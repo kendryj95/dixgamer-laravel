@@ -13,15 +13,22 @@
 				</div>
 	@endif
   <!-- Filter -->
-  @component('components/filters/column_word')
-    @slot('columns',$columns);
-    @slot('path','cuentas');
-  @endcomponent
+    <div class="row">
+        @component('components/filters/column_word')
+            @slot('columns',$columns);
+            @slot('path','cuentas');
+        @endcomponent
+    </div>
+
 
   <!-- COMPONENTE DE CUENTAS -->
-  @component('components.account.index')
-    @slot('accounts', $accounts)
-  @endcomponent
+
+    <div class="row">
+        @component('components.account.index')
+            @slot('accounts', $accounts)
+        @endcomponent
+    </div>
+
 
 
 </div><!--/.container-->

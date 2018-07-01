@@ -514,7 +514,7 @@
 							class="img img-responsive img-rounded full-width"
 							style="width:54%; margin:0;"
 							alt="{{$stock->titulo}}"
-							src="../img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg">
+							src="/img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg">
 
 						<div class="caption text-center">
             </div>
@@ -573,7 +573,8 @@
 							@foreach($lastAccountGames as $last)
 								<div class="col-sm-5" >
 									<div>
-										<img src="/img/productos/<?php echo $last->consola."/".$last->titulo.".jpg"; ?>" alt="<?php echo $last->consola." - ".$last->titulo.".jpg"; ?>" class="img img-responsive full-width" />
+										<img src="/img/productos/<?php echo $last->consola."/".$last->titulo.".jpg"; ?>"
+											 alt="<?php echo $last->consola." - ".$last->titulo.".jpg"; ?>" class="img img-responsive full-width" />
 									</div>
 
 									<div class="caption text-center" style="margin:5px 0;">

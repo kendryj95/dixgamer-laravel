@@ -34,7 +34,7 @@
 
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-cube fa-fw"></i></span>
-						<select id="consola" name="consola" class="selectpicker form-control">
+						<select id="consola" name="consola" class="selectpicker form-control" onchange="return GameVerifyFunction();">
 							<option selected value="ps4" data-content="<span class='label label-primary'>ps4</span>">ps4</option>
 							<option value="ps3" data-content="<span class='label label-warning' style='background-color:#000;'>ps3</span>">ps3</option>
 							<option value="ps" data-content="<span class='label label-danger'>psn</span>">psn</option>
@@ -74,7 +74,7 @@
 
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
-						<input class="form-control" type="text" name="Notas" placeholder="Notas de stock">
+						<input class="form-control" type="text" name="Notas" placeholder="Notas de stock" required>
 					</div>
 
 					<button class="btn btn-primary btn-block" type="submit">Guardar</button>
@@ -117,5 +117,9 @@
 	@else
 		<h1 style="color:#000">Cuenta no encontrada</h1>
 	@endif
-
+		<script>
+			function GameVerifyFunction(){
+			    
+			}
+		</script>
 </div>

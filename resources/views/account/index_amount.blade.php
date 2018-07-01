@@ -36,13 +36,13 @@
               <tr>
 
                 <td>
-                  <a title="Ir a cuenta." href="{{ url('/cuentas_detalles', [$account->cuentas_id] ) }}">
+                  <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                     {{ $account->cuentas_id }}
                   </a>
                 </td>
 
                 <td>
-                  <a title="Ir a cuenta." href="{{ url('/cuentas_detalles', [$account->cuentas_id] ) }}">
+                  <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                     {{ $account->libre_usd }}
                   </a>
                 </td>
@@ -50,14 +50,14 @@
                 <?php // validamos administracion  ?>
                 @if(Helper::validateAdministrator(Auth::user()->Level))
                   <td>
-                    <a title="Ir a cuenta." href="{{ url('/cuentas_detalles', [$account->cuentas_id] ) }}">
+                    <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                       {{ $account->libre_ars }}
                     </a>
                   </td>
                 @endif
 
                 <td>
-                  <a title="Ir a cuenta." href="{{ url('/cuentas_detalles', [$account->cuentas_id] ) }}">
+                  <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                     {{ $consol }}
                   </a>
                 </td>

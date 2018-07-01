@@ -809,5 +809,8 @@
     <h4 class="text-center">No se encontraron datos</h4>
   @endif
 
-
+@section('scripts')
+    @parent
+    <script type="text/javascript" src="js/typeahead.bundle.js"></script>
+@endsection
 @endsection

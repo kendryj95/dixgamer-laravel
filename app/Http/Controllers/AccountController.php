@@ -70,6 +70,11 @@ class AccountController extends Controller
                   ));
     }
 
+    public function details_account(Request $request, $id){
+
+        return view('account.details_account');
+    }
+
 
     // Retorna vista para modal de solicitud de reseteo
     public function requestReset($id){

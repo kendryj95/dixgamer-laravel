@@ -97,7 +97,8 @@
 
 @stop
 @section('scripts')
-  <script type="text/javascript" src="js/typeahead.bundle.js"></script>
+  @parent
+  <script type="text/javascript" src="../js/typeahead.bundle.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function(){
