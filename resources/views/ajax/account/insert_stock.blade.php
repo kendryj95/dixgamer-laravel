@@ -117,9 +117,5 @@
 	@else
 		<h1 style="color:#000">Cuenta no encontrada</h1>
 	@endif
-		<script>
-			function GameVerifyFunction(){
-
-			}
-		</script>
+		
 </div>

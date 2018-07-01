@@ -76,7 +76,7 @@
 
                             <td>
                                 @if($stock->cuentas_id)
-                                    <a title="Ir a Cuenta" href="{{ url('/cuentas_detalles',[$stock->cuentas_id]) }}">
+                                    <a title="Ir a Cuenta" href="{{ url('/cuentas',[$stock->cuentas_id]) }}">
                                         {{$stock->cuentas_id}}
                                     </a>
                                 @endif
