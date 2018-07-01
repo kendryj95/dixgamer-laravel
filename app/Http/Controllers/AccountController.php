@@ -17,7 +17,7 @@ use Schema;
 
 class AccountController extends Controller
 {
-    
+
     private $wp_pst;
     private $tks;
     private $blc;
