@@ -119,7 +119,7 @@
 	@endif
 		<script>
 			function GameVerifyFunction(){
-			    
+
 			}
 		</script>
 </div>
