@@ -1,9 +1,6 @@
 @extends('layouts.master-layouts')
 
 @section('container')
-    <script>
-        console.log('ola k ase');
-    </script>
 <div class="container">
   <h1>Listar cuentas</h1>
   @if (count($errors) > 0)

@@ -33,9 +33,11 @@ Route::group(['middleware' => ['auth']], function()
   Route::post('customer_ctrl_ml_user', 'CustomerController@customerCtrlMlUsr');
 
   // Rutas para cuentas
+
   Route::resource('cuentas', 'AccountController');
   Route::get('cuentas_con_saldo', 'AccountController@accountAmount');
   Route::get('cuentas_para_ps3', 'AccountController@accountGamePs3');
+    Route::get('cuentas_para_ps4', 'AccountController@accountGamePs4');
   Route::post('account_ctrl_column', 'AccountController@accountCtrlColumn');
   Route::get('recharge_account/{id}', 'AccountController@rechargeBalance');
   Route::get('crear_saldo_cuenta/{account_id}/{title}/{console}', 'AccountController@storeBalanceAccount');

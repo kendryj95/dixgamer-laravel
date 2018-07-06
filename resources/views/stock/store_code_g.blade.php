@@ -13,91 +13,102 @@
 					</ul>
 				</div>
 	@endif
-  <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo_g') }}">
-    {{ csrf_field() }}
-    <div class="col-md-6" style="padding-right: 15px !important;padding-left: 10px !important">
-      <div class="row">
-        <div class="col-sm-12" style="text-align:right;">
-          <span id="alerta" class="label label-danger"></span>
-          <img class="img-rounded pull-left" width="100" id="image-swap" src="" alt="" />
+  <div class="row">
+    <div class="col-md-12">
+        <div class="col-md-2">
+          <div class="col-sm-12" style="text-align:right;">
+            <span id="alerta" class="label label-danger"></span>
+            <img class="img-rounded pull-left" width="180" id="image-swap" src="" alt="" />
+          </div>
         </div>
+        <div class="col-md-10">
+          <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo_g') }}">
+            {{ csrf_field() }}
+            <div class="col-md-6" style="padding-right: 15px !important;padding-left: 10px !important">
+              <div class="row">
 
-        <div class="col-sm-12">
 
-          <input id="clientes" type="text" class="form-control typeahead" autocomplete="off" spellcheck="false" value="" />
-          <br />
-          <br />
+                <div class="col-sm-12">
 
-          <input type="text" id="clientes_id1" name="clientes_id1" value="" hidden="" />
-          <input type="text" id="clientes_id2" name="clientes_id2" value="" hidden="" />
+                  <input id="clientes" type="text" class="form-control typeahead" autocomplete="off" spellcheck="false" value="" />
+                  <br />
+                  <br />
 
-          <div class="input-group form-group">
+                  <input type="text" id="clientes_id1" name="clientes_id1" value="" hidden="" />
+                  <input type="text" id="clientes_id2" name="clientes_id2" value="" hidden="" />
 
-            <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
+                  <div class="input-group form-group">
 
-            <select id="medio_pago" name="medio_pago" class="selectpicker form-control">
-        			<option selected value="BiP" data-content="<span class='label label-primary'>BiP</span>">BiP</option>
-        			<option value="MC Uala" data-content="<span class='label label-info'>MC U</span>">MC U</option>
-              <option value="MC MercadoPago" data-content="<span class='label label-info'>MC MP</span>">MC MP</option>
-        			<option value="MC Galicia" data-content="<span class='label label-default'>MC G</span>">MC G</option>
-        			<option value="VISA Galicia" data-content="<span class='label label-default'>VISA G</span>">VISA G</option>
-        			<option value="Debito Galicia" data-content="<span class='label label-success'>Deb G</span>">Deb G</option>
-            	<option value="Efectivo" data-content="<span class='label label-success'>Efectivo</span>">Efectivo</option>
-            </select>
+                    <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
 
-          </div>
+                    <select id="medio_pago" name="medio_pago" class="selectpicker form-control">
+                      <option selected value="BiP" data-content="<span class='label label-primary'>BiP</span>">BiP</option>
+                      <option value="MC Uala" data-content="<span class='label label-info'>MC U</span>">MC U</option>
+                      <option value="MC MercadoPago" data-content="<span class='label label-info'>MC MP</span>">MC MP</option>
+                      <option value="MC Galicia" data-content="<span class='label label-default'>MC G</span>">MC G</option>
+                      <option value="VISA Galicia" data-content="<span class='label label-default'>VISA G</span>">VISA G</option>
+                      <option value="Debito Galicia" data-content="<span class='label label-success'>Deb G</span>">Deb G</option>
+                      <option value="Efectivo" data-content="<span class='label label-success'>Efectivo</span>">Efectivo</option>
+                    </select>
 
-          <div class="col-md-4">
-            <div class="input-group form-group" id="div_costo_usd">
-            <span class="input-group-addon">usd</span>
-              <input class="form-control" type="text" name="costo_usd" id="multiplicando" value="">
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="input-group form-group" id="div_costo_usd">
+                      <span class="input-group-addon">usd</span>
+                      <input class="form-control" type="text" name="costo_usd" id="multiplicando" value="">
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-4">
+                    <div class="input-group form-group">
+                      <span class="input-group-addon">ctz</span>
+                      <input class="form-control" type="text" id="multiplicador" value="{{ $cotiz }}">
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+
+                  <div class="col-md-4">
+                    <div class="input-group form-group">
+                      <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
+                      <input class="form-control" type="text" name="costo" id="resultado" value="" style="text-align:right; color: #777" readonly>
+                    </div>
+                  </div>
+
+                  <p>.</p>
+
+                  <div class="col-sm-12">
+                    <textarea rows="5" id="excel_data" name="excel_data" class="form-control">{{ old('excel_data') }}</textarea><br>
+                    <br>
+                  </div>
+
+                  <div class="input-group form-group" id="div_order">
+                    <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+                    <input class="form-control" id="n_order" type="text" name="n_order" placeholder="n° de compra">
+                  </div>
+
+
+                  <div class="col-sm-12">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+                    <br>
+                  </div>
+
+                </div>
+              </div>
             </div>
-          </div>
+
+            <div class="col-md-6"  style="padding-right: 10px !important;padding-left: 15px !important">
+              <div class="row" id="container_codes">
 
 
-          <div class="col-md-4">
-            <div class="input-group form-group">
-              <span class="input-group-addon">ctz</span>
-              <input class="form-control" type="text" id="multiplicador" value="{{ $cotiz }}">
-            </div><!-- /input-group -->
-          </div><!-- /.col-lg-6 -->
-
-          <div class="col-md-4">
-            <div class="input-group form-group">
-              <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
-              <input class="form-control" type="text" name="costo" id="resultado" value="" style="text-align:right; color: #777" readonly>
+              </div>
             </div>
-          </div>
-
-          <p>.</p>
-
-          <div class="col-sm-12">
-            <textarea rows="5" id="excel_data" name="excel_data" class="form-control">{{ old('excel_data') }}</textarea><br>
-            <br>
-          </div>
-
-          <div class="input-group form-group" id="div_order">
-            <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-            <input class="form-control" id="n_order" type="text" name="n_order" placeholder="n° de compra">
-    			</div>
-
-
-          <div class="col-sm-12">
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
-            <br>
-          </div>
-
+          </form>
         </div>
-      </div>
     </div>
-
-    <div class="col-md-6"  style="padding-right: 10px !important;padding-left: 15px !important">
-      <div class="row" id="container_codes">
+  </div>
 
 
-      </div>
-    </div>
-  </form>
 
 </div>
 
@@ -160,9 +171,12 @@
           document.getElementById("alerta").innerHTML = "";
         });
 
-        $('#image-swap').error(function() {
-          document.getElementById("alerta").innerHTML = "no se encuentra";
-        });
+          if(titulo !== '') {
+              $('#image-swap').error(function() {
+                  document.getElementById("alerta").innerHTML = "No se encuentra la imágen";
+              });
+          }
+
       },500);
 
 

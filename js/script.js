@@ -236,6 +236,15 @@ $(document).ready(function() {
 		$('#resultado').val(r);
 	});
 
+    $('body').on('input', '#multiplicador', function(event) {
+        event.preventDefault();
+
+        let multiplicador = $(this).val();
+        let multiplicando = $("#multiplicando").val();
+        let r = multiplicando*multiplicador;
+        $('#resultado').val(r);
+    });
+
 	// Sacar codigo de text area
 	$('body').on('keyup', 'textarea[name=cod_bruto]', function(event) {
 		event.preventDefault();

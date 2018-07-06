@@ -811,6 +811,6 @@
 
 @section('scripts')
     @parent
-    <script type="text/javascript" src="js/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="{{ asset('js/typeahead.bundle.js') }}"></script>
 @endsection
 @endsection

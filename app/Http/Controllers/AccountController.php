@@ -26,6 +26,7 @@ class AccountController extends Controller
     private $rst;
     private $dte;
     function __construct(){
+
       $this->tks = new Stock();
       $this->blc = new Balance();
       $this->ac = new AccountNote();
@@ -41,6 +42,7 @@ class AccountController extends Controller
      */
     public function index(Request $request)
     {
+
       // Columnas de la base de datos
       $columns = Schema::getColumnListing('cuentas');
       // Traer la lista de cuentas
@@ -49,6 +51,7 @@ class AccountController extends Controller
       $obj = new \stdClass;
       $obj->column = $request->column;
       $obj->word = $request->word;
+
 
       $accounts = Account::accountGames($obj)->paginate(50);
 
@@ -123,12 +126,26 @@ class AccountController extends Controller
     public function accountGamePs3(Request $request)
     {
       // Traer la lista de cuentas
-      $accounts = Account::accountGamesPs3()->paginate(50);
+      $accounts = Account::accountGamesPs3()->paginate(30);
 
       return view('account.index_account_ps3',
                   compact(
                     'accounts'
                   ));
+    }
+
+    // juegos de cuentas ps4
+    public function accountGamePs4(Request $request)
+    {
+        // Traer la lista de cuentas
+        $accounts = Account::accountGamesPs4()->paginate(30)->toSql();
+
+        dd($accounts);
+
+        return view('account.index_account_ps4',
+            compact(
+                'accounts'
+            ));
     }
 
     /**

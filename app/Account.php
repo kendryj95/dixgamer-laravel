@@ -114,8 +114,8 @@ class Account extends Model
                               WHERE cuentas_id IS NOT NULL
                               GROUP BY cuentas_id) AS rdo"))
                       ->whereRaw("cons NOT LIKE '%ps3%'
-                      and cons!='ps'
-                      and ID!='5288'
+                      and cons <> 'ps'
+                      and ID <> '5288'
                       and costo_usd='10.00'
                       and costo_usd='20.00'
                       and costo_usd='30.00'
@@ -131,6 +131,40 @@ class Account extends Model
                       and costo_usd='130.00'
                       and costo_usd='140.00'")
                       ->orderBy('costo_usd','DESC');
+    }
+
+    // cuentas para juegos PS3
+    public function ScopeAccountGamesPs4($query){
+        return DB::table(DB::raw("
+                      (SELECT COUNT(*) as Q, stock.ID as ID_stk,
+                              costo_usd,
+                              GROUP_CONCAT(consola) as cons,
+                              cuentas_id,
+                              cuentas.ID as ID,
+                              mail,
+                              mail_fake FROM `stock`
+                              LEFT JOIN cuentas
+                              ON stock.cuentas_id = cuentas.ID
+                              WHERE cuentas_id IS NOT NULL
+                              GROUP BY cuentas_id) AS rdo"))
+            ->whereRaw("cons NOT LIKE '%ps4%'
+                      and cons <> 'ps'
+                      and ID <> '5288'
+                      and costo_usd='10.00'
+                      and costo_usd='20.00'
+                      and costo_usd='30.00'
+                      and costo_usd='40.00'
+                      and costo_usd='50.00'
+                      and costo_usd='60.00'
+                      and costo_usd='70.00'
+                      and costo_usd='80.00'
+                      and costo_usd='90.00'
+                      and costo_usd='100.00'
+                      and costo_usd='110.00'
+                      and costo_usd='120.00'
+                      and costo_usd='130.00'
+                      and costo_usd='140.00'")
+            ->orderBy('costo_usd','DESC');
     }
 
 
