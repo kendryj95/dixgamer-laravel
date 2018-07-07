@@ -20,12 +20,8 @@
               <i class="fa fa-user fa-fw" aria-hidden="true"></i>
               {{$customer->nombre}} {{$customer->apellido}}
 
-              <button title="Modificar Nombre"
-                class="btn btn-xs btn-default pull-right"
-                type="button"
-                data-toggle="modal"
-                data-target=".bs-example-modal-lg"
-                onClick='getPageAjax("/clientes/{{$customer->ID}}/edit","#modal-container");'>
+              <button title="Modificar Nombre" id="modificarNombre" class="btn btn-xs btn-default pull-right" type="button"
+                      data-toggle="modal" data-target="#exampleModal_samuel" data-customer="{{ $customer->ID }}">
               <i aria-hidden="true" class="fa fa-pencil"></i>
               </button>
 
@@ -56,9 +52,9 @@
                 class="btn btn-xs btn-default pull-right"
                 style="opacity: 0.5;"
                 type="button"
+                id="modificarEmailboton"
                 data-toggle="modal"
-                data-target=".bs-example-modal-lg"
-                onClick='document.getElementById("ifr").src="clientes_modificar_email.php?id={{$customer->ID}}";'>
+                data-target="#modificarEmailModal"  data-customer="{{ $customer->ID }}">
 
                 <i aria-hidden="true" class="fa fa-pencil"></i>
               </button>
@@ -74,8 +70,8 @@
                   style="opacity: 0.7;"
                   type="button"
                   data-toggle="modal"
-                  data-target=".bs-example-modal-lg"
-                  onClick='document.getElementById("ifr").src="clientes_modificar_ml_user.php?id={{$customer->ID}}"'>
+                  id="modificarMLboton"
+                  data-target="#modificarMLModal" data-customer="{{ $customer->ID }}">
                     <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>
               </p>
@@ -95,9 +91,9 @@
                 class="btn-xs text-muted"
                 style="opacity: 0.7;"
                 type="button"
+                id="modificarOtrosboton"
                 data-toggle="modal"
-                data-target=".bs-example-modal-lg"
-                onClick='document.getElementById("ifr").src="clientes_modificar_extras.php?id={{$customer->ID}}";'>
+                data-target="#modificarOtrosModal" data-customer="{{ $customer->ID }}">
                 <i aria-hidden="true" class="fa fa-pencil"></i>
               </a>
             </em>
@@ -142,9 +138,9 @@
               class="btn btn-warning btn-xs"
               style="color: #8a6d3b; background-color:#FFDD87; opacity: 0.7"
               type="button"
+              id="addNotes"
               data-toggle="modal"
-              data-target=".bs-example-modal-lg"
-              onClick='document.getElementById("ifr").src="clientes_notas_insertar.php?id=$customer->ID";'>
+              data-target="#agregarNotaModal"  data-customer="{{ $customer->ID }}">
                 <i class="fa fa-fw fa-comment"></i>
                 Agregar Nota
             </button>
@@ -172,26 +168,14 @@
                   <i class="fa fa-snapchat-ghost fa-fw"></i> ML
               </button>
             @endif
-
-            @if(strpos($customer->auto, 're') !== false)
-                <a type="button"
-
-                  @if(Helper::validateAdministrator(Auth::user()->Level))
-                    href="clientes_hacer_revendedor.php?id={{$customer->ID}}&a=no"
-                  @endif
-                    class="btn btn-danger btn-xs pull-right">
-                    Revendedor
-                </a>
-            @else
-              <a type="button"
-
                 @if(Helper::validateAdministrator(Auth::user()->Level))
-                  href="clientes_hacer_revendedor.php?id={{$customer->ID}}&a=re"
+                    @if(strpos($customer->auto, 're') !== false)
+                        <a href="#!" id="doreseller" data-customer="{{ $customer->ID }}" data-update="no" type="button" class="btn btn-default btn-xs pull-right">Hacer Revendedor</a>
+                    @else
+                        <a href="#!" id="doseller" data-customer="{{ $customer->ID }}" data-update="re" type="button" class="btn btn-danger btn-xs pull-right">Revendedor</a>
+                    @endif
                 @endif
-                  class="btn btn-danger btn-xs pull-right">
-                  Revendedor
-              </a>
-            @endif
+
 
 
             </p>
@@ -782,25 +766,218 @@
       </div>
 
 
-
+        <input type="hidden" value="{{ csrf_token() }}" id="token">
 
       <div class="container">
         <div class="row">
           <!-- Large modal -->
 
-          <div class="modal fade bs-example-modal-lg" id="modal-container" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-            <div class="modal-dialog modal-lg" style="top:40px;">
-              <div class="modal-content">
 
-                <div class="modal-body" style="text-align:center;padding:10px;color:#000">
-                </div>
-
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal_samuel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 300px;">
+                                <h5 class="modal-title" id="exampleModalLabel">Modificar Nombres y Apellidos</h5>
+
+                            </div>
+                            <div class="modal-body" style="color: black !important;">
+
+                                    <div class="row" style="margin-left: auto; margin-right: auto; width: 300px;">
+                                        <div class="card">
+                                            <div class="card-header">
+                                            </div>
+                                            <div class="card-body">
+                                                <div>
+                                                    <label>Nombre(s)</label>
+                                                    <input class="form-control" type="text" id="nombres_cliente" value="">
+                                                    <input type="hidden" id="idcustomer" value="">
+                                                </div>
+                                                <br>
+                                                <div>
+                                                    <label for="">Apellido(s)</label>
+                                                    <input type="text" class="form-control" id="apellidos_cliente" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" id="saveEditName" class="btn btn-primary">Salvar Cambios</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modificarEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 300px;">
+                        <h5 class="modal-title" id="exampleModalLabel">Modificar Email</h5>
+
+                    </div>
+                    <div class="modal-body" style="color: black !important;">
+
+                        <div class="row" style="margin-left: auto; margin-right: auto; width: 300px;">
+                            <div class="card">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+
+                                    <div>
+                                        <label>Correo electrónico</label>
+                                        <input type="text" class="form-control" id="correo_cliente" value="">
+                                        <input type="hidden" id="idcustomer" value="">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="saveEditEmail" class="btn btn-primary">Salvar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modificarMLModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 450px;">
+                        <h5 class="modal-title" id="exampleModalLabel">Modificar Usuario Mercado Libre</h5>
+
+                    </div>
+                    <div class="modal-body" style="color: black !important;">
+
+                        <div class="row" style="margin-left: auto; margin-right: auto; width: 450px;">
+                            <div class="card">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+
+                                    <div>
+                                        <label>Usuario Mercado Libre</label>
+                                        <input type="text" class="form-control" id="ML_cliente" value="">
+                                        <input type="hidden" id="idcustomer" value="">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="saveEditML" class="btn btn-primary">Salvar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modificarOtrosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 450px;">
+                        <h5 class="modal-title" id="exampleModalLabel">Modificar Datos Varios</h5>
+
+                    </div>
+                    <div class="modal-body" style="color: black !important;">
+
+                        <div class="row" style="margin-left: auto; margin-right: auto; width: 450px;">
+                            <div class="card">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+
+                                    <div>
+                                        <label>Provincia</label>
+                                        <input type="text" class="form-control" id="provincia" value="">
+                                        <input type="hidden" id="idcustomer" value="">
+                                    </div>
+                                    <div>
+                                        <label>Ciudad</label>
+                                        <input type="text" class="form-control" id="ciudad" value="">
+                                    </div>
+                                    <div>
+                                        <label>Código de área</label>
+                                        <input type="text" class="form-control" id="carac" value="">
+                                    </div>
+                                    <div>
+                                        <label>Teléfono</label>
+                                        <input type="text" class="form-control" id="tel" value="">
+                                    </div>
+                                    <div>
+                                        <label>Celular</label>
+                                        <input type="text" class="form-control" id="cel" value="">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="saveEditOtros" class="btn btn-primary">Salvar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="agregarNotaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 450px;">
+                        <h5 class="modal-title" id="exampleModalLabel">Agregar notas</h5>
+
+                    </div>
+                    <div class="modal-body" style="color: black !important;">
+
+                        <div class="row" style="margin-left: auto; margin-right: auto; width: 450px;">
+                            <div class="card">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+
+                                    <div>
+                                        <label>Notas</label>
+                                        <textarea class="form-control" id="notaCliente"></textarea>
+                                        <input type="hidden" id="idcustomer" value="">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="saveNotes" class="btn btn-primary">Salvar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
        <!--/row-->
        <!-- InstanceEndEditable -->
 </div><!--/.container-->
@@ -812,5 +989,192 @@
 @section('scripts')
     @parent
     <script type="text/javascript" src="{{ asset('js/typeahead.bundle.js') }}"></script>
+    <script>
+        $('#doseller').on('click', function (e) {
+
+                var id = $('#doseller').data('customer');
+                var token = $('#token').val();
+                var datos = $('#doseller').data('update');
+                console.log(id);
+                    $.ajax({
+                        data: { '_token':token, 'id':id, 'datos':datos },
+                        method: 'post',
+                        dataType: 'json',
+                        url: '/updateStatusReseller',
+                        success: function(result){
+                            location.reload();
+                        }
+                    });
+        });
+
+        $('#doreseller').on('click', function (e) {
+
+            var id = $('#doreseller').data('customer');
+            var token = $('#token').val();
+            var datos = $('#doreseller').data('update');
+            console.log(id);
+            $.ajax({
+                data: { '_token':token, 'id':id, 'datos':datos },
+                method: 'post',
+                dataType: 'json',
+                url: '/updateStatusReseller',
+                success: function(result){
+                    location.reload();
+                }
+            });
+        });
+
+        $('#modificarNombre').on('click',function (e) {
+            var ID = $('#modificarNombre').data('customer');
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/getDataName',
+                data: { '_token':token, 'id':ID },
+                success: function (result) {
+                    console.log(result.nombre);
+                    $('.modal-body #nombres_cliente').val(result.nombre);
+                    $('.modal-body #idcustomer').val(ID);
+                    $('.modal-body #apellidos_cliente').val(result.apellido);
+                }
+            });
+        });
+
+        $('#saveEditName').on('click',function (e) {
+            var nombre = $('#nombres_cliente').val();
+            var apellido = $('#apellidos_cliente').val();
+            var id = $('#idcustomer').val();
+            var token = $('#token').val();
+                $.ajax({
+                   method: 'post',
+                   url: '/saveDataName',
+                   data: { '_token':token, 'nombre':nombre,'apellido':apellido,'id':id },
+                    success: function (result) {
+                       alert(result);
+                        location.reload();
+                    }
+                });
+        });
+
+        $('#modificarEmailboton').on('click',function (e) {
+            var ID = $('#modificarEmailboton').data('customer');
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/getDataName',
+                data: { '_token':token, 'id':ID },
+                success: function (result) {
+                    console.log(result.nombre);
+                    $('.modal-body #correo_cliente').val(result.email);
+                    $('.modal-body #idcustomer').val(ID);
+                }
+            });
+        });
+
+        $('#saveEditEmail').on('click',function (e) {
+            var email = $('#correo_cliente').val();
+            var id = $('#idcustomer').val();
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/saveDataEmail',
+                data: { '_token':token, 'email':email,'id':id },
+                success: function (result) {
+                    alert(result);
+                    location.reload();
+                }
+            });
+        });
+
+        $('#modificarMLboton').on('click',function (e) {
+            var ID = $('#modificarMLboton').data('customer');
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/getDataName',
+                data: { '_token':token, 'id':ID },
+                success: function (result) {
+                    console.log(result.ml_user);
+                    $('.modal-body #ML_cliente').val(result.ml_user);
+                    $('.modal-body #idcustomer').val(ID);
+                }
+            });
+        });
+
+        $('#saveEditML').on('click',function (e) {
+            var ml = $('#ML_cliente').val();
+            var id = $('#idcustomer').val();
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/saveDataML',
+                data: { '_token':token, 'ml':ml,'id':id },
+                success: function (result) {
+                    alert(result);
+                    location.reload();
+                }
+            });
+        });
+
+        $('#modificarOtrosboton').on('click',function (e) {
+            var ID = $('#modificarOtrosboton').data('customer');
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/getDataName',
+                data: { '_token':token, 'id':ID },
+                success: function (result) {
+                    console.log(result.ml_user);
+                    $('.modal-body #provincia').val(result.provincia);
+                    $('.modal-body #ciudad').val(result.ciudad);
+                    $('.modal-body #carac').val(result.carac);
+                    $('.modal-body #tel').val(result.tel);
+                    $('.modal-body #cel').val(result.cel);
+                    $('.modal-body #idcustomer').val(ID);
+                }
+            });
+        });
+
+        $('#saveEditOtros').on('click',function (e) {
+            var provincia = $('#provincia').val();
+            var ciudad = $('#ciudad').val();
+            var carac = $('#carac').val();
+            var tel = $('#tel').val();
+            var cel = $('#cel').val();
+            var id = $('#idcustomer').val();
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/saveDataOther',
+                data: { '_token':token,'provincia':provincia,'ciudad':ciudad,'carac':carac,'tel':tel,'cel':cel,'id':id },
+                success: function (result) {
+                    alert(result);
+                    location.reload();
+                }
+            });
+        });
+
+        $('#addNotes').on('click',function (e) {
+            var ID = $('#addNotes').data('customer');
+            $('.modal-body #idcustomer').val(ID);
+
+        });
+
+        $('#saveNotes').on('click',function (e) {
+            var notes = $('#notaCliente').val();
+            var id = $('#idcustomer').val();
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/saveNotes',
+                data: { '_token':token,'notes':notes,'id':id },
+                success: function (result) {
+                    alert(result);
+                    location.reload();
+                }
+            });
+        });
+
+    </script>
 @endsection
 @endsection

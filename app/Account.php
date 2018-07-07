@@ -133,7 +133,7 @@ class Account extends Model
                       ->orderBy('costo_usd','DESC');
     }
 
-    // cuentas para juegos PS3
+    // cuentas para juegos PS4
     public function ScopeAccountGamesPs4($query){
         return DB::table(DB::raw("
                       (SELECT COUNT(*) as Q, stock.ID as ID_stk,

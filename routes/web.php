@@ -32,12 +32,63 @@ Route::group(['middleware' => ['auth']], function()
   Route::post('customer_ctrl_email', 'CustomerController@customerCtrlEmail');
   Route::post('customer_ctrl_ml_user', 'CustomerController@customerCtrlMlUsr');
 
+  //Card functions buttons
+  Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');
+    Route::post('saveDataName','EditButtonsController@saveDataName')->name('saveDataName');
+    Route::post('saveDataEmail','EditButtonsController@saveDataEmail')->name('saveDataEmail');
+    Route::post('saveDataML','EditButtonsController@saveDataML')->name('saveDataML');
+    Route::post('saveDataOther','EditButtonsController@saveDataOther')->name('saveDataOther');
+    Route::post('saveNotes','EditButtonsController@saveNotes')->name('saveNotes');
+  Route::post('updateStatusReseller','CustomerController@updateStatusReseller')->name('updateStatusReseller');
+
+  Route::get('prubasam', function (){
+     $veamos = \DB::select('*')
+         ->from(\DB::raw('(SELECT
+			COUNT(*) AS Q,
+			stock.ID AS ID_stk,
+			costo_usd,
+			GROUP_CONCAT(consola) AS cons,
+			cuentas_id,
+			cuentas.ID AS ID,
+			mail,
+			mail_fake
+		FROM
+			stock
+		LEFT JOIN cuentas ON stock.cuentas_id = cuentas.ID
+		WHERE
+			cuentas_id IS NOT NULL
+		GROUP BY
+			cuentas_id) as rdo'))
+             ->whereNotLike('cons')
+             ->where( 'cons', '!=', 'ps')
+             ->where('ID', '<>',5288)
+            ->whereRaw("costo_usd = '10.00'
+                OR costo_usd = '20.00'
+                OR costo_usd = '30.00'
+                OR costo_usd = '40.00'
+                OR costo_usd = '50.00'
+                OR costo_usd = '60.00'
+                OR costo_usd = '70.00'
+                OR costo_usd = '80.00'
+                OR costo_usd = '90.00'
+                OR costo_usd = '100.00'
+                OR costo_usd = '110.00'
+                OR costo_usd = '120.00'
+                OR costo_usd = '130.00'
+                OR costo_usd = '140.00'")
+         ->orderBy('costo_usd','DESC')
+
+         ->get();
+
+     return $veamos;
+  });
+
   // Rutas para cuentas
 
   Route::resource('cuentas', 'AccountController');
   Route::get('cuentas_con_saldo', 'AccountController@accountAmount');
   Route::get('cuentas_para_ps3', 'AccountController@accountGamePs3');
-    Route::get('cuentas_para_ps4', 'AccountController@accountGamePs4');
+  Route::get('cuentas_para_ps4', 'AccountController@accountGamePs4');
   Route::post('account_ctrl_column', 'AccountController@accountCtrlColumn');
   Route::get('recharge_account/{id}', 'AccountController@rechargeBalance');
   Route::get('crear_saldo_cuenta/{account_id}/{title}/{console}', 'AccountController@storeBalanceAccount');

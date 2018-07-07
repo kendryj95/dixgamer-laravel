@@ -6,6 +6,7 @@ use App\Customer;
 use App\Sale;
 use App\Expenses;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Validator;
 use Auth;
 use Schema;
@@ -159,9 +160,11 @@ class CustomerController extends Controller
 
     }
 
-    public function update(Request $request, Customer $customer)
+    public function updateStatusReseller(Request $request)
     {
+        $cliente = DB::table('clientes')->where('ID',$request->id)->update(['auto' => $request->datos]);
 
+        return Response()->json('ola k ase');
     }
 
     /**
