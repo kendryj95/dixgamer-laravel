@@ -126,7 +126,9 @@ class AccountController extends Controller
     public function accountGamePs3(Request $request)
     {
       // Traer la lista de cuentas
-      $accounts = Account::accountGamesPs3()->paginate(30);
+      $accounts = Account::accountGamesPs3()->paginate(20);
+
+      //dd($accounts);
 
       return view('account.index_account_ps3',
                   compact(
@@ -138,9 +140,9 @@ class AccountController extends Controller
     public function accountGamePs4(Request $request)
     {
         // Traer la lista de cuentas
-        $accounts = Account::accountGamesPs4()->paginate(30)->toSql();
+        $accounts = Account::accountGamesPs4()->paginate(20);
 
-        dd($accounts);
+        //dd($accounts);
 
         return view('account.index_account_ps4',
             compact(
@@ -295,11 +297,17 @@ class AccountController extends Controller
      * @param  \App\Account  $account
      * @return \Illuminate\Http\Response
      */
+
+    public function previo(){
+        return Account::previo();
+    }
+
     public function show(Account $account,$id)
     {
+
       $account = Account::resetAccountDetail($id)->first();
-      if (count($account) < 1)
-        return redirect('/cuentas')->withErrors('Cuenta no encontrada');
+      //if (count($account) < 1)
+        //return redirect('/cuentas')->withErrors('Cuenta no encontrada');
 
       $stocks = Stock::stockDetailSold($id)->get();
       $quantityStock = Stock::quantityAccountId($id)->first();
@@ -317,7 +325,9 @@ class AccountController extends Controller
       // dd($accountBalances);
       $lastAccountGames = $this->tks->lastAccountUserGames(Auth::user()->Nombre);
 
-      // dd($lastAccountGames);
+        $next = Account::Siguiente($id)->first();
+        $back = Account::Previo($id)->first();
+      //dd($soldConcept);
 
       return view('account.show',compact(
                 'account',
@@ -330,8 +340,15 @@ class AccountController extends Controller
                 'maxDayReset',
                 'accountBalances',
                 'hasBalance',
-                'lastAccountGames'
+                'paccount',
+                'lastAccountGames',
+                'next',
+                'back'
       ));
+
+    }
+
+    public function getDataPaginaAnt(Request $request){
 
     }
 

@@ -23,7 +23,7 @@
                   class="img img-responsive full-width" style="position:absolute;" />
            </div>
           <div class="caption text-center">
-           <a href="cuentas_detalles.php?id={{ $data->stk_ctas_id }}"
+           <a href="{{ url('cuentas/') . '/' . $data->stk_ctas_id }}"
              title="Ir a Cuenta"
              role="button"
              class="btn btn-xs btn-{{ ($data->days_from_vta > 6) ? 'success' : 'normal'  }}">

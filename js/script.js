@@ -160,13 +160,13 @@ function createColumn(selector,type = 'code'){
 				word = format(word, [4, 4, 4, 4, 4, 4, 4, 4, 4], "-");
 
 				let input =`
-				<div class="input-group form-group" style="margin:0px;width:100%">
-					<input class="form-control corregircodigo" type="text" name="codes[]" placeholder="${index+1}" value="${word}">
+				<div class="input-group form-group" style="margin:0px;width:80%;">
+					<input class="form-control corregircodigo" type="text" name="codes[]" placeholder="${index+1}" value="${word}" style="height: 20px;">
 				</div>
 				`;
 
 				// Cada multiplo de 10 creara una fila nueva
-				if (index%10 == 0){
+				if (index%20 == 0){
 					if (index != 0) {
 						html += '</div>';
 					}
@@ -182,6 +182,8 @@ function createColumn(selector,type = 'code'){
 
 			html += '</div>';
 			$('#container_codes').html(html);
+            $('#cant_giftcards').html(index);
+
 		} catch (e) {
 
 		} finally {

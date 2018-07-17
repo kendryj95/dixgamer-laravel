@@ -4,6 +4,8 @@
 
 <div class="container">
   <h1>Gift Cards</h1>
+  <h4>Gift Cards Cargadas: <span id="cant_giftcards"></span></h4>
+
   @if (count($errors) > 0)
 				<div class="alert alert-danger text-center">
 					<ul>
@@ -15,89 +17,93 @@
 	@endif
   <div class="row">
     <div class="col-md-12">
-      <div class="col-md-2">
-        <div class="col-sm-12" style="text-align:right;">
-          <span id="alerta" class="label label-danger"></span>
-          <img class="img-rounded pull-left" width="180" id="image-swap" src="" alt="" />
+      <form  method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo') }}">
+        {{ csrf_field() }}
+
+
+        <div class="col-md-2">
+          <div class="col-sm-12" style="text-align:right;">
+            <span id="alerta" class="label label-danger"></span>
+            <img class="img-rounded pull-left" width="180" id="image-swap" src="" alt="" />
+          </div>
         </div>
-      </div>
-      <div class="col-md-10">
-        <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo') }}">
-          {{ csrf_field() }}
-          <div class="col-md-6" style="padding-right: 15px !important;padding-left: 10px !important">
-            <div class="row">
+        <div class="col-md-5">
+
+            <div class="col-md-12" style="padding-right: 15px !important;padding-left: 10px !important">
+              <div class="row">
 
 
-              <div class="col-sm-12">
+                <div class="col-sm-12">
 
-                <input id="clientes" type="text" class="form-control typeahead" autocomplete="off" spellcheck="false" value="" />
-                <br />
-                <br />
+                  <input id="clientes" type="text" class="form-control typeahead" autocomplete="off" spellcheck="false" value="" />
+                  <br />
+                  <br />
 
-                <input type="text" id="clientes_id1" name="clientes_id1" value="" hidden="" />
-                <input type="text" id="clientes_id2" name="clientes_id2" value="" hidden="" />
+                  <input type="hidden" id="clientes_id1" name="clientes_id1" value=""  />
+                  <input type="hidden" id="clientes_id2" name="clientes_id2" value=""  />
 
-                <div class="input-group form-group">
-
-                  <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
-
-                  <select id="medio_pago" name="medio_pago" class="selectpicker form-control">
-                    <option selected value="BiP" data-content="<span class='label label-primary'>BiP</span>">BiP</option>
-                    <option value="MC Uala" data-content="<span class='label label-info'>MC U</span>">MC U</option>
-                    <option value="MC MercadoPago" data-content="<span class='label label-info'>MC MP</span>">MC MP</option>
-                    <option value="MC Galicia" data-content="<span class='label label-default'>MC G</span>">MC G</option>
-                    <option value="VISA Galicia" data-content="<span class='label label-default'>VISA G</span>">VISA G</option>
-                    <option value="Debito Galicia" data-content="<span class='label label-success'>Deb G</span>">Deb G</option>
-                    <option value="Efectivo" data-content="<span class='label label-success'>Efectivo</span>">Efectivo</option>
-                  </select>
-
-                </div>
-
-                <div class="col-md-4">
-                  <div class="input-group form-group" id="div_costo_usd">
-                    <span class="input-group-addon">usd</span>
-                    <input class="form-control" type="text" name="costo_usd" id="multiplicando" value="" readonly>
-                  </div>
-                </div>
-
-
-                <div class="col-md-4">
                   <div class="input-group form-group">
-                    <span class="input-group-addon">ctz</span>
-                    <input class="form-control" type="text" id="multiplicador" value="{{ $cotiz }}">
-                  </div><!-- /input-group -->
-                </div><!-- /.col-lg-6 -->
 
-                <div class="col-md-4">
-                  <div class="input-group form-group">
                     <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
-                    <input class="form-control" type="text" name="costo" id="resultado" value="" style="text-align:right; color: #777" readonly>
+
+                    <select id="medio_pago" name="medio_pago" class="selectpicker form-control">
+                      <option selected value="BiP" data-content="<span class='label label-primary'>BiP</span>">BiP</option>
+                      <option value="MC Uala" data-content="<span class='label label-info'>MC U</span>">MC U</option>
+                      <option value="MC MercadoPago" data-content="<span class='label label-info'>MC MP</span>">MC MP</option>
+                      <option value="MC Galicia" data-content="<span class='label label-default'>MC G</span>">MC G</option>
+                      <option value="VISA Galicia" data-content="<span class='label label-default'>VISA G</span>">VISA G</option>
+                      <option value="Debito Galicia" data-content="<span class='label label-success'>Deb G</span>">Deb G</option>
+                      <option value="Efectivo" data-content="<span class='label label-success'>Efectivo</span>">Efectivo</option>
+                    </select>
+
                   </div>
+
+                  <div class="col-md-4">
+                    <div class="input-group form-group" id="div_costo_usd">
+                      <span class="input-group-addon">usd</span>
+                      <input class="form-control" type="text" name="costo_usd" id="multiplicando" value="" >
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-4">
+                    <div class="input-group form-group">
+                      <span class="input-group-addon">ctz</span>
+                      <input class="form-control" type="text" id="multiplicador" name="ctz" value="{{ $cotiz }}">
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+
+                  <div class="col-md-4">
+                    <div class="input-group form-group">
+                      <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
+                      <input class="form-control" type="text" name="costo" id="resultado" value="" style="text-align:right; color: #777" readonly>
+                    </div>
+                  </div>
+
+                  <p>.</p>
+
+                  <div class="col-sm-12">
+                    <!-- <input type="file" name="xls_cards" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"> -->
+                    <textarea rows="5" id="cod_bruto" name="cod_bruto" class="form-control" required>{{ old('cod_bruto') }}</textarea><br>
+                    <!-- no uso mas el boton <input class="btn btn-xs btn-normal" type="button" onClick="javascript:convertirProveedor()" value="Convertir Proveedor" /> -->
+                  </div>
+
+
+                  <div class="col-sm-12">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit" id="guardarcodigos">Guardar</button>
+                  </div>
+
                 </div>
-
-                <p>.</p>
-
-                <div class="col-sm-12">
-                  <textarea rows="5" id="cod_bruto" name="cod_bruto" class="form-control" required>{{ old('cod_bruto') }}</textarea><br>
-                  <!-- no uso mas el boton <input class="btn btn-xs btn-normal" type="button" onClick="javascript:convertirProveedor()" value="Convertir Proveedor" /> -->
-                </div>
-
-
-                <div class="col-sm-12">
-                  <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
-                </div>
-
               </div>
             </div>
-          </div>
 
-        </form>
-        <div class="row" id="container_codes">
 
 
         </div>
-      </div>
-
+        <div class="col-md-5" >
+          <div class="row" id="container_codes" style="padding-left: 10px;"></div>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -108,7 +114,6 @@
 @section('scripts')
   @parent
   <script type="text/javascript" src="../js/typeahead.bundle.js"></script>
-
   <script type="text/javascript">
     $(document).ready(function(){
       // Defining the local dataset
@@ -203,6 +208,10 @@
     });
 
 
+
+
+
   </script>
+
 
 @stop

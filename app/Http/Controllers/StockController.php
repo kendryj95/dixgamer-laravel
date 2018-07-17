@@ -9,6 +9,7 @@ use Schema;
 use DB;
 use App\Stock;
 use App\WpPost;
+use Illuminate\Support\Facades\Input;
 
 class StockController extends Controller
 {
@@ -107,18 +108,58 @@ class StockController extends Controller
       ));
     }
 
+    public function createCodep3(){
+        $cotiz = 25;
+
+        $giftCards = $this->wp_p->stockGiftCard();
+        $rowsAA = array();
+
+        foreach ($giftCards as $gifts) {
+            $rowsAA[]=$gifts->nombre;
+        }
+
+        $giftCards=$rowsAA;
+        $giftCards = json_encode($giftCards);
+        return view('stock.store_code_p3',compact(
+            'cotiz',
+            'giftCards'
+        ));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function validaCodigo(Request $request){
+
+        $gc = $request->codigo;
+        $u = Stock::where('code',$gc)->first();
+
+            if($u){
+                return response()->json('El código '. $gc . ' está duplicado o existente en la Base de datos verfique e intente de nuevo');
+            }
+
+        /*$codigos = [];
+        $codigos = $request->codes;
+
+        foreach ($codigos as $v){
+            $u = Stock::where('code',$v->codes)->first();
+                if (!empty($u)){
+                    return response()->json('El código '. $u->code . ' está duplicado o existente en la Base de datos verfique e intente de nuevo');
+                }
+        }*/
+    }
+
     public function storeCode(Request $request)
     {
+
+
       // Mensajes de alerta
       $msgs = [
-        'clientes_id1.required' => 'Intentelo nuevamente',
-        'clientes_id2.required' => 'Intentelo nuevamente',
+        'clientes_id1.required' => 'Intentelo nuevamente 1',
+        'clientes_id2.required' => 'Intentelo nuevamente 2 ',
         'medio_pago.required' => 'Medio de pago requerido',
         'costo_usd.required' => 'Costo en USD requerido',
         'costo.required' => 'Costo requerido',
@@ -140,6 +181,20 @@ class StockController extends Controller
       {
           return redirect()->back()->withInput()->withErrors($v->errors());
       }
+
+      foreach ($request->codes as $codes){
+
+          $locate = DB::table('stock')->where('code',$codes)->first();
+
+
+          if(!empty($locate)){
+              return redirect()->back()->withInput()->withErrors('El código '. $codes . ' Esta duplicado o ya se encuentra en la Base de datos, por favor verifique e intente de nuevo.');
+          } else {
+
+          }
+      }
+
+
 
       try {
 
@@ -165,6 +220,7 @@ class StockController extends Controller
         return redirect('stock');
 
       } catch (\Exception $e) {
+
         return redirect()->back()->withInput()->withErrors(['Intentelo nuevamente']);
       }
 
@@ -181,14 +237,13 @@ class StockController extends Controller
       // Mensajes de alerta
 
       $msgs = [
-        'clientes_id1.required' => 'Intentelo nuevamente',
-        'clientes_id2.required' => 'Intentelo nuevamente',
+        'clientes_id1.required' => 'Intentelo nuevamente 1 ',
+        'clientes_id2.required' => 'Intentelo nuevamente 2 ',
         'medio_pago.required' => 'Medio de pago requerido',
         'costo_usd.required' => 'Costo en USD requerido',
         'costo.required' => 'Costo requerido',
         'codes.required' => 'Codigos requeridos',
-        'codes.array' => 'Ingrese codigos validos',
-        'n_order.required' => 'Ingrese numero de orden'
+        'codes.array' => 'Ingrese codigos validos'
       ];
       // Validamos
       $v = Validator::make($request->all(), [
@@ -196,7 +251,6 @@ class StockController extends Controller
           // 'clientes_id2' => 'required',
           'medio_pago' => 'required',
           'costo_usd' => 'required',
-          'n_order' => 'required',
           'costo' => 'required',
           'codes' => 'required|array'
       ], $msgs);
@@ -206,6 +260,18 @@ class StockController extends Controller
       {
           return redirect()->back()->withInput()->withErrors($v->errors());
       }
+
+        foreach ($request->codes as $codes){
+
+            $locate = DB::table('stock')->where('code',$codes)->first();
+
+
+            if(!empty($locate)){
+                return redirect()->back()->withInput()->withErrors('El código '. $codes . ' Esta duplicado o ya se encuentra en la Base de datos, por favor verifique e intente de nuevo.');
+            } else {
+
+            }
+        }
 
       try {
 
@@ -233,8 +299,84 @@ class StockController extends Controller
         return redirect('stock');
 
       } catch (\Exception $e) {
-        return redirect()->back()->withInput()->withErrors(['Intentelo nuevamente']);
+          return $e;
+        //return redirect()->back()->withInput()->withErrors(['Intentelo nuevamente final']);
       }
+
+
+
+    }
+
+    public function storeCodep3(Request $request)
+    {
+        // Mensajes de alerta
+
+        $msgs = [
+            'clientes_id1.required' => 'Intentelo nuevamente 1 ',
+            'clientes_id2.required' => 'Intentelo nuevamente 2 ',
+            'medio_pago.required' => 'Medio de pago requerido',
+            'costo_usd.required' => 'Costo en USD requerido',
+            'costo.required' => 'Costo requerido',
+            'codes.required' => 'Codigos requeridos',
+            'codes.array' => 'Ingrese codigos validos'
+        ];
+        // Validamos
+        $v = Validator::make($request->all(), [
+            'clientes_id1' => 'required',
+            // 'clientes_id2' => 'required',
+            'medio_pago' => 'required',
+            'costo_usd' => 'required',
+            'costo' => 'required',
+            'codes' => 'required|array'
+        ], $msgs);
+
+        // Si hay errores retornamos a la pantalla anterior con los mensajes
+        if ($v->fails())
+        {
+            return redirect()->back()->withInput()->withErrors($v->errors());
+        }
+
+        foreach ($request->codes as $codes){
+
+            $locate = DB::table('stock')->where('code',$codes)->first();
+
+
+            if(!empty($locate)){
+                return redirect()->back()->withInput(Input::all())->withErrors('El código '. $codes . ' Esta duplicado o ya se encuentra en la Base de datos, por favor verifique e intente de nuevo.');
+            } else {
+
+            }
+        }
+
+        try {
+
+            $stocks = [];
+
+
+            $stockArr['titulo'] = $request->clientes_id1;
+            $stockArr['consola'] = $request->clientes_id2;
+            $stockArr['medio_pago'] = $request->medio_pago;
+            $stockArr['costo_usd'] = $request->costo_usd;
+            $stockArr['costo'] = $request->costo;
+            $stockArr['n_order'] = $request->n_order;
+            $stockArr['usuario'] = Auth::user()->Nombre."-GC";
+            $stockArr['code_prov'] = 'P3';
+
+            foreach ($request->codes as $code) {
+                $stockArr['code'] = $code;
+                array_push($stocks,$stockArr);
+            }
+
+            $saving = $this->st->storeCodes($stocks);
+
+            // Mensaje de notificacion
+            \Helper::messageFlash('Stock','Código P3 guardado');
+            return redirect('stock');
+
+        } catch (\Exception $e) {
+            //return $e;
+            return redirect()->back()->withInput()->withErrors(['Intentelo nuevamente']);
+        }
 
 
 

@@ -12,6 +12,7 @@
 */
 
 
+
 // Rutas login y logout
 Route::get('login', 'Auth\LoginController@index')->name('login');
 Route::post('login', 'Auth\LoginController@auth');
@@ -19,6 +20,10 @@ Route::get('logout',function(){
   Auth::logout();
   return redirect('login');
 });
+
+//API
+Route::get('getDataPaginaAnt','AccountController@previo')->name('getDataPaginaAnt');
+Route::get('getDataPaginaSig','AccountController@siguiente')->name('getDataPaginaSig');
 
 
 // Solo usuarios logueados
@@ -39,49 +44,9 @@ Route::group(['middleware' => ['auth']], function()
     Route::post('saveDataML','EditButtonsController@saveDataML')->name('saveDataML');
     Route::post('saveDataOther','EditButtonsController@saveDataOther')->name('saveDataOther');
     Route::post('saveNotes','EditButtonsController@saveNotes')->name('saveNotes');
+    Route::post('saveFB','EditButtonsController@saveFB')->name('saveFB');
+    Route::post('locateFB','EditButtonsController@locateFB')->name('locateFB');
   Route::post('updateStatusReseller','CustomerController@updateStatusReseller')->name('updateStatusReseller');
-
-  Route::get('prubasam', function (){
-     $veamos = \DB::select('*')
-         ->from(\DB::raw('(SELECT
-			COUNT(*) AS Q,
-			stock.ID AS ID_stk,
-			costo_usd,
-			GROUP_CONCAT(consola) AS cons,
-			cuentas_id,
-			cuentas.ID AS ID,
-			mail,
-			mail_fake
-		FROM
-			stock
-		LEFT JOIN cuentas ON stock.cuentas_id = cuentas.ID
-		WHERE
-			cuentas_id IS NOT NULL
-		GROUP BY
-			cuentas_id) as rdo'))
-             ->whereNotLike('cons')
-             ->where( 'cons', '!=', 'ps')
-             ->where('ID', '<>',5288)
-            ->whereRaw("costo_usd = '10.00'
-                OR costo_usd = '20.00'
-                OR costo_usd = '30.00'
-                OR costo_usd = '40.00'
-                OR costo_usd = '50.00'
-                OR costo_usd = '60.00'
-                OR costo_usd = '70.00'
-                OR costo_usd = '80.00'
-                OR costo_usd = '90.00'
-                OR costo_usd = '100.00'
-                OR costo_usd = '110.00'
-                OR costo_usd = '120.00'
-                OR costo_usd = '130.00'
-                OR costo_usd = '140.00'")
-         ->orderBy('costo_usd','DESC')
-
-         ->get();
-
-     return $veamos;
-  });
 
   // Rutas para cuentas
 
@@ -123,6 +88,7 @@ Route::group(['middleware' => ['auth']], function()
     // P1
     Route::get('stock_insertar_codigo','StockController@createCode');
     Route::post('stock_insertar_codigo','StockController@storeCode');
+    Route::get('validaCodigo','StockController@validaCodigo');
 
   });
 
@@ -138,6 +104,17 @@ Route::group(['middleware' => ['auth']], function()
     Route::resource('gastos', 'ExpensesController');
   });
 
+    Route::group(['middleware' => ['administrator']], function()
+    {
+        // P3
+        Route::get('stock_insertar_codigo_p3','StockController@createCodep3');
+        Route::post('stock_insertar_codigo_p3','StockController@storeCodep3');
+
+
+        // Gastos
+        Route::resource('gastos', 'ExpensesController');
+    });
+
 
 
   // Pueden acceder todos menos administrador
@@ -147,6 +124,8 @@ Route::group(['middleware' => ['auth']], function()
     Route::resource('horario','ScheduleController');
 
   });
+
+  Route::get('listado/ventas','SalesController@index')->name('listado/ventas');
 
 
 });

@@ -124,9 +124,9 @@
                   class="btn-xs text-muted"
                   style="opacity: 0.7;"
                   type="button"
+                  id="ModificarFacebook"
                   data-toggle="modal"
-                  data-target=".bs-example-modal-lg"
-                  onClick=document.getElementById("ifr").src="clientes_facebook.php?id={{$customer->ID}}";>
+                  data-target="#modificarfb"  data-customer="{{ $customer->ID }}">
                   <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>
               </p>
@@ -149,11 +149,11 @@
             @if(empty($customer->face))
               <button
                 title="Agregar FB"
+                id="agregaFacebook"
                 class="btn btn-xs btn-info"
                 type="button"
                 data-toggle="modal"
-                data-target=".bs-example-modal-lg"
-                onClick='document.getElementById("ifr").src="clientes_facebook.php?id=$customer->ID";'>
+                data-target="#agregarfb" data-customer="{{ $customer->ID }}">
                   <i class="fa fa-facebook fa-fw"></i> FB
               </button>
             @endif
@@ -809,8 +809,8 @@
                                     </div>
 
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
                                 <button type="button" id="saveEditName" class="btn btn-primary">Salvar Cambios</button>
                             </div>
                         </div>
@@ -845,8 +845,8 @@
                         </div>
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
                         <button type="button" id="saveEditEmail" class="btn btn-primary">Salvar Cambios</button>
                     </div>
                 </div>
@@ -881,8 +881,8 @@
                         </div>
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
                         <button type="button" id="saveEditML" class="btn btn-primary">Salvar Cambios</button>
                     </div>
                 </div>
@@ -933,8 +933,8 @@
                         </div>
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
                         <button type="button" id="saveEditOtros" class="btn btn-primary">Salvar Cambios</button>
                     </div>
                 </div>
@@ -968,15 +968,81 @@
                         </div>
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
                         <button type="button" id="saveNotes" class="btn btn-primary">Salvar Cambios</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="agregarfb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 450px;">
+                        <h5 class="modal-title" id="exampleModalLabel">Agregar Cuenta de Facebook</h5>
 
+                    </div>
+                    <div class="modal-body" style="color: black !important;">
+
+                        <div class="row" style="margin-left: auto; margin-right: auto; width: 450px;">
+                            <div class="card">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+
+                                    <div>
+                                        <input type="text" class="form-control" id="cuentafacebook">
+                                        <input type="hidden" class="form-control" id="idcustomer">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
+                        <button type="button" id="saveFB" class="btn btn-primary">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modificarfb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 450px;">
+                        <h5 class="modal-title" id="exampleModalLabel">Modificar Cuenta de Facebook</h5>
+
+                    </div>
+                    <div class="modal-body" style="color: black !important;">
+
+                        <div class="row" style="margin-left: auto; margin-right: auto; width: 450px;">
+                            <div class="card">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+
+                                    <div>
+                                        <input type="text" class="form-control" id="cuentafacebookmodify">
+                                        <input type="hidden" class="form-control" id="idcustomer">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
+                        <button type="button" id="saveModifyFB" class="btn btn-primary">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
        <!--/row-->
        <!-- InstanceEndEditable -->
@@ -1050,7 +1116,6 @@
                    url: '/saveDataName',
                    data: { '_token':token, 'nombre':nombre,'apellido':apellido,'id':id },
                     success: function (result) {
-                       alert(result);
                         location.reload();
                     }
                 });
@@ -1080,7 +1145,7 @@
                 url: '/saveDataEmail',
                 data: { '_token':token, 'email':email,'id':id },
                 success: function (result) {
-                    alert(result);
+
                     location.reload();
                 }
             });
@@ -1110,7 +1175,7 @@
                 url: '/saveDataML',
                 data: { '_token':token, 'ml':ml,'id':id },
                 success: function (result) {
-                    alert(result);
+
                     location.reload();
                 }
             });
@@ -1148,7 +1213,7 @@
                 url: '/saveDataOther',
                 data: { '_token':token,'provincia':provincia,'ciudad':ciudad,'carac':carac,'tel':tel,'cel':cel,'id':id },
                 success: function (result) {
-                    alert(result);
+
                     location.reload();
                 }
             });
@@ -1169,7 +1234,60 @@
                 url: '/saveNotes',
                 data: { '_token':token,'notes':notes,'id':id },
                 success: function (result) {
-                    alert(result);
+
+                    location.reload();
+                }
+            });
+        });
+
+       $('#agregaFacebook').on('click',function(e){
+          e.preventDefault();
+          var id = $('#agregaFacebook').data('customer');
+          console.log(id);
+          $('.modal-body #idcustomer').val(id);
+       });
+
+        $('#saveFB').on('click',function (e) {
+            var face = $('#cuentafacebook').val();
+            var id = $('#idcustomer').val();
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/saveFB',
+                data: { '_token':token,'face':face,'id':id },
+                success: function (result) {
+
+                    location.reload();
+                }
+            });
+        });
+
+        $('#ModificarFacebook').on('click',function(e){
+            e.preventDefault();
+            var id = $('#ModificarFacebook').data('customer');
+            var token = $('#token').val();
+                $.ajax({
+                    method: 'post',
+                    url: '/locateFB',
+                    data: { 'id':id, '_token':token },
+                    success: function(result){
+                        console.log(result.face);
+                        $('#cuentafacebookmodify').val(result.face);
+                        $('#idcustomer').val(result.ID);
+                    }
+                });
+        });
+
+        $('#saveModifyFB').on('click',function (e) {
+            var face = $('#cuentafacebookmodify').val();
+            var id = $('#idcustomer').val();
+            var token = $('#token').val();
+            $.ajax({
+                method: 'post',
+                url: '/saveFB',
+                data: { '_token':token,'face':face,'id':id },
+                success: function (result) {
+
                     location.reload();
                 }
             });

@@ -20,22 +20,55 @@ class EditButtonsController extends Controller
     }
 
     public function saveDataName(Request $request){
+        $prevName = DB::table('clientes')
+            ->where('ID',$request->id)->first();
+
         DB::table('clientes')
             ->where('ID',$request->id)->update(['nombre' => $request->nombre, 'apellido' => $request->apellido]);
+
+        DB::table('clientes_notas')->insert(['notas' => 'Nombre Anterior: ' . $prevName->nombre . ' '. $prevName->apellido,
+            'clientes_id' => $prevName->ID ,
+            'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
 
         return Response()->json('Variables Actualizadas');
     }
 
     public function saveDataEmail(Request $request){
+        $prevName = DB::table('clientes')
+            ->where('ID',$request->id)->first();
+
         DB::table('clientes')
             ->where('ID',$request->id)->update(['email' => $request->email]);
+
+        DB::table('clientes_notas')->insert(['notas' => 'Email Anterior: ' . $prevName->email,
+            'clientes_id' => $prevName->ID ,
+            'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
 
         return Response()->json('Variable de Correo Actualizada');
     }
 
     public function saveDataML(Request $request){
+        $prevName = DB::table('clientes')
+            ->where('ID',$request->id)->first();
+
         DB::table('clientes')
             ->where('ID',$request->id)->update(['ml_user' => $request->ml]);
+
+        DB::table('clientes_notas')->insert(['notas' => 'ML Anterior: ' . $prevName->ml_user,
+            'clientes_id' => $prevName->ID ,
+            'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
+
+        return Response()->json('Variable de ML Actualizada');
+    }
+
+    public function saveFB(Request $request){
+
+        DB::table('clientes')
+            ->where('ID',$request->id)->update(['face' => $request->face]);
+
+        DB::table('clientes_notas')->insert(['notas' => 'Cuenta de Face agreagada: ' . $request->face,
+            'clientes_id' => $request->id ,
+            'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
 
         return Response()->json('Variable de ML Actualizada');
     }
@@ -56,6 +89,14 @@ class EditButtonsController extends Controller
         ]);
 
         return Response()->json('Variables  Insertadas con exito');
+    }
+
+    public function locateFB(Request $request){
+
+        $cliente = DB::table('clientes')
+            ->where('ID',$request->id)->first();
+
+        return Response()->json($cliente);
     }
 
 

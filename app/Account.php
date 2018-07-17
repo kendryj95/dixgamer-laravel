@@ -106,31 +106,31 @@ class Account extends Model
                               costo_usd,
                               GROUP_CONCAT(consola) as cons,
                               cuentas_id,
-                              cuentas.ID as ID,
+                              cuentas.ID as id,
                               mail,
                               mail_fake FROM `stock`
                               LEFT JOIN cuentas
                               ON stock.cuentas_id = cuentas.ID
                               WHERE cuentas_id IS NOT NULL
                               GROUP BY cuentas_id) AS rdo"))
-                      ->whereRaw("cons NOT LIKE '%ps3%'
-                      and cons <> 'ps'
-                      and ID <> '5288'
-                      and costo_usd='10.00'
-                      and costo_usd='20.00'
-                      and costo_usd='30.00'
-                      and costo_usd='40.00'
-                      and costo_usd='50.00'
-                      and costo_usd='60.00'
-                      and costo_usd='70.00'
-                      and costo_usd='80.00'
-                      and costo_usd='90.00'
-                      and costo_usd='100.00'
-                      and costo_usd='110.00'
-                      and costo_usd='120.00'
-                      and costo_usd='130.00'
-                      and costo_usd='140.00'")
-                      ->orderBy('costo_usd','DESC');
+          ->whereRaw("rdo.cons NOT LIKE '%ps3%'
+                      and rdo.cons != 'ps'
+                      and rdo.id != '5288'
+                      and (costo_usd='10.00'
+                      or costo_usd='20.00'
+                      or costo_usd='30.00'
+                      or costo_usd='40.00'
+                      or costo_usd='50.00'
+                      or costo_usd='60.00'
+                      or costo_usd='70.00'
+                      or costo_usd='80.00'
+                      or costo_usd='90.00'
+                      or costo_usd='100.00'
+                      or costo_usd='110.00'
+                      or costo_usd='120.00'
+                      or costo_usd='130.00'
+                      or costo_usd='140.00')")
+          ->orderBy('costo_usd','DESC');
     }
 
     // cuentas para juegos PS4
@@ -140,33 +140,48 @@ class Account extends Model
                               costo_usd,
                               GROUP_CONCAT(consola) as cons,
                               cuentas_id,
-                              cuentas.ID as ID,
+                              cuentas.ID as id,
                               mail,
                               mail_fake FROM `stock`
                               LEFT JOIN cuentas
                               ON stock.cuentas_id = cuentas.ID
                               WHERE cuentas_id IS NOT NULL
                               GROUP BY cuentas_id) AS rdo"))
-            ->whereRaw("cons NOT LIKE '%ps4%'
-                      and cons <> 'ps'
-                      and ID <> '5288'
-                      and costo_usd='10.00'
-                      and costo_usd='20.00'
-                      and costo_usd='30.00'
-                      and costo_usd='40.00'
-                      and costo_usd='50.00'
-                      and costo_usd='60.00'
-                      and costo_usd='70.00'
-                      and costo_usd='80.00'
-                      and costo_usd='90.00'
-                      and costo_usd='100.00'
-                      and costo_usd='110.00'
-                      and costo_usd='120.00'
-                      and costo_usd='130.00'
-                      and costo_usd='140.00'")
+            ->whereRaw("rdo.cons NOT LIKE '%ps4%'
+                      and rdo.cons != 'ps'
+                      and rdo.id != '5288'
+                      and (costo_usd='10.00'
+                      or costo_usd='20.00'
+                      or costo_usd='30.00'
+                      or costo_usd='40.00'
+                      or costo_usd='50.00'
+                      or costo_usd='60.00'
+                      or costo_usd='70.00'
+                      or costo_usd='80.00'
+                      or costo_usd='90.00'
+                      or costo_usd='100.00'
+                      or costo_usd='110.00'
+                      or costo_usd='120.00'
+                      or costo_usd='130.00'
+                      or costo_usd='140.00')")
             ->orderBy('costo_usd','DESC');
     }
 
+    public function scopeSiguiente($query, $id){
+        $dato = $query->select('ID')
+            ->where('ID','>',$id)
+            ->orderBy('ID','asc');
+
+        return $dato;
+    }
+
+    public function scopePrevio($query, $id){
+        $dato = $query->select('ID')
+            ->where('ID','<',$id)
+            ->orderBy('ID','desc');
+
+        return $dato;
+    }
 
     public function createAccount($arrayAcount){
       return DB::table('cuentas')->insert($arrayAcount);

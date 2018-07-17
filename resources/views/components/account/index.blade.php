@@ -27,12 +27,13 @@
                   {{ $account->mail_fake }}
                 </a>
               </td>
-
               <td>
                 <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->id] ) }}">
                   {{ $account->juego }}
                 </a>
               </td>
+
+
             </tr>
 
           @endforeach

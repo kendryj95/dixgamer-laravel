@@ -3,7 +3,7 @@
 @section('container')
 
 <div class="container">
-  <h1>Gift Cards G</h1>
+  <h1>Gift Cards P3</h1>
   <h4>Gift Cards Cargadas: <span id="cant_giftcards"></span></h4>
   @if (count($errors) > 0)
 				<div class="alert alert-danger text-center">
@@ -16,7 +16,7 @@
 	@endif
   <div class="row">
     <div class="col-md-12">
-        <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo_g') }}">
+        <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo_p3') }}">
             {{ csrf_field() }}
         <div class="col-md-2">
           <div class="col-sm-12" style="text-align:right;">

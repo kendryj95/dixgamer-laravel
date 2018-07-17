@@ -9,23 +9,29 @@
 
 @section('container')
 <div class="container">
+
 	<h1>
 		Cuenta #{{$account->ID}}
+
 		<a
 			title="Cuenta anterior"
 			style="color:#ccc;"
-			href="{{ url('cuentas/'.((int)$account->ID-1)) }}"
+			id="paginaAnt"
+			href="{{ url('cuentas/'.$back->ID) }}"
 			target="_self">
 				<
 		</a>
-
+		@if(!empty($next))
 		<a
 			title="Cuenta siguiente"
 			style="color:#ccc;"
-			href="{{ url('cuentas/'.((int)$account->ID+1)) }}"
+			id="paginaPrev"
+			href="{{ url('cuentas/'.$next->ID) }}"
 			target="_self">
 				>
 		</a>
+		@else
+		@endif
 	</h1>
 		@if (count($errors) > 0)
 					<div class="alert alert-danger text-center">
@@ -637,15 +643,18 @@
             <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Solicitud de Reseteo por <?php echo $sc->usuario;?></em></td>
             <?php else:?>
             <td><span class="text-muted small">#<?php echo $sc->clientes_id; ?></span> <span class="label label-info"><?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span>
-            <?php if ($sc->clientes_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->clientes_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
+            <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
 
             <td id="<?php echo $sc->clientes_id; ?>"><a title="Ir a Cliente" href="clientes_detalles.php?id=<?php echo $sc->clientes_id; ?>"><?php echo $sc->email; ?></a> <a class="btn btn-xs btn-default" style="opacity:0.6;" href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($sc->email, 0, strpos($sc->email, '@')) . '+' . substr($account->mail_fake, 0, strpos($account->mail_fake, '@')); ?>" title="filtrar guia de descarga en gmail" target="_blank"><i aria-hidden="true" class="fa fa-google"></i>mail</a>
 
 				<!--- Mensajes predefinidos con guia de re activar o cambio de contraseña -->
+				<!--
 				<div style="position:absolute; top:0; left:-500px;">
-					<textarea id="newpass-copy" type="text" rows="1" cols="2"><?php echo "Actualizamos la contraseña de ésta Cuenta/Usuario: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
-					<textarea id="reactivar-copy" type="text" rows="1" cols="2"><?php echo "Por favor ingresá a nuestra cuenta/usuario una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:\r\n\r\n1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar\r\n2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar\r\n3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.\r\n\r\nContraseña: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
+					<textarea id="newpass-copy" type="text" rows="1" cols="2"><?php // echo "Actualizamos la contraseña de ésta Cuenta/Usuario: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
+					<textarea id="reactivar-copy" type="text" rows="1" cols="2"><?php // echo "Por favor ingresá a nuestra cuenta/usuario una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:\r\n\r\n1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar\r\n2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar\r\n3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.\r\n\r\nContraseña: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
 				</div>
+1
+				-->
 				<?php if (strpos($sc->consola, 'ps4') !== false):?>
 					<?php if ($sc->slot == 'Primario'):?>
 					<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
@@ -655,9 +664,9 @@
 				<?php endif;?>
 
 			  </td>
-            <td><span class="label <?php if ($sc->slot == 'Primario'):?>label-default<?php endif;?>"><?php echo $sc->titulo; ?></span> <?php if ($sc->slot == 'Secundario'): ?><span class="label label-danger" style="opacity:0.7">2°</span><?php endif; ?> <span class="label label-default <?php echo $sc->consola; ?>"><?php echo $sc->consola; ?></span> <?php echo $sc->ID_ventas; ?> <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
+            <td><span class="label <?php if ($sc->slot == 'Primario'):?>label-default<?php endif;?>"><?php echo $sc->titulo; ?></span> <?php if ($sc->slot == 'Secundario'): ?><span class="label label-danger" style="opacity:0.7">2°</span><?php endif; ?> <span class="label label-default <?php echo $sc->consola; ?>"><?php echo $sc->consola; ?></span> <?php echo $sc->ID_stock; ?> <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
 
-            <td style="text-align:right;"><a class="btn btn-xs btn-default" type="button" title="Modificar venta" href="ventas_modificar.php?id=<?php echo $sc->ID_ventas; ?>"><i aria-hidden="true" class="fa fa-pencil"></i></a></td>
+            <td style="text-align:right;"><a class="btn btn-xs btn-default" type="button" title="Modificar venta" href="ventas_modificar.php?id=<?php echo $sc->ID_stock; ?>"><i aria-hidden="true" class="fa fa-pencil"></i></a></td>
             <?php endif;?>
           </tr>
       @endforeach
@@ -688,5 +697,21 @@
      <!-- InstanceEndEditable -->
     </div><!--/.container-->
     </div><!--/.container-->
-
+@section('scripts')
+@parent
+	<script>
+		/*
+		$('#paginaAnt').on('click',function(e){
+			e.preventDefault();
+			$.ajax({
+				method: 'get',
+				url: '/getDataPaginaAnt',
+				success: function(result){
+				    console.log(result);
+			}
+			});
+		});
+		*/
+	</script>
+@endsection
 @endsection
