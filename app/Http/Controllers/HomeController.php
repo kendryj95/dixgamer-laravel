@@ -48,6 +48,8 @@ class HomeController extends Controller
       $obj->title = 'plus-12-meses-slot';
       $obj->type = 'primary';
       $ps4_primary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
+
+      //dd($stocks);
       /***     PS4 SECUNDARIO     ***/
 
       $obj = new \stdClass;

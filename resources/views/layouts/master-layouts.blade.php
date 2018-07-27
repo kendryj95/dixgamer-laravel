@@ -98,15 +98,20 @@
             <li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Vtas<span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="{{ url('listado/ventas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+                <li><a href="{{ url('sales/list') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
 				<!--
                 <li><a href="https://dixgamer.com/db/ventas_web_sin_oii.php"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin order_item_id</a></li>
-                -->
+
                 <li class="divider" role="separator"></li>
                 <!--  Solo Admin   -->
+                <!--
                 <li><a href="https://dixgamer.com/db/ventas_insertar.php"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
                 <!--  Termina Admin   -->
+                <!--
+
                 <li><a href="https://dixgamer.com/db/ventas_buscador.php"><i class="fa fa-search fa-fw" aria-hidden="true"></i> Buscar</a></li>
+
+                -->
               </ul>
             </li>
             <li><a href="https://dixgamer.com/db/ventas_web.php"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>

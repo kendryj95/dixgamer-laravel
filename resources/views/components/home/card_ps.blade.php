@@ -14,7 +14,8 @@
                 {{ str_replace('-', ' ', $data->titulo) }}
               </span>
               <a title="vender {{$data->titulo}}"
-                  href="ventas_insertar.php?consola={{$data->consola}}>&titulo={{$data->titulo}}&slot={{$slot}}&order_item_id={{app('request')->input('order_item_id')}}">
+
+                  href="{{ url('sales/manual/add',[$data->consola,$data->titulo,$slot]) }}">
 
                 <img src="/img/productos/{{$data->consola}}/{{$data->titulo}}.jpg" alt="{{$data->consola}} - {{$data->titulo}}.jpg"
                     class="img img-responsive full-width"
