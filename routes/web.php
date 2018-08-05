@@ -129,6 +129,7 @@ Route::group(['middleware' => ['auth']], function()
   Route::get('sales/manual/add/{consola}/{titulo}/{slot}','SalesController@addManualSale')->name('sales/manual/add/{consola}/{titulo}/{slot}');
   Route::post('saveManualSale','SalesController@saveManualSale')->name('saveManualSale');
   //Route::get('web/sales','Pedidos_CobradosController@index')->name('web/sales');
-    Route::get('web/sales','Pedidos_CobradosController@pdosCobrados')->name('web/sales');
+    Route::get('web/sales','Pedidos_CobradosController@index')->name('web/sales');
+    Route::post('getDataClientWebSales','Pedidos_CobradosController@getDataClientWebSales')->name('getDataClientWebSales');
 
 });
