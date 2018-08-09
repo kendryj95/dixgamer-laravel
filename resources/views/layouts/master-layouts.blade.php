@@ -137,6 +137,8 @@
             <li><a href="{{ url('horario') }}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
           @endif
 
+          @if (Auth::user()->Level == "Adm")
+
            <li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -151,8 +153,11 @@
                 <li class="divider" role="separator"></li>
                 <li><a href="https://dixgamer.com/db/adwords_detalles.php"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
                 <li><a href="https://dixgamer.com/db/titulos.php"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> Titulos</a></li>
+                <li class="divider" role="separator"></li>
+                <li><a href="usuario"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
               </ul>
             </li>
+          @endif
 
 			<li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Control<span class="caret"></span></a>

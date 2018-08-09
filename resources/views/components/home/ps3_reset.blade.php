@@ -18,7 +18,7 @@
               ) {{ $data->titulo }}
             </span>
 
-           	<img src="/img/productos/{{ $data->consola }}/{{$data->titulo}}.jpg"
+           	<img src="{{asset('img/productos/'.$data->consola .'/'.$data->titulo.'.jpg')}}"
                   alt="{{ $data->consola }} - {{ $data->titulo }}.jpg"
                   class="img img-responsive full-width" style="position:absolute;" />
            </div>

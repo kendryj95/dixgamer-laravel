@@ -16,7 +16,8 @@
               <a title="vender {{$stock->titulo}}"
                   href="{{ url('sales/manual/add',[$stock->consola,$stock->titulo,'No']) }}">
 
-                <img src="/img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg" alt="{{$stock->consola}} - {{$stock->titulo}}.jpg"
+                {{-- <img src="/img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg" alt="{{$stock->consola}} - {{$stock->titulo}}.jpg" --}}
+                <img src="{{ asset('img/productos/'.$stock->consola.'/'.$stock->titulo.'.jpg')}}" alt="{{$stock->consola}} - {{$stock->titulo}}.jpg"
                     class="img img-responsive full-width"
                     style="border-radius:5px; position:absolute;">
 

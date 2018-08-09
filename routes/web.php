@@ -27,7 +27,7 @@ Route::get('getDataPaginaSig','AccountController@siguiente')->name('getDataPagin
 
 
 // Solo usuarios logueados
-Route::group(['middleware' => ['auth']], function()
+Route::group(['middleware' => ['login']], function()
 {
   Route::get('/', 'HomeController@index');
   Route::get('home', 'HomeController@index');
@@ -131,5 +131,9 @@ Route::group(['middleware' => ['auth']], function()
   //Route::get('web/sales','Pedidos_CobradosController@index')->name('web/sales');
     Route::get('web/sales','Pedidos_CobradosController@index')->name('web/sales');
     Route::post('getDataClientWebSales','Pedidos_CobradosController@getDataClientWebSales')->name('getDataClientWebSales');
+
+  Route::get('usuario', 'UsuariosController@create');
+
+  Route::post('usuario/create', 'UsuariosController@store');
 
 });

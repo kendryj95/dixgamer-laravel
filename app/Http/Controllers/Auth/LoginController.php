@@ -44,19 +44,17 @@ class LoginController extends Controller
     $password = $request->password;
     $name = $request->name;
     $user = User::where('Nombre',$name)->first();
+    // $user = DB::select("SELECT * FROM usuarios WHERE Nombre=?", [$name])[0];
+    // dd($user);
     // Si encontramos un usuario validamos sus datos
-    if (count($user) == 1) {
+    if ($user) {
       // Si las password coinciden pasaremos
       if (\Hash::check($password, $user->Contra))
       {
-        // logueamos el usuario
-        Auth::loginUsingId($user->id);
-        if (Auth::check())
-        {
+        
+        $request->session()->put('usuario', $user);
 
-          // dd(Auth::user());
-          return redirect('home');
-        }
+        return redirect('home');
 
       }
       return redirect()->back()->withErrors(['Credenciales incorrectas']);

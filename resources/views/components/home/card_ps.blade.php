@@ -17,7 +17,7 @@
 
                   href="{{ url('sales/manual/add',[$data->consola,$data->titulo,$slot]) }}">
 
-                <img src="/img/productos/{{$data->consola}}/{{$data->titulo}}.jpg" alt="{{$data->consola}} - {{$data->titulo}}.jpg"
+                <img src="{{asset('img/productos/'.$data->consola.'/'.$data->titulo.'.jpg')}}" alt="{{$data->consola}} - {{$data->titulo}}.jpg"
                     class="img img-responsive full-width"
                     style="border-radius:5px; position:absolute;">
 
