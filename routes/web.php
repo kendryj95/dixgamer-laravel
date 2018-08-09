@@ -16,11 +16,13 @@
 // Rutas login y logout
 Route::get('login', 'Auth\LoginController@index')->name('login');
 Route::post('login', 'Auth\LoginController@auth');
-Route::get('logout',function(){
+Route::get('logout', 'Auth\LoginController@logout');
+
+/*Route::get('logout',function(){
   Auth::logout();
   return redirect('login');
 });
-
+*/
 //API
 Route::get('getDataPaginaAnt','AccountController@previo')->name('getDataPaginaAnt');
 Route::get('getDataPaginaSig','AccountController@siguiente')->name('getDataPaginaSig');
