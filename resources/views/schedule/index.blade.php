@@ -3,7 +3,7 @@
 @section('container')
 
 <div class="container">
-	<h1>Horario de {{ Auth::user()->Name }}</h1>
+	<h1>Horario de {{ session()->get('usuario')->Name }}</h1>
     <!-- InstanceBeginEditable name="body" -->
     <div class="row">
 

@@ -18,15 +18,15 @@
                 <tr>
                     <th>#</th>
                     <th>Producto</th>
-                    @if(Helper::validateAdministrator(Auth::user()->Level))
+                    @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                         <th>Code Prov</th>
                     @endif
                     <th>Cuenta</th>
                     <th>Costo USD</th>
-                    @if(Helper::validateAdminAnalyst(Auth::user()->Level))
+                    @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level))
                         <th>Costo</th>
                     @endif
-                    @if(Helper::validateAdministrator(Auth::user()->Level))
+                    @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                         <th>Pago por</th>
                     @endif
                 </tr>
@@ -61,7 +61,7 @@
                   </span>
                             </td>
 
-                            @if(Helper::validateAdministrator(Auth::user()->Level))
+                            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                                 <td>
                                     @if($stock->code)
                                         <small class="label label-default">
@@ -84,11 +84,11 @@
 
                             <td>{{$stock->costo_usd}}</td>
 
-                            @if(Helper::validateAdminAnalyst(Auth::user()->Level))
+                            @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level))
                                 <td>{{ $stock->costo }}</td>
                             @endif
 
-                            @if(Helper::validateAdministrator(Auth::user()->Level))
+                            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                                 <td>{{ $stock->medio_pago }}</td>
                             @endif
 

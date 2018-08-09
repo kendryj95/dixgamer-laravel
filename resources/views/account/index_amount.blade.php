@@ -14,7 +14,7 @@
         <tr>
           <th>#</th>
           <th>Libre en USD</th>
-            @if(Helper::validateAdministrator(Auth::user()->Level))
+            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <th>Libre en Pesos</th>
             @endif
           <th>Para Consola</th>
@@ -48,7 +48,7 @@
                 </td>
 
                 <?php // validamos administracion  ?>
-                @if(Helper::validateAdministrator(Auth::user()->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                   <td>
                     <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                       {{ $account->libre_ars }}

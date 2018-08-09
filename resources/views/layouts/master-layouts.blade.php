@@ -80,16 +80,16 @@
                 <li><a href="{{ url('catalogo_link_ps_store') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Link PS Store</a></li>
 				        <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
 
-                @if(Helper::validateAdminAnalyst(Auth::user()->Level))
+                @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level))
                     <li class="divider" role="separator"></li>
                     <li><a href="{{ url('stock_insertar_codigo') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P1</a></li>
                 @endif
 
-                @if(Helper::validateAdministrator(Auth::user()->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                   <li><a href="{{ url('stock_insertar_codigo_g') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P2</a></li>
                 @endif
 
-                @if(Helper::validateAdministrator(Auth::user()->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                   <li><a href="{{ url('stock_insertar_codigo_p3') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P3</a></li>
                 @endif
               </ul>
@@ -116,7 +116,7 @@
             </li>
             <li><a href="https://dixgamer.com/db/ventas_web.php"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>
 
-            @if(Helper::validateAdministrator(Auth::user()->Level))
+            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <li class="dropdown">
                 <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bank fa-fw" aria-hidden="true"></i> Gtos<span class="caret"></span></a>
                 <ul class="dropdown-menu">
@@ -133,11 +133,11 @@
           <ul class="nav navbar-nav navbar-right">
           <li><a target="_blank" href="https://dixgamer.com/base-de-conocimiento/"><i class="fa fa-info fa-fw" aria-hidden="true"></i> Info</a></li>
 
-          @if(Helper::lessAdministrator(Auth::user()->Level))
+          @if(Helper::lessAdministrator(session()->get('usuario')->Level))
             <li><a href="{{ url('horario') }}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
           @endif
 
-          @if (Auth::user()->Level == "Adm")
+          @if (session()->get('usuario')->Level == "Adm")
 
            <li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>

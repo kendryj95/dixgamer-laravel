@@ -28,7 +28,7 @@
                   style="position: relative; top: 8px; left: -8px;">
 
               <?php // Valido que sea administrador o analista para mostrar valor real ?>
-              @if(Helper::validateAdminAnalyst(Auth::user()->Level))
+              @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level))
                   {{$stock->q_stock}}
               @else
 
@@ -47,7 +47,7 @@
               {{$stock->id_stk}}
             </small>
             <br />
-              @if(Helper::validateAdministrator(Auth::user()->Level))
+              @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                 <span class="badge badge-default">
                   ${{$stock->costo}}
                 </span>

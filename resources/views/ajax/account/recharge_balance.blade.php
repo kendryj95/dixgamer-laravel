@@ -24,7 +24,7 @@
               <span
                 class="badge badge-<?php if ($gift->Q_Stock > 4): echo 'success'; else: echo 'danger'; endif;?> pull-right"
                 style="position: relative; top: 8px; left: -8px;">
-                  @if(Helper::validateAdministrator(Auth::user()->Level))
+                  @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     {{ $gift->Q_Stock }}
                   @else
                     @if ($gift->Q_Stock > 4)
@@ -40,7 +40,7 @@
 
             <div class="caption text-center">
               <small style="color:#CFCFCF;">
-                @if(Helper::validateAdministrator(Auth::user()->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                   <i class="fa fa-gamepad fa-fw" aria-hidden="true"></i>
                   {{ $gift->ID_stk }}
                 @endif

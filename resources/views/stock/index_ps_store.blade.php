@@ -22,7 +22,7 @@
           <th>Titulo</th>
           <th>Links PS</th>
 
-          @if(Helper::validateAdministrator(Auth::user()->Level))
+          @if(Helper::validateAdministrator(session()->get('usuario')->Level))
             <th>Agregar Link</th>
             <th>Post ID</th>
       		@endif
@@ -69,7 +69,7 @@
                 @endif
               </td>
 
-              @if(Helper::validateAdministrator(Auth::user()->Level))
+              @if(Helper::validateAdministrator(session()->get('usuario')->Level))
 
                 <td title="Insertar Link">
 

@@ -168,7 +168,7 @@
                   <i class="fa fa-snapchat-ghost fa-fw"></i> ML
               </button>
             @endif
-                @if(Helper::validateAdministrator(Auth::user()->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     @if(strpos($customer->auto, 're') !== false)
                         <a href="#!" id="doreseller" data-customer="{{ $customer->ID }}" data-update="no" type="button" class="btn btn-default btn-xs pull-right">Hacer Revendedor</a>
                     @else
@@ -180,7 +180,7 @@
 
             </p>
 
-            @if(Helper::validateAdministrator(Auth::user()->Level))
+            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <div style="display: none;">
                 <p>
                   <a
@@ -243,7 +243,7 @@
 
 
 
-        @if($customer->ID === "371" && !(Helper::validateAdministrator(Auth::user()->Level)))
+        @if($customer->ID === "371" && !(Helper::validateAdministrator(session()->get('usuario')->Level)))
         @else
           <!-- Si hay ventas de usuario -->
           <?php if(count($dataCustomers) > 0): ?>
@@ -338,7 +338,7 @@
 
                   <small style="color:#CFCFCF;">
                     <?php // si es el admin muestro los ID de cobros como links para editar los cobros?>
-                      @if(Helper::validateAdministrator(Auth::user()->Level))
+                      @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                         <?php
                           $array = (explode(',', $dataCustomer->ID_cobro, 10));
                         ?>
@@ -445,7 +445,7 @@
               ?>
 
 
-              @if(Helper::validateAdministrator(Auth::user()->Level))
+              @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                 @if(!empty($expensesIncome))
                   <?php
                     $gtoestimado = round($expensesIncome[0]->gto_x_ing * $dataCustomer->precio);
@@ -469,7 +469,7 @@
                   <?php echo round($dataCustomer->precio); ?>
                 </small>
 
-                @if(Helper::validateAdministrator(Auth::user()->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                   /
                   <small
                     class="
@@ -489,7 +489,7 @@
                   </i>
 
                   <?php echo round($dataCustomer->comision); ?>
-                  @if(Helper::validateAdministrator(Auth::user()->Level))
+                  @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     <?php echo ', ' . $gtoestimado . ', ' . $iibbestimado . ', ' . $costo; ?>
                   @endif
                 </small>
@@ -502,7 +502,7 @@
                     <?php echo $dataCustomer->code; ?>
                   </small>
 
-                  @if(Helper::validateAdministrator(Auth::user()->Level))
+                  @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     <?php
                       echo '<br><small style="color:#CFCFCF; font-size:0.6em;" class="caption text-center">' . $dataCustomer->code_prov;
                       echo '-' . $dataCustomer->n_order . '</small>';
@@ -561,7 +561,7 @@
 
                   <i class="fa fa-gamepad fa-fw" aria-hidden="true"></i>
                   <?php echo $dataCustomer->ID_stock; ?>
-                  @if(Helper::validateAdministrator(Auth::user()->Level))
+                  @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     @if($dataCustomer->stock_Notas)
                       <a
                         href="#"
@@ -745,7 +745,7 @@
               <?php endif; ?>
               <?php $ganancia2 = round($lowerSale->precio - $lowerSale->comision - $costo2); ?>
               <p><small class="text-success"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo round($lowerSale->precio); ?></small><br /><small class="text-danger"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo round($lowerSale->comision); ?></small>
-        @if(Helper::validateAdministrator(Auth::user()->Level))
+        @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <br /><small class="text-danger"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo $costo2; ?></small><hr style="margin:0px"><small class="<?php if ($ganancia2 < '0'):?>text-danger<?php else:?>text-success<?php endif;?>"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo $ganancia2; ?></small>
         @endif
 

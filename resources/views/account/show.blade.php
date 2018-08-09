@@ -225,7 +225,7 @@
 
 								@foreach($accountBalances as $balance)
 									@if(!empty($balance->costo_usd))
-										@if(Helper::validateAdministrator(Auth::user()->Level))
+										@if(Helper::validateAdministrator(session()->get('usuario')->Level))
 											<div class="dropdown" style="display:inline;">
 												<button
 													class="btn btn-default dropdown-toggle btn-xs"
@@ -263,7 +263,7 @@
 												{{ str_replace('-', '', $balance->code) }}
 											</small>
 
-											@if(Helper::validateAdministrator(Auth::user()->Level))
+											@if(Helper::validateAdministrator(session()->get('usuario')->Level))
 												<span class="text-mued" style="font-size:0.6em;">
 													({{ substr($balance->code_prov, 0 , 3) }}) {{$balance->n_order}}
 												</span>
@@ -277,7 +277,7 @@
 			                <small
 												class="pull-right text-muted">
 													{{$balance->costo_usd}}
-													@if(Helper::validateAdministrator(Auth::user()->Level))
+													@if(Helper::validateAdministrator(session()->get('usuario')->Level))
 														<span style="font-size:0.8em;">
 															({{$balance->costo}})
 														</span>
@@ -303,7 +303,7 @@
 											style="opacity:0.7">
 										<em style="border-top: 2px solid #cccccc; padding: 0 10px;">
 											{{number_format($saldo , 2, '.', '')}}
-											@if(Helper::validateAdministrator(Auth::user()->Level))
+											@if(Helper::validateAdministrator(session()->get('usuario')->Level))
 												<span style="font-size:0.8em;">
 													({{number_format($saldoARS , 2, '.', '')}})
 												</span>
@@ -461,7 +461,7 @@
 									</small>
 									<br />
 
-			            @if(Helper::validateAdministrator(Auth::user()->Level))
+			            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
 
 				            @php
 											$gtoestimado = round($expensesIncome->gto_x_ing * $stock->total_ing);
@@ -487,7 +487,7 @@
             		</p>
 
 
-            		@if(!empty($hasBalance->costo_usd) or Helper::validateAdministrator(Auth::user()->Level))
+            		@if(!empty($hasBalance->costo_usd) or Helper::validateAdministrator(session()->get('usuario')->Level))
 
 			            <p style="opacity:0.7">
 										<img src="https://exur-exur.netdna-ssl.com/realskin/images/usa.png" style="opacity:0.7">
