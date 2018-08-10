@@ -15,7 +15,7 @@ class LessAdministratorMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (\Helper::lessAdministrator(session()->get('usuario')->Level)) {
+        if (\Helper::lessAdministrator(\Auth::user()->Level)) {
           return $next($request);
         }
 

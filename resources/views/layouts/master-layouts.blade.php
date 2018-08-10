@@ -131,20 +131,19 @@
             </ul>
 
           <ul class="nav navbar-nav navbar-right">
-          <li><a target="_blank" href="https://dixgamer.com/base-de-conocimiento/"><i class="fa fa-info fa-fw" aria-hidden="true"></i> Info</a></li>
 
           @if(Helper::lessAdministrator(session()->get('usuario')->Level))
             <li><a href="{{ url('horario') }}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
           @endif
 
-          @if (session()->get('usuario')->Level == "Adm")
+          @if (Helper::validateAdminAnalyst(session()->get('usuario')->Level))
 
            <li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>
               <ul class="dropdown-menu">
               	<li><a href="https://dixgamer.com/db/_control/balance.php"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Balance</a></li>
                 <li><a href="https://dixgamer.com/db/_control/balance_productos.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
-				<li><a href="https://dixgamer.com/db/_control/balance_productos_dias.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
+				        <li><a href="https://dixgamer.com/db/_control/balance_productos_dias.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_detalles.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Publicaciones</a></li>
@@ -154,25 +153,26 @@
                 <li><a href="https://dixgamer.com/db/adwords_detalles.php"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
                 <li><a href="https://dixgamer.com/db/titulos.php"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> Titulos</a></li>
                 <li class="divider" role="separator"></li>
-                <li><a href="usuario"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
-                <li><a href="usuario/list"><i class="fa fa-users fa-fw" aria-hidden="true"></i> Listar usuarios</a></li>
+                <li><a href="{{url('usuario')}}"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
+                <li><a href="{{url('usuario/list')}}"><i class="fa fa-users fa-fw" aria-hidden="true"></i> Listar usuarios</a></li>
               </ul>
             </li>
-          @endif
+          
 
-			<li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Control<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-              	<li><a href="https://dixgamer.com/db/horarios.php"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
-				  <li class="divider" role="separator"></li>
-				  <li><a href="https://dixgamer.com/db/_control/control_carga_gc.php"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
-				  <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
-				  <li class="divider" role="separator"></li>
-                <li><a href="https://dixgamer.com/db/_control/control_mp.php"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
-              	<li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
-                <li><a href="https://dixgamer.com/db/_control/control_ventas.php"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas</a></li>
-             </ul>
+      			<li class="dropdown">
+                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Control<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                	<li><a href="{{url('horarios')}}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
+        				  <li class="divider" role="separator"></li>
+        				  <li><a href="https://dixgamer.com/db/_control/control_carga_gc.php"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
+        				  <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
+        				  <li class="divider" role="separator"></li>
+                  <li><a href="https://dixgamer.com/db/_control/control_mp.php"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
+                	<li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
+                  <li><a href="https://dixgamer.com/db/_control/control_ventas.php"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas</a></li>
+               </ul>
             </li>
+          @endif
 			<!--  Termina Admin   -->
             <li><a href="{{ url('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
           </ul>

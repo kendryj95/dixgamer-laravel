@@ -6,6 +6,7 @@ use App\Schedule;
 use Illuminate\Http\Request;
 use Auth;
 use Validator;
+use DB;
 
 class ScheduleController extends Controller
 {
@@ -21,15 +22,44 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $toDay = Schedule::scheduleByUserName(Auth::user()->Nombre)->first();
-        $shedulesDay = Schedule::shedulesDay(Auth::user()->Nombre)->get();
-        $shedulesMonth = Schedule::shedulesMonth(Auth::user()->Nombre)->get();
+        $toDay = Schedule::scheduleByUserName(session()->get('usuario')->Nombre)->first();
+        $shedulesDay = Schedule::shedulesDay(session()->get('usuario')->Nombre)->get();
+        $shedulesMonth = Schedule::shedulesMonth(session()->get('usuario')->Nombre)->get();
         // dd($shedulesMonth);
         return view('schedule.index', compact(
           'toDay',
           'shedulesMonth',
           'shedulesDay'
         ));
+    }
+
+    public function indexAdmin()
+    {
+        $shedulesDayAdmin = Schedule::shedulesDayAdmin()->get();
+        $shedulesMonthAdmin = Schedule::shedulesMonthAdmin()->get();
+        // dd($shedulesMonth);
+        return view('schedule.admin.index', compact(
+          'shedulesMonthAdmin',
+          'shedulesDayAdmin'
+        ));
+    }
+
+    public function verificarHorario($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            DB::update("UPDATE horario SET verificado='si' WHERE id=?", [$id]);
+            DB::commit();
+
+            // Mensaje de notificacion
+            \Helper::messageFlash('Horarios','Horario verificado');
+
+            return redirect('horarios');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
+        }
     }
 
     /**
@@ -54,7 +84,7 @@ class ScheduleController extends Controller
       $scheduleArr = [];
       $scheduleArr['Day'] = date('Y-m-d', time());
       $scheduleArr['inicio'] = date('Y-m-d H:i:s', time());
-      $scheduleArr['usuario'] = Auth::user()->Nombre;
+      $scheduleArr['usuario'] = session()->get('usuario')->Nombre;
 
       // Validamos excepciones
       try {
@@ -107,7 +137,7 @@ class ScheduleController extends Controller
       $scheduleArr = [];
       $scheduleArr['fin'] = date('Y-m-d H:i:s', time());
       $scheduleArr['id'] = $id;
-      $scheduleArr['usuario'] = Auth::user()->Nombre;
+      $scheduleArr['usuario'] = session()->get('usuario')->Nombre;
 
       // Validamos excepciones
       try {

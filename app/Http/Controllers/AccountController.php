@@ -105,7 +105,7 @@ class AccountController extends Controller
         $data['cuentas_id'] = $id;
         $data['Day'] = $this->dte;
         $data['Notas'] = $request->note;
-        $data['usuario'] = Auth::user()->Nombre;
+        $data['usuario'] = session()->get('usuario')->Nombre;
 
         $this->rst->storeRequestResetAccount($data);
 
@@ -213,7 +213,7 @@ class AccountController extends Controller
         $account['years'] = $request->years;
         $account['nacimiento'] = $request->nacimiento;
         $account['pass'] = $request->pass;
-        $account['usuario'] = Auth::user()->Nombre;
+        $account['usuario'] = session()->get('usuario')->Nombre;
         $account['address'] = $request->address;
         $account['reg_date'] = Date('Y-m-d H:i:s');
         $ac->createAccount($account);
@@ -252,7 +252,7 @@ class AccountController extends Controller
           return redirect()->back()->withErrors($v->errors());
       }
 
-      $lastGames = $this->tks->lastAccountByIdAndUser(Auth::user()->Nombre,$request->last_account);
+      $lastGames = $this->tks->lastAccountByIdAndUser(session()->get('usuario')->Nombre,$request->last_account);
       if (count($lastGames) < 1)
         return redirect()->back()->withErrors(['Intentelo nuevamente']);
 
@@ -268,7 +268,7 @@ class AccountController extends Controller
           'costo_usd' => $game->costo_usd,
           'costo' => $costo,
           'Day' => $this->dte,
-          'usuario' => Auth::user()->Nombre,
+          'usuario' => session()->get('usuario')->Nombre,
         ];
       }
 
@@ -323,7 +323,7 @@ class AccountController extends Controller
       $accountBalances = Balance::accountBalance($id);
       $hasBalance = Balance::AccountHasBalance($id)->first();
       // dd($accountBalances);
-      $lastAccountGames = $this->tks->lastAccountUserGames(Auth::user()->Nombre);
+      $lastAccountGames = $this->tks->lastAccountUserGames(session()->get('usuario')->Nombre);
 
         $next = Account::Siguiente($id)->first();
         $back = Account::Previo($id)->first();
@@ -421,7 +421,7 @@ class AccountController extends Controller
           $notes = [];
           $notes['cuentas_id'] = $account_id;
           $notes['Notas'] = "Modificacion de juego #$stock->ID, antes $stock->titulo ($stock->consola)";
-          $notes['usuario'] = Auth::user()->Nombre;
+          $notes['usuario'] = session()->get('usuario')->Nombre;
           $notes['Day'] = $this->dte;
           DB::table('cuentas_notas')->insert([$notes]);
 
@@ -505,7 +505,7 @@ class AccountController extends Controller
         $data['costo'] = $request->titulo;
         $data['Day'] = $this->dte;
         $data['Notas'] = $request->Notas;
-        $data['usuario'] = Auth::user()->Nombre;
+        $data['usuario'] = session()->get('usuario')->Nombre;
 
         $this->tks->storeStockAccount($data);
         \Helper::messageFlash('Cuentas','Stock agregado');
@@ -547,7 +547,7 @@ class AccountController extends Controller
           'Day'=>$date,
           'ex_Day_stock'=>$stock->Day,
           'Notas'=>$stock->Notas,
-          'usuario'=>Auth::user()->Nombre,
+          'usuario'=>session()->get('usuario')->Nombre,
           'ex_usuario'=>$stock->usuario
         ];
 
@@ -576,7 +576,7 @@ class AccountController extends Controller
         return redirect('/cuentas')->withErrors('Intentelo nuevamente');
 
       // Ultimos stocks
-      $accountStocks = $this->tks->lastStockUser(Auth::user()->Nombre);
+      $accountStocks = $this->tks->lastStockUser(session()->get('usuario')->Nombre);
 
       // Saldo real de la cuenta
       $balance = \Helper::getBalanceAccount($id);
@@ -639,7 +639,7 @@ class AccountController extends Controller
         $data['medio_pago'] = 'Saldo';
         $data['costo'] = $costo;
         $data['Day'] = $this->dte;
-        $data['usuario'] = Auth::user()->Nombre;
+        $data['usuario'] = session()->get('usuario')->Nombre;
 
         $this->tks->storeStockAccount($data);
         \Helper::messageFlash('Cuentas','Stock masivo agregado');
@@ -663,7 +663,7 @@ class AccountController extends Controller
         $data = [];
         $data['cuentas_id']=$id;
         $data['Day']=$date;
-        $data['usuario']= Auth::user()->Nombre;
+        $data['usuario']= session()->get('usuario')->Nombre;
         $this->rst->storeResetAccount($data);
 
         \Helper::messageFlash('Cuentas','Cuenta reseteada');
@@ -784,8 +784,8 @@ class AccountController extends Controller
         $date = date('Y-m-d H:i:s', time());
         $account['cuentas_id'] = $id;
         $account['Day'] = $date;
-        $account['usuario'] = Auth::user()->Nombre;
-        $account['verificado'] = (\Helper::validateAdministrator(Auth::user()->Level)) ? 'si' : 'no';
+        $account['usuario'] = session()->get('usuario')->Nombre;
+        $account['verificado'] = (\Helper::validateAdministrator(session()->get('usuario')->Level)) ? 'si' : 'no';
         $this->acc->createAccountMod($account);
 
 
@@ -856,8 +856,8 @@ class AccountController extends Controller
         $date = date('Y-m-d H:i:s', time());
         $account['cuentas_id'] = $id;
         $account['Day'] = $date;
-        $account['usuario'] = Auth::user()->Nombre;
-        $account['verificado'] = (\Helper::validateAdministrator(Auth::user()->Level)) ? 'si' : 'no';
+        $account['usuario'] = session()->get('usuario')->Nombre;
+        $account['verificado'] = (\Helper::validateAdministrator(session()->get('usuario')->Level)) ? 'si' : 'no';
         $this->acc->createAccountMod($account);
 
 
@@ -879,7 +879,7 @@ class AccountController extends Controller
         $data['cuentas_id'] = $id;
         $data['new_pass'] = $npass;
         $data['Day'] = $date;
-        $data['usuario'] = Auth::user()->Nombre;
+        $data['usuario'] = session()->get('usuario')->Nombre;
         $this->acc->createAccPass($data,$id);
 
 
@@ -925,7 +925,7 @@ class AccountController extends Controller
                     'cuentas_id' => $id,
                     'Notas'=>$request->notes,
                     'Day'=>$date,
-                    'usuario'=>Auth::user()->Nombre
+                    'usuario'=>session()->get('usuario')->Nombre
                   ];
 
           $this->ac->storeNote($data);

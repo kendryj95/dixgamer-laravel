@@ -217,7 +217,7 @@ class Stock extends Model
             $query->where($obj->column,$obj->word);
         }
         // Validamos que sea administrador o analitico
-        if (!\Helper::validateAdminAnalyst(\Auth::user()->Level)) {
+        if (!\Helper::validateAdminAnalyst(session()->get('usuario')->Level)) {
             return $query->whereRaw("titulo NOT LIKE '%gift-card%' AND (titulo NOT LIKE '%plus%' AND titulo NOT LIKE '%slot' ) ")->orderBy('ID','DESC');
         }else{
             return $query->orderBy('ID','DESC');

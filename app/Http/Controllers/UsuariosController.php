@@ -60,7 +60,7 @@ class UsuariosController extends Controller
 
     public function edit($id)
     {
-    	$usuarios = DB::select("SELECT * FROM usuarios WHERE id=?", [$id]);
+    	$usuarios = DB::select("SELECT * FROM usuarios WHERE ID=?", [$id]);
 
     	if ($usuarios) {
     		return view('usuarios.edit', ['usuarios' => $usuarios[0]]);
@@ -93,7 +93,7 @@ class UsuariosController extends Controller
     	DB::beginTransaction();
 
     	try {
-    		DB::update("UPDATE usuarios SET Contra=?, Level=? WHERE id=?", [$password, $level, $id]);
+    		DB::update("UPDATE usuarios SET Contra=?, Level=? WHERE ID=?", [$password, $level, $id]);
     		DB::commit();
 
     		// Mensaje de notificacion

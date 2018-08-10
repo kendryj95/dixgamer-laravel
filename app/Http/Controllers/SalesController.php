@@ -89,7 +89,7 @@ class SalesController extends Controller
             'estado'        => $request->estado,
             'Day'           => \Carbon\Carbon::now('America/New_York'),
             'Notas'         => $request->Notas,
-            'usuario'       => Auth::user()->Nombre
+            'usuario'       => session()->get('usuario')->Nombre
 
         ]);
 
@@ -103,7 +103,7 @@ class SalesController extends Controller
             'comision'      => $request->comision,
             'Day'           => \Carbon\Carbon::now('America/New_York'),
             'Notas'         => $request->Notas,
-            'usuario'       => Auth::user()->Nombre
+            'usuario'       => session()->get('usuario')->Nombre
         ]);
 
         return redirect(url('clientes',$request->clientes_id));

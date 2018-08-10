@@ -105,7 +105,7 @@ class CustomerController extends Controller
         $customer['cel'] = $request->cel;
         $customer['Level'] = 'Cliente';
         $customer['auto'] = 'no';
-        $customer['usuario'] = Auth::user()->Nombre;
+        $customer['usuario'] = session()->get('usuario')->Nombre;
 
         // Creamos objeto de customer para llamar a la funcion creadora
         $c = new Customer();

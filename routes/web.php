@@ -117,6 +117,12 @@ Route::group(['middleware' => ['login']], function()
         Route::resource('gastos', 'ExpensesController');
     });
 
+    Route::group(['middleware' => ['administrator']], function()
+    {
+        Route::get('horarios', 'ScheduleController@indexAdmin');
+        Route::get('horarios/verificar/{id}', 'ScheduleController@verificarHorario');
+    });
+
 
 
   // Pueden acceder todos menos administrador

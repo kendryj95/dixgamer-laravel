@@ -9,7 +9,7 @@ class Helper
 {
     // Todos menos administrador
     public static function lessAdministrator($level){
-      if ($level != 'Administrador') {
+      if ($level != 'Adm') {
         return true;
       }
 
@@ -17,7 +17,7 @@ class Helper
     }
     // Valida si es administrador
     public static function validateAdministrator($level){
-      if ($level == 'Administrador') {
+      if ($level == 'Adm') {
         return true;
       }
 
@@ -26,7 +26,7 @@ class Helper
 
     // Valida si es analista o administrador
     public static function validateAdminAnalyst($level){
-      if ($level == 'Administrador' || $level == 'Analista') {
+      if ($level == 'Adm' || $level == 'Analista') {
         return true;
       }
 

@@ -33,7 +33,7 @@ class StockController extends Controller
         $obj->word = $request->word;
 
         $columns = [];
-        if (\Helper::validateAdministrator(Auth::user()->Level)) {
+        if (\Helper::validateAdministrator(session()->get('usuario')->Level)) {
           $columns = Schema::getColumnListing('stock');
         }else{
           $columns = ['ID','titulo','consola','cuentas_id','Day'];
@@ -206,7 +206,7 @@ class StockController extends Controller
         $stockArr['medio_pago'] = $request->medio_pago;
         $stockArr['costo_usd'] = $request->costo_usd;
         $stockArr['costo'] = $request->costo;
-        $stockArr['usuario'] = Auth::user()->Nombre."-GC";
+        $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
         $stockArr['code_prov'] = 'P1';
 
         foreach ($request->codes as $code) {
@@ -284,7 +284,7 @@ class StockController extends Controller
         $stockArr['costo_usd'] = $request->costo_usd;
         $stockArr['costo'] = $request->costo;
         $stockArr['n_order'] = $request->n_order;
-        $stockArr['usuario'] = Auth::user()->Nombre."-GC";
+        $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
         $stockArr['code_prov'] = 'P2';
 
         foreach ($request->codes as $code) {
@@ -359,7 +359,7 @@ class StockController extends Controller
             $stockArr['costo_usd'] = $request->costo_usd;
             $stockArr['costo'] = $request->costo;
             $stockArr['n_order'] = $request->n_order;
-            $stockArr['usuario'] = Auth::user()->Nombre."-GC";
+            $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
             $stockArr['code_prov'] = 'P3';
 
             foreach ($request->codes as $code) {

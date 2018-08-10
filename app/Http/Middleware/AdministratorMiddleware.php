@@ -15,7 +15,7 @@ class AdministratorMiddleware
      */
     public function handle($request, Closure $next)
     {
-      if (\Helper::validateAdministrator(\Auth::user()->Level)) {
+      if (\Helper::validateAdminAnalyst(session()->get('usuario')->Level)) {
         return $next($request);
       }
 
