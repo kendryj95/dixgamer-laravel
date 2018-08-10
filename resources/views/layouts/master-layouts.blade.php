@@ -155,6 +155,7 @@
                 <li><a href="https://dixgamer.com/db/titulos.php"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> Titulos</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="usuario"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
+                <li><a href="usuario/list"><i class="fa fa-users fa-fw" aria-hidden="true"></i> Listar usuarios</a></li>
               </ul>
             </li>
           @endif

@@ -17,7 +17,7 @@ class LoginMiddleware
     {
         if ($request->session()->get('usuario')==null)
         {
-            return redirect('/');            
+            return redirect('login');            
         } else 
         return $next($request);
     }

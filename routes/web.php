@@ -138,4 +138,10 @@ Route::group(['middleware' => ['login']], function()
 
   Route::post('usuario/create', 'UsuariosController@store');
 
+  Route::get('usuario/list', 'UsuariosController@listar');
+
+  Route::get('usuario/edit/{id}', 'UsuariosController@edit')->where(['id' => '[0-9]+']);
+
+  Route::post('usuario/edit', 'UsuariosController@storeEdit');
+
 });

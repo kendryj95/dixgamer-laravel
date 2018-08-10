@@ -48,4 +48,62 @@ class UsuariosController extends Controller
     		return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
     	}
     }
+
+    public function listar()
+    {
+    	$usuarios = DB::select("SELECT * FROM usuarios");
+
+    	return view('usuarios.listar', [
+    		"usuarios" => $usuarios
+    	]);
+    }
+
+    public function edit($id)
+    {
+    	$usuarios = DB::select("SELECT * FROM usuarios WHERE id=?", [$id]);
+
+    	if ($usuarios) {
+    		return view('usuarios.edit', ['usuarios' => $usuarios[0]]);
+    	}
+
+    	return redirect()->back();
+    }
+
+    public function storeEdit(Request $request)
+    {
+    	// Mensajes de alerta
+    	$msgs = [
+    	  'password.required' => 'Contraseña requerida',
+    	];
+    	// Validamos
+    	$v = Validator::make($request->all(), [
+    	    'password' => 'required'
+    	], $msgs);
+
+    	// Si hay errores retornamos a la pantalla anterior con los mensajes
+    	if ($v->fails())
+    	{
+    	    return redirect()->back()->withErrors($v->errors());
+    	}
+
+    	$id = $request->id_usuario;
+    	$password = \Hash::make($request->password);
+    	$level = $request->level;
+
+    	DB::beginTransaction();
+
+    	try {
+    		DB::update("UPDATE usuarios SET Contra=?, Level=? WHERE id=?", [$password, $level, $id]);
+    		DB::commit();
+
+    		// Mensaje de notificacion
+    		\Helper::messageFlash('Usuarios','Usuario Editado');
+
+    		return redirect('usuario/list');
+
+    	} catch (Exception $e) {
+    		DB::rollback();
+    		return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
+    	}
+    }
 }
