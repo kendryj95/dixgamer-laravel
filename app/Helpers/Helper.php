@@ -147,6 +147,7 @@ class Helper
       elseif (strpos($person, 'anuel') !== false): $color = "normal";
       elseif (strpos($person, 'ictor') !== false): $color = "default";
       elseif (strpos($person, 'ugenio') !== false): $color = "primary";
+      elseif (strpos($person, 'etina') !== false): $color = "danger";
       endif;
 
       return $color;
