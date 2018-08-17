@@ -520,7 +520,7 @@
 							class="img img-responsive img-rounded full-width"
 							style="width:54%; margin:0;"
 							alt="{{$stock->titulo}}"
-							src="/img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg">
+							src='{{asset("img/productos/".$stock->consola."/".$stock->titulo.".jpg")}}'>
 
 						<div class="caption text-center">
             </div>
