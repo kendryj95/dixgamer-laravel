@@ -36,7 +36,7 @@ class UsuariosController extends Controller
     	DB::beginTransaction();
 
     	try {
-    		DB::insert("INSERT INTO usuarios VALUES (null,?,?,?,null)", [$request->nombre, \Hash::make($request->password), $request->level]);
+    		DB::insert("INSERT INTO usuarios VALUES (null,?,?,?,null,?)", [$request->nombre, \Hash::make($request->password), $request->level, $request->color]);
     		DB::commit();
 
     		// Mensaje de notificacion
@@ -88,12 +88,13 @@ class UsuariosController extends Controller
 
     	$id = $request->id_usuario;
     	$password = \Hash::make($request->password);
-    	$level = $request->level;
+        $level = $request->level;
+    	$color = $request->color;
 
     	DB::beginTransaction();
 
     	try {
-    		DB::update("UPDATE usuarios SET Contra=?, Level=? WHERE ID=?", [$password, $level, $id]);
+    		DB::update("UPDATE usuarios SET Contra=?, Level=?, color=? WHERE ID=?", [$password, $level, $color, $id]);
     		DB::commit();
 
     		// Mensaje de notificacion

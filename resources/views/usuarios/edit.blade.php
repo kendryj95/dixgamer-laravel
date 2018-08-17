@@ -19,7 +19,7 @@
       <div class="col-sm-4">
         <form method="post" name="form1" action='{{ url("usuario/edit") }}'>
           {{ csrf_field() }}
-          <input type="hidden" name="id_usuario" value="{{$usuarios->id}}">
+          <input type="hidden" name="id_usuario" value="{{$usuarios->ID}}">
           <div id="user-result-div" class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
             <input class="form-control" type="text" name="nombre" id="nombre" value="{{$usuarios->Nombre}}" disabled>
@@ -41,7 +41,20 @@
             </select>
           </div>
 
-          <button class="btn btn-primary btn-block btn-lg" type="submit">Insertar</button>
+          <label for="color">Asignar color</label>
+          <div class="input-group form-group">
+            <span class="input-group-addon"><i class="fa fa-paint-brush fa-fw"></i></span>
+            <select name="color" id="color" class="form-control" onchange="setColor(this.value)">
+              <option value="primary" @if ($usuarios->color == 'primary') selected @endif> <label for="" class="label label-primary"></label> Primary</option>
+              <option value="success" @if ($usuarios->color == 'success') selected @endif>Success</option>
+              <option value="info" @if ($usuarios->color == 'info') selected @endif>Info</option>
+              <option value="danger" @if ($usuarios->color == 'danger') selected @endif>Danger</option>
+              <option value="default" @if ($usuarios->color == 'default') selected @endif>Normal</option>
+            </select>
+            <span class="input-group-addon" style="background:white"><span class="label label-{{$usuarios->color}}" id="asigColor">{{substr($usuarios->Nombre, 0, 1)}}</span></span>
+          </div>
+
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Editar</button>
           <br>
       </form>
     </div>
@@ -55,6 +68,9 @@
 
 @section('scripts')
 <script type="text/javascript">
- 
+ function setColor(value)
+ {
+    $('#asigColor').attr('class', '').addClass('label label-'+value);
+ }
 </script>
 @stop
