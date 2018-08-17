@@ -3,20 +3,20 @@
 @section('container')
 
 <div class="container">
-	<h1>Horario de {{ session()->get('usuario')->Name }}</h1>
+	<h1>Horario de {{ session()->get('usuario')->Nombre }}</h1>
     <!-- InstanceBeginEditable name="body" -->
     <div class="row">
 
       <div class="col-md-12">
 
-    		@if(!empty($toDay->inicio) && !empty($toDay->fin))
+    		@if((!empty($toDay->inicio) && !empty($toDay->fin)) || (!isset($toDay->inicio) && !isset($toDay->fin)))
 
           <form action="{{ url('horario') }}" method="post">
             {{ csrf_field() }}
             <button type="submit" class="text-center btn btn-success" title="Iniciar día"> ¡Iniciar día!</button>
           </form>
 
-        @endif
+        	@endif
 
     		@if(!empty($toDay->ID) && (is_null($toDay->fin)))
 
@@ -26,7 +26,7 @@
 					<button type="submit" class="text-center btn btn-danger" title="Iniciar día"> ¡Finalizar día!</button><em class="text-muted"> Iniciado a las {{ date('H:i', strtotime($toDay->inicio)) }}</em>
 				</form>
 
-        @endif
+        	@endif
 
       </div>
 

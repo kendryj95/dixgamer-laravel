@@ -54,7 +54,11 @@ class LoginController extends Controller
         
         $request->session()->put('usuario', $user);
 
-        return redirect('home');
+        if (\Helper::validateAdministrator($user->Level)) {
+          return redirect('home');
+        } else {
+          return redirect('horario');
+        }
 
       }
       return redirect()->back()->withErrors(['Credenciales incorrectas']);
