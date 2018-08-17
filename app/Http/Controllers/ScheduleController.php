@@ -116,7 +116,7 @@ class ScheduleController extends Controller
         // Pasamos datos a la funcion del modelo
         $this->sch->updateSchedule($scheduleArr);
 
-        \Helper::messageFlash('Horario','Tu día finalizo, descanza');
+        \Helper::messageFlash('Horario','Tu día finalizo, descansa');
         // Redireccionamos a la pagina donde estabamos
         return redirect()->back();
       } catch (\Exception $e) {
