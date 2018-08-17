@@ -33,21 +33,38 @@
           <input type="hidden" name="id_hor" value="{{$horario_ope->ID}}">
           <input type="hidden" name="day_h" id="day_h" value="{{$horario_ope->Day}}">
 
+          <label for="f_inicio">Inicio</label>
           <div id="user-result-div" class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
             <input class="form-control" type="text" name="day" id="day" autocomplete="off" spellcheck="false" placeholder="Día" value="{{ date('d/m/Y', strtotime($horario_ope->Day)) }}" disabled>
           </div>
 
-          <label for="f_inicio">Hora inicio</label>
           <div id="user-result-div" class="input-group form-group bootstrap-timepicker timepicker">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
-            <input class="form-control" type="text" name="f_inicio" id="f_inicio" autocomplete="off" spellcheck="false" placeholder="Fecha inicio" value="{{ substr($horario_ope->inicio, -8) }}">
+            <input class="form-control" type="text" name="h_inicio" id="f_inicio" autocomplete="off" spellcheck="false" placeholder="Fecha inicio" value="{{ substr($horario_ope->inicio, -8) }}">
           </div>
 
-          <label for="f_inicio">Hora fin</label>
+          @php
+
+          $max_f_fin = strtotime("+1 day", strtotime($horario_ope->Day));
+          $max_fecha_fin = date('Y-m-d', $max_f_fin);
+
+          @endphp
+
+          <label for="f_inicio">Fin</label>
+          <div id="user-result-div" class="input-group form-group">
+            <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+            <select name="f_fin" id="" class="form-control">
+              <option value="{{$horario_ope->Day}}" @if ($horario_ope->Day == substr($horario_ope->fin, 0, 10)) selected @endif>{{ date('d/m/Y', strtotime($horario_ope->Day)) }}</option>
+              <option value="{{$max_fecha_fin}}" @if ($max_fecha_fin == substr($horario_ope->fin, 0, 10)) selected @endif>{{ date('d/m/Y', $max_f_fin) }}</option>
+            </select>
+          </div>
+          {{-- {{$max_fecha_fin}} --}}
+          {{substr($horario_ope->fin, -8)}}
+          
           <div id="user-result-div" class="input-group form-group bootstrap-timepicker timepicker">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
-            <input class="form-control" type="text" name="f_fin" id="f_fin" autocomplete="off" spellcheck="false" placeholder="Fecha fin" value="{{ substr($horario_ope->fin, -8) }}">
+            <input class="form-control" type="text" name="h_fin" id="f_fin" autocomplete="off" spellcheck="false" placeholder="Fecha fin" value="{{ substr($horario_ope->fin, -8) }}">
           </div>
 
           <button class="btn btn-primary btn-block btn-lg" type="submit">Editar</button>

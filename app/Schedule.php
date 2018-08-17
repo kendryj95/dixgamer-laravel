@@ -57,7 +57,7 @@ class Schedule extends Model
 
   public function ScopeShedulesMonthAdmin($query){
     return $query->select(DB::raw("date_format(Day, '%Y-%m') as mes, COUNT(*) as Q_dias, SUM(time_to_sec(timediff(fin, inicio)) / 3600) as Q_horas , usuario"))
-                ->groupBy(DB::raw('date_format(Day, "%%Y-%%m"), usuario DESC'))
+                ->groupBy(DB::raw('date_format(Day, "%Y-%m"), usuario DESC'))
                 ->orderBy('mes','Desc');
 
   }

@@ -183,13 +183,15 @@ class ScheduleController extends Controller
 
         // Mensajes de alerta
         $msgs = [
-          'f_inicio.required' => 'Hora inicio es obligatorio',
-          'f_fin.required' => 'Hora fin es obligatorio',
+          'h_inicio.required' => 'Hora inicio es obligatorio',
+          'f_fin.required' => 'Fecha fin es obligatorio',
+          'h_fin.required' => 'Hora fin es obligatorio',
         ];
         // Validamos
         $v = Validator::make($request->all(), [
-            'f_inicio' => 'required',
-            'f_fin' => 'required'
+            'h_inicio' => 'required',
+            'f_fin' => 'required',
+            'h_fin' => 'required'
         ], $msgs);
 
         // Si hay errores retornamos a la pantalla anterior con los mensajes
@@ -198,15 +200,15 @@ class ScheduleController extends Controller
             return redirect()->back()->withErrors($v->errors());
         }
 
-        $inicio = $request->day_h . " " . $request->f_inicio;
-        $fin = $request->day_h . " " . $request->f_fin;
+        $inicio = $request->day_h . " " . $request->h_inicio;
+        $fin = $request->f_fin . " " . $request->h_fin;
         $id = $request->id_hor;
 
         $timestamp_inicio = strtotime($inicio);
         $timestamp_fin = strtotime($fin);
 
         if ($timestamp_fin <= $timestamp_inicio) {
-            return redirect()->back()->withErrors(['La hora de fin no puede ser menor ni igual a la hora de inicio.']);
+            return redirect()->back()->withErrors(['La fecha de fin no puede ser menor ni igual a la fecha de inicio.']);
         } else {
             DB::beginTransaction();
 
