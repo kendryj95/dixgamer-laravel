@@ -24,18 +24,20 @@
 								  <th><i class="fa fa-user fa-fw" aria-hidden="true"></i></th>
 								  <th>Total</th>
 								  <th><i class="fa fa-check fa-fw" aria-hidden="true"></i></th>
+								  <th><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach($shedulesDayAdmin as $shedule)
 									<tr>
 
-										<td>{{ date("d-M", strtotime($shedule->Day)) }}</td>
+										<td>{{ date("d", strtotime($shedule->Day)) }}</td>
 										<td>{{ date("H:i", strtotime($shedule->inicio)) }}</td>
 										<td>{{ date("H:i", strtotime($shedule->fin)) }}</td>
 										<td><span class="label label-{{Helper::userColor($shedule->usuario)}}"><strong>{{strtoupper(substr($shedule->usuario,0,1))}}</strong></span></td>
 										<td>{{ number_format((float)$shedule->Q_horas, 2, ',', '') }}</td>
 										<td>@if ($shedule->verificado == 'si') <i class="fa fa-check fa-fw" style="color:#ddd;" aria-hidden="true"></i> @else <a class="text-center btn btn-success btn-xs" title="verificar" href="{{url("horarios/verificar/$shedule->ID")}}"><i class="fa fa-check fa-fw"  aria-hidden="true"></i></a> @endif</td>
+										<td><a href="horarios/edit/{{$shedule->ID}}" class="btn btn-primary btn-xs"><i class="fa fa-pencil" title="Editar horario"></i></a></td>
 	
 									</tr>
 								@endforeach

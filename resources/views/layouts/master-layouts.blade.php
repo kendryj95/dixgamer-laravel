@@ -30,6 +30,9 @@
 	<!-- Estilo personalizado por mi -->
 	<link href="{{ asset('css/personalizado.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+  @stack('css')
+  
   <style media="screen">
     .form-control{
       width: 100% !important;

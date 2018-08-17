@@ -33,34 +33,6 @@ class ScheduleController extends Controller
         ));
     }
 
-    public function indexAdmin()
-    {
-        $shedulesDayAdmin = Schedule::shedulesDayAdmin()->get();
-        $shedulesMonthAdmin = Schedule::shedulesMonthAdmin()->get();
-        // dd($shedulesMonth);
-        return view('schedule.admin.index', compact(
-          'shedulesMonthAdmin',
-          'shedulesDayAdmin'
-        ));
-    }
-
-    public function verificarHorario($id)
-    {
-        DB::beginTransaction();
-
-        try {
-            DB::update("UPDATE horario SET verificado='si' WHERE id=?", [$id]);
-            DB::commit();
-
-            // Mensaje de notificacion
-            \Helper::messageFlash('Horarios','Horario verificado');
-
-            return redirect('horarios');
-        } catch (Exception $e) {
-            DB::rollback();
-            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
-        }
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -162,5 +134,94 @@ class ScheduleController extends Controller
     public function destroy(Schedule $schedule)
     {
         //
+    }
+
+    ######### ACCIONES DE ADMINISTRADOR ##############
+
+    public function indexAdmin()
+    {
+        $shedulesDayAdmin = Schedule::shedulesDayAdmin()->get();
+        $shedulesMonthAdmin = Schedule::shedulesMonthAdmin()->get();
+        // dd($shedulesMonth);
+        return view('schedule.admin.index', compact(
+          'shedulesMonthAdmin',
+          'shedulesDayAdmin'
+        ));
+    }
+
+    public function verificarHorario($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            DB::update("UPDATE horario SET verificado='si' WHERE id=?", [$id]);
+            DB::commit();
+
+            // Mensaje de notificacion
+            \Helper::messageFlash('Horarios','Horario verificado');
+
+            return redirect('horarios');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
+        }
+    }
+
+    public function editarHorario($id)
+    {
+        $horario_ope = Schedule::find($id);
+
+        if ($horario_ope) {
+            return view('schedule.admin.edit_horario', ["horario_ope" => $horario_ope]);
+        } else {
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
+        }
+    }
+
+    public function editHorario(Request $request)
+    {
+
+        // Mensajes de alerta
+        $msgs = [
+          'f_inicio.required' => 'Hora inicio es obligatorio',
+          'f_fin.required' => 'Hora fin es obligatorio',
+        ];
+        // Validamos
+        $v = Validator::make($request->all(), [
+            'f_inicio' => 'required',
+            'f_fin' => 'required'
+        ], $msgs);
+
+        // Si hay errores retornamos a la pantalla anterior con los mensajes
+        if ($v->fails())
+        {
+            return redirect()->back()->withErrors($v->errors());
+        }
+
+        $inicio = $request->day_h . " " . $request->f_inicio;
+        $fin = $request->day_h . " " . $request->f_fin;
+        $id = $request->id_hor;
+
+        $timestamp_inicio = strtotime($inicio);
+        $timestamp_fin = strtotime($fin);
+
+        if ($timestamp_fin <= $timestamp_inicio) {
+            return redirect()->back()->withErrors(['La hora de fin no puede ser menor ni igual a la hora de inicio.']);
+        } else {
+            DB::beginTransaction();
+
+            try {
+                DB::update("UPDATE horario SET inicio=?, fin=? WHERE id=?", [$inicio, $fin, $id]);
+                DB::commit();
+
+                // Mensaje de notificacion
+                \Helper::messageFlash('Horarios','Horario editado');
+
+                return redirect('horarios');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
+            }
+        }
     }
 }

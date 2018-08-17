@@ -121,6 +121,8 @@ Route::group(['middleware' => ['login']], function()
     {
         Route::get('horarios', 'ScheduleController@indexAdmin');
         Route::get('horarios/verificar/{id}', 'ScheduleController@verificarHorario');
+        Route::get('horarios/edit/{id}', 'ScheduleController@editarHorario')->where(['id' => '[0-9]+']);
+        Route::post('horarios/editar', 'ScheduleController@editHorario');
     });
 
 
