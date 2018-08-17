@@ -2,7 +2,7 @@
 
 @section('container')
 
-  @if(count($customer) > 0)
+  @if($customer)
     <div class="container">
     <h1>Cliente #{{$customer->ID}}</h1>
 
@@ -1066,7 +1066,7 @@
                         data: { '_token':token, 'id':id, 'datos':datos },
                         method: 'post',
                         dataType: 'json',
-                        url: '/updateStatusReseller',
+                        url: '{{url('updateStatusReseller')}}',
                         success: function(result){
                             location.reload();
                         }
@@ -1083,7 +1083,7 @@
                 data: { '_token':token, 'id':id, 'datos':datos },
                 method: 'post',
                 dataType: 'json',
-                url: '/updateStatusReseller',
+                url: '{{url('updateStatusReseller')}}',
                 success: function(result){
                     location.reload();
                 }
@@ -1095,7 +1095,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/getDataName',
+                url: '{{url('getDataName')}}',
                 data: { '_token':token, 'id':ID },
                 success: function (result) {
                     console.log(result.nombre);
@@ -1113,7 +1113,7 @@
             var token = $('#token').val();
                 $.ajax({
                    method: 'post',
-                   url: '/saveDataName',
+                   url: '{{url('saveDataName')}}',
                    data: { '_token':token, 'nombre':nombre,'apellido':apellido,'id':id },
                     success: function (result) {
                         location.reload();
@@ -1126,7 +1126,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/getDataName',
+                url: '{{url('getDataName')}}',
                 data: { '_token':token, 'id':ID },
                 success: function (result) {
                     console.log(result.nombre);
@@ -1142,7 +1142,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/saveDataEmail',
+                url: '{{url("saveDataEmail")}}',
                 data: { '_token':token, 'email':email,'id':id },
                 success: function (result) {
 
@@ -1156,7 +1156,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/getDataName',
+                url: '{{url('getDataName')}}',
                 data: { '_token':token, 'id':ID },
                 success: function (result) {
                     console.log(result.ml_user);
@@ -1172,7 +1172,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/saveDataML',
+                url: '{{url('saveDataML')}}',
                 data: { '_token':token, 'ml':ml,'id':id },
                 success: function (result) {
 
@@ -1186,7 +1186,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/getDataName',
+                url: '{{url('getDataName')}}',
                 data: { '_token':token, 'id':ID },
                 success: function (result) {
                     console.log(result.ml_user);
@@ -1210,7 +1210,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/saveDataOther',
+                url: '{{url('saveDataOther')}}',
                 data: { '_token':token,'provincia':provincia,'ciudad':ciudad,'carac':carac,'tel':tel,'cel':cel,'id':id },
                 success: function (result) {
 
@@ -1231,7 +1231,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/saveNotes',
+                url: '{{url('saveNotes')}}',
                 data: { '_token':token,'notes':notes,'id':id },
                 success: function (result) {
 
@@ -1253,7 +1253,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/saveFB',
+                url: '{{url('saveFB')}}',
                 data: { '_token':token,'face':face,'id':id },
                 success: function (result) {
 
@@ -1268,7 +1268,7 @@
             var token = $('#token').val();
                 $.ajax({
                     method: 'post',
-                    url: '/locateFB',
+                    url: '{{url('locateFB')}}',
                     data: { 'id':id, '_token':token },
                     success: function(result){
                         console.log(result.face);
@@ -1284,7 +1284,7 @@
             var token = $('#token').val();
             $.ajax({
                 method: 'post',
-                url: '/saveFB',
+                url: '{{url('saveFB')}}',
                 data: { '_token':token,'face':face,'id':id },
                 success: function (result) {
 
