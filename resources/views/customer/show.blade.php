@@ -811,7 +811,7 @@
                             </div>
                             <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
 
-                                <button type="button" id="saveEditName" class="btn btn-primary">Salvar Cambios</button>
+                                <button type="button" id="saveEditName" class="btn btn-primary btn-block">Salvar Cambios</button>
                             </div>
                         </div>
                     </div>
@@ -887,7 +887,7 @@
                     </div>
                     <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
 
-                        <button type="button" id="saveEditML" class="btn btn-primary">Salvar Cambios</button>
+                        <button type="button" id="saveEditML" class="btn btn-primary btn-block">Salvar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -942,7 +942,7 @@
                     </div>
                     <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
 
-                        <button type="button" id="saveEditOtros" class="btn btn-primary">Salvar Cambios</button>
+                        <button type="button" id="saveEditOtros" class="btn btn-primary btn-block">Salvar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -977,7 +977,7 @@
                     </div>
                     <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
 
-                        <button type="button" id="saveNotes" class="btn btn-primary">Salvar Cambios</button>
+                        <button type="button" id="saveNotes" class="btn btn-primary btn-block">Salvar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -1015,7 +1015,7 @@
                     </div>
                     <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
 
-                        <button type="button" id="saveFB" class="btn btn-primary">Salvar</button>
+                        <button type="button" id="saveFB" class="btn btn-primary btn-block">Salvar</button>
                     </div>
                 </div>
             </div>
