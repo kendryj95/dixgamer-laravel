@@ -169,10 +169,10 @@
               </button>
             @endif
                 @if(Helper::validateAdministrator(session()->get('usuario')->Level))
-                    @if(strpos($customer->auto, 're') !== false)
-                        <a href="#!" id="doreseller" data-customer="{{ $customer->ID }}" data-update="no" type="button" class="btn btn-default btn-xs pull-right">Hacer Revendedor</a>
+                    @if($customer->auto != 're')
+                        <a href="#!" id="doreseller" data-customer="{{ $customer->ID }}" data-update="re" type="button" class="btn btn-default btn-xs pull-right">Hacer Revendedor</a>
                     @else
-                        <a href="#!" id="doseller" data-customer="{{ $customer->ID }}" data-update="re" type="button" class="btn btn-danger btn-xs pull-right">Revendedor</a>
+                        <a href="#!" id="doseller" data-customer="{{ $customer->ID }}" data-update="no" type="button" class="btn btn-danger btn-xs pull-right">Revendedor</a>
                     @endif
                 @endif
 
