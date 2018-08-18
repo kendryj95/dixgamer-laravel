@@ -48,8 +48,10 @@
               <option value="primary" @if ($usuarios->color == 'primary') selected @endif> <label for="" class="label label-primary"></label> Primary</option>
               <option value="success" @if ($usuarios->color == 'success') selected @endif>Success</option>
               <option value="info" @if ($usuarios->color == 'info') selected @endif>Info</option>
+              <option value="warning" @if ($usuarios->color == 'warning') selected @endif>Warning</option>
               <option value="danger" @if ($usuarios->color == 'danger') selected @endif>Danger</option>
-              <option value="default" @if ($usuarios->color == 'default') selected @endif>Normal</option>
+              <option value="normal" @if ($usuarios->color == 'normal') selected @endif>Normal</option>
+              <option value="default" @if ($usuarios->color == 'default') selected @endif>Default</option>
             </select>
             <span class="input-group-addon" style="background:white"><span class="label label-{{$usuarios->color}}" id="asigColor">{{substr($usuarios->Nombre, 0, 1)}}</span></span>
           </div>

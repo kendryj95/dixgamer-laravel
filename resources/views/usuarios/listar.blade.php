@@ -40,7 +40,7 @@
               </td>
 
               <td>
-                  {{ $usuario->Nombre }}
+                  <span class="label label-{{$usuario->color}}">{{ $usuario->Nombre }}</span>
               </td>
 
               <td>
@@ -48,7 +48,7 @@
               </td>
 
               <td>
-                  <a href="{{ url("usuario/edit/$usuario->id")}}" title="Editar"><i class="fa fa-pencil"></i></a>
+                  <a href="{{ url("usuario/edit/$usuario->ID")}}" title="Editar"><i class="fa fa-pencil"></i></a>
               </td>
 
             </tr>

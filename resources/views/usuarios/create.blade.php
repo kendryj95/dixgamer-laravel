@@ -47,8 +47,10 @@
               <option value="primary"> <label for="" class="label label-primary"></label> Primary</option>
               <option value="success">Success</option>
               <option value="info">Info</option>
+              <option value="warning">Warning</option>
               <option value="danger">Danger</option>
-              <option value="default">Normal</option>
+              <option value="normal">Normal</option>
+              <option value="default">Default</option>
             </select>
             <span class="input-group-addon" style="background:white"><span class="label label-primary" id="asigColor"></span></span>
           </div>
