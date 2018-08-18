@@ -35,7 +35,7 @@
               <option value="Adm">Administrador</option>
               <option value="Analista">Analista</option>
               <option value="Asistente">Asistente</option>
-              <option value="Vendedor">Vendedor</option>
+              <option value="Vendedor" selected>Vendedor</option>
               <option value="Revendedor">Revendedor</option>
             </select>
           </div>

@@ -25,9 +25,11 @@
             <input class="form-control" type="text" name="nombre" id="nombre" value="{{$usuarios->Nombre}}" disabled>
           </div>
 
+          <input type="hidden" name="old_pass" value="{{$usuarios->Contra}}">
+
           <div class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-            <input class="form-control" type="password" name="password" autocomplete="off" placeholder="Contraseña">
+            <input class="form-control" type="password" name="password" autocomplete="off" placeholder="Contraseña" value="{{$usuarios->Contra}}">
           </div>
 
           <div class="input-group form-group">

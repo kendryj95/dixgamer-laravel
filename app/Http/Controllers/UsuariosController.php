@@ -93,18 +93,33 @@ class UsuariosController extends Controller
 
     	DB::beginTransaction();
 
-    	try {
-    		DB::update("UPDATE usuarios SET Contra=?, Level=?, color=? WHERE ID=?", [$password, $level, $color, $id]);
-    		DB::commit();
+        if ($request->password == $request->old_pass) {
+            try {
+                DB::update("UPDATE usuarios SET Level=?, color=? WHERE ID=?", [$level, $color, $id]);
+                DB::commit();
 
-    		// Mensaje de notificacion
-    		\Helper::messageFlash('Usuarios','Usuario Editado');
+                // Mensaje de notificacion
+                \Helper::messageFlash('Usuarios','Usuario Editado');
 
-    		return redirect('usuario/list');
+                return redirect('usuario/list');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
+            }
+        } else {
+            try {
+                DB::update("UPDATE usuarios SET Contra=?, Level=?, color=? WHERE ID=?", [$password, $level, $color, $id]);
+                DB::commit();
 
-    	} catch (Exception $e) {
-    		DB::rollback();
-    		return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
-    	}
+                // Mensaje de notificacion
+                \Helper::messageFlash('Usuarios','Usuario Editado');
+
+                return redirect('usuario/list');
+
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo de nuevo.']);
+            }
+        }
     }
 }
