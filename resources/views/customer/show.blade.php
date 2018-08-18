@@ -833,6 +833,10 @@
                                 </div>
                                 <div class="card-body">
 
+                                    <div class="alert alert-danger" style="display:none" id="alert-email">
+                                      <p>Correo electronico no valido.</p>
+                                    </div>
+
                                     <div>
                                         <label>Correo electrónico</label>
                                         <input type="text" class="form-control" id="correo_cliente" value="">
@@ -847,7 +851,7 @@
                     </div>
                     <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
 
-                        <button type="button" id="saveEditEmail" class="btn btn-primary">Salvar Cambios</button>
+                        <button type="button" id="saveEditEmail" class="btn btn-primary btn-block">Salvar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -904,6 +908,9 @@
                                 <div class="card-header">
                                 </div>
                                 <div class="card-body">
+
+                                  <div class="alert alert-danger" style="display:none" id="alert-datos">
+                                  </div>
 
                                     <div>
                                         <label>Provincia</label>
@@ -991,6 +998,10 @@
                                 <div class="card-header">
                                 </div>
                                 <div class="card-body">
+
+                                    <div class="alert alert-danger" id="alert-fb" style="display:none">
+                                      <p>Coloque una URL de su cuenta de FB valida.</p>
+                                    </div>
 
                                     <div>
                                         <input type="text" class="form-control" id="cuentafacebook">
@@ -1140,15 +1151,23 @@
             var email = $('#correo_cliente').val();
             var id = $('#idcustomer').val();
             var token = $('#token').val();
-            $.ajax({
-                method: 'post',
-                url: '{{url("saveDataEmail")}}',
-                data: { '_token':token, 'email':email,'id':id },
-                success: function (result) {
 
-                    location.reload();
-                }
-            });
+            $('#alert-email').fadeOut();
+
+            if (isEmail(email)) {
+              $.ajax({
+                  method: 'post',
+                  url: '{{url("saveDataEmail")}}',
+                  data: { '_token':token, 'email':email,'id':id },
+                  success: function (result) {
+
+                      location.reload();
+                  }
+              });
+            } else {
+              $('#alert-email').fadeIn();
+            }
+            
         });
 
         $('#modificarMLboton').on('click',function (e) {
@@ -1208,15 +1227,27 @@
             var cel = $('#cel').val();
             var id = $('#idcustomer').val();
             var token = $('#token').val();
-            $.ajax({
-                method: 'post',
-                url: '{{url('saveDataOther')}}',
-                data: { '_token':token,'provincia':provincia,'ciudad':ciudad,'carac':carac,'tel':tel,'cel':cel,'id':id },
-                success: function (result) {
 
-                    location.reload();
-                }
-            });
+            $('#alert-datos').fadeOut();
+
+            if (!isNum(carac)) {
+              $('#alert-datos').fadeIn().html('<p>El código de área no es valido. (Solo caracteres númericos)</p>');
+            } else if (!isTlf(tel)) {
+              $('#alert-datos').fadeIn().html('<p>El Teléfono no es valido.</p>');
+            } else if (!isTlf(cel)) {
+              $('#alert-datos').fadeIn().html('<p>El celular no es valido.</p>');
+            } else {
+              $.ajax({
+                  method: 'post',
+                  url: '{{url('saveDataOther')}}',
+                  data: { '_token':token,'provincia':provincia,'ciudad':ciudad,'carac':carac,'tel':tel,'cel':cel,'id':id },
+                  success: function (result) {
+
+                      location.reload();
+                  }
+              });
+            }
+            
         });
 
         $('#addNotes').on('click',function (e) {
@@ -1251,15 +1282,23 @@
             var face = $('#cuentafacebook').val();
             var id = $('#idcustomer').val();
             var token = $('#token').val();
-            $.ajax({
-                method: 'post',
-                url: '{{url('saveFB')}}',
-                data: { '_token':token,'face':face,'id':id },
-                success: function (result) {
 
-                    location.reload();
-                }
-            });
+            $('#alert-fb').fadeOut();
+
+            if (isFB(face)) {
+              $.ajax({
+                  method: 'post',
+                  url: '{{url('saveFB')}}',
+                  data: { '_token':token,'face':face,'id':id },
+                  success: function (result) {
+
+                      location.reload();
+                  }
+              });
+            } else {
+              $('#alert-fb').fadeIn();
+            }
+            
         });
 
         $('#ModificarFacebook').on('click',function(e){
@@ -1292,6 +1331,26 @@
                 }
             });
         });
+
+        function isEmail(email) {
+          var regex = /^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/;
+          return regex.test(email);
+        }
+
+        function isNum(num) {
+          var regex = /^\d+$/g;
+          return regex.test(num);
+        }
+
+        function isTlf(tlf) {
+          var regex = /^([0-9\-\+]{7,15})+$/g;
+          return regex.test(tlf);
+        }
+
+        function isFB(fb) {
+          var regex = /^(https:\/\/((www.facebook)|(facebook)).com\/)[A-Za-z0-9.\-\_]+(\/)?$/;
+          return regex.test(fb);
+        }
 
     </script>
 @endsection
