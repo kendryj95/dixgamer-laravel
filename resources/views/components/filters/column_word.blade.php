@@ -10,7 +10,7 @@
           @if(app('request')->input('column') == $column)
             <option selected value="{{ $column }}"> {{$column}} </option>
           @else
-              <option value="{{ $column }}"> {{$column}} </option>
+              <option value="{{ $column }}" @if ($column == 'email') selected @endif> {{$column}} </option>
           @endif
         @endforeach
       </select>
