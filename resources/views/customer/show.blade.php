@@ -1230,23 +1230,30 @@
 
             $('#alert-datos').fadeOut();
 
-            if (!isNum(carac)) {
-              $('#alert-datos').fadeIn().html('<p>El código de área no es valido. (Solo caracteres númericos)</p>');
-            } else if (!isTlf(tel)) {
-              $('#alert-datos').fadeIn().html('<p>El Teléfono no es valido.</p>');
-            } else if (!isTlf(cel)) {
-              $('#alert-datos').fadeIn().html('<p>El celular no es valido.</p>');
-            } else {
-              $.ajax({
-                  method: 'post',
-                  url: '{{url('saveDataOther')}}',
-                  data: { '_token':token,'provincia':provincia,'ciudad':ciudad,'carac':carac,'tel':tel,'cel':cel,'id':id },
-                  success: function (result) {
 
-                      location.reload();
-                  }
-              });
+            if (carac != "" || tel != "" || cel != "") {
+
+              if (!codArea(carac) && carac != "") {
+                $('#alert-datos').fadeIn().html('<p>El código de área no es valido. (Solo caracteres númericos)</p>');
+                return 0;
+              } else if (!isTlf(tel) && tef != "") {
+                $('#alert-datos').fadeIn().html('<p>El Teléfono no es valido.</p>');
+                return 0;
+              } else if (!isTlf(cel) && cel != "") {
+                $('#alert-datos').fadeIn().html('<p>El celular no es valido.</p>');
+                return 0;
+              }
             }
+
+            $.ajax({
+                method: 'post',
+                url: '{{url('saveDataOther')}}',
+                data: { '_token':token,'provincia':provincia,'ciudad':ciudad,'carac':carac,'tel':tel,'cel':cel,'id':id },
+                success: function (result) {
+
+                    location.reload();
+                }
+            });
             
         });
 
@@ -1337,13 +1344,13 @@
           return regex.test(email);
         }
 
-        function isNum(num) {
-          var regex = /^\d+$/g;
-          return regex.test(num);
+        function codArea(carac) {
+          var regex = /^(\+?((\([0-9]+\))|([0-9]+)))|(\d+)$/g;
+          return regex.test(carac);
         }
 
         function isTlf(tlf) {
-          var regex = /^([0-9\-\+]{7,15})+$/g;
+          var regex = /^([0-9\-\+\(\)]{7,15})+$/g;
           return regex.test(tlf);
         }
 
