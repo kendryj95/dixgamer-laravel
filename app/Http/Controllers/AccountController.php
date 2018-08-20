@@ -528,40 +528,99 @@ class AccountController extends Controller
     public function storeBalanceAccount($account,$title,$console){
       if (!empty($account) && !empty($title) && !empty($console)) {
         // cargo el stock disponible en este mismo segundo y busco el producto que quiero asignar
-        $stock_valido = \Helper::availableStock($account,$title,$console);
-        $stock_valido_id = $stock_valido[0]->ID_stk;
-        $stock = Stock::stockDetail($stock_valido_id)->first();
+        $band = false;
+        if ($title == 'gift-card-60-usd-org') {
 
-        $date = date('Y-m-d H:i:s', time());
-        $data = [
-          'cuentas_id'=>$account,
-          'ex_stock_id'=>$stock->ID,
-          'titulo'=>$title,
-          'consola'=>$console,
-          'medio_pago'=>$stock->medio_pago,
-          'costo_usd'=>$stock->costo_usd,
-          'costo'=>$stock->costo,
-          'code'=>$stock->code,
-          'code_prov'=>$stock->code_prov,
-          'n_order'=>$stock->n_order,
-          'Day'=>$date,
-          'ex_Day_stock'=>$stock->Day,
-          'Notas'=>$stock->Notas,
-          'usuario'=>session()->get('usuario')->Nombre,
-          'ex_usuario'=>$stock->usuario
-        ];
+          $titles = ['gift-card-10-usd', 'gift-card-50-usd'];
 
-        try {
-          $this->blc->storeBalanceAccount($data);
+          foreach ($titles as $title) {
+            $stock_valido = \Helper::availableStock($account,$title,$console);
 
-          // Eliminando stock
-          $stock = Stock::where('ID',$stock->ID)->delete();
-          // Mensaje de notificacion
+            if (is_array($stock_valido)) { 
+              $stock_valido_id = $stock_valido[0]->ID_stk;
+              $stock = Stock::stockDetail($stock_valido_id)->first();
+
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
+
+              try {
+                $this->blc->storeBalanceAccount($data);
+
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
+              }
+            }
+          }
+          
+        } else {
+          $stock_valido = \Helper::availableStock($account,$title,$console);
+          $stock_valido_id = $stock_valido[0]->ID_stk;
+          $stock = Stock::stockDetail($stock_valido_id)->first();
+
+          $date = date('Y-m-d H:i:s', time());
+          $data = [
+            'cuentas_id'=>$account,
+            'ex_stock_id'=>$stock->ID,
+            'titulo'=>$title,
+            'consola'=>$console,
+            'medio_pago'=>$stock->medio_pago,
+            'costo_usd'=>$stock->costo_usd,
+            'costo'=>$stock->costo,
+            'code'=>$stock->code,
+            'code_prov'=>$stock->code_prov,
+            'n_order'=>$stock->n_order,
+            'Day'=>$date,
+            'ex_Day_stock'=>$stock->Day,
+            'Notas'=>$stock->Notas,
+            'usuario'=>session()->get('usuario')->Nombre,
+            'ex_usuario'=>$stock->usuario
+          ];
+
+          try {
+            $this->blc->storeBalanceAccount($data);
+
+            // Eliminando stock
+            $stock = Stock::where('ID',$stock->ID)->delete();
+            // Mensaje de notificacion
+            // \Helper::messageFlash('Cuentas','Saldo agregado');
+            // return redirect('cuentas/'.$account);
+            $band = true;
+          } catch (\Exception $e) {
+            // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+            $band = false;
+          }
+        }
+
+        if ($band) {
           \Helper::messageFlash('Cuentas','Saldo agregado');
-          return redirect('cuentas/'.$account);
-        } catch (\Exception $e) {
+            return redirect('cuentas/'.$account);
+        } else {
           return redirect('/cuentas')->withErrors('Intentelo nuevamente');
         }
+        
 
 
 

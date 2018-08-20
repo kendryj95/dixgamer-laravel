@@ -10,7 +10,6 @@
       <form method="post" action="{{url('actualizar_direccion_cuenta',[$account->ID])}}">
         {{ csrf_field() }}
 
-        <em class="text-muted">{{$account->mail}}</em>
         <em class="text-muted">{{$account->country}}</em>
 
         <div class="input-group form-group">

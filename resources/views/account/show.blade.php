@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title',"Cuenta #$account->ID")
+
 @php
 	$saldo = 0.00; $saldoARS = 0.00;
 	$color = Helper::userColor($account->usuario);

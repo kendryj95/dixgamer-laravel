@@ -50,9 +50,8 @@ class Balance extends Model
               GROUP BY stock_id
               ORDER BY ID DESC) AS vendido
               ON ID = stock_id
-              WHERE (consola != 'ps4')
-              AND (consola != 'ps3')
-              AND (consola != 'steam') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot')
+              WHERE (consola = 'ps')
+              AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot')
               AND (titulo != 'plus-1-mes') AND (titulo != 'plus-3-meses') AND (titulo != 'gift-card-75-usd')
               AND (titulo != 'gift-card-100-usd') AND (titulo NOT LIKE '%points-fifa%')
               GROUP BY consola, titulo
