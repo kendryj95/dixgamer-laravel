@@ -65,7 +65,7 @@
 										type="button"
 										data-toggle="modal"
 										data-target=".bs-example-modal-lg"
-										onClick='getPageAjax("/cuentas/{{$account->ID}}/edit","#modal-container");'>
+										onClick='getPageAjax("{{url('cuentas/'.$account->ID.'/edit')}}","#modal-container");'>
 										<i aria-hidden="true" class="fa fa-pencil"></i>
 									</span>
                 </span>
@@ -160,7 +160,7 @@
 										class="text-muted btn-xs"
 										data-toggle="modal"
 										data-target=".bs-example-modal-lg"
-										onClick='getPageAjax("/editar_direccion_cuenta","#modal-container",{{$account->ID}});'>
+										onClick='getPageAjax("{{url('editar_direccion_cuenta')}}","#modal-container",{{$account->ID}});'>
 											<i aria-hidden="true" class="fa fa-pencil"></i>
 									</span>
 									<br />
@@ -210,7 +210,7 @@
 										type="button"
 										data-toggle="modal"
 										data-target=".bs-example-modal-lg"
-										onClick='getPageAjax("/crear_nota_cuenta","#modal-container",{{$account->ID}});'>
+										onClick='getPageAjax("{{url('crear_nota_cuenta')}}","#modal-container",{{$account->ID}});'>
 										<i class="fa fa-fw fa-comment"></i> Agregar Nota
 									</button>
 								</p>
@@ -334,7 +334,7 @@
 										type="button"
 										data-toggle="modal"
 										data-target=".bs-example-modal-lg"
-										onClick='getPageAjax("/solicitar_reseteo_cuenta","#modal-container",{{$account->ID}});'>
+										onClick='getPageAjax("{{url('solicitar_reseteo_cuenta')}}","#modal-container",{{$account->ID}});'>
 											<i class="fa fa-fw fa-power-off"></i>
 											Pedir Reseteo
 										</button>
@@ -408,7 +408,7 @@
 								type="button"
 								data-toggle="modal"
 								data-target=".bs-example-modal-lg"
-								onClick='getPageAjax("/actualizar_stock_cuenta/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}","#modal-container");'>
+								onClick='getPageAjax("{{url('actualizar_stock_cuenta/'.$stock->ID_stock.'/'.$stock->stock_cuentas_id)}}","#modal-container");'>
 									<i class="fa fa-pencil"></i>
 								</button>
 							</span>
@@ -541,7 +541,7 @@
 					type="button"
 					data-toggle="modal"
 					data-target=".bs-example-modal-lg"
-					onClick='getPageAjax("/recharge_account","#modal-container",{{$account->ID}});'>
+					onClick='getPageAjax("{{url('recharge_account')}}","#modal-container",{{$account->ID}});'>
 						<i class="fa fa-fw fa-dollar"></i>
 						Cargar Saldo
 				</button>
@@ -555,7 +555,7 @@
 						type="button"
 						data-toggle="modal"
 						data-target=".bs-example-modal-lg"
-						onClick='getPageAjax("/stock_insertar_cuenta","#modal-container",{{$account->ID}});'>
+						onClick='getPageAjax("{{url('stock_insertar_cuenta')}}","#modal-container",{{$account->ID}});'>
 							<i class="fa fa-fw fa-gamepad"></i>
 							Cargar Juego
 					</button>
@@ -567,7 +567,7 @@
 						type="button"
 						data-toggle="modal"
 						data-target=".bs-example-modal-lg"
-						onClick='getPageAjax("/stock_pre_insertar_cuenta","#modal-container",{{$account->ID}});'>
+						onClick='getPageAjax("{{url('stock_pre_insertar_cuenta')}}","#modal-container",{{$account->ID}});'>
 							<i class="fa fa-fw fa-th"></i>
 							Carga Masiva
 						</button>

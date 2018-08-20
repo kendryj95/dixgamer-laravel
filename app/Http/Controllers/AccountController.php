@@ -84,7 +84,7 @@ class AccountController extends Controller
     public function requestReset($id){
       $account = Account::where('ID',$id)->first();
 
-      if (count($account)<1)
+      if (!$account)
         return redirect('/cuentas')->withErrors('Intentelo nuevamente');
 
 
@@ -96,7 +96,7 @@ class AccountController extends Controller
     public function storeRequestReset($id,Request $request){
       $account = Account::where('ID',$id)->first();
 
-      if (count($account)<1)
+      if (!$account)
         return redirect('/cuentas')->withErrors('Intentelo nuevamente');
 
 
@@ -919,7 +919,7 @@ class AccountController extends Controller
       $obj->column = 'ID';
       $obj->word = $id;
       $account = Account::accountByColumnWord($obj)->first();
-      if (count($account) > 0) {
+      if ($account) {
         try {
           $data = [
                     'cuentas_id' => $id,

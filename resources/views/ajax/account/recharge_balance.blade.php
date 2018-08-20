@@ -13,11 +13,11 @@
 
             <a
               title="cargar saldo"
-              href="/crear_saldo_cuenta/{{$account_id}}/{{$gift->titulo}}/{{$gift->consola}}">
+              href="{{url('crear_saldo_cuenta/'.$account_id.'/'.$gift->titulo.'/'.$gift->consola)}}">
 
             <div>
               <img
-                src="/img/productos/{{$gift->consola}}/{{$gift->titulo}}.jpg"
+                src="{{asset('img/productos/'.$gift->consola.'/'.$gift->titulo.'.jpg')}}"
                 alt="{{$gift->consola}} - {{$gift->titulo}}.jpg"
                 class="img img-responsive full-width" />
 

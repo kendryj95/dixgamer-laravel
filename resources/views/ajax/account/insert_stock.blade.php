@@ -7,7 +7,7 @@
 
 @endphp
 <div class="container">
-	@if(count($account) > 0)
+	@if($account)
 		<h1 style="color:#000">GUARDAR STOCK</h1>
 		<div class="row">
 			<div class="col-sm-2" style="text-align:right;">
