@@ -32,14 +32,53 @@
 						<!--- <input type="text" id="titulo-selec" name="titulo" class="titulo tt-query form-control" autocomplete="off" spellcheck="false" placeholder="Buscar título"> -->
 					</div>
 
+					@php
+
+						$consolas_stock = [
+							"ps4",
+							"ps3",
+							"psn",
+							"steam",
+							"psvita"
+						];
+
+					@endphp
+
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-cube fa-fw"></i></span>
 						<select id="consola" name="consola" class="selectpicker form-control" onchange="return GameVerifyFunction();">
-							<option selected value="ps4" data-content="<span class='label label-primary'>ps4</span>">ps4</option>
-							<option value="ps3" data-content="<span class='label label-warning' style='background-color:#000;'>ps3</span>">ps3</option>
-							<option value="ps" data-content="<span class='label label-danger'>psn</span>">psn</option>
-							<option value="steam" data-content="<span class='label label-default'>steam</span>">steam</option>
-							<option value="psvita" data-content="<span class='label label-info'>psvita</span>">psvita</option>
+							@php $color = ''; @endphp
+							@foreach ($consolas_stock as $cons)
+
+							@if (!in_array($cons, $consolas))
+
+							@php
+								switch ($cons) {
+									case 'ps4':
+										$color = "primary";
+										break;
+									case 'ps3':
+										$color = "warning";
+										break;
+									case 'psn':
+										$color = "danger";
+										break;
+									case 'steam':
+										$color = "default";
+										break;
+									case 'psvita':
+										$color = "info";
+										break;
+								}
+							@endphp
+							
+							<option value="{{$cons}}" data-content="<span @if ($cons == "ps3") style='background-color: #000' @endif class='label label-{{$color}}'>{{$cons}}</span>">{{$cons}}</option>
+
+							@endif
+
+							@endforeach
+							
+							
 						</select>
 					</div>
 
@@ -63,7 +102,8 @@
 							class="form-control"
 							type="number"
 							step="0.01"
-							name="costo_usd" value="{{$accountBalance->costo_usd - $expense->costo_usd}}">
+							name="costo_usd" value="{{$accountBalance->costo_usd - $expense->costo_usd}}" @if ($expense->costo_usd) readonly @endif>
+							<input type="hidden" name="saldo_act" value="{{$accountBalance->costo_usd - $expense->costo_usd}}">
 
 							<span class="input-group-addon">
 								<em style="opacity:0.7" class="text-muted">Saldo: {{$accountBalance->costo_usd - $expense->costo_usd}}
@@ -112,6 +152,9 @@
 						document.getElementById("alerta").innerHTML = "no se encuentra";
 					});
 							}).trigger('change');
+
+							// To style only <select>s with the selectpicker class
+							$('.selectpicker').selectpicker();
 					})
 		</script>
 	@else

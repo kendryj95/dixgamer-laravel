@@ -398,8 +398,13 @@
         </div>
      </div>
 
+  @php
+  	$cant_productos = 0;
+  @endphp
+
   @if(count($stocks) > 0)
 		@foreach($stocks as $stock)
+			@php $cant_productos++; @endphp
     	<div class="col-xs-12 col-sm-4 col-md-3">
 				<div class="thumbnail">
 					<span class="pull-right" style="width: 45%;">
@@ -537,6 +542,7 @@
 
 
     <div class="col-md-2 pull-right">
+    	@if ($cant_productos < 2)
 			<p>
 				<button
 					class="btn btn-default btn-lg"
@@ -548,6 +554,7 @@
 						Cargar Saldo
 				</button>
 			</p>
+		@endif
 
      <?php if ($saldo > 0.00):?>
 
@@ -581,7 +588,7 @@
 							@foreach($lastAccountGames as $last)
 								<div class="col-sm-5" >
 									<div>
-										<img src="/img/productos/<?php echo $last->consola."/".$last->titulo.".jpg"; ?>"
+										<img src="{{asset('img/productos')}}/<?php echo $last->consola."/".$last->titulo.".jpg"; ?>"
 											 alt="<?php echo $last->consola." - ".$last->titulo.".jpg"; ?>" class="img img-responsive full-width" />
 									</div>
 
@@ -595,7 +602,7 @@
 
 							<?php if ($saldo <  $saldo_ultima_cta):?><p class="badge badge-danger">Se necesita <?php echo $saldo_ultima_cta;?> usd</p>
 							<?php else:?>
-								<form class="" action="{{ url('/repetir_ultima_cuenta',[$account->ID]) }}" method="post">
+								<form class="" action="{{ url('repetir_ultima_cuenta',[$account->ID]) }}" method="post">
 									{{ csrf_field() }}
 									<input type="hidden" name="last_account" value="{{$almaceno_ultima_cta_id}}">
 									<input type="hidden" name="saldo_usd" value="{{$saldo}}">

@@ -253,7 +253,7 @@ class AccountController extends Controller
       }
 
       $lastGames = $this->tks->lastAccountByIdAndUser(session()->get('usuario')->Nombre,$request->last_account);
-      if (count($lastGames) < 1)
+      if (!$lastGames)
         return redirect()->back()->withErrors(['Intentelo nuevamente']);
 
       $data = [];
@@ -353,6 +353,14 @@ class AccountController extends Controller
     }
 
     public function createStockAccount($id){
+
+      $consolas = [];
+      $stocks = Stock::stockDetailSold($id)->get();
+
+      foreach ($stocks as $stock) {
+        $consolas[] = $stock->consola;
+      }
+
       $account = Account::accountStockId($id)->first();
       $expense = Stock::stockExpensesByAccountId($id)->first();
       $titles = $this->wp_pst->lastGameStockTitles();
@@ -361,7 +369,8 @@ class AccountController extends Controller
         'account',
         'expense',
         'titles',
-        'accountBalance'
+        'accountBalance',
+        'consolas'
       ));
     }
 
@@ -466,6 +475,10 @@ class AccountController extends Controller
       if ($v->fails())
       {
           return redirect()->back()->withErrors($v->errors());
+      }
+
+      if ($request->costo_usd > $request->saldo_act) {
+        return redirect()->back()->withErrors('El saldo a usar para cargar el juego no puede ser mayor al que tienes disponible.');
       }
 
 
