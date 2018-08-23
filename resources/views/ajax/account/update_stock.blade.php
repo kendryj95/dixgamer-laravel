@@ -1,6 +1,8 @@
-
+@php
+$saldo = $accountBalance->costo_usd - $expense->costo_usd;
+@endphp
 <div class="container">
-	@if(count($account) > 0 && count($stock) > 0)
+	@if($account && $stock)
 		<h1 style="color:#000">Modificar Producto # {{ $stock->ID }}</h1>
 		<div class="row">
 			<div class="col-sm-3" style="text-align:right;">
@@ -35,6 +37,25 @@
 						</select>
 					</div>
 
+					<div class="input-group form-group">
+						<span class="input-group-addon"><em>Costo en USD</em></span>
+
+						<input
+							id="proporcion_usd"
+							class="form-control"
+							type="number"
+							step="0.01"
+							name="costo_usd" value="{{$stock->costo_usd}}" @if ($saldo == 0) readonly @endif>
+							<input type="hidden" name="saldo_act" value="{{$saldo}}">
+							<input type="hidden" name="costo_act" value="{{$stock->costo_usd}}">
+
+							<span class="input-group-addon">
+								<em style="opacity:0.7" class="text-muted">Saldo: {{$saldo}}
+									<img src="https://exur-exur.netdna-ssl.com/realskin/images/usa.png" style="opacity:0.7">
+								</em>
+						</span>
+					</div>
+
 					<button class="btn btn-primary btn-block" type="submit">Guardar</button>
 				</form>
 
@@ -49,7 +70,7 @@
 							$("form").on('change', function() {
 									var titulo = document.getElementById('titulo-selec').value;
 					var consola = document.getElementById('consola').value;
-					$("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
+					$("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
 					$('#image-swap').load(function() {
 									document.getElementById("alerta").innerHTML = "";
 									});
@@ -57,6 +78,8 @@
 						document.getElementById("alerta").innerHTML = "no se encuentra";
 					});
 							}).trigger('change');
+
+							$('.selectpicker').selectpicker();
 					})
 		</script>
 	@else

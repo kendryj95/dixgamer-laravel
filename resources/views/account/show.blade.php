@@ -415,7 +415,7 @@
 								type="button"
 								data-toggle="modal"
 								data-target=".bs-example-modal-lg"
-								onClick='getPageAjax("{{url('actualizar_stock_cuenta/'.$stock->ID_stock.'/'.$stock->stock_cuentas_id)}}","#modal-container");'>
+								onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}","#modal-container");'>
 									<i class="fa fa-pencil"></i>
 								</button>
 							</span>
@@ -709,6 +709,7 @@
 @section('scripts')
 @parent
 	<script>
+		var peticion = 0;
 		/*
 		$('#paginaAnt').on('click',function(e){
 			e.preventDefault();
@@ -721,6 +722,15 @@
 			});
 		});
 		*/
+		function request(e)
+		{
+			if (peticion == 0) {
+				peticion++;
+			} else {
+				e.preventDefault();
+				alert("Ya existe una petición abierta");
+			}
+		}
 	</script>
 @endsection
 @endsection

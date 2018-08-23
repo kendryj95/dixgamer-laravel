@@ -30,10 +30,13 @@ function getPageAjax(path,modal,param=null){
 
 	if (param == null) {
 		param = '';
+	} else {
+		param = '/'+param;
 	}
+	console.log('path', path);
 	modal.find('.modal-body').html('');
 	$.ajax({
-		url: path+'/'+param,
+		url: path+param,
 		type: 'GET',
 		dataType: 'HTML',
 		beforeSend: function(){

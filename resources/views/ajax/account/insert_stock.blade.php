@@ -114,7 +114,7 @@
 
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
-						<input class="form-control" type="text" name="Notas" placeholder="Notas de stock" required>
+						<input class="form-control" type="text" name="Notas" placeholder="Notas de stock">
 					</div>
 
 					<button class="btn btn-primary btn-block" type="submit">Guardar</button>

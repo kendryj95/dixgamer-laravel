@@ -381,6 +381,8 @@ class AccountController extends Controller
 
       // traemos la cuenta por el ID
       $account = Account::AccountByColumnWord($obj)->first();
+      $expense = Stock::stockExpensesByAccountId($account_id)->first();
+      $accountBalance = Balance::totalBalanceAccount($account_id)->first();
 
       // Traemos el stock
       $stock = Stock::where('ID',$stock_id)->first();
@@ -389,7 +391,9 @@ class AccountController extends Controller
       return view('ajax.account.update_stock',compact(
         'account',
         'stock',
-        'titles'
+        'titles',
+        'expense',
+        'accountBalance'
       ));
     }
 
@@ -423,13 +427,42 @@ class AccountController extends Controller
 
       // Traemos el stock
       $stock = Stock::where('ID',$request->stock_id)->first();
+      $expense = Stock::stockExpensesByAccountId($account_id)->first();
+      $accountBalance = Balance::totalBalanceAccount($account_id)->first();
 
-      if (count($account) > 0 && count($stock) > 0) {
+      /// SI EL COSTO EN USD ES 9.99, 19.99, etc... LE SUMO UN CENTAVO
+      $costo_usd = round($request->costo_usd, 1);
+
+      //// CALCULO EL SALDO LIBRE DE LA CUENTA EN USD Y EN ARS
+      $saldo_libre_usd = ($accountBalance->costo_usd - $expense->costo_usd);
+      $saldo_libre_ars = ($accountBalance->costo - $expense->costo);
+
+      /// SI EL SALDO A QUEDAR LUEGO DE INSERTAR UN PRODUCTO ES MAYOR O IGUAL A 9.99, CARGO COSTO ARS PROPORCIONAL
+      if (($saldo_libre_usd - $costo_usd) >= 9.99) {
+        $costo_ars = ($saldo_libre_ars * ($costo_usd/$saldo_libre_usd));
+      } else {
+      /// SI EL SALDO A QUEDAR ES MENOR A 9.99 LE ASIGNO EL TOTAL EN PESOS LIBRES > ABSORBO TODO EL COSTO EN PESOS
+        $costo_ars = $saldo_libre_ars;
+      }
+
+      if ($request->saldo_act != 0) {
+        if ($costo_usd > $request->saldo_act) {
+          return redirect()->back()->withErrors('El costo utilizado para actualizar el producto no puede ser mayor al saldo que tienes disponible.');
+        }
+      }
+
+      if ($account && $stock) {
         try {
 
+          $operador = session()->get('usuario')->Nombre;
           $notes = [];
           $notes['cuentas_id'] = $account_id;
-          $notes['Notas'] = "Modificacion de juego #$stock->ID, antes $stock->titulo ($stock->consola)";
+          if ($request->saldo_act != 0) {
+            $notes['Notas'] = "Modificacion de juego #$stock->ID, antes $stock->titulo y costo $request->costo_act a $costo_usd ($stock->consola)";
+          } else {
+
+            $notes['Notas'] = "Modificacion de juego #$stock->ID, antes $stock->titulo ($stock->consola)";
+          }
           $notes['usuario'] = session()->get('usuario')->Nombre;
           $notes['Day'] = $this->dte;
           DB::table('cuentas_notas')->insert([$notes]);
@@ -438,6 +471,10 @@ class AccountController extends Controller
           $data = [];
           $data['titulo'] = $request->titulo;
           $data['consola'] = $request->consola;
+          if ($request->saldo_act != 0) { // solo se actualiza el saldo de los productos solo si la cta tiene saldo disponible.
+            $data['costo_usd'] = $costo_usd;
+            $data['costo'] = $costo_ars;
+          }
           $this->tks->updateStockById($request->stock_id,$data);
 
 
@@ -515,7 +552,7 @@ class AccountController extends Controller
         $data['cuentas_id'] = $request->cuentas_id;
         $data['costo_usd'] = $request->costo_usd;
         $data['medio_pago'] = 'Saldo';
-        $data['costo'] = $request->titulo;
+        $data['costo'] = $costo_ars;
         $data['Day'] = $this->dte;
         $data['Notas'] = $request->Notas;
         $data['usuario'] = session()->get('usuario')->Nombre;
@@ -588,6 +625,52 @@ class AccountController extends Controller
             }
           }
           
+        } elseif ($title == 'gift-card-30-usd-org'){
+
+          $titles = ['gift-card-10-usd', 'gift-card-20-usd'];
+
+          foreach ($titles as $title) {
+            $stock_valido = \Helper::availableStock($account,$title,$console);
+
+            if (is_array($stock_valido)) { 
+              $stock_valido_id = $stock_valido[0]->ID_stk;
+              $stock = Stock::stockDetail($stock_valido_id)->first();
+
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
+
+              try {
+                $this->blc->storeBalanceAccount($data);
+
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
+              }
+            }
+          }
+
         } else {
           $stock_valido = \Helper::availableStock($account,$title,$console);
           $stock_valido_id = $stock_valido[0]->ID_stk;
