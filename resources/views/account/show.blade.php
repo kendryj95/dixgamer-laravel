@@ -673,7 +673,7 @@
 				<?php endif;?>
 
 			  </td>
-            <td><span class="label <?php if ($sc->slot == 'Primario'):?>label-default<?php endif;?>"><?php echo $sc->titulo; ?></span> <?php if ($sc->slot == 'Secundario'): ?><span class="label label-danger" style="opacity:0.7">2°</span><?php endif; ?> <span class="label label-default <?php echo $sc->consola; ?>"><?php echo $sc->consola; ?></span> <?php echo $sc->ID_stock; ?> <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
+            <td><span class="label <?php if ($sc->slot == 'Primario'):?>label-default<?php endif;?>"><?php echo $sc->titulo; ?></span> <?php if ($sc->slot == 'Secundario'): ?><span class="label label-danger" style="opacity:0.7">2°</span><?php endif; ?> <span class="label label-default <?php echo $sc->consola; ?>"><?php echo $sc->consola; ?></span> <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
 
             <td style="text-align:right;"><a class="btn btn-xs btn-default" type="button" title="Modificar venta" href="ventas_modificar.php?id=<?php echo $sc->ID_stock; ?>"><i aria-hidden="true" class="fa fa-pencil"></i></a></td>
             <?php endif;?>

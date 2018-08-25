@@ -63,12 +63,17 @@ class EditButtonsController extends Controller
 
     public function saveFB(Request $request){
 
+        $fb = DB::table('clientes')
+            ->where('ID',$request->id)->value('face');
+
         DB::table('clientes')
             ->where('ID',$request->id)->update(['face' => $request->face]);
 
-        DB::table('clientes_notas')->insert(['notas' => 'Cuenta de Face agreagada: ' . $request->face,
-            'clientes_id' => $request->id ,
-            'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
+        if ($fb != null) {
+            DB::table('clientes_notas')->insert(['notas' => 'Facebook anterior: '. $fb,
+                'clientes_id' => $request->id ,
+                'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
+        }
 
         return Response()->json('Variable de ML Actualizada');
     }

@@ -1236,7 +1236,7 @@
               if (!codArea(carac) && carac != "") {
                 $('#alert-datos').fadeIn().html('<p>El código de área no es valido. (Solo caracteres númericos)</p>');
                 return 0;
-              } else if (!isTlf(tel) && tef != "") {
+              } else if (!isTlf(tel) && tel != "") {
                 $('#alert-datos').fadeIn().html('<p>El Teléfono no es valido.</p>');
                 return 0;
               } else if (!isTlf(cel) && cel != "") {
