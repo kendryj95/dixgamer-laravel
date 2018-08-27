@@ -168,4 +168,28 @@ class Customer extends Model
               ->where('ventas.ID', $id)
               ->first();
     }
+
+    public function scopeInfoCustomerVentasProductos($query, $id)
+    {
+      return DB::table('ventas')
+              ->select(
+                'ventas.ID',
+                'clientes_id',
+                'stock_id',
+                'order_item_id',
+                'cons',
+                'slot',
+                'medio_venta',
+                'ventas.Notas',
+                'clientes.nombre',
+                'clientes.apellido',
+                'clientes.email',
+                'titulo',
+                'consola'
+              )
+              ->leftjoin('clientes', 'ventas.clientes_id', '=', 'clientes.ID')
+              ->leftjoin('stock', 'ventas.stock_id', '=', 'stock.ID')
+              ->where('ventas.ID', $id)
+              ->first();
+    }
 }

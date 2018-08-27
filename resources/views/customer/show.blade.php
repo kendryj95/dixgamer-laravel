@@ -590,8 +590,8 @@
                     class="btn-xs text-muted"
                     style="opacity: 0.7;"
                     type="button" data-toggle="modal"
-                    data-target=".bs-example-modal-lg"
-                    onClick='document.getElementById("ifr").src="ventas_modificar_producto.php?id=<?php echo $dataCustomer->ID_ventas; ?>&c_id=<?php echo $customer->ID ?>";'>
+                    data-target=".modalVentas"
+                    onclick='getPageAjax("{{ url('customer_ventas_modificar_producto') }}", "#modalVentas", {{ $dataCustomer->ID_ventas }})'>
                       <i aria-hidden="true" class="fa fa-pencil"></i>
                   </a>
                   <a

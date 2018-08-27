@@ -40,6 +40,8 @@ Route::group(['middleware' => ['login']], function()
   Route::post('customer_ctrl_ml_user', 'CustomerController@customerCtrlMlUsr');
   Route::get('customer_ventas_modificar/{id}', 'CustomerController@ventasModificar');
   Route::post('customer_ventas_modificar_store', 'CustomerController@ventasModificarStore');
+  Route::get('customer_ventas_modificar_producto/{id}', 'CustomerController@ventasModificarProductos');
+  Route::post('customer_ventas_modificar_producto_store', 'CustomerController@ventasModificarProductosStore');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');
