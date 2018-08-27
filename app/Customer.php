@@ -150,4 +150,22 @@ class Customer extends Model
     public function storeCustomer($customer){
       DB::table('clientes')->insert($customer);
     }
+
+    public function scopeInfoCustomerVentas($query, $id)
+    {
+      return DB::table('ventas')
+              ->select(
+                'ventas.ID',
+                'clientes_id',
+                'order_item_id',
+                'medio_venta',
+                'Notas',
+                'clientes.nombre',
+                'clientes.apellido',
+                'clientes.email'
+              )
+              ->leftjoin('clientes', 'ventas.clientes_id', '=', 'clientes.ID')
+              ->where('ventas.ID', $id)
+              ->first();
+    }
 }

@@ -49,7 +49,7 @@ $row_rsUsuarios = mysql_fetch_assoc($rsUsuarios);
 $totalRows_rsUsuarios = mysql_num_rows($rsUsuarios);
 
 mysql_select_db($database_Conexion, $Conexion);
-$sqlAA = "SELECT CONCAT('[ ',ID,' ] ',nombre,' ',apellido,' - ',email) as nombre FROM `game24hs`.`clientes` ORDER BY ID DESC";
+$sqlAA = "SELECT CONCAT('[ ',ID,' ] ',nombre,' ',apellido,' - ',email) as nombre FROM `clientes` ORDER BY ID DESC";
 $resultAA = mysql_query($sqlAA, $Conexion) or die(mysql_error());
 $rowsAA = array();
 while($r = mysql_fetch_assoc($resultAA)) {

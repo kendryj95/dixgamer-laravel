@@ -38,6 +38,8 @@ Route::group(['middleware' => ['login']], function()
   Route::resource('clientes', 'CustomerController');
   Route::post('customer_ctrl_email', 'CustomerController@customerCtrlEmail');
   Route::post('customer_ctrl_ml_user', 'CustomerController@customerCtrlMlUsr');
+  Route::get('customer_ventas_modificar/{id}', 'CustomerController@ventasModificar');
+  Route::post('customer_ventas_modificar_store', 'CustomerController@ventasModificarStore');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');

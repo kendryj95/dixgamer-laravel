@@ -6,6 +6,16 @@
     <div class="container">
     <h1>Cliente #{{$customer->ID}}</h1>
 
+    @if (count($errors) > 0)
+          <div class="alert alert-danger text-center">
+            <ul>
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+    @endif
+
 
       <div class="row clientes_detalles">
 
@@ -287,8 +297,8 @@
                       class="btn btn-xs btn-default"
                       type="button"
                       data-toggle="modal"
-                      data-target=".bs-example-modal-lg"
-                      onClick='document.getElementById("ifr").src="ventas_modificar.php?id=<?php echo $dataCustomer->ID_ventas; ?>&c_id=<?php echo $customer->ID ?>";'>
+                      data-target=".modalVentas"
+                      onclick="getPageAjax('{{url("customer_ventas_modificar")}}','#modalVentas',{{$dataCustomer->ID_ventas}})">
                               <i aria-hidden="true" class="fa fa-pencil"></i>
                     </button>
                     <button title="Modificar Venta" class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" onClick='document.getElementById("ifr").src="ventas_eliminar.php?id=<?php echo $dataCustomer->ID_ventas; ?>&c_id=<?php echo $customer->ID ?>";'>
@@ -1019,6 +1029,17 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="modal fade modalVentas" id="modalVentas" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+          <div class="modal-dialog modal-lg" style="top:40px;">
+            <div class="modal-content">
+              
+              <div class="modal-body" style="text-align:center;padding:10px;">
+              </div>
+              
+            </div>
+          </div>
         </div>
 
         <!-- Modal -->

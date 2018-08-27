@@ -202,4 +202,45 @@ class CustomerController extends Controller
         echo false;
       }
     }
+
+    public function ventasModificar($id)
+    {
+      $clientes = Customer::infoCustomerVentas($id);
+
+      return view('ajax.customer.ventas_modificar', compact('clientes'));
+    }
+
+    public function ventasModificarStore(Request $request)
+    {
+      
+      DB::beginTransaction();
+
+      $date = date('Y-m-d H:i:s');
+      $verificado = 'no';
+      if (\Helper::validateAdministrator(session()->get('usuario')->Level)) {
+        $verificado = 'si';
+      }
+      $vendedor = session()->get('usuario')->Nombre;
+
+      try {
+        DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
+
+        $data = [];
+        $data['clientes_id'] = $request->clientes_id;
+        $data['order_item_id'] = $request->order_item_id;
+        $data['medio_venta'] = $request->medio_venta;
+        $data['Notas'] = $request->Notas;
+
+        DB::table('ventas')->where('ID', $request->ID)->update($data);
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Venta modificada.');
+
+        return redirect()->back();
+
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+      }
+    }
 }
