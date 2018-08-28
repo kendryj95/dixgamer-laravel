@@ -300,7 +300,7 @@
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/2','#modalVentas')">Modificar medio venta</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/3','#modalVentas')">Modificar order</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/4','#modalVentas')">Agregar nota</a></li>
-                      {{-- <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/1','#modalVentas')">Eliminar venta</a></li> --}}
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar venta</a></li>
                     </ul>
                   </div>
                   <small style="color:#CFCFCF;" title="<?php echo $dataCustomer->Day; ?>">
@@ -740,9 +740,9 @@
         elseif (strpos($lowerSale->medio_cobro, 'Mercado') !== false): $text4 = 'MP';
         endif;?>
         <small style="color:#CFCFCF;" title="<?php echo $lowerSale->medio_venta; ?>"><?php echo $text3;?></small> <small style="color:#CFCFCF;" title="<?php echo $lowerSale->medio_cobro; ?>"><?php echo $text4;?></small>
-              <?php if($lowerSale->estado == 'listo'):?>
-              <small style="color:#CFCFCF;"><i class="fa fa-download fa-fw" aria-hidden="true"></i></small>
-              <?php endif; ?>
+              <?php //if($lowerSale->estado == 'listo'):?>
+              {{-- <small style="color:#CFCFCF;"><i class="fa fa-download fa-fw" aria-hidden="true"></i></small> --}}
+              <?php //endif; ?>
               </p>
         <?php if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($dataCustomer->costo * 0.6) ?>
               <?php elseif (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo * 0.4) ?>

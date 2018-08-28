@@ -362,4 +362,100 @@ class CustomerController extends Controller
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
       }
     }
+
+    public function ventasEliminar($id)
+    {
+      $ventas = DB::table('ventas')->select('ID','clientes_id')->where('ID',$id)->first();
+
+      $ventasBaja = DB::table('ventas_baja')->select('ID')->where('ventas_id',$id)->first();
+
+      return view('ajax.customer.ventas_eliminar', compact('ventas', 'ventasBaja'));
+    }
+
+    public function ventas_delete(Request $request)
+    {
+
+      DB::beginTransaction();
+
+      $date = date('Y-m-d H:i:s');
+      $verificado = 'no';
+      if (\Helper::validateAdministrator(session()->get('usuario')->Level)) {
+        $verificado = 'si';
+      }
+      $vendedor = session()->get('usuario')->Nombre;
+
+      switch ($request->opt) {
+        case 1:
+
+          try {
+            DB::insert("INSERT INTO ventas_baja(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, Day_baja, Notas_baja, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, '$date',?, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->Notas_baja, $request->ID]);
+
+            DB::table('ventas')->where('ID', $request->ID)->delete();
+
+            $data = [];
+            $data['precio']='0';
+            $data['comision']='0';
+
+            DB::table('ventas_cobro')->where('ventas_id',$request->ID)->update($data);
+
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Venta y cobro eliminado.');
+
+            return redirect()->back();
+
+          } catch (Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
+        
+        case 2:
+          
+          try {
+            DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
+
+            DB::insert("INSERT INTO ventas_baja(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, Day_baja, Notas_baja, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, '$date',?, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->Notas_baja, $request->ID]);
+
+            $data = [];
+            $data['precio']='0';
+            $data['comision']='0';
+
+            DB::table('ventas_cobro')->where('ventas_id',$request->ID)->update($data);
+
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Cobro eliminado.');
+
+            return redirect()->back();
+
+          } catch (Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
+
+        case 3:
+
+          try {
+
+            DB::table('ventas')->where('ID', $request->ID)->delete();
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Venta eliminada.');
+
+            return redirect()->back();
+          } catch (Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
+      }
+    }
 }

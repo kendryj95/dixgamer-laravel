@@ -105,11 +105,12 @@ class Customer extends Model
       return DB::table('stock')
                 ->select(
                   'ID AS ID_stock',
-                  'cuentas_id',
                   'titulo',
-                  'client.*',
                   'consola',
-                  'Notas AS stock_Notas'
+                  'costo',
+                  'Notas AS stock_Notas',
+                  'cuentas_id',
+                  'client.*'
                   )
                 ->rightjoin(
                   DB::raw("
