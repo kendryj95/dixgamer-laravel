@@ -158,6 +158,8 @@ class Customer extends Model
                 'ventas.ID',
                 'clientes_id',
                 'order_item_id',
+                'order_id_web',
+                'order_id_ml',
                 'medio_venta',
                 'Notas',
                 'clientes.nombre',

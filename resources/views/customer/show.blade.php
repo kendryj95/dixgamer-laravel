@@ -291,20 +291,18 @@
               <span class="pull-right" style="width: 45%;">
 
                 <p>
-                  <span class="btn-group pull-right">
-                    <button
-                      title="Modificar Venta"
-                      class="btn btn-xs btn-default"
-                      type="button"
-                      data-toggle="modal"
-                      data-target=".modalVentas"
-                      onclick="getPageAjax('{{url("customer_ventas_modificar")}}','#modalVentas',{{$dataCustomer->ID_ventas}})">
-                              <i aria-hidden="true" class="fa fa-pencil"></i>
+                  <div class="dropdown pull-right">
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <i aria-hidden="true" class="fa fa-pencil"></i>
                     </button>
-                    <button title="Modificar Venta" class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" onClick='document.getElementById("ifr").src="ventas_eliminar.php?id=<?php echo $dataCustomer->ID_ventas; ?>&c_id=<?php echo $customer->ID ?>";'>
-                              <i aria-hidden="true" class="fa fa-trash-o"></i>
-                    </button>
-                  </span>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/1','#modalVentas')">Modificar cliente</a></li>
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/2','#modalVentas')">Modificar medio venta</a></li>
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/3','#modalVentas')">Modificar order</a></li>
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/4','#modalVentas')">Agregar nota</a></li>
+                      {{-- <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/1','#modalVentas')">Eliminar venta</a></li> --}}
+                    </ul>
+                  </div>
                   <small style="color:#CFCFCF;" title="<?php echo $dataCustomer->Day; ?>">
                     <em class="fa fa-calendar-o fa-xs fa-fw" aria-hidden="true">
 

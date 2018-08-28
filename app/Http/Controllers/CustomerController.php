@@ -203,11 +203,12 @@ class CustomerController extends Controller
       }
     }
 
-    public function ventasModificar($id)
+    public function ventasModificar($id, $opt)
     {
       $clientes = Customer::infoCustomerVentas($id);
+      $opt = $opt; //Opción
 
-      return view('ajax.customer.ventas_modificar', compact('clientes'));
+      return view('ajax.customer.ventas_modificar', compact('clientes', 'opt'));
     }
 
     public function ventasModificarStore(Request $request)
@@ -222,25 +223,96 @@ class CustomerController extends Controller
       }
       $vendedor = session()->get('usuario')->Nombre;
 
-      try {
-        DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
+      switch ($request->opt) {
+        case 1:
+          try {
+            DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
 
-        $data = [];
-        $data['clientes_id'] = $request->clientes_id;
-        $data['order_item_id'] = $request->order_item_id;
-        $data['medio_venta'] = $request->medio_venta;
-        $data['Notas'] = $request->Notas;
+            $data = [];
+            $data['clientes_id'] = $request->clientes_id;
 
-        DB::table('ventas')->where('ID', $request->ID)->update($data);
-        DB::commit();
+            DB::table('ventas')->where('ID', $request->ID)->update($data);
+            DB::commit();
 
-        \Helper::messageFlash('Clientes','Venta modificada.');
+            \Helper::messageFlash('Clientes','Venta modificada.');
 
-        return redirect()->back();
+            return redirect()->back();
 
-      } catch (Exception $e) {
-        DB::rollback();
-        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+          break;
+        
+        case 2:
+          
+          try {
+            DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
+
+            $data = [];
+            $data['medio_venta'] = $request->medio_venta;
+
+            DB::table('ventas')->where('ID', $request->ID)->update($data);
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Venta modificada.');
+
+            return redirect()->back();
+
+          } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
+        case 3:
+
+          try {
+            DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
+
+            $order_item_id = isset($order_item_id) ? $request->order_item_id : '';
+            $order_id_web = isset($order_id_web) ? $request->order_id_web : '';
+            $order_id_ml = isset($order_id_ml) ? $request->order_id_ml : '';
+
+            $data = [];
+            $data['order_item_id'] = $order_item_id;
+            $data['order_id_web'] = $order_id_web;
+            $data['order_id_ml'] = $order_id_ml;
+
+            DB::table('ventas')->where('ID', $request->ID)->update($data);
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Venta modificada.');
+
+            return redirect()->back();
+
+          } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
+        case 4:
+
+          try {
+            DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
+
+            $data = [];
+            $data['Notas'] = $request->Notas;
+
+            DB::table('ventas')->where('ID', $request->ID)->update($data);
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Venta modificada.');
+
+            return redirect()->back();
+
+          } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
       }
     }
 
