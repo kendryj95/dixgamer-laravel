@@ -205,10 +205,12 @@ class CustomerController extends Controller
 
     public function ventasModificar($id, $opt)
     {
+      $data = DB::table('clientes')->select(DB::raw("CONCAT('[ ',ID,' ] ',nombre,' ',apellido,' - ',email) as nombre"))->orderBy('ID','DESC')->get();
+
       $clientes = Customer::infoCustomerVentas($id);
       $opt = $opt; //Opción
 
-      return view('ajax.customer.ventas_modificar', compact('clientes', 'opt'));
+      return view('ajax.customer.ventas_modificar', compact('clientes', 'opt', 'data'));
     }
 
     public function ventasModificarStore(Request $request)
@@ -319,8 +321,14 @@ class CustomerController extends Controller
     public function ventasModificarProductos($id)
     {
       $clientes = Customer::infoCustomerVentasProductos($id);
+      $stocks = DB::table('stock')->select('ID')->orderBy('ID')->get();
+      $data_set = array();
 
-      return view('ajax.customer.ventas_modificar_producto', compact('clientes'));
+      foreach ($stocks as $stock) {
+        $data_set[] = $stock->ID;
+      }
+
+      return view('ajax.customer.ventas_modificar_producto', compact('clientes', 'data_set'));
     }
 
     public function ventasModificarProductosStore(Request $request)
@@ -456,6 +464,31 @@ class CustomerController extends Controller
           }
 
           break;
+      }
+    }
+
+    public function ventarQuitarProducto($id)
+    {
+      DB::beginTransaction();
+
+      try {
+
+        $data = [];
+        $data['stock_id'] = 1;
+        $data['cons'] = 'ps';
+        $data['slot'] = 'No';
+
+        DB::table('ventas')->where('ID',$id)->update($data);
+
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Producto removido.');
+
+        return redirect()->back();
+      } catch (Exception $e) {
+          DB::rollback();
+
+          return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
       }
     }
 }

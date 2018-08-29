@@ -1,5 +1,15 @@
+@php
+
+$data_set = array();
+
+foreach ($data as $value) {
+  $data_set[] = $value->nombre;
+}
+
+@endphp
 <div class="container">
-	<h1 style="color:#000">Modificar Venta</h1>
+  <h1 style="color:#000">Modificar Venta</h1>
+  
   <div class="row">
       <div class="col-sm-3">
       </div>
@@ -13,13 +23,14 @@
 
             <input type="hidden" name="opt" value="1">
 
-            <div class="input-group form-group">
-              <span class="input-group-addon"><i class="fa fa-slack fa-fw"></i></span> 
-               <input id="clientes" type="text" class="form-control typeahead" autocomplete="off" spellcheck="false" value="{{$clientes->clientes_id}}" name="clientes_id">
-               <span class="input-group-addon"><em>clientes_id</em> antes: {{$clientes->clientes_id}}</span> 
-             </div>
+            <div style="margin-bottom:10px;">
+              <input id="clientes" type="text" class="form-control typeahead" autocomplete="off" spellcheck="false" value="[ {{$clientes->clientes_id}} ] {{ $clientes->nombre }} {{ $clientes->apellido }} - {{ $clientes->email }}">
+            </div>
 
+
+             <input type="hidden" name="clientes_id" id="clientes_id" value="{{$clientes->clientes_id}}">
             <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+            <input type="hidden" id="data_set" value="{{ json_encode($data_set) }}">
 
             <button class="btn btn-primary" type="submit">Modificar</button>
             <input type="reset" class="btn btn-secondary">
@@ -152,7 +163,58 @@
 </div><!--/.container-->
 
 <script>
+  var cliente;
   $(document).ready(function() {
+
+    var cars = JSON.parse($('#data_set').val());
+
+    // Constructing the suggestion engine
+    var cars = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: cars
+    });
+
+    // Initializing the typeahead
+    $('.typeahead').typeahead({
+        hint: true,
+        highlight: true, /* Enable substring highlighting */
+        minLength: 2 /* Specify minimum characters required for showing result */
+        
+    },
+    {
+        name: 'cars',
+        source: cars
+    });
+
+      /*.on('typeahead:render', (e,firstOption) => {
+                        if (!!firstOption) {
+                            enterSelection = firstOption
+                        } else {
+                            enterSelection = undefined;
+                        }
+                    }).on('keypress', (e) => {
+                        if (e.which == 13 && enterSelection) {
+                            $('#typeahead').typeahead('val', enterSelection.value);
+                            (this.onDataSelect || _.noop)({ selection: enterSelection });
+                            $('#typeahead').typeahead('close');
+                        }
+                    });*/
+
+            $("#clientes").blur(function(){
+              if(this.value==""){
+               this.value = arr[0];   
+              }
+           });
+
+          window.setInterval(function() {
+
+            cliente = $('#clientes').val();
+            var String = cliente.substring(cliente.lastIndexOf('[ ')+1,cliente.lastIndexOf(' ]'));
+              // document.getElementById("clientes_id").value = String;
+              $('#clientes_id').val((String).trim());
+            },500);
+
     // To style only <select>s with the selectpicker class
     $('.selectpicker').selectpicker();
   });

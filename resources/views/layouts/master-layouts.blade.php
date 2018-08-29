@@ -211,6 +211,7 @@
   <script src="{{ asset('js/script.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+  <script src="{{ asset('js/typeahead.bundle.js') }}"></script>
 
   <script>new Clipboard('.btn-copiador');</script>
 

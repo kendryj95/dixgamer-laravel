@@ -10,12 +10,19 @@
                 <input type="text" id="clientes_id" name="clientes_id" value="{{ $clientes->clientes_id }}" hidden>
                 
                 
-                <div class="input-group form-group">
+                <div style="margin-bottom:10px;">
+                  <input id="stocks" type="text" class="form-control typeahead" autocomplete="off" spellcheck="false" value="{{ $clientes->stock_id }}">
+                </div>
+
+                <input type="hidden" name="stock_id" id="stock_id" value="{{ $clientes->stock_id }}">
+                <input type="hidden" name="" id="data_set" value="{{json_encode($data_set)}}">
+
+                <!-- <div class="input-group form-group">
                   <span class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></span>
                   <input value="{{ $clientes->stock_id }}" class="form-control" type="text" name="stock_id" placeholder="stock_id">
                   <span class="input-group-addon"><em class="text-muted">stock id (Antes {{ $clientes->stock_id }})</em></span>
                 </div>
-                
+                 -->
                 @php $colorcons = ''; @endphp
 
                 @if ($clientes->cons == 'ps3') @php $colorcons='normal'; @endphp
@@ -69,6 +76,53 @@
 
 <script>
   $(document).ready(function() {
+
+    var cars = JSON.parse($('#data_set').val());
+
+    // Constructing the suggestion engine
+    var cars = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: cars
+    });
+
+    // Initializing the typeahead
+    $('.typeahead').typeahead({
+        hint: true,
+        highlight: true, /* Enable substring highlighting */
+        minLength: 2 /* Specify minimum characters required for showing result */
+        
+    },
+    {
+        name: 'cars',
+        source: cars
+    });
+
+      /*.on('typeahead:render', (e,firstOption) => {
+                        if (!!firstOption) {
+                            enterSelection = firstOption
+                        } else {
+                            enterSelection = undefined;
+                        }
+                    }).on('keypress', (e) => {
+                        if (e.which == 13 && enterSelection) {
+                            $('#typeahead').typeahead('val', enterSelection.value);
+                            (this.onDataSelect || _.noop)({ selection: enterSelection });
+                            $('#typeahead').typeahead('close');
+                        }
+                    });*/
+
+            $("#stocks").blur(function(){
+              if(this.value==""){
+               this.value = arr[0];   
+              }
+           });
+
+          window.setInterval(function() {
+              $('#stock_id').val($('#stocks').val());
+            },500);
+
+
     // To style only <select>s with the selectpicker class
     $('.selectpicker').selectpicker();
   });

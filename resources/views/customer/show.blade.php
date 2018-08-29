@@ -443,6 +443,7 @@
 
               <?php
 
+                $costo = 0;
                 if (($dataCustomer->consola == 'ps4') && ($dataCustomer->slot == 'Primario')): $costo = round($dataCustomer->costo * 0.6);
                 elseif (($dataCustomer->consola == 'ps4') && ($dataCustomer->slot == 'Secundario')): $costo = round($dataCustomer->costo * 0.4);
                 elseif ($dataCustomer->consola == 'ps3'): $costo = round($dataCustomer->costo * (1 / (2 + (2 * $dataCustomer->q_reset))));
@@ -596,10 +597,7 @@
                     title="Quita Producto (producto 0)"
                     class="btn-xs text-muted"
                     style="opacity: 0.7;"
-                    type="button"
-                    data-toggle="modal"
-                    data-target=".bs-example-modal-lg"
-                    onClick='document.getElementById("ifr").src="ventas_quitar_producto.php?id=<?php echo $dataCustomer->ID_ventas; ?>&c_id=<?php echo $customer->ID ?>";'>
+                    href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">
                       <i aria-hidden="true" class="fa fa-remove"></i>
                   </a>
               </small>
