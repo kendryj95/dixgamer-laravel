@@ -236,9 +236,9 @@ class CustomerController extends Controller
             DB::table('ventas')->where('ID', $request->ID)->update($data);
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta modificada.');
+            \Helper::messageFlash('Clientes','Venta asignada.');
 
-            return redirect()->back();
+            return redirect('clientes/'.$request->clientes_id);
 
           } catch (Exception $e) {
             DB::rollback();
