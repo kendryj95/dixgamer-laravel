@@ -76,6 +76,23 @@ foreach ($data as $value) {
 
             <input type="hidden" name="opt" value="3">
 
+            @php $colorventa = ''; @endphp
+
+            @if ($clientes->medio_venta == 'MercadoLibre') @php $colorventa='warning'; @endphp
+            @elseif ($clientes->medio_venta == 'Web') @php $colorventa='info'; @endphp
+            @elseif ($clientes->medio_venta == 'Mail') @php $colorventa='danger'; @endphp
+            @endif
+
+            <div class="input-group form-group">
+            <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span> 
+            <select name="medio_venta" class="selectpicker form-control">
+               <option value="{{$clientes->medio_venta}}" selected="selected" data-content="<span class='label label-{{$colorventa}}'>{{$clientes->medio_venta}}</span> - <span class='label label-success'>Actual</span>">{{$clientes->medio_venta}} - Actual</option>
+               <option value="MercadoLibre" data-content="<span class='label label-warning'>MercadoLibre</span>">MercadoLibre</option>
+                <option value="Mail" data-content="<span class='label label-danger'>Mail</span>">Mail</option>
+                <option value="Web" data-content="<span class='label label-info'>Web</span>">Web</option>
+            </select>                
+            </div>
+
             @if ($clientes->medio_venta == 'MercadoLibre')
 
               <div class="input-group form-group">
@@ -166,6 +183,8 @@ foreach ($data as $value) {
   var cliente;
   $(document).ready(function() {
 
+    @if($opt == 1)
+
     var cars = JSON.parse($('#data_set').val());
 
     // Constructing the suggestion engine
@@ -214,6 +233,8 @@ foreach ($data as $value) {
               // document.getElementById("clientes_id").value = String;
               $('#clientes_id').val((String).trim());
             },500);
+
+    @endif
 
     // To style only <select>s with the selectpicker class
     $('.selectpicker').selectpicker();

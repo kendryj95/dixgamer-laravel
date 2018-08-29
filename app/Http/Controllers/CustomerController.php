@@ -277,6 +277,7 @@ class CustomerController extends Controller
             $order_id_ml = isset($order_id_ml) ? $request->order_id_ml : '';
 
             $data = [];
+            $data['medio_venta'] = $request->medio_venta;
             $data['order_item_id'] = $order_item_id;
             $data['order_id_web'] = $order_id_web;
             $data['order_id_ml'] = $order_id_ml;
