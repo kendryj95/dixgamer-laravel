@@ -85,7 +85,7 @@ foreach ($data as $value) {
 
             <div class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span> 
-            <select name="medio_venta" class="selectpicker form-control">
+            <select name="medio_venta" class="selectpicker form-control" onchange="orders(this.value)">
                <option value="{{$clientes->medio_venta}}" selected="selected" data-content="<span class='label label-{{$colorventa}}'>{{$clientes->medio_venta}}</span> - <span class='label label-success'>Actual</span>">{{$clientes->medio_venta}} - Actual</option>
                <option value="MercadoLibre" data-content="<span class='label label-warning'>MercadoLibre</span>">MercadoLibre</option>
                 <option value="Mail" data-content="<span class='label label-danger'>Mail</span>">Mail</option>
@@ -95,19 +95,19 @@ foreach ($data as $value) {
 
             @if ($clientes->medio_venta == 'MercadoLibre')
 
-              <div class="input-group form-group">
+              <div class="input-group form-group oiml">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
                 <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" name="order_id_ml" placeholder="order_id_ml">
                 <span class="input-group-addon"><em class="text-muted">order id ml</em></span>
               </div>
 
-              <div class="input-group form-group">
+              <div class="input-group form-group oii">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
                 <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" name="order_item_id" placeholder="order_item_id">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
-              <div class="input-group form-group">
+              <div class="input-group form-group oiw">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
                 <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" name="order_id_web" placeholder="order_id_web">
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
@@ -120,13 +120,19 @@ foreach ($data as $value) {
 
             @elseif ($clientes->medio_venta == 'Web')
 
-              <div class="input-group form-group">
+              <div class="input-group form-group oiml" style="display: none">
+                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" name="order_id_ml" placeholder="order_id_ml">
+                <span class="input-group-addon"><em class="text-muted">order id ml</em></span>
+              </div>
+
+              <div class="input-group form-group oii">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
                 <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" name="order_item_id" placeholder="order_item_id">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
-              <div class="input-group form-group">
+              <div class="input-group form-group oiw">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
                 <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" name="order_id_web" placeholder="order_id_web">
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
@@ -139,9 +145,28 @@ foreach ($data as $value) {
 
             @elseif ($clientes->medio_venta == 'Mail')
 
-              <div class="text-center">
-                <h3 style="color: #000">Ningún campo que actualizar.</h3>
+              <div class="input-group form-group oiml" style="display: none">
+                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" name="order_id_ml" placeholder="order_id_ml">
+                <span class="input-group-addon"><em class="text-muted">order id ml</em></span>
               </div>
+
+              <div class="input-group form-group oii" style="display: none">
+                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" name="order_item_id" placeholder="order_item_id">
+                <span class="input-group-addon"><em class="text-muted">order item id</em></span>
+              </div>
+
+              <div class="input-group form-group oiw" style="display: none">
+                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" name="order_id_web" placeholder="order_id_web">
+                <span class="input-group-addon"><em class="text-muted">order id web</em></span>
+              </div>
+
+              <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+
+              <button class="btn btn-primary" type="submit">Modificar</button>
+              <input type="reset" class="btn btn-secondary">
 
             @endif
 
@@ -239,4 +264,21 @@ foreach ($data as $value) {
     // To style only <select>s with the selectpicker class
     $('.selectpicker').selectpicker();
   });
+
+  function orders(value)
+  {
+    if (value == 'Mail') {
+      $('.oiml').hide();
+      $('.oii').hide();
+      $('.oiw').hide();
+    } else if(value == 'MercadoLibre') {
+      $('.oiml').show();
+      $('.oii').show();
+      $('.oiw').show();
+    } else {
+      $('.oiml').hide();
+      $('.oii').show();
+      $('.oiw').show();
+    }
+  }
 </script>

@@ -272,15 +272,26 @@ class CustomerController extends Controller
           try {
             DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
 
-            $order_item_id = isset($order_item_id) ? $request->order_item_id : '';
-            $order_id_web = isset($order_id_web) ? $request->order_id_web : '';
-            $order_id_ml = isset($order_id_ml) ? $request->order_id_ml : '';
+            $order_item_id = isset($request->order_item_id) ? $request->order_item_id : NULL;
+            $order_id_web = isset($request->order_id_web) ? $request->order_id_web : NULL;
+            $order_id_ml = isset($request->order_id_ml) ? $request->order_id_ml : NULL;
 
             $data = [];
             $data['medio_venta'] = $request->medio_venta;
-            $data['order_item_id'] = $order_item_id;
-            $data['order_id_web'] = $order_id_web;
-            $data['order_id_ml'] = $order_id_ml;
+            if ($request->medio_venta == 'Mail') {
+              $data['order_item_id'] = NULL;
+              $data['order_id_web'] = NULL;
+              $data['order_id_ml'] = NULL;
+            } elseif ($request->medio_venta == 'MercadoLibre') {
+              $data['order_item_id'] = $order_item_id;
+              $data['order_id_web'] = $order_id_web;
+              $data['order_id_ml'] = $order_id_ml;
+            } else {
+              $data['order_item_id'] = $order_item_id;
+              $data['order_id_web'] = $order_id_web;
+              $data['order_id_ml'] = NULL;
+            }
+            
 
             DB::table('ventas')->where('ID', $request->ID)->update($data);
             DB::commit();
