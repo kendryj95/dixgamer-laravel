@@ -7,7 +7,8 @@
       <h1 style="color:#000">Cargar Saldo - Cuenta #{{$account_id}}</h1>
       @php
         $bandera1 = 0;
-        $bandera2 = 0
+        $bandera2 = 0;
+        $bandera3 = 0;
       @endphp
       @foreach($gifts as $gift)
 
@@ -24,6 +25,14 @@
           @php
 
             $bandera2++;
+          @endphp
+        @endif
+
+        @if ($gift->titulo == 'gift-card-20-usd') <!-- Determinar si las dos gift card están disponibles -->
+
+          @php
+
+            $bandera3++;
           @endphp
         @endif
 
@@ -118,6 +127,34 @@
                 <h3>20 + 10</h3>
                 <br>
                 <h2>30 USD</h2>
+            </div> 
+            
+            
+              
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      @endif
+
+      @if ($bandera3 != 0) {{-- 2 en 1: 20 + 20 --}}
+
+      <div class="col-xs-6 col-sm-2">
+
+        <div class="thumbnail">
+
+          <div style="height: 305px; border: 1px solid #ccc">
+            <a
+              title="cargar saldo"
+              onclick="request(event)"
+              href="{{url('crear_saldo_cuenta/'.$account_id.'/gift-card-40-usd-org/'.$gift->consola)}}">
+            
+            <div style="color: #000">
+                <h3>20 + 20</h3>
+                <br>
+                <h2>40 USD</h2>
             </div> 
             
             
