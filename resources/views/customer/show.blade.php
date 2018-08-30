@@ -1038,6 +1038,17 @@
           </div>
         </div>
 
+        <div class="modal fade modalConfirm" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+          <div class="modal-dialog modal-lg" style="top:40px;">
+            <div class="modal-content">
+              
+              <div class="modal-body" style="text-align:center;padding:10px;">
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
         <!-- Modal -->
         <div class="modal fade" id="modificarfb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

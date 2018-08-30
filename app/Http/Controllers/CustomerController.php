@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Customer;
 use App\Sale;
 use App\Expenses;
+use App\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
@@ -330,7 +331,7 @@ class CustomerController extends Controller
       }
     }
 
-    public function ventasModificarProductos($id)
+    /*public function ventasModificarProductos($id) # ORIGINAL
     {
       $clientes = Customer::infoCustomerVentasProductos($id);
       $stocks = DB::table('stock')->select('ID')->orderBy('ID')->get();
@@ -341,9 +342,64 @@ class CustomerController extends Controller
       }
 
       return view('ajax.customer.ventas_modificar_producto', compact('clientes', 'data_set'));
+    }*/
+
+    public function ventasModificarProductos($id)
+    {
+      /*// Extraemos variable de item id
+      $order_item_id = $request->order_item_id;
+      // Buscamos por medio de un scope creado la orden
+      $sales_order_item = Sale::salesFromOrderId($order_item_id)->first();
+
+      // si la venta existe aviso al gestor
+      if ($sales_order_item) {
+        echo "Este pedido ya fue asignado por ".$sales_order_item->usuario." <br><a href='/clientes_detalles/".$sales_order_item->clientes_id."' target='_blank'>Ver Venta</a>";
+      }*/
+
+
+      /***  Stock Nuevo  ***/
+      $obj = new \stdClass;
+      $obj->console_1 = 'ps4';
+      $obj->console_2 = 'ps3';
+      $obj->title = 'plus-12-meses-slot';
+
+      $stocks = Stock::showStock($obj)->get();
+      /***     PS4 PRIMARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps4';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'primary';
+      $ps4_primary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
+
+      //dd($stocks);
+      /***     PS4 SECUNDARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps4';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'secundary';
+      $ps4_secundary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
+
+      /***     PS3     ***/
+      $ps3_stocks =  Stock::ps3();
+
+      /***     PS3 Resetear    ***/
+      $ps3_reset_stocks =  Stock::ps3Resetear();
+
+      $id_ventas = $id;
+      return view('ajax.customer.ven_modificar_producto',
+            compact(
+              'stocks',
+              'ps4_primary_stocks',
+              'ps4_secundary_stocks',
+              'ps3_reset_stocks',
+              'ps3_stocks',
+              'id_ventas'
+            ));
     }
 
-    public function ventasModificarProductosStore(Request $request)
+    /*public function ventasModificarProductosStore(Request $request)
     {
       $this->validate($request,[
         "stock_id" => "required"
@@ -371,6 +427,46 @@ class CustomerController extends Controller
         $data['Notas'] = $request->Notas;
 
         DB::table('ventas')->where('ID', $request->ID)->update($data);
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Venta de producto modificado.');
+
+        return redirect()->back();
+
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+      }
+    }*/
+
+    public function ventasModificarProductosStore($consola, $titulo, $slot, $id_ventas)
+    {
+      
+      $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+      
+      $stk_ID = $row_rsSTK[0]->ID_stk;
+
+      DB::beginTransaction();
+
+      $date = date('Y-m-d H:i:s');
+      $verificado = 'no';
+      if (\Helper::validateAdministrator(session()->get('usuario')->Level)) {
+        $verificado = 'si';
+      }
+      $vendedor = session()->get('usuario')->Nombre;
+
+      $stock_anterior = DB::table('ventas')->where('ID',$id_ventas)->value('stock_id');
+
+      try {
+        DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$id_ventas]);
+
+        $data = [];
+        $data['stock_id'] = $stk_ID;
+        $data['cons'] = $consola;
+        $data['slot'] = $slot;
+        $data['Notas'] = "Antes tenía # $stock_anterior";
+
+        DB::table('ventas')->where('ID', $id_ventas)->update($data);
         DB::commit();
 
         \Helper::messageFlash('Clientes','Venta de producto modificado.');
@@ -502,5 +598,28 @@ class CustomerController extends Controller
 
           return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
       }
+    }
+
+    public function confirmUpdateProduct($consola, $titulo, $slot, $id_ventas)
+    {
+      $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+      $errors = [];
+      $stk_ID = '';
+      $consola = $consola;
+      $titulo = $titulo;
+      $slot = $slot;
+      $id_ventas = $id_ventas;
+
+      // dd($row_rsSTK);
+
+      if(!is_array($row_rsSTK)) {
+          $errors[] = "No hay stock disponibles.";
+      } else {
+        $stk_ID = $row_rsSTK[0]->ID_stk;
+      }
+
+      return view('ajax.customer.confirmUpdateProduct', compact('errors', 'stk_ID', 'consola', 'titulo', 'slot', 'id_ventas'));
+
+      
     }
 }
