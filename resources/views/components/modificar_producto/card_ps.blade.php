@@ -15,7 +15,7 @@
               </span>
               <a title="vender {{$data->titulo}}"
 
-                  href="javascript:void(0)" data-toggle="modal" data-target=".modalConfirm" onclick="$('#modalVentas').modal('hide');getPageAjax('{{ url('customer_confirmUpdateProduct',[$data->consola,$data->titulo,'No',$id_ventas]) }}','#modalConfirm')">
+                  href="javascript:void(0)" data-toggle="modal" data-target=".modalConfirm" onclick="$('#modalVentas').modal('hide');getPageAjax('{{ url('customer_confirmUpdateProduct',[$data->consola,$data->titulo,$slot,$id_ventas]) }}','#modalConfirm')">
 
                 <img src="{{asset('img/productos/'.$data->consola.'/'.$data->titulo.'.jpg')}}" alt="{{$data->consola}} - {{$data->titulo}}.jpg"
                     class="img img-responsive full-width"

@@ -31,6 +31,7 @@ class SalesController extends Controller
 
 
         $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+        dd($row_rsSTK);
 
         if(! count($row_rsSTK) > 0) {
             exit('No hay stock del Juego:'. $titulo ($consola));
