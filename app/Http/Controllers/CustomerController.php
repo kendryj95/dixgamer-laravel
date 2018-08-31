@@ -647,4 +647,141 @@ class CustomerController extends Controller
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
       }
     }
+
+    public function ventasCobroModificar($id)
+    {
+      $ventas_cobro = DB::table('ventas_cobro AS vc')
+                        ->select(
+                          'vc.ID',
+                          'medio_cobro',
+                          'ref_cobro',
+                          'precio',
+                          'comision',
+                          'vc.Notas',
+                          'vc.ventas_id',
+                          'v.clientes_id'
+                        )
+                        ->leftjoin('ventas AS v', 'vc.ventas_id', '=', 'v.ID')
+                        ->where('vc.ID',$id)
+                        ->first();
+
+      return view('customer.ventas_modificar_cobro', compact('ventas_cobro'));
+    }
+
+    public function ventasCobroModificarStore(Request $request)
+    {
+      $this->validate($request,[
+        "precio" => "required|numeric",
+        "comision" => "required|numeric",
+      ],
+      [
+        "precio.required" => "Precio es obligatorio.",
+        "precio.numeric" => "Precio no es valido.",
+        "comision.required" => "Comision es obligatorio.",
+        "comision.numeric" => "Precio no es valido."
+      ]);
+
+      if (strpos($request->medio_cobro, "Mercado") !== false) {
+        $this->validate($request,[
+          "ref_cobro" => "required|numeric",
+        ],
+        [
+          "ref_cobro.required" => "Nº de cobro es obligatorio para MercadoPago",
+          "ref_cobro.numeric" => "Nº de cobro no es valido.",
+        ]);
+      }
+
+      DB::beginTransaction();
+
+      try {
+        $data = [];
+        $data['medio_cobro'] = $request->medio_cobro;
+        $data['ref_cobro'] = $request->ref_cobro;
+        $data['precio'] = $request->precio;
+        $data['comision'] = $request->comision;
+        $data['Notas'] = $request->Notas_cobro;
+
+        DB::table('ventas_cobro')->where('ID',$request->ID)->update($data);
+
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Cobro de venta modificado.');
+
+        return redirect('clientes/'.$request->clientes_id);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+      }
+    }
+
+    public function addVentasCobro($id_ventas, $id_cliente)
+    {
+      $venta_stock = DB::table('ventas AS v')
+                      ->select(
+                        'v.ID',
+                        'v.Day',
+                        'v.clientes_id',
+                        'v.stock_id',
+                        'titulo',
+                        'consola'
+                      )
+                      ->leftjoin('stock AS s', 'v.stock_id', '=', 's.ID')
+                      ->where('v.ID',$id_ventas)
+                      ->first();
+
+      $cliente = DB::table('clientes')->where('ID',$id_cliente)->first();
+
+      return view('ajax.customer.ventas_cobro_insertar', compact('venta_stock', 'cliente'));
+    }
+
+    public function addVentasCobroStore(Request $request)
+    {
+      $this->validate($request,[
+        "precio" => "required|numeric",
+        "comision" => "required|numeric",
+      ],
+      [
+        "precio.required" => "Precio es obligatorio.",
+        "precio.numeric" => "Precio no es valido.",
+        "comision.required" => "Comision es obligatorio.",
+        "comision.numeric" => "Precio no es valido."
+      ]);
+
+      if (strpos($request->medio_cobro, "Mercado") !== false) {
+        $this->validate($request,[
+          "ref_cobro" => "required|numeric",
+        ],
+        [
+          "ref_cobro.required" => "Nº de cobro es obligatorio para MercadoPago",
+          "ref_cobro.numeric" => "Nº de cobro no es valido.",
+        ]);
+      }
+
+      DB::beginTransaction();
+
+      try {
+        $data = [];
+        $data['ventas_id'] = $request->ventas_id;
+        $data['medio_cobro'] = $request->medio_cobro;
+        $data['ref_cobro'] = $request->ref_cobro;
+        $data['precio'] = $request->precio;
+        $data['comision'] = $request->comision;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['Notas'] = $request->Notas_cobro;
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('ventas_cobro')->insert($data);
+
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Cobro de venta agregada.');
+
+        return redirect('clientes/'.$request->clientes_id);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+      }
+    }
 }

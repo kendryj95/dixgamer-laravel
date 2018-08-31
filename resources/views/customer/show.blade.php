@@ -356,7 +356,7 @@
                             style='color:#CFCFCF; padding:0px 2px; font-size:0.8em;'
                             title='Editar Cobro en DB'
                             type='button'
-                            href='ventas_cobro_modificar.php?id=$valor'>
+                            href='{{ url("customer_ventas_cobro_modificar",$valor) }}'>
                             {{$valor}}
                           </a>
                           <a
@@ -379,8 +379,8 @@
                       class="btn btn-xs btn-default"
                       type="button"
                       data-toggle="modal"
-                      data-target=".bs-example-modal-lg"
-                      onClick='document.getElementById("ifr").src="ventas_cobro_insertar.php?vta_id=<?php echo $dataCustomer->ID_ventas; ?>&c_id=<?php echo $customer->ID ?>";'>
+                      data-target="#modalVentas"
+                      onclick='getPageAjax("{{ url('customer_addVentasCobro') }}/{{ $dataCustomer->ID_ventas }}/{{ $customer->ID }}","#modalVentas")'>
                               <i aria-hidden="true" class="fa fa-plus"></i>
                     </button>
                   </span>

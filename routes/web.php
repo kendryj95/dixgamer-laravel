@@ -47,6 +47,10 @@ Route::group(['middleware' => ['login']], function()
   Route::get('customer_ventas_quitar_producto/{id}', 'CustomerController@ventarQuitarProducto');
   Route::get('customer_confirmUpdateProduct/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@confirmUpdateProduct');
   Route::post('customer_saveML', 'CustomerController@storeML');
+  Route::get('customer_ventas_cobro_modificar/{id}', 'CustomerController@ventasCobroModificar');
+  Route::post('customer_ventas_cobro_modificar', 'CustomerController@ventasCobroModificarStore');
+  Route::get('customer_addVentasCobro/{id_ventas}/{id_cliente}', 'CustomerController@addVentasCobro');
+  Route::post('customer_addVentasCobro', 'CustomerController@addVentasCobroStore');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');
