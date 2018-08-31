@@ -173,8 +173,7 @@
                 class="btn btn-xs btn-info"
                 type="button"
                 data-toggle="modal"
-                data-target=".bs-example-modal-lg"
-                onClick='document.getElementById("ifr").src="clientes_modificar_ml_user.php?id=$customer->ID";'>
+                data-target="#agregarML">
                   <i class="fa fa-snapchat-ghost fa-fw"></i> ML
               </button>
             @endif
@@ -819,44 +818,51 @@
       </div>
 
 
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal_samuel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 300px;">
-                                <h5 class="modal-title" id="exampleModalLabel">Modificar Nombres y Apellidos</h5>
+        <!-- Modal -->
+        <div class="modal fade" id="agregarML" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 300px;">
+                        <h5 class="modal-title" id="exampleModalLabel">Agregar usuario ML</h5>
 
-                            </div>
-                            <div class="modal-body" style="color: black !important;">
+                    </div>
+                    <div class="modal-body" style="color: black !important;">
 
-                                    <div class="row" style="margin-left: auto; margin-right: auto; width: 300px;">
-                                        <div class="card">
-                                            <div class="card-header">
-                                            </div>
-                                            <div class="card-body">
-                                                <div>
-                                                    <label>Nombre(s)</label>
-                                                    <input class="form-control" type="text" id="nombres_cliente" value="">
-                                                    <input type="hidden" id="idcustomer" value="">
-                                                </div>
-                                                <br>
-                                                <div>
-                                                    <label for="">Apellido(s)</label>
-                                                    <input type="text" class="form-control" id="apellidos_cliente" value="">
-                                                </div>
-                                            </div>
-                                        </div>
+                      <div class="row" style="margin-left: auto; margin-right: auto; width: 300px;">
+                          <div class="card">
+                              <div class="card-header">
+                              </div>
+                              <div class="card-body">
 
-                                    </div>
+                                 <form action="{{ url('customer_saveML') }}" method="post" id="form_saveML">
+                                   {{ csrf_field() }}
 
-                            </div>
-                            <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+                                   <div class="alert alert-danger" style="display:none" id="alert-ml">
+                                     <p>Campo ML es obligatorio.</p>
+                                   </div>
 
-                                <button type="button" id="saveEditName" class="btn btn-primary btn-block">Salvar Cambios</button>
-                            </div>
-                        </div>
+                                   <div id="user-result-div" class="input-group form-group">
+                                     <span class="input-group-addon"><i class="fa fa-snapchat-ghost fa-fw"></i></span>
+                                     <input value="" class="form-control" type="text" name="ml_user" id="ml_user" autocomplete="off" spellcheck="false" placeholder="ML User" autofocus>
+                                   </div>
+
+                                   <input type="hidden" name="id_cliente" value="{{$customer->ID}}">
+
+                                 </form>
+
+                              </div>
+                          </div>
+
+                      </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
+                        <button type="button" id="saveML" class="btn btn-primary btn-block">Salvar Cambios</button>
                     </div>
                 </div>
+            </div>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="modificarEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1145,6 +1151,18 @@
                             location.reload();
                         }
                     });
+        });
+
+        $('#saveML').on('click', function(){
+
+          var ml_user = $('#ml_user').val();
+          $('#alert-ml').fadeOut();
+
+          if (ml_user != "") {
+            $('#form_saveML').submit();
+          } else {
+            $('#alert-ml').fadeIn();
+          }
         });
 
         $('#doreseller').on('click', function (e) {

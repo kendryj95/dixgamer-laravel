@@ -46,6 +46,7 @@ Route::group(['middleware' => ['login']], function()
   Route::post('customer_ventas_eliminar', 'CustomerController@ventas_delete');
   Route::get('customer_ventas_quitar_producto/{id}', 'CustomerController@ventarQuitarProducto');
   Route::get('customer_confirmUpdateProduct/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@confirmUpdateProduct');
+  Route::post('customer_saveML', 'CustomerController@storeML');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');

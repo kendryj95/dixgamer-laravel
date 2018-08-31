@@ -618,4 +618,33 @@ class CustomerController extends Controller
 
       
     }
+
+    public function storeML(Request $request)
+    {
+      $this->validate($request,[
+        "ml_user" => "required"
+      ],
+      [
+        "ml_user.required" => "Campo ML es obligatorio."
+      ]);
+
+      $data = [];
+      $data['ml_user'] = $request->ml_user;
+
+      DB::beginTransaction();
+
+      try {
+        DB::table('clientes')->where('id',$request->id_cliente)->update($data);
+
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Usuario ML agregado.');
+
+        return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+      }
+    }
 }
