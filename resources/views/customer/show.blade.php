@@ -253,6 +253,7 @@
 
 
 
+        @php $color2 = ''; $text2= '';@endphp
         @if($customer->ID === "371" && !(Helper::validateAdministrator(session()->get('usuario')->Level)))
         @else
           <!-- Si hay ventas de usuario -->
