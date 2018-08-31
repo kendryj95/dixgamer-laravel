@@ -593,6 +593,7 @@
                     onclick='getPageAjax("{{ url('customer_ventas_modificar_producto') }}", "#modalVentas", {{ $dataCustomer->ID_ventas }})'>
                       <i aria-hidden="true" class="fa fa-pencil"></i>
                   </a>
+                  @if ($dataCustomer->ID_stock != 1)
                   <div class="dropup" style="display: inline-block;">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-remove text-muted"></i>
@@ -603,6 +604,7 @@
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, remover</a></li>
                     </ul>
                   </div>
+                  @endif
                   
               </small>
 
