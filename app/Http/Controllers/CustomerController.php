@@ -666,7 +666,7 @@ class CustomerController extends Controller
                         ->where('vc.ID',$id)
                         ->first();
 
-      return view('customer.ventas_modificar_cobro', compact('ventas_cobro'));
+      return view('ajax.customer.ventas_modificar_cobro', compact('ventas_cobro'));
     }
 
     public function ventasCobroModificarStore(Request $request)

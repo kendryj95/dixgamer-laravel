@@ -340,8 +340,7 @@
                     class="label label-<?php echo $color2;?>"
                     style="opacity:0.7; font-weight:400;"
                     title="<?php echo $dataCustomer->medio_cobro; ?>">
-                    <?php echo $text2;?>
-                  </small>
+                    <?php echo $text2;?></small>
 
                   <small style="color:#CFCFCF;">
                     <?php // si es el admin muestro los ID de cobros como links para editar los cobros?>
@@ -354,8 +353,10 @@
                           <a
                             style='color:#CFCFCF; padding:0px 2px; font-size:0.8em;'
                             title='Editar Cobro en DB'
-                            type='button'
-                            href='{{ url("customer_ventas_cobro_modificar",$valor) }}'>
+                            data-toggle="modal"
+                            data-target="#modalVentas"
+                            href='javascript:void(0)'
+                            onclick="getPageAjax('{{ url("customer_ventas_cobro_modificar") }}','#modalVentas',{{ $valor }})" >
                             {{$valor}}
                           </a>
                           <a
@@ -385,8 +386,9 @@
                   </span>
                   <br />
 
-                <?php   // si hay un cobro nuevo de mp sin ref de cobro imprimir cartel de que "falta ref cobro" ?>
-                  @if(($dataCustomer->ID_cobro > '3300' && $dataCustomer->ref_cobro = '') && (strpos($dataCustomer->medio_cobro, 'Mercado') !== false))
+
+                 {{-- // si hay un cobro nuevo de mp sin ref de cobro imprimir cartel de que "falta ref cobro"  --}}
+                  @if(($dataCustomer->ID_cobro > '3300') && ($dataCustomer->ref_cobro == '') && (strpos($dataCustomer->medio_cobro, 'Mercado') !== false))
                     <a
                       href="ventas_cobro_modificar.php?id={{$dataCustomer->ID_cobro}}"
                       class="label label-danger"
@@ -394,8 +396,10 @@
                         Agregar Ref de Cobro
                       </a>
                   @elseif($dataCustomer->ref_cobro != "")
-                    <?php  // si hay referencia de cobro hacer el explode para mostrar todos?>
-                    <?php $array = (explode(',', $dataCustomer->ref_cobro, 10)); ?>
+                      {{-- // si hay referencia de cobro hacer el explode para mostrar todos --}}
+                    @php 
+                      $array = (explode(',', $dataCustomer->ref_cobro, 10));
+                     @endphp
 
                     @foreach ($array as $valor)
                       <small
@@ -410,7 +414,7 @@
                           href='https://www.mercadopago.com.ar/activities?q={{$valor}}'>
                             <i aria-hidden='true' class='fa fa-external-link'></i>
                           </a>
-                        </small>";
+                        </small>
                     @endforeach
                   @endif
 
