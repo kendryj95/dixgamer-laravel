@@ -323,8 +323,7 @@
                     class="label label-<?php echo $color1;?>"
                     style="opacity:0.7; font-weight:400;"
                     title="<?php echo $dataCustomer->medio_venta; ?>">
-                    <?php echo $text;?>
-                  </small>
+                    <?php echo $text;?></small>
 
                   <small style="color:#CFCFCF;">
                       <?php echo $dataCustomer->ID_ventas; ?>

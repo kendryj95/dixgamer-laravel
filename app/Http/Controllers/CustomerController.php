@@ -659,7 +659,8 @@ class CustomerController extends Controller
                           'comision',
                           'vc.Notas',
                           'vc.ventas_id',
-                          'v.clientes_id'
+                          'v.clientes_id',
+                          'v.medio_venta'
                         )
                         ->leftjoin('ventas AS v', 'vc.ventas_id', '=', 'v.ID')
                         ->where('vc.ID',$id)
@@ -720,6 +721,7 @@ class CustomerController extends Controller
       $venta_stock = DB::table('ventas AS v')
                       ->select(
                         'v.ID',
+                        'v.medio_venta',
                         'v.Day',
                         'v.clientes_id',
                         'v.stock_id',

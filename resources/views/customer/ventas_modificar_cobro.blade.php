@@ -32,10 +32,16 @@
 	              <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
 	              <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
 	              		<option value="{{ $ventas_cobro->medio_cobro }}" selected="selected" data-content="<span class='label label-{{ $colorcons }}'>{{ $ventas_cobro->medio_cobro }}</span> - <span class='label label-success'>Actual</span>">{{ $ventas_cobro->medio_cobro }} - Actual</option>
-	                    <option value="MercadoPago" data-content="<span class='label label-primary'>MercadoPago</span>">MercadoPago</option>
-	                    <option value="MercadoPago - Tarjeta" data-content="<span class='label label-primary'>MercadoPago - Tarjeta</span>">MercadoPago - Tarjeta</option>
-	                    <option value="MercadoPago - Ticket" data-content="<span class='label label-success'>MercadoPago - Ticket</span>">MercadoPago - Ticket</option>
-	                    <option value="Transferencia" data-content="<span class='label label-info'>Transferencia</span>">Transferencia</option>
+	              		@if ($ventas_cobro->medio_venta == 'Web' || $ventas_cobro->medio_venta == 'Mail')
+		                    <option value="MercadoPago" data-content="<span class='label label-primary'>MercadoPago</span>">MercadoPago</option>
+		                    <option value="MercadoPago - Tarjeta" data-content="<span class='label label-primary'>MercadoPago - Tarjeta</span>">MercadoPago - Tarjeta</option>
+		                    <option value="MercadoPago - Ticket" data-content="<span class='label label-success'>MercadoPago - Ticket</span>">MercadoPago - Ticket</option>
+		                    <option value="Deposito/Transferencia" data-content="<span class='label label-info'>Deposito/Transferencia</span>">Deposito/Transferencia</option>
+	                    @else
+		                    <option value="MercadoPago" data-content="<span class='label label-primary'>MercadoPago</span>">MercadoPago</option>
+		                    <option value="MercadoPago - Tarjeta" data-content="<span class='label label-primary'>MercadoPago - Tarjeta</span>">MercadoPago - Tarjeta</option>
+		                    <option value="MercadoPago - Ticket" data-content="<span class='label label-success'>MercadoPago - Ticket</span>">MercadoPago - Ticket</option>
+	                    @endif
 	              </select>
 	            </div>
 	            
@@ -60,7 +66,7 @@
 	            <div class="col-md-3" style="opacity:0.7">
 	            <div class="input-group form-group">
 	            <select id="porcentaje" class="form-control">
-	            	<option value="0.12">12 %</option>
+	            	<option value="0.13">13 %</option>
 	                <option selected value="0.0538">6 %</option>
 	                <option value="0.00">0 %</option>
 	            </select>  
@@ -110,7 +116,10 @@
 			//alert(val2); 
 			if (val == "Deposito/Transferencia") {
 				$("#porcentaje").html("<option value='0.00'>0%</option>");
-			} 
+			} else {
+		        let html = '<option value="0.13">13 %</option><option selected value="0.0538">6 %</option><option value="0.00">0 %</option>';
+		        $("#porcentaje").html(html);
+		    } 
 		});
 
 		$("#porcentaje").change(function() {
