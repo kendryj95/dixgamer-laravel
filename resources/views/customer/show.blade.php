@@ -593,13 +593,17 @@
                     onclick='getPageAjax("{{ url('customer_ventas_modificar_producto') }}", "#modalVentas", {{ $dataCustomer->ID_ventas }})'>
                       <i aria-hidden="true" class="fa fa-pencil"></i>
                   </a>
-                  <a
-                    title="Quita Producto (producto 0)"
-                    class="btn-xs text-muted"
-                    style="opacity: 0.7;"
-                    href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">
-                      <i aria-hidden="true" class="fa fa-remove"></i>
-                  </a>
+                  <div class="dropup" style="display: inline-block;">
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
+                      <i aria-hidden="true" class="fa fa-remove text-muted"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <li class="dropdown-header">¿Deseas quitar producto?</li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, remover</a></li>
+                    </ul>
+                  </div>
+                  
               </small>
 
               @if ($dataCustomer->cuentas_id)
@@ -612,14 +616,31 @@
 
               <!--- inicio del analisis si deben avisar a victor -->
               @if(($dataCustomer->ID_cobro > '3300') && ($dataCustomer->ref_cobro == "") && (strpos($dataCustomer->medio_cobro, 'Mercado') !== false))
+                @if($dataCustomer->datos1 > 0)
+                <?php
+                 $colorcito = 'info';
+                ?>
+
+                @else
                <?php
                 $colorcito = 'danger';
                ?>
 
+               @endif
+
               @else
-                <?php
+                 @if($dataCustomer->datos1 > 0)
+                 <?php
                   $colorcito = 'info';
+                 ?>
+
+                 @else
+                <?php
+                 $colorcito = 'danger';
                 ?>
+
+                @endif
+
               @endif
 
               <!--- aca entran los mails de gift cards -->
@@ -686,11 +707,22 @@
               </a>
             </div>
 
-            @if ($dataCustomer->ventas_Notas)
-                <div class="alert alert-warning">
+            @if ($ventas_notas)
+              @foreach ($ventas_notas as $venta_nota)
+                @if ($venta_nota->id_ventas == $dataCustomer->ID_ventas)
+                <div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.9;">
                   <i class="fa fa-comment fa-fw"></i>
-                  <?php echo $dataCustomer->ventas_Notas; ?>
+                  {{ $venta_nota->Notas }}
                 </div>
+                <em
+                  class="small text-muted pull-right"
+                  style="opacity: 0.7">
+                  {{ date("d M 'y", strtotime($venta_nota->Day)) }}
+                  ({{ $venta_nota->usuario }})
+                </em>
+                <br>
+                @endif
+              @endforeach
             @endif
 
           </div>

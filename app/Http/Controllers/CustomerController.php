@@ -138,8 +138,14 @@ class CustomerController extends Controller
       $expensesIncome = Expenses::expensesIncome();
       $customerNotes = Customer::customerNotesByCustomerId($id)->get();
 
+      $id_ventas = [];
+      foreach ($dataCustomers as $data) {
+        $id_ventas[] = $data->ID_ventas;
+      }
 
 
+
+      $ventas_notas = DB::table('ventas_notas')->whereIn('id_ventas',$id_ventas)->orderBy('Day','DESC')->get();
 
       return view('customer.show',compact(
         'customer',
@@ -147,7 +153,8 @@ class CustomerController extends Controller
         'salesByCustomer',
         'lowSalesByCustomerIds',
         'expensesIncome',
-        'customerNotes'
+        'customerNotes',
+        'ventas_notas'
       ));
     }
 
@@ -331,31 +338,8 @@ class CustomerController extends Controller
       }
     }
 
-    /*public function ventasModificarProductos($id) # ORIGINAL
-    {
-      $clientes = Customer::infoCustomerVentasProductos($id);
-      $stocks = DB::table('stock')->select('ID')->orderBy('ID')->get();
-      $data_set = array();
-
-      foreach ($stocks as $stock) {
-        $data_set[] = $stock->ID;
-      }
-
-      return view('ajax.customer.ventas_modificar_producto', compact('clientes', 'data_set'));
-    }*/
-
     public function ventasModificarProductos($id)
     {
-      /*// Extraemos variable de item id
-      $order_item_id = $request->order_item_id;
-      // Buscamos por medio de un scope creado la orden
-      $sales_order_item = Sale::salesFromOrderId($order_item_id)->first();
-
-      // si la venta existe aviso al gestor
-      if ($sales_order_item) {
-        echo "Este pedido ya fue asignado por ".$sales_order_item->usuario." <br><a href='/clientes_detalles/".$sales_order_item->clientes_id."' target='_blank'>Ver Venta</a>";
-      }*/
-
 
       /***  Stock Nuevo  ***/
       $obj = new \stdClass;
@@ -399,52 +383,30 @@ class CustomerController extends Controller
             ));
     }
 
-    /*public function ventasModificarProductosStore(Request $request)
-    {
-      $this->validate($request,[
-        "stock_id" => "required"
-      ],
-      [
-        "stock_id.required" => "ID stock es un campo obligatorio."
-      ]);
-      
-      DB::beginTransaction();
-
-      $date = date('Y-m-d H:i:s');
-      $verificado = 'no';
-      if (\Helper::validateAdministrator(session()->get('usuario')->Level)) {
-        $verificado = 'si';
-      }
-      $vendedor = session()->get('usuario')->Nombre;
-
-      try {
-        DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
-
-        $data = [];
-        $data['stock_id'] = $request->stock_id;
-        $data['cons'] = $request->cons;
-        $data['slot'] = $request->slot;
-        $data['Notas'] = $request->Notas;
-
-        DB::table('ventas')->where('ID', $request->ID)->update($data);
-        DB::commit();
-
-        \Helper::messageFlash('Clientes','Venta de producto modificado.');
-
-        return redirect()->back();
-
-      } catch (Exception $e) {
-        DB::rollback();
-        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
-      }
-    }*/
-
     public function ventasModificarProductosStore($consola, $titulo, $slot, $id_ventas)
     {
       
       $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
       
       $stk_ID = $row_rsSTK[0]->ID_stk;
+
+      $stock_anterior = DB::table('stock AS s')
+                          ->select(
+                            'v.stock_id',
+                            's.titulo',
+                            'v.cons',
+                            'v.slot'
+                          )
+                          ->leftjoin('ventas AS v', 's.ID', '=', 'v.stock_id')
+                          ->where('v.ID',$id_ventas)->first();
+
+      $nota = '';
+
+      if ($stock_anterior->cons == "ps4") {
+        $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot";
+      } else {
+        $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons";
+      }
 
       DB::beginTransaction();
 
@@ -464,9 +426,17 @@ class CustomerController extends Controller
         $data['stock_id'] = $stk_ID;
         $data['cons'] = $consola;
         $data['slot'] = $slot;
-        $data['Notas'] = "Antes tenía # $stock_anterior";
 
         DB::table('ventas')->where('ID', $id_ventas)->update($data);
+
+        $data = [];
+        $data['id_ventas'] = $id_ventas;
+        $data['Notas'] = $nota;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('ventas_notas')->insert($data);
+
         DB::commit();
 
         \Helper::messageFlash('Clientes','Venta de producto modificado.');
@@ -581,12 +551,38 @@ class CustomerController extends Controller
 
       try {
 
+        $stock_anterior = DB::table('stock AS s')
+                            ->select(
+                              'v.stock_id',
+                              's.titulo',
+                              'v.cons',
+                              'v.slot'
+                            )
+                            ->leftjoin('ventas AS v', 's.ID', '=', 'v.stock_id')
+                            ->where('v.ID',$id)->first();
+
+        $nota = '';
+
+        if ($stock_anterior->cons == "ps4") {
+          $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot";
+        } else {
+          $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons";
+        }
+
         $data = [];
         $data['stock_id'] = 1;
         $data['cons'] = 'ps';
         $data['slot'] = 'No';
 
         DB::table('ventas')->where('ID',$id)->update($data);
+
+        $data = [];
+        $data['id_ventas'] = $id;
+        $data['Notas'] = $nota;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('ventas_notas')->insert($data);
 
         DB::commit();
 
