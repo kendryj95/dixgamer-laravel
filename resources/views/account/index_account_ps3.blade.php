@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Listar cuentas')
+
 @section('container')
 <div class="container">
   <h1>Listar cuentas PS3</h1>

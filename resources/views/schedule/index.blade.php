@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Horario de '.session()->get('usuario')->Nombre)
+
 @section('container')
 
 <div class="container">

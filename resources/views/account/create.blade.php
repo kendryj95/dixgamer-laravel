@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Insertar cuenta')
+
 @section('container')
 <div class="container">
 	<h1>Crear cuentas</h1>

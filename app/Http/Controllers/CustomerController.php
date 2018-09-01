@@ -238,10 +238,21 @@ class CustomerController extends Controller
           try {
             DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
 
+            $cliente_anterior = DB::table('ventas')->where('ID', $request->ID)->value('clientes_id');
+
             $data = [];
             $data['clientes_id'] = $request->clientes_id;
 
             DB::table('ventas')->where('ID', $request->ID)->update($data);
+
+            $data = [];
+            $data['id_ventas'] = $request->ID;
+            $data['Notas'] = "Antes asignado a cliente #$cliente_anterior";
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('ventas_notas')->insert($data);
+
             DB::commit();
 
             \Helper::messageFlash('Clientes','Venta asignada.');
@@ -284,6 +295,26 @@ class CustomerController extends Controller
             $order_id_web = isset($request->order_id_web) ? $request->order_id_web : NULL;
             $order_id_ml = isset($request->order_id_ml) ? $request->order_id_ml : NULL;
 
+            $venta = DB::table('ventas')->where('ID', $request->ID)->first();
+
+            $nota = "Antes tenía";
+
+            if ($venta->medio_venta != $request->medio_venta) {
+              $nota .= " Medio venta $venta->medio_venta";
+            }
+
+            if (($venta->order_item_id != $request->order_item_id) && $venta->order_item_id != null) {
+              $nota .= " Order_item_id #$venta->order_item_id";
+            }
+
+            if (($venta->order_id_web != $request->order_id_web) && $venta->order_id_web != null) {
+              $nota .= " Order_id_web #$venta->order_id_web";
+            }
+
+            if (($venta->order_id_ml != $request->order_id_ml) && $venta->order_id_ml != null) {
+              $nota .= " Order_id_ml #$venta->order_id_ml";
+            }
+
             $data = [];
             $data['medio_venta'] = $request->medio_venta;
             if ($request->medio_venta == 'Mail') {
@@ -302,6 +333,15 @@ class CustomerController extends Controller
             
 
             DB::table('ventas')->where('ID', $request->ID)->update($data);
+
+            $data = [];
+            $data['id_ventas'] = $request->ID;
+            $data['Notas'] = $nota;
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('ventas_notas')->insert($data);
+
             DB::commit();
 
             \Helper::messageFlash('Clientes','Venta modificada.');

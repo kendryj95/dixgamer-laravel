@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Editar horario')
+
 @push('css')
 
 <link rel="stylesheet" href="{{asset('plugins/timepicker/css/timepicker.less')}}">

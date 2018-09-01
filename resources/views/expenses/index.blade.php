@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Listar gastos')
+
 @section('container')
 <div class="container">
   <h1>Gastos</h1>

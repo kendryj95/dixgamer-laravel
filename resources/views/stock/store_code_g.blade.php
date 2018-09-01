@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Gift Cards G')
+
 @section('container')
 
 <div class="container">

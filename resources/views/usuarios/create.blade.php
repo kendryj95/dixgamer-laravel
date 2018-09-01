@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Nuevo usuario')
+
 @section('container')
   <div class="container text-center">
   	<h1>Nuevo Usuario</h1>

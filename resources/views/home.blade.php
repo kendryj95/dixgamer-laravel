@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Inicio')
+
 @section('container')
 
 @if (count($errors) > 0)

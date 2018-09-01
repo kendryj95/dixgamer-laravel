@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Listado de Links a PS Store')
+
 @section('container')
 
 

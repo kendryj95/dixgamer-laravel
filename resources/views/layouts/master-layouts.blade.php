@@ -8,7 +8,7 @@
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <meta name="description" content="tienda de productos digitales">
   <meta name="author" content="dixgamer.com argentina">
-  <link rel="icon" href="favicon.ico">
+  <link rel="icon" href="{{asset('favicon.ico')}}">
   <meta name="_token" content="{{ csrf_token() }}">
   <title>@yield('title','Dixgamer panel')</title>
 

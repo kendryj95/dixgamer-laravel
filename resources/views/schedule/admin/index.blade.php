@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Horarios')
+
 @section('container')
 
 <div class="container">

@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Cuentas on Saldo libre')
+
 @section('container')
 <div class="container">
   <h1>Listar cuentas</h1>

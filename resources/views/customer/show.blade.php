@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', "Cliente #$customer->ID")
+
 @section('container')
 
   @if($customer)

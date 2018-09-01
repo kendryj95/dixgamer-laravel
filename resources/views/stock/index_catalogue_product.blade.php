@@ -1,5 +1,7 @@
 @extends('layouts.master-layouts')
 
+@section('title', 'Catalogo de Productos')
+
 @section('container')
 
 
