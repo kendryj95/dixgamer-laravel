@@ -298,20 +298,25 @@ class CustomerController extends Controller
             $venta = DB::table('ventas')->where('ID', $request->ID)->first();
 
             $nota = "Antes tenía";
+            $band = false;
 
             if ($venta->medio_venta != $request->medio_venta) {
+              $band = true;
               $nota .= " Medio venta $venta->medio_venta";
             }
 
             if (($venta->order_item_id != $request->order_item_id) && $venta->order_item_id != null) {
+              $band = true;
               $nota .= " Order_item_id #$venta->order_item_id";
             }
 
             if (($venta->order_id_web != $request->order_id_web) && $venta->order_id_web != null) {
+              $band = true;
               $nota .= " Order_id_web #$venta->order_id_web";
             }
 
             if (($venta->order_id_ml != $request->order_id_ml) && $venta->order_id_ml != null) {
+              $band = true;
               $nota .= " Order_id_ml #$venta->order_id_ml";
             }
 
@@ -334,13 +339,15 @@ class CustomerController extends Controller
 
             DB::table('ventas')->where('ID', $request->ID)->update($data);
 
-            $data = [];
-            $data['id_ventas'] = $request->ID;
-            $data['Notas'] = $nota;
-            $data['Day'] = date('Y-m-d H:i:s');
-            $data['usuario'] = session()->get('usuario')->Nombre;
+            if ($band) {
+              $data = [];
+              $data['id_ventas'] = $request->ID;
+              $data['Notas'] = $nota;
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
 
-            DB::table('ventas_notas')->insert($data);
+              DB::table('ventas_notas')->insert($data);
+            }
 
             DB::commit();
 
@@ -360,9 +367,12 @@ class CustomerController extends Controller
             DB::insert("INSERT INTO ventas_modif(ventas_id, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, Day, Notas, verificado, usuario ) SELECT ID, clientes_id, stock_id, order_item_id, cons, slot, medio_venta, '$date', Notas, '$verificado', '$vendedor' FROM ventas WHERE ID=?", [$request->ID]);
 
             $data = [];
+            $data['id_ventas'] = $request->ID;
             $data['Notas'] = $request->Notas;
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
 
-            DB::table('ventas')->where('ID', $request->ID)->update($data);
+            DB::table('ventas_notas')->insert($data);
             DB::commit();
 
             \Helper::messageFlash('Clientes','Venta modificada.');
@@ -727,8 +737,8 @@ class CustomerController extends Controller
           "ref_cobro" => "required|numeric",
         ],
         [
-          "ref_cobro.required" => "Nº de cobro es obligatorio para MercadoPago",
-          "ref_cobro.numeric" => "Nº de cobro no es valido.",
+          "ref_cobro.required" => "Ref. de cobro es obligatorio para MercadoPago",
+          "ref_cobro.numeric" => "Ref. de cobro no es valido.",
         ]);
       }
 

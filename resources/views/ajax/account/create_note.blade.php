@@ -9,7 +9,7 @@
         <textarea class="form-control" rows="4" name="notes" id="Notas" style="font-size: 22px;"></textarea>
 
       </div>
-      <button class="btn btn-warning btn-lg" type="submit">Guardar</button>
+      <button class="btn btn-warning btn-block" type="submit">Guardar</button>
     </form>
 
   </div>

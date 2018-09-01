@@ -8,8 +8,8 @@ foreach ($data as $value) {
 
 @endphp
 <div class="container">
-  <h1 style="color:#000">Modificar Venta</h1>
-  
+  {{-- <h1 style="color:#000">Modificar Venta</h1> --}}
+  <div class="alert alert-danger" style="display:none" id="alert"></div>
   <div class="row">
       <div class="col-sm-3">
       </div>
@@ -17,6 +17,8 @@ foreach ($data as $value) {
 
 
         @if($opt == 1)
+
+        <h1 style="color:#000">Modificar Cliente</h1>
 
           <form action="{{ url('customer_ventas_modificar_store') }}" method="post">
             {{csrf_field()}}
@@ -70,7 +72,9 @@ foreach ($data as $value) {
 
         @elseif ($opt == 3)
 
-          <form action="{{ url('customer_ventas_modificar_store') }}" method="post">
+        <h1 style="color:#000">Modificar Venta</h1>
+
+          <form action="{{ url('customer_ventas_modificar_store') }}" method="post" id="form_modificar">
 
             {{csrf_field()}}
 
@@ -85,7 +89,7 @@ foreach ($data as $value) {
 
             <div class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span> 
-            <select name="medio_venta" class="selectpicker form-control" onchange="orders(this.value)">
+            <select name="medio_venta" id="medio_venta" class="selectpicker form-control" onchange="orders(this.value)">
                <option value="{{$clientes->medio_venta}}" selected="selected" data-content="<span class='label label-{{$colorventa}}'>{{$clientes->medio_venta}}</span> - <span class='label label-success'>Actual</span>">{{$clientes->medio_venta}} - Actual</option>
                <option value="MercadoLibre" data-content="<span class='label label-warning'>MercadoLibre</span>">MercadoLibre</option>
                 <option value="Mail" data-content="<span class='label label-danger'>Mail</span>">Mail</option>
@@ -97,75 +101,75 @@ foreach ($data as $value) {
 
               <div class="input-group form-group oiml">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" name="order_id_ml" placeholder="order_id_ml">
+                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" id="oiml" name="order_id_ml" placeholder="order_id_ml">
                 <span class="input-group-addon"><em class="text-muted">order id ml</em></span>
               </div>
 
               <div class="input-group form-group oii">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" name="order_item_id" placeholder="order_item_id">
+                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
               <div class="input-group form-group oiw">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" name="order_id_web" placeholder="order_id_web">
+                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web">
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
 
-              <button class="btn btn-primary" type="submit">Modificar</button>
+              <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
               <input type="reset" class="btn btn-secondary">
 
             @elseif ($clientes->medio_venta == 'Web')
 
               <div class="input-group form-group oiml" style="display: none">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" name="order_id_ml" placeholder="order_id_ml">
+                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" id="oiml" name="order_id_ml" placeholder="order_id_ml">
                 <span class="input-group-addon"><em class="text-muted">order id ml</em></span>
               </div>
 
               <div class="input-group form-group oii">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" name="order_item_id" placeholder="order_item_id">
+                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
               <div class="input-group form-group oiw">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" name="order_id_web" placeholder="order_id_web">
+                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web">
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
 
-              <button class="btn btn-primary" type="submit">Modificar</button>
+              <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
               <input type="reset" class="btn btn-secondary">
 
             @elseif ($clientes->medio_venta == 'Mail')
 
               <div class="input-group form-group oiml" style="display: none">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" name="order_id_ml" placeholder="order_id_ml">
+                <input value="{{ $clientes->order_id_ml }}" class="form-control" type="text" id="oiml" name="order_id_ml" placeholder="order_id_ml">
                 <span class="input-group-addon"><em class="text-muted">order id ml</em></span>
               </div>
 
               <div class="input-group form-group oii" style="display: none">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" name="order_item_id" placeholder="order_item_id">
+                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
               <div class="input-group form-group oiw" style="display: none">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" name="order_id_web" placeholder="order_id_web">
+                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web">
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
 
-              <button class="btn btn-primary" type="submit">Modificar</button>
+              <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
               <input type="reset" class="btn btn-secondary">
 
             @endif
@@ -174,25 +178,31 @@ foreach ($data as $value) {
 
         @elseif ($opt == 4)
 
-          <form action="{{ url('customer_ventas_modificar_store') }}" method="post">
-            
-            {{csrf_field()}}
-
-            <input type="hidden" name="opt" value="4">
-
-            <em class="text-muted">{{ $clientes->Notas }}</em>
-            <div class="input-group form-group">
-              <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
-              <input value="{{ $clientes->Notas }}" class="form-control" type="text" name="Notas" placeholder="Notas de la venta">
+        {{-- <div class="container"> --}}
+            <h1 style="color:#000">Agregar Nota - Venta #{{$clientes->ID}}</h1>
+            <div class="row">
+              <div class="col-lg-12">
+                <form action="{{ url('customer_ventas_modificar_store') }}" method="post">
+                  
+                  {{csrf_field()}}
+                
+                  <input type="hidden" name="opt" value="4">
+                
+                  <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
+                    <textarea class="form-control" rows="4" name="Notas" id="Notas" style="font-size: 22px;"></textarea>
+                
+                  </div>
+                  <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+                
+                  <button class="btn btn-warning" type="submit">Modificar</button>
+                  <input type="reset" class="btn btn-secondary">
+                
+                
+                </form>
+              </div>
             </div>
-
-            <input type="hidden" name="ID" value="{{ $clientes->ID }}">
-
-            <button class="btn btn-primary" type="submit">Modificar</button>
-            <input type="reset" class="btn btn-secondary">
-
-
-          </form>
+        {{-- </div> --}}
 
         @endif
         
@@ -260,6 +270,30 @@ foreach ($data as $value) {
             },500);
 
     @endif
+
+    $('#submiter').on('click', function(){
+
+      var medio_venta = $('#medio_venta').val();
+      $('#alert').fadeOut();
+
+      if (medio_venta == 'Web') {
+        if ($('#oii').val() != "" && $('#oiw').val() != "") {
+          $('#form_modificar').submit();
+        } else {
+          let html = '<p>Has dejado vacío campos obligatorios.</p>';
+          $('#alert').html(html).fadeIn();
+        }
+      } else if (medio_venta == 'MercadoLibre') {
+        if ($('#oiml').val() != "") {
+          $('#form_modificar').submit();
+        } else {
+          let html = '<p>Has dejado vacío campos obligatorios.</p>';
+          $('#alert').html(html).fadeIn();
+        }
+      } else {
+        $('#form_modificar').submit();
+      }
+    });
 
     // To style only <select>s with the selectpicker class
     $('.selectpicker').selectpicker();

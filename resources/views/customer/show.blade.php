@@ -719,7 +719,18 @@
                 @if ($venta_nota->id_ventas == $dataCustomer->ID_ventas)
                 <div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.9;">
                   <i class="fa fa-comment fa-fw"></i>
-                  {{ $venta_nota->Notas }}
+
+                  @if (strpos($venta_nota->Notas, "cliente") !== false)
+                  
+                  @php 
+                  $cliente = substr($venta_nota->Notas, 26);
+                  @endphp
+                  Antes asignado a cliente <a href="{{ url('clientes', $cliente) }}" class="alert-link" target="_blank">#{{ $cliente }}</a>
+
+                  @else
+
+                  {{ ($venta_nota->Notas) }}
+                  @endif
                 </div>
                 <em
                   class="small text-muted pull-right"
@@ -1002,34 +1013,26 @@
 
         <!-- Modal -->
         <div class="modal fade" id="agregarNotaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog" role="document" style="top:40px;">
                 <div class="modal-content">
-                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 450px;">
-                        <h5 class="modal-title" id="exampleModalLabel">Agregar notas</h5>
+                    
+                    <div class="modal-body" style="color: black !important;text-align:center;padding:10px;">
 
-                    </div>
-                    <div class="modal-body" style="color: black !important;">
+                      <div class="container">
+                        <h1 style="color:#000">Agregar Nota - Cliente #{{$customer->ID}}</h1>
+                        <div class="row">
 
-                        <div class="row" style="margin-left: auto; margin-right: auto; width: 450px;">
-                            <div class="card">
-                                <div class="card-header">
-                                </div>
-                                <div class="card-body">
+                            <div class="input-group form-group">
+                              <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
+                              <textarea class="form-control" rows="4" name="notes" id="notaCliente" style="font-size: 22px;"></textarea>
 
-                                    <div>
-                                        <label>Notas</label>
-                                        <textarea class="form-control" id="notaCliente"></textarea>
-                                        <input type="hidden" id="idcustomer" value="">
-                                    </div>
-                                </div>
                             </div>
+                            <input type="hidden" id="idcustomer" value="">
+                            <button class="btn btn-warning btn-block" id="saveNotes" type="button">Salvar Cambios</button>
 
                         </div>
+                      </div>
 
-                    </div>
-                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
-
-                        <button type="button" id="saveNotes" class="btn btn-primary btn-block">Salvar Cambios</button>
                     </div>
                 </div>
             </div>

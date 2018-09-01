@@ -6,7 +6,7 @@
 	    <div class="col-sm-3">
 	    </div>
 	    <div class="col-sm-6">
-	    <form method="post" name="form1" action="{{ url('customer_ventas_cobro_modificar') }}">
+	    <form method="post" name="form1" id="form1" action="{{ url('customer_ventas_cobro_modificar') }}">
 
 	    	{{ csrf_field() }}
 	    		
@@ -113,12 +113,26 @@
       if (precio != "" && comision != "") {
         if (medio_cobro.indexOf("Mercado") >= 0) {
           if (ref_cobro != "") {
-            $('#form1').submit();
+            if (isNum(ref_cobro)) {
+
+              $('#form1').submit();
+            } else {
+              $('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
+            }
           } else {
             $('#alert-ventasInsert').html('<p>Ref. de cobro es obligatorio para MercadoPago.</p>').fadeIn();
           }
         } else {
-          $('#form1').submit();
+          if (ref_cobro != "") {
+            if (isNum(ref_cobro)) {
+
+              $('#form1').submit();
+            } else {
+              $('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
+            }
+          } else {
+            $('#form1').submit();
+          }
         }
       } else {
         $('#alert-ventasInsert').html('<p>Has dejado vacío campos obligatorios.</p>').fadeIn();
@@ -137,4 +151,9 @@
 
 
   });
+
+  function isNum(carac) {
+    var regex = /^(\d+)$/g;
+    return regex.test(carac);
+  }
 </script>
