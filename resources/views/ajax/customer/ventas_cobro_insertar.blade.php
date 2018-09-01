@@ -1,5 +1,7 @@
 <div class="container">
 	<h1 style="color: #000">Agregar Cobro (vta #{{$venta_stock->ID}}) </h1>
+
+  <div class="alert alert-danger text-center" id="alert-ventasInsert" style="display:none"></div>
   <div class="row">
       <div class="col-sm-3">
   	   <img class="img-rounded pull-right" width="100" src="{{asset('img/productos')}}/{{ $venta_stock->consola }}/{{ $venta_stock->titulo }}.jpg" alt="{{ $venta_stock->titulo }} - {{ $venta_stock->consola }}" />
@@ -14,12 +16,10 @@
              <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span> 
              <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
               @if ($venta_stock->medio_venta == 'Web' || $venta_stock->medio_venta == 'Mail')
-              	<option selected value="MercadoPago" data-content="<span class='label label-primary'>MercadoPago</span>">MercadoPago</option>
                 <option value="MercadoPago - Tarjeta" data-content="<span class='label label-primary'>MercadoPago - Tarjeta</span>">MercadoPago - Tarjeta</option>
                 <option value="MercadoPago - Ticket" data-content="<span class='label label-success'>MercadoPago - Ticket</span>">MercadoPago - Ticket</option>
                 <option value="Deposito/Transferencia" data-content="<span class='label label-info'>Deposito/Transferencia</span>">Deposito/Transferencia</option>
               @else
-                <option selected value="MercadoPago" data-content="<span class='label label-primary'>MercadoPago</span>">MercadoPago</option>
                 <option value="MercadoPago - Tarjeta" data-content="<span class='label label-primary'>MercadoPago - Tarjeta</span>">MercadoPago - Tarjeta</option>
                 <option value="MercadoPago - Ticket" data-content="<span class='label label-success'>MercadoPago - Ticket</span>">MercadoPago - Ticket</option>
               @endif
@@ -28,7 +28,7 @@
               
   			<div class="input-group form-group" id="n_cobro">
                 <span class="input-group-addon"><i class="fa fa-hashtag fa-fw"></i></span>
-                <input class="form-control" type="text" name="ref_cobro" id="ref_cobro" placeholder="N° de Cobro">             
+                <input class="form-control" type="text" name="ref_cobro" id="ref_cobro" placeholder="Ref. de Cobro">             
               </div>
               <span id="faltacobro" style="color:#777;display:none;"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i> completar</span>
                    
@@ -63,7 +63,7 @@
                 <input class="form-control" type="text" name="Notas_cobro" placeholder="Notas del cobro">
               </div>
 
-              <button class="btn btn-primary botonero" id="submiter" type="submit">Insertar</button>
+              <button class="btn btn-primary botonero" id="submiter" type="button">Insertar</button>
           
       </form>
       </div>
@@ -85,6 +85,29 @@
         let html = '<option value="0.13">13 %</option><option selected value="0.0538">6 %</option><option value="0.00">0 %</option>';
         $("#porcentaje").html(html);
       } 
+    });
+
+    $('#submiter').on('click', function(){
+      var ref_cobro = $('#ref_cobro').val(),
+          precio = $('#precio').val(),
+          comision = $('#comision').val(),
+          medio_cobro = $('#medio_cobro').val();
+
+      $('#alert-ventasInsert').fadeOut();
+
+      if (precio != "" && comision != "") {
+        if (medio_cobro.indexOf("Mercado") >= 0) {
+          if (ref_cobro != "") {
+            $('#form1').submit();
+          } else {
+            $('#alert-ventasInsert').html('<p>Ref. de cobro es obligatorio para MercadoPago.</p>').fadeIn();
+          }
+        } else {
+          $('#form1').submit();
+        }
+      } else {
+        $('#alert-ventasInsert').html('<p>Has dejado vacío campos obligatorios.</p>').fadeIn();
+      }
     });
 
     window.setInterval(function() {
