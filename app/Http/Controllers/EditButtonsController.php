@@ -37,12 +37,24 @@ class EditButtonsController extends Controller
         $prevName = DB::table('clientes')
             ->where('ID',$request->id)->first();
 
-        DB::table('clientes')
+        if ($prevName->email != $request->email) {
+            DB::table('clientes')
             ->where('ID',$request->id)->update(['email' => $request->email]);
-
-        DB::table('clientes_notas')->insert(['notas' => 'Email Anterior: ' . $prevName->email,
+            
+            DB::table('clientes_notas')->insert(['notas' => 'Email Anterior: ' . $prevName->email,
             'clientes_id' => $prevName->ID ,
-            'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
+            'usuario' => session()->get('usuario')->Nombre , 'Day' => (string)\Carbon\Carbon::now()]);
+        }
+
+        $exists = DB::table('clientes_email')->where('email',$request->email)->first();
+
+        if (!$exists) {
+            $data = [];
+            $data['clientes_id'] = $request->id;
+            $data['email'] = $request->email;
+            
+            DB::table('clientes_email')->insert($data);
+        }
 
         return Response()->json('Variable de Correo Actualizada');
     }
@@ -51,12 +63,26 @@ class EditButtonsController extends Controller
         $prevName = DB::table('clientes')
             ->where('ID',$request->id)->first();
 
-        DB::table('clientes')
+        if ($prevName->ml_user != $request->ml) {
+            DB::table('clientes')
             ->where('ID',$request->id)->update(['ml_user' => $request->ml]);
 
-        DB::table('clientes_notas')->insert(['notas' => 'ML Anterior: ' . $prevName->ml_user,
+            DB::table('clientes_notas')->insert(['notas' => 'ML Anterior: ' . $prevName->ml_user,
             'clientes_id' => $prevName->ID ,
             'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
+        }
+
+        $exists = DB::table('clientes_ml_user')->where('ml_user',$request->ml)->first();
+
+        if (!$exists) {
+            $data = [];
+            $data['clientes_id'] = $request->id;
+            $data['ml_user'] = $request->ml_user;
+            
+            DB::table('clientes_ml_user')->insert($data);
+        }
+
+        
 
         return Response()->json('Variable de ML Actualizada');
     }

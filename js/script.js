@@ -1,10 +1,10 @@
 
 // Verifica si el email existe
-function check_email_ajax(email){
+function check_email_ajax(page,email){
 
 	 document.getElementById("user-result").className = "fa fa-spinner fa-pulse fa-fw";
 
-    $.post('/customer_ctrl_email', {'email':email}, function(data) {
+    $.post(page, {'email':email}, function(data) {
       if (data) {
         document.getElementById("user-result").className = 'fa fa-ban';
       }else{
@@ -54,11 +54,11 @@ function getPageAjax(path,modal,param=null){
 
 
 // Verifica que el usuario de mercado libre exista
-function check_ml_user_ajax(ml_user){
+function check_ml_user_ajax(page,ml_user){
 
 	document.getElementById("ml-user-result").className = "fa fa-spinner fa-pulse fa-fw";
 
-    $.post('/customer_ctrl_ml_user', {'ml_user':ml_user}, function(data) {
+    $.post(page, {'ml_user':ml_user}, function(data) {
 
       if (data) {
         document.getElementById("ml-user-result").className = 'fa fa-ban';

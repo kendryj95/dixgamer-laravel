@@ -116,7 +116,7 @@
         clearTimeout(x_timer);
         var user_name = $(this).val();
         x_timer = setTimeout(function(){
-            check_email_ajax(user_name);
+            check_email_ajax('{{ url("customer_ctrl_email") }}',user_name);
         }, 1000);
     });
 
@@ -125,7 +125,7 @@
         clearTimeout(x_timer_ml_user);
         var user_name = $(this).val();
         x_timer_ml_user = setTimeout(function(){
-            check_ml_user_ajax(user_name);
+            check_ml_user_ajax('{{ url("customer_ctrl_ml_user") }}',user_name);
         }, 1000);
     });
 

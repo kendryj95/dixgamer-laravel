@@ -41,7 +41,9 @@ class Customer extends Model
     // No lo hacemos por like
     public function ScopeCustomerEmail($query,$email){
       if (!empty($email)) {
-        $query->where('email',$email);
+        $query
+        ->leftjoin('clientes_email','clientes.id','=','clientes_email.clientes_id')
+        ->where('clientes_email.email',$email);
       }else{
         return $query;
       }

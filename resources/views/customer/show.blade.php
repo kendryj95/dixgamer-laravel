@@ -42,7 +42,7 @@
 
           <div class="panel-body" style="background-color: #efefef;">
 
-            <p>
+            <p style="margin-bottom: 2px;">
               <i class="fa fa-envelope-o fa-fw"></i>
 
               <a href="#" class="btn-copiador" data-clipboard-target="#email-copy">
@@ -71,6 +71,14 @@
                 <i aria-hidden="true" class="fa fa-pencil"></i>
               </button>
             </p>
+
+            @if ($othersEmails)
+              <p style="margin-left: 19px;margin-top: 0;">
+                @foreach ($othersEmails as $email)
+                    <small class="text-muted">{{ $email->email }} <a href="{{ url('customer_setEmailPrimary',[$email->id,$email->clientes_id]) }}" title="Email primario"> <i class="fa fa-check"></i> </a></small>
+                @endforeach
+              </p>
+            @endif
 
             @if($customer->ml_user)
               <p>
@@ -291,8 +299,7 @@
           <div class="col-xs-12 col-sm-6 col-md-3" style="display: inline-flex">
             <div class=" thumbnail" <?php if ($dataCustomer->slot == 'Secundario'): ?>style="background-color:#efefef;"<?php endif; ?>>
               <span class="pull-right" style="width: 45%;">
-
-                <p>
+                
                   <div class="dropdown pull-right">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <i aria-hidden="true" class="fa fa-pencil"></i>
@@ -305,6 +312,7 @@
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar venta</a></li>
                     </ul>
                   </div>
+                <p>
                   <small style="color:#CFCFCF;" title="<?php echo $dataCustomer->Day; ?>">
                     <em class="fa fa-calendar-o fa-xs fa-fw" aria-hidden="true">
 

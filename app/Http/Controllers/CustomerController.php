@@ -66,7 +66,6 @@ class CustomerController extends Controller
         'ml_user.unique' => 'Usuario mercado libre ya existe',
         'apellido.required' => 'Apellido requerido',
         'nombre.required' => 'Nombre requerido',
-        'ml_user.required' => 'ml_user requerido',
         'pais.required' => 'Pais requerido',
         'provincia.required' => 'Provincia requerido',
         'carac.required' => 'Carac requerido',
@@ -79,7 +78,7 @@ class CustomerController extends Controller
           'email' => 'required|email|unique:clientes,email',
           'apellido' => 'required',
           'nombre' => 'required',
-          'ml_user' => 'required|unique:clientes,ml_user',
+          'ml_user' => 'unique:clientes,ml_user',
           'pais' => 'required',
           'provincia' => 'required',
       ], $msgs);
@@ -143,6 +142,10 @@ class CustomerController extends Controller
         $id_ventas[] = $data->ID_ventas;
       }
 
+      $othersEmails = DB::table('clientes_email')
+      ->where('email','<>',$customer->email)
+      ->where('clientes_id',$customer->ID)
+      ->get();
 
 
       $ventas_notas = DB::table('ventas_notas')->whereIn('id_ventas',$id_ventas)->orderBy('Day','DESC')->get();
@@ -154,7 +157,8 @@ class CustomerController extends Controller
         'lowSalesByCustomerIds',
         'expensesIncome',
         'customerNotes',
-        'ventas_notas'
+        'ventas_notas',
+        'othersEmails'
       ));
     }
 
@@ -189,7 +193,7 @@ class CustomerController extends Controller
 
     public function customerCtrlEmail(Request $request){
       $customer = Customer::customerEmail($request->email)->first();
-      if (count($customer) > 0) {
+      if ($customer) {
         echo true;
       }else{
         echo false;
@@ -197,14 +201,11 @@ class CustomerController extends Controller
     }
 
     public function customerCtrlMlUsr(Request $request){
-      // Clientes con filtro
-      $obj = new \stdClass;
-      $obj->column = 'ml_user';
-      $obj->word = $request->ml_user;
 
       // Pasamos los filtros a la busqueda
-      $customer = Customer::customerCustomColumn($obj)->first();
-      if (count($customer) > 0) {
+      $customer = DB::table('clientes AS c')->leftjoin('clientes_ml_user AS cml','c.id','=','cml.clientes_id')
+                    ->where('cml.ml_user',$request->ml_user)->first();
+      if ($customer) {
         echo true;
       }else{
         echo false;
@@ -830,6 +831,27 @@ class CustomerController extends Controller
         \Helper::messageFlash('Clientes','Cobro de venta agregada.');
 
         return redirect('clientes/'.$request->clientes_id);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+      }
+    }
+
+    public function setEmailPrimary($id, $id_cliente)
+    {
+      $email = DB::table('clientes_email')->where('id', $id)->first();
+
+      
+      DB::beginTransaction();
+      
+      try {
+        DB::table('clientes')->where('ID',$id_cliente)->update(['email' => $email->email]);
+        
+        DB::commit();
+        \Helper::messageFlash('Clientes','Email actualizado.');
+
+        return redirect()->back();
       } catch (Exception $e) {
         DB::rollback();
 
