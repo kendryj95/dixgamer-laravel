@@ -41,7 +41,7 @@ class Balance extends Model
 
     public function reChargeGifCards(){
       return DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola,
-              cuentas_id AS stk_ctas_id, medio_pago,
+              cuentas_id AS stk_ctas_id, medio_pago, FORMAT(costo_usd,2) AS costo_usd,
               costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
               FROM stock
               LEFT JOIN

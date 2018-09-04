@@ -9,6 +9,7 @@
         $bandera1 = 0;
         $bandera2 = 0;
         $bandera3 = 0;
+        $gifts_array = [];
       @endphp
       @foreach($gifts as $gift)
 
@@ -36,136 +37,94 @@
           @endphp
         @endif
 
-        <div class="col-xs-6 col-sm-2">
-
-          <div class="thumbnail">
-
-            <a
-              title="cargar saldo"
-              onclick="request(event)"
-              href="{{url('crear_saldo_cuenta/'.$account_id.'/'.$gift->titulo.'/'.$gift->consola)}}">
-
-            <div>
-              <img
-                src="{{asset('img/productos/'.$gift->consola.'/'.$gift->titulo.'.jpg')}}"
-                alt="{{$gift->consola}} - {{$gift->titulo}}.jpg"
-                class="img img-responsive full-width" />
-
-              <span
-                class="badge badge-<?php if ($gift->Q_Stock > 4): echo 'success'; else: echo 'danger'; endif;?> pull-right"
-                style="position: relative; top: 8px; left: -8px;">
-                  @if(Helper::validateAdministrator(session()->get('usuario')->Level))
-                    {{ $gift->Q_Stock }}
-                  @else
-                    @if ($gift->Q_Stock > 4)
-                      +4
-                    @else
-                      {{$gift->Q_Stock}}
-                    @endif
-                  @endif
-              </span>
-            </div>
-
-            </a>
-
-            <div class="caption text-center">
-              <small style="color:#CFCFCF;">
-                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
-                  <i class="fa fa-gamepad fa-fw" aria-hidden="true"></i>
-                  {{ $gift->ID_stk }}
-                @endif
-              </small>
-            </div>
-
-          </div>
-
-        </div>
+        @php
+            if(($gift->costo_usd*100) < 30) {
+              $gifts_array[] = [
+                "account_id" => $account_id,
+                "titulo" => $gift->titulo,
+                "consola" => $gift->consola,
+                "costo_usd" => $gift->costo_usd*100
+              ];
+            } elseif (($gift->costo_usd*100) < 60) {
+              if ($bandera1 == 2) { // Para 20+10 y 20+20
+                $gifts_array[] = [
+                  "account_id" => $account_id,
+                  "titulo" => 'gift-card-30-usd-org',
+                  "consola" => $gift->consola,
+                  "costo_usd" => 30
+                ];
+              }
+              if ($bandera2 == 2) {
+                $gifts_array[] = [
+                  "account_id" => $account_id,
+                  "titulo" => 'gift-card-40-usd-org',
+                  "consola" => $gift->consola,
+                  "costo_usd" => 40
+                ];
+              }
+              $gifts_array[] = [
+                  "account_id" => $account_id,
+                  "titulo" => $gift->titulo,
+                  "consola" => $gift->consola,
+                  "costo_usd" => $gift->costo_usd*100
+              ];
+            } else {
+              if ($bandera3 != 0) {
+                $gifts_array[] = [
+                    "account_id" => $account_id,
+                    "titulo" => 'gift-card-60-usd-org',
+                    "consola" => $gift->consola,
+                    "costo_usd" => 60
+                ];
+              }
+              $gifts_array[] = [
+                  "account_id" => $account_id,
+                  "titulo" => $gift->titulo,
+                  "consola" => $gift->consola,
+                  "costo_usd" => $gift->costo_usd*100
+              ];
+            }
+        @endphp
 
       @endforeach
 
-      @if ($bandera1 == 2) {{-- 2 en 1: 50 + 10 --}}
+      @foreach ($gifts_array as $gift)
 
+      
       <div class="col-xs-6 col-sm-2">
 
-        <div class="thumbnail">
+          <div class="thumbnail">
 
-          <div style="height: 305px; border: 1px solid #ccc">
-            <a
-              title="cargar saldo"
-              onclick="request(event)"
-              href="{{url('crear_saldo_cuenta/'.$account_id.'/gift-card-60-usd-org/'.$gift->consola)}}">
-            
-            <div style="color: #000">
-                <h3>50 + 10</h3>
-                <br>
-                <h2>60 USD</h2>
-            </div> 
-            
-            
+            <div style="height: 305px; border: 1px solid #ccc">
+              <a
+                title="cargar saldo"
+                onclick="request(event)"
+                href="{{url('crear_saldo_cuenta',[$gift['account_id'],$gift['titulo'],$gift['consola']])}}">
               
-            </a>
+                <div style="color: #000">
+                    <br>
+                    <br>
+                    <br><br>
+                    <br>
+                    @if ($gift['titulo'] == 'plus-12-meses')
+                      <h4>{{ $gift['titulo'] }}</h4>
+                    @else
+                      <h2>{{ $gift['costo_usd'] }} USD</h2>
+                    @endif
+                    
+                </div> 
+              
+              
+                
+              </a>
+            </div>
+
+            
+
           </div>
-        </div>
 
       </div>
-
-      @endif
-
-      @if ($bandera2 == 2) {{-- 2 en 1: 20 + 10 --}}
-
-      <div class="col-xs-6 col-sm-2">
-
-        <div class="thumbnail">
-
-          <div style="height: 305px; border: 1px solid #ccc">
-            <a
-              title="cargar saldo"
-              onclick="request(event)"
-              href="{{url('crear_saldo_cuenta/'.$account_id.'/gift-card-30-usd-org/'.$gift->consola)}}">
-            
-            <div style="color: #000">
-                <h3>20 + 10</h3>
-                <br>
-                <h2>30 USD</h2>
-            </div> 
-            
-            
-              
-            </a>
-          </div>
-        </div>
-
-      </div>
-
-      @endif
-
-      @if ($bandera3 != 0) {{-- 2 en 1: 20 + 20 --}}
-
-      <div class="col-xs-6 col-sm-2">
-
-        <div class="thumbnail">
-
-          <div style="height: 305px; border: 1px solid #ccc">
-            <a
-              title="cargar saldo"
-              onclick="request(event)"
-              href="{{url('crear_saldo_cuenta/'.$account_id.'/gift-card-40-usd-org/'.$gift->consola)}}">
-            
-            <div style="color: #000">
-                <h3>20 + 20</h3>
-                <br>
-                <h2>40 USD</h2>
-            </div> 
-            
-            
-              
-            </a>
-          </div>
-        </div>
-
-      </div>
-
-      @endif
+      @endforeach
     @else
       <h2 style="color:#000">No se encontraron datos</h2>
     @endif

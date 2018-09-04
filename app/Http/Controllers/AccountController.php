@@ -569,6 +569,7 @@ class AccountController extends Controller
     public function rechargeBalance($id){
       $gifts = $this->blc->reChargeGifCards();
       $account_id = $id ;
+      // dd($gifts);
       return view('ajax.account.recharge_balance',compact(
         'gifts',
         'account_id'
