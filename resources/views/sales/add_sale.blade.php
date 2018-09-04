@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row text-center" style="background-color:#cfcfcf;padding:5px; border: 1px dashed #efefef">
             <img class="img-rounded" width="60"
-                 src="/img/productos/<?php echo $colname_rsCON . "/" . $colname_rsTIT;?>.jpg"
+                 src="{{asset('img/productos')}}/<?php echo $colname_rsCON . "/" . $colname_rsTIT;?>.jpg"
                  alt="<?php echo $colname_rsTIT . " - " . $colname_rsCON;?>"/><h4 style="display: inline">
                 Asignar <?php echo $colname_rsTIT . " (" . $colname_rsCON . ")";?></h4>
         <?php if (($colname_rsCON === "ps4") or ($colname_rsTIT === "plus-12-meses-slot")): echo '<em style="font-size:0.8m">' . $colname_rsSlot . '</em>'; endif;?>
@@ -115,7 +115,7 @@
                         <input class="form-control" type="text" name="Notas_cobro" placeholder="Notas del cobro">
                     </div>
 
-                    <button class="btn btn-primary botonero" id="submiter" type="submit">Insertar</button>
+                    <button class="btn btn-primary botonero" id="submiter" type="button">Insertar</button>
                     <input type="hidden" name="MM_insert" value="form1">
 
                 </form>
@@ -160,6 +160,15 @@
                     name: 'cars',
                     source: cars
                 });
+
+            $('#submiter').on('click', function(){
+                $(this).prop('disabled', true);
+
+                $('#form1').submit();
+            });
+
+            // To style only <select>s with the selectpicker class
+            $('.selectpicker').selectpicker();
         });
     </script>
     <script type="text/javascript">
@@ -168,6 +177,7 @@
 
             if (!isFormValid) {
                 if($('#ref_cobro').val() == ''){
+                    $('#submiter').prop('disabled', false);
                     document.getElementById("n_cobro").className = "input-group form-group has-error";
                     $("#faltacobro").show(300);
                     isFormValid = true;
@@ -243,16 +253,5 @@
         },500);
 
     </script>
-    <!-- IMAGE PICKER
-      <link rel="stylesheet" href="css/image-picker.css">
-      <script src="js/image-picker.min.js"></script>
-      <script type="text/javascript">
-      $("#consola").imagepicker()
-      </script>
-      <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 @endsection
 @endsection

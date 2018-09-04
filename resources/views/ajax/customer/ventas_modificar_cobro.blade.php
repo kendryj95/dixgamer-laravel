@@ -103,6 +103,8 @@
     });
 
     $('#submiter').on('click', function(){
+      var $btn = $(this);
+      $btn.prop('disabled', true);
       var ref_cobro = $('#ref_cobro').val(),
           precio = $('#precio').val(),
           comision = $('#comision').val(),
@@ -118,9 +120,11 @@
               $('#form1').submit();
             } else {
               $('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
+              $btn.prop('disabled', false);
             }
           } else {
             $('#alert-ventasInsert').html('<p>Ref. de cobro es obligatorio para MercadoPago.</p>').fadeIn();
+            $btn.prop('disabled', false);
           }
         } else {
           if (ref_cobro != "") {
@@ -129,6 +133,7 @@
               $('#form1').submit();
             } else {
               $('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
+              $btn.prop('disabled', false);
             }
           } else {
             $('#form1').submit();
@@ -136,6 +141,7 @@
         }
       } else {
         $('#alert-ventasInsert').html('<p>Has dejado vacío campos obligatorios.</p>').fadeIn();
+        $btn.prop('disabled', false);
       }
     });
 

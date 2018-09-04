@@ -182,7 +182,7 @@ foreach ($data as $value) {
             <h1 style="color:#000">Agregar Nota - Venta #{{$clientes->ID}}</h1>
             <div class="row">
               <div class="col-lg-12">
-                <form action="{{ url('customer_ventas_modificar_store') }}" method="post">
+                <form action="{{ url('customer_ventas_modificar_store') }}" method="post" id="form_addNote">
                   
                   {{csrf_field()}}
                 
@@ -195,8 +195,7 @@ foreach ($data as $value) {
                   </div>
                   <input type="hidden" name="ID" value="{{ $clientes->ID }}">
                 
-                  <button class="btn btn-warning" type="submit">Modificar</button>
-                  <input type="reset" class="btn btn-secondary">
+                  <button class="btn btn-warning btn-block" id="addNote" type="button">Insertar</button>
                 
                 
                 </form>
@@ -217,6 +216,12 @@ foreach ($data as $value) {
 <script>
   var cliente;
   $(document).ready(function() {
+
+    $('#addNote').on('click', function(){
+      $(this).prop('disabled', true);
+
+      $('#form_addNote').submit();
+    });
 
     @if($opt == 1)
 

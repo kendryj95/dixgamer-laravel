@@ -1361,6 +1361,7 @@
         });
 
         $('#saveNotes').on('click',function (e) {
+            $(this).prop('disabled', true);
             var notes = $('#notaCliente').val();
             var id = $('#idcustomer').val();
             var token = $('#token').val();
