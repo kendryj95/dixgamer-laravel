@@ -855,7 +855,7 @@ class AccountController extends Controller
     public function resetAccount($id){
       $account = Account::where('ID',$id)->first();
 
-      if (count($account)<1)
+      if (!$account)
         return redirect('/cuentas')->withErrors('Intentelo nuevamente');
 
       $date = date('Y-m-d H:i:s', time());

@@ -15,7 +15,7 @@
 				<img class="img-rounded pull-right" width="100" id="image-swap" src="" alt="" />
 			</div>
 			<div class="col-sm-6">
-				<form method="post" name="form1" action="{{ url('stock_insertar_cuenta',[$account->ID]) }}">
+				<form method="post" name="form1" id="form1" action="{{ url('stock_insertar_cuenta',[$account->ID]) }}">
 					{{ csrf_field() }}
 
 					<input type="text" name="cuentas_id" value="{{ $account->ID }}" hidden>
@@ -117,7 +117,7 @@
 						<input class="form-control" type="text" name="Notas" placeholder="Notas de stock">
 					</div>
 
-					<button class="btn btn-primary btn-block" type="submit">Guardar</button>
+					<button class="btn btn-primary btn-block" id="submiter" type="button">Guardar</button>
 				</form>
 
 			</div>
@@ -155,6 +155,12 @@
 
 							// To style only <select>s with the selectpicker class
 							$('.selectpicker').selectpicker();
+
+							$('#submiter').on('click', function(){
+								$(this).prop('disabled', true);
+
+								$('#form1').submit();
+							});
 					})
 		</script>
 	@else

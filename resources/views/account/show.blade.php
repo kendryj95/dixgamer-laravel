@@ -93,12 +93,13 @@
 		                <li class="dropdown-header">cambiar el pass?</li>
 		                <li role="separator" class="divider"></li>
 		                <li>
-											<form class=" text-center" action="{{url('actualizar_password_cuenta',[$account->ID])}}" method="post">
+											<form class=" text-center" id="form_cambiar_pass" action="{{url('actualizar_password_cuenta',[$account->ID])}}" method="post">
 												{{ csrf_field() }}
 												<button
 													class="btn btn-danger"
-			                    title="cambiar pass"
-			                    type="submit">
+								title="cambiar pass"
+								id="cambiar_pass"
+			                    type="button">
 		                    	Si, seguro!
 		                    </button>
 											</form>
@@ -368,12 +369,13 @@
 											<li class="dropdown-header">resetear la cuenta?</li>
 											<li role="separator" class="divider"></li>
 											<li>
-												<form class=" text-center" action="{{url('resetear_cuenta',[$account->ID])}}" method="post">
+												<form class=" text-center" id="form_resetear" action="{{url('resetear_cuenta',[$account->ID])}}" method="post">
 													{{ csrf_field() }}
 													<button
 														class="btn btn-danger btn-block"
 														title="cambiar pass"
-														type="submit">
+														id="resetear"
+														type="button">
 														Si, seguro!
 													</button>
 												</form>
@@ -710,6 +712,17 @@
 @parent
 	<script>
 		var peticion = 0;
+		$(document).ready(function(){
+			$('#cambiar_pass').on('click', function(){
+				$(this).prop('disabled', true);
+				$('#form_cambiar_pass').submit();
+			});
+
+			$('#resetear').on('click', function(){
+				$(this).prop('disabled', true);
+				$('#form_resetear').submit();
+			});
+		});
 		/*
 		$('#paginaAnt').on('click',function(e){
 			e.preventDefault();
