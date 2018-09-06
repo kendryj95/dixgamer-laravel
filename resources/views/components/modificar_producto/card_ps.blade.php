@@ -10,7 +10,7 @@
           <div>
 
             <div style="position:relative; overflow:hidden; padding-bottom:100%;">
-              <span style="position:absolute; z-index:100; bottom: 0px; background-color: rgba(0, 0, 0, 0.8); color:#FFF; padding:3px; font-size:0.9em;">
+              <span style="position:absolute; z-index:100; bottom: 0px; background-color: rgba(0, 0, 0, 0.8); color:#FFF; padding:3px; font-size:0.9em; left: 0px">
                 {{ str_replace('-', ' ', $data->titulo) }}
               </span>
               <a title="vender {{$data->titulo}}"
