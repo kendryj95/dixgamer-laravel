@@ -19,7 +19,6 @@
                     <tr height="90">
 
                         <td id="{{ $ventasweb->order_item_id  }}"><input type="hidden" id="verificaCliente" value="prueba@cliente.com"><span class="label label-default" style="opacity:0.7;">pedido #{{ $ventasweb->order_id }}</span><a target="_blank" href="https://dixgamer.com/wp-admin/post.php?post={{ $ventasweb->order_id }}&action=edit" class="text-muted btn-xs" title="ver pedido en la adm del sitio"><i class="fa fa-external-link" aria-hidden="true"></i> </a><br /><br /><span class="label label-normal" style="font-weight:400; opacity:0.5;">order_item_id #{{ $ventasweb->order_item_id  }}</span></td>
-                        <td id="prueba"></td>
                         <td><img class="img-rounded" width="50" id="image-swap" src="/img/productos/{{ $ventasweb->consola }}/{{ $ventasweb->producto.'.jpg' }} "alt="" /></td>
                         <td title="{{ str_replace('-', ' ', $ventasweb->producto)  }}({{ $ventasweb->consola }})">{{ str_replace('-', ' ', $ventasweb->producto)  }} ({{ $ventasweb->consola }})
 
@@ -65,16 +64,16 @@
                         @if($ventasweb->cliente_email)
                             {{ $ventasweb->email }}
                             @if(strpos($ventasweb->cliente_auto, 're') !== false)
-                                    <a type="button" target="_blank" href="clientes_detalles.php?id={{ $ventasweb->cliente_ID }}" class="btn btn-danger btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Revendedor</a>
+                                    <a type="button" target="_blank" href="{{ url('clientes', $ventasweb->cliente_ID) }}" class="btn btn-danger btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Revendedor</a>
                             @else
-                                    <a type="button" target="_blank" href="clientes_detalles.php?id={{ $ventasweb->cliente_ID }}" class="btn btn-default btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Cte</a>
+                                    <a type="button" tarmget="_blank" href="{{ url('clientes', $ventasweb->cliente_ID) }}" class="btn btn-default btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Cte</a>
                             @endif
                         @else
                             @if(strpos($ventasweb->email, 'mercadolibre.com') !== false)
-                                <a type="button" target="_blank" href="clientes_insertar_web_email.php?order_id={{ $ventasweb->order_id }}" class="btn btn-danger btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Revendedor</a>
+                                <a type="button" target="_blank" href="clientes_insertar_web_email.php?order_id={{ $ventasweb->order_id }}" class="btn btn-secondary btn-xs" title="corregir email de ML"><i class="fa fa-pencil" aria-hidden="true"></i> Modificar email de ML</a>
                             @else
                                 {{ $ventasweb->email }}
-                                <a type="button" target="_blank" href="clientes_insertar_web.php?order_item_id={{ $ventasweb->order_item_id  }}" class="btn btn-default btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Cte</a>
+                                <a type="button" target="_blank" href="clientes_insertar_web.php?order_item_id={{ $ventasweb->order_item_id  }}" class="btn btn-success btn-xs" title="agregar cliente a base de datos"><i class="fa fa-plus" aria-hidden="true"></i> cliente</a>
                             @endif
 
                         @endif
@@ -125,7 +124,7 @@
             var email = $('#verificaCliente').val();
             $.ajax({
                 method: 'post',
-                url: '/getDataClientWebSales',
+                url: '{{url('getDataClientWebSales')}}',
                 data: {'email':email},
                 success: function (result) {
                     console.log(result);
