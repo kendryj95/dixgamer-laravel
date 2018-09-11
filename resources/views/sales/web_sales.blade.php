@@ -19,31 +19,11 @@
 
         <br />
 
-        <div class="row">
-         <form action="{{ url('web/sales') }}" method="post">
-          {{ csrf_field() }}
-            <div class="col-lg-3">
-             <select name="opt" id="" class="form-control">
-               <option value="order_id">Order ID</option>
-               <option value="email">Email</option>
-             </select>
-           </div>
-           <div class="col-lg-6">
-             <div class="input-group">
-               <input type="text" class="form-control" name="search" placeholder="Buscar" aria-label="Buscar" aria-describedby="button-addon2">
-               <div class="input-group-btn">
-                 <button class="btn btn-primary" type="submit" id="button-addon2"><i class="fa fa-search"></i></button>
-               </div>
-             </div>
-           </div>
-         </form>
-        </div>
-
         @if ($filtros)
         <br>
 
 
-        <a href="{{url('web/sales')}}" class="btn btn-secondary" style="margin-bottom: 10px">Limpiar filtros</a>
+        <a href="{{url('web/sales/list')}}" class="btn btn-secondary" style="margin-bottom: 10px">Limpiar filtros</a>
 
         @endif
 

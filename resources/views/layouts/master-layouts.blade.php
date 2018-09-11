@@ -119,7 +119,7 @@
                 -->
               </ul>
             </li>
-            <li><a href="{{ url('web/sales') }}"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>
+            <li><a href="{{ url('web/sales/list') }}"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>
 
             @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <li class="dropdown">

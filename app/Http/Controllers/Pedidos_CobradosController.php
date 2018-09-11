@@ -88,14 +88,14 @@ class Pedidos_CobradosController extends Controller
             return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata]);
     }
 
-    public function test(Request $request)
+    public function test($filtro)
     {
 
         $condicion = "";
 
-        if (isset($request->opt) && isset($request->search) && $request->opt == "order_id") {
+        if (isset($filtro) && $filtro != "list" && is_numeric($filtro)) {
                 
-            $condicion .= " AND wco.order_id LIKE '$request->search%'";
+            $condicion .= " AND wco.order_id LIKE '$filtro%'";
         }
 
         $passdata = DB::select("SELECT
@@ -106,7 +106,7 @@ class Pedidos_CobradosController extends Controller
                                 cbgw_woocommerce_order_items as wco
                                 LEFT JOIN cbgw_posts as p
                                 ON wco.order_id = p.ID
-                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order' and wco.order_item_name NOT LIKE 'fifa 19%' and wco.order_item_name NOT LIKE 'pes 2019%'
+                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order'
                                 $condicion
                                 GROUP BY wco.order_item_id
                                 ORDER BY order_item_id DESC");
@@ -128,7 +128,7 @@ class Pedidos_CobradosController extends Controller
         $pedidos = [];
         $mostrar = true;
 
-        if (isset($request->opt) && isset($request->search) && $request->opt == 'email') {
+        if (isset($filtro) && $filtro != "list" && !is_numeric($filtro)) {
             foreach ($passdata as $data) {
                 
                 $info = DB::table(DB::raw("(SELECT
@@ -149,14 +149,16 @@ class Pedidos_CobradosController extends Controller
                                             ->select(
                                                 "r.*",
                                                 "v.cons AS consola",
-                                                "c.ID AS clientes_ID",
+                                                "c.ID AS cliente_ID",
                                                 "c.email AS cliente_email",
-                                                "c.auto AS cliente_auto"
+                                                "c.auto AS cliente_auto",
+                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola")
                                             )
-                                            ->leftjoin(DB::raw("(SELECT cons, stock_id FROM ventas) AS v"),'v.stock_id','=','r._product_id')
                                             ->leftjoin('clientes AS c','c.email','=','r.email')
-                                            ->where('r.email','LIKE',"$request->search%")
-                                            ->groupBy('order_id')
+                                            ->leftjoin('ventas AS v','v.order_item_id','=','r.order_item_id')
+                                            ->where('r.email','LIKE',"$filtro%")
+                                            ->whereNull('v.order_item_id')
+                                            ->groupBy('order_item_id')
                                             ->first();
 
                 if ($info != null) {
@@ -191,13 +193,15 @@ class Pedidos_CobradosController extends Controller
                                             ->select(
                                                 "r.*",
                                                 "v.cons AS consola",
-                                                "c.ID AS clientes_ID",
+                                                "c.ID AS cliente_ID",
                                                 "c.email AS cliente_email",
-                                                "c.auto AS cliente_auto"
+                                                "c.auto AS cliente_auto",
+                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola")
                                             )
-                                            ->leftjoin(DB::raw("(SELECT cons, stock_id FROM ventas) AS v"),'v.stock_id','=','r._product_id')
                                             ->leftjoin('clientes AS c','c.email','=','r.email')
-                                            ->groupBy('order_id')
+                                            ->leftjoin('ventas AS v','v.order_item_id','=','r.order_item_id')
+                                            ->whereNull('v.order_item_id')
+                                            ->groupBy('order_item_id')
                                             ->first();
 
                 $pedidos[] = $info;
@@ -207,7 +211,7 @@ class Pedidos_CobradosController extends Controller
 
         $filtros = false;
 
-        if (isset($request->opt) && isset($request->search)) {
+        if (isset($filtro) && $filtro != "list") {
             $filtros = true;
         }
         
