@@ -1,10 +1,43 @@
 @extends('layouts.master-layouts')
+
+@section('title', 'Pedidos Cobrados')
+
 @section('container')
 
     <div class="container">
         <h1>Pedidos Cobrados</h1>
 
         <br />
+
+        <div class="row">
+         <form action="{{ url('web/sales') }}" method="post">
+          {{ csrf_field() }}
+            <div class="col-lg-3">
+             <select name="opt" id="" class="form-control">
+               <option value="order_id">Order ID</option>
+               <option value="email">Email</option>
+             </select>
+           </div>
+           <div class="col-lg-6">
+             <div class="input-group">
+               <input type="text" class="form-control" name="search" placeholder="Buscar" aria-label="Buscar" aria-describedby="button-addon2">
+               <div class="input-group-btn">
+                 <button class="btn btn-primary" type="submit" id="button-addon2"><i class="fa fa-search"></i></button>
+               </div>
+             </div>
+           </div>
+         </form>
+        </div>
+
+        @if ($filtros)
+        <br>
+
+
+        <a href="{{url('web/sales')}}" class="btn btn-secondary" style="margin-bottom: 10px">Limpiar filtros</a>
+
+        @endif
+
+        <br>
 
         <table class="table table-striped" border="0" cellpadding="0" cellspacing="5">
             <tr>
@@ -19,7 +52,7 @@
                     <tr height="90">
 
                         <td id="{{ $ventasweb->order_item_id  }}"><input type="hidden" id="verificaCliente" value="prueba@cliente.com"><span class="label label-default" style="opacity:0.7;">pedido #{{ $ventasweb->order_id }}</span><a target="_blank" href="https://dixgamer.com/wp-admin/post.php?post={{ $ventasweb->order_id }}&action=edit" class="text-muted btn-xs" title="ver pedido en la adm del sitio"><i class="fa fa-external-link" aria-hidden="true"></i> </a><br /><br /><span class="label label-normal" style="font-weight:400; opacity:0.5;">order_item_id #{{ $ventasweb->order_item_id  }}</span></td>
-                        <td><img class="img-rounded" width="50" id="image-swap" src="/img/productos/{{ $ventasweb->consola }}/{{ $ventasweb->producto.'.jpg' }} "alt="" /></td>
+                        <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $ventasweb->consola }}/{{ $ventasweb->producto.'.jpg' }} "alt="" /></td>
                         <td title="{{ str_replace('-', ' ', $ventasweb->producto)  }}({{ $ventasweb->consola }})">{{ str_replace('-', ' ', $ventasweb->producto)  }} ({{ $ventasweb->consola }})
 
                             @if($ventasweb->cliente_email)
@@ -98,6 +131,94 @@
 
 
         </table>
+
+    @if ($mostrar)
+
+    <div class="col-md-12">
+
+        <ul class="pager">
+          <ul class="pagination">
+
+            @php
+                if (isset($_GET['pag'])) {
+                  if ($_GET['pag'] != 1) {
+                    $previous = intval($_GET['pag']) - 1;
+                  } else {
+                    $previous = 1;
+                  }
+                } else {
+                  $previous = 1;
+                }
+            @endphp
+                @if ($previous == 1 && (!isset($_GET['pag']) || $_GET['pag'] == 1))
+
+                <li class="disabled"><span>«</span></li>
+                @else
+                <li><a href="{{url('web/sales')}}?pag={{ $previous }}">«</a></li>
+                @endif 
+               
+               @if ($paginas >= 1 && $paginas <= 5)
+                 @for ($i=0;$i<$paginas;$i++)
+                   @php 
+                   $active = isset($_GET['pag']) ? ($i+1) == $_GET['pag'] ? 'active' : "" : ($i+1) == 1 ? 'active' : ""; 
+                   @endphp
+                   <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i+1 ?>"><?= $i+1 ?></a></li>
+                 @endfor
+               @else
+                 @if (($paginaAct+4) <= ($paginas))
+                   @for ($i=$paginaAct;$i<=($paginaAct+4);$i++)
+                        @php
+                            $active = isset($_GET['pag']) ? ($i) == $_GET['pag'] ? 'active' : "" : ($i) == 1 ? 'active' : "";
+                        @endphp
+                     <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i ?>"><?= $i ?></a></li>
+                   @endfor
+                 @elseif ($paginaAct == $paginas)
+                   @for ($i=($paginaAct-4);$i<=$paginas;$i++)
+                        @php
+                            $active = isset($_GET['pag']) ? ($i) == $_GET['pag'] ? 'active' : "" : ($i) == 1 ? 'active' : ""; 
+                        @endphp
+                     <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i ?>"><?= $i ?></a></li>
+                   @endfor
+                 @else
+                   @for ($i=$paginaAct;$i<=$paginas;$i++)
+                         @php 
+                            $active = isset($_GET['pag']) ? ($i) == $_GET['pag'] ? 'active' : "" : ($i) == 1 ? 'active' : ""; 
+                         @endphp
+                     <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i ?>"><?= $i ?></a></li>
+                   @endfor
+                 @endif
+                 @if (($paginaAct+4) < ($paginas))
+                 <li class="disabled"><span>...</span></li>
+                 <li><a href="{{url('web/sales')}}?pag=<?= $paginas ?>"><?= $paginas ?></a></li>
+                 @endif
+               @endif
+
+                @php
+
+                    if (isset($_GET['pag'])) {
+                      if ($_GET['pag'] != $paginas) {
+                        $next = intval($_GET['pag']) + 1;
+                      } else {
+                        $next = $paginas;
+                      }
+                    } else {
+                      $next = 2;
+                    }
+
+                @endphp
+
+                @if (($next == $paginas) || (!isset($_GET['pag']) && ($paginas-1)==0))
+
+                <li class="disabled"><span>»</span></li>
+                @else
+                <li><a href="{{url('web/sales')}}?pag={{ $next }}" rel="next">»</a></li>
+                @endif
+            </ul>
+
+        </ul>
+
+    </div>
+  @endif
         <div class="container">
             <div class="row">
                 <!-- Large modal -->

@@ -88,6 +88,150 @@ class Pedidos_CobradosController extends Controller
             return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata]);
     }
 
+    public function test(Request $request)
+    {
+
+        $condicion = "";
+
+        if (isset($request->opt) && isset($request->search) && $request->opt == "order_id") {
+                
+            $condicion .= " AND wco.order_id LIKE '$request->search%'";
+        }
+
+        $passdata = DB::select("SELECT
+                                wco.order_item_id,
+                                wco.order_id,
+                                SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(wco.order_item_name)), ' ', '-'), '''', ''), '’', ''), '.', ''),'-&ndash;',1),'---',1) as producto
+                                FROM
+                                cbgw_woocommerce_order_items as wco
+                                LEFT JOIN cbgw_posts as p
+                                ON wco.order_id = p.ID
+                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order' and wco.order_item_name NOT LIKE 'fifa 19%' and wco.order_item_name NOT LIKE 'pes 2019%'
+                                $condicion
+                                GROUP BY wco.order_item_id
+                                ORDER BY order_item_id DESC");
+
+
+        $tamPag = 20;
+        $numReg = count($passdata);
+        $paginas = ceil($numReg/$tamPag);
+        $limit = "";
+        $paginaAct = "";
+        if (!isset($_GET['pag'])) {
+            $paginaAct = 1;
+            $limit = 0;
+        } else {
+            $paginaAct = $_GET['pag'];
+            $limit = ($paginaAct-1) * $tamPag;
+        }
+
+        $pedidos = [];
+        $mostrar = true;
+
+        if (isset($request->opt) && isset($request->search) && $request->opt == 'email') {
+            foreach ($passdata as $data) {
+                
+                $info = DB::table(DB::raw("(SELECT
+                                            (SELECT $data->order_id) AS order_id,
+                                            (SELECT $data->order_item_id) AS order_item_id,
+                                            (SELECT '$data->producto') AS producto,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_last_name' AND post_id=$data->order_id) AS apellido,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_first_name' AND post_id=$data->order_id) AS nombre,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_email' AND post_id=$data->order_id) AS email,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='user_id_ml' AND post_id=$data->order_id) AS user_id_ml,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='order_id_ml' AND post_id=$data->order_id) AS order_id_ml,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method_title' AND post_id=$data->order_id) AS _payment_method_title,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=$data->order_item_id) AS _qty,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=$data->order_item_id) AS _product_id,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_variation_id' AND order_item_id=$data->order_item_id) AS _variation_id) r"))
+                                            ->select(
+                                                "r.*",
+                                                "v.cons AS consola",
+                                                "c.ID AS clientes_ID",
+                                                "c.email AS cliente_email",
+                                                "c.auto AS cliente_auto"
+                                            )
+                                            ->leftjoin(DB::raw("(SELECT cons, stock_id FROM ventas) AS v"),'v.stock_id','=','r._product_id')
+                                            ->leftjoin('clientes AS c','c.email','=','r.email')
+                                            ->where('r.email','LIKE',"$request->search%")
+                                            ->groupBy('order_id')
+                                            ->first();
+
+                if ($info != null) {
+                    
+                    $pedidos[] = $info;
+                }
+
+                $mostrar = false;
+
+            }
+        } else {
+
+            $passdata = $this->consultaPagination($condicion,$limit, $tamPag);
+
+            foreach ($passdata as $data) {
+                
+                $info = DB::table(DB::raw("(SELECT
+                                            (SELECT $data->order_id) AS order_id,
+                                            (SELECT $data->order_item_id) AS order_item_id,
+                                            (SELECT '$data->producto') AS producto,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_last_name' AND post_id=$data->order_id) AS apellido,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_first_name' AND post_id=$data->order_id) AS nombre,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_email' AND post_id=$data->order_id) AS email,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='user_id_ml' AND post_id=$data->order_id) AS user_id_ml,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='order_id_ml' AND post_id=$data->order_id) AS order_id_ml,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method_title' AND post_id=$data->order_id) AS _payment_method_title,
+                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=$data->order_item_id) AS _qty,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=$data->order_item_id) AS _product_id,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_variation_id' AND order_item_id=$data->order_item_id) AS _variation_id) r"))
+                                            ->select(
+                                                "r.*",
+                                                "v.cons AS consola",
+                                                "c.ID AS clientes_ID",
+                                                "c.email AS cliente_email",
+                                                "c.auto AS cliente_auto"
+                                            )
+                                            ->leftjoin(DB::raw("(SELECT cons, stock_id FROM ventas) AS v"),'v.stock_id','=','r._product_id')
+                                            ->leftjoin('clientes AS c','c.email','=','r.email')
+                                            ->groupBy('order_id')
+                                            ->first();
+
+                $pedidos[] = $info;
+            }
+
+        }
+
+        $filtros = false;
+
+        if (isset($request->opt) && isset($request->search)) {
+            $filtros = true;
+        }
+        
+        return view('sales.web_sales')->with(['row_rsAsignarVta' => $pedidos, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => $mostrar, "filtros" => $filtros]);
+    }
+
+    private function consultaPagination($condicion,$inicio, $fin)
+    {
+        $passdata = DB::select("SELECT
+                                wco.order_item_id,
+                                wco.order_id,
+                                SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(wco.order_item_name)), ' ', '-'), '''', ''), '’', ''), '.', ''),'-&ndash;',1),'---',1) as producto
+                                FROM
+                                cbgw_woocommerce_order_items as wco
+                                LEFT JOIN cbgw_posts as p
+                                ON wco.order_id = p.ID
+                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order' and wco.order_item_name NOT LIKE 'fifa 19%' and wco.order_item_name NOT LIKE 'pes 2019%'
+                                $condicion
+                                GROUP BY wco.order_item_id
+                                ORDER BY order_item_id DESC LIMIT $inicio,$fin");
+
+        return $passdata;
+    }
+
     public function getDataClientWebSales(Request $request){
         $cliente = DB::table('clientes')->where('email', $request->email)->first();
 
