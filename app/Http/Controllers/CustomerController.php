@@ -858,4 +858,90 @@ class CustomerController extends Controller
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
       }
     }
+
+    public function createCustomerWeb($oii)
+    {
+      $cliente = DB::table('cbgw_woocommerce_order_items AS wco')
+                    ->select(
+                      'wco.order_item_id',
+                      'wco.order_id',
+                      'p.ID as post_id',
+                      'p.post_status as estado',
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_email' AND post_id=p.ID) AS email"),
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_first_name' AND post_id=p.ID) AS nombre"),
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_last_name' AND post_id=p.ID) AS apellido"),
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_country' AND post_id=p.ID) AS pais"),
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_state' AND post_id=p.ID) AS provincia"),
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_city' AND post_id=p.ID) AS ciudad"),
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_phone' AND post_id=p.ID) AS tel"),
+                      DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='user_id_ml' AND post_id=p.ID) AS user_id_ml")
+                    )
+                    ->leftjoin('cbgw_posts AS p','wco.order_id','=','p.ID')
+                    ->leftjoin('cbgw_postmeta AS pm','wco.order_id','=','pm.post_id')
+                    ->leftjoin('cbgw_woocommerce_order_itemmeta AS wcom','wco.order_item_id','=','wcom.order_item_id')
+                    ->where('wco.order_item_id',$oii)
+                    ->first();
+
+      if ($cliente) {
+        $apellido = ucwords(strtolower($cliente->apellido));
+        $nombre = ucwords(strtolower($cliente->nombre));;
+        if ($cliente->pais == "AR"): $pais = "Argentina"; else: $pais = $cliente->pais; endif;
+        if ($cliente->provincia === "C"): $prov = "Ciudad Autónoma de Buenos Aires";
+        elseif ($cliente->provincia === "B"): $prov = "Buenos Aires";
+        elseif ($cliente->provincia === "K"): $prov = "Catamarca";
+        elseif ($cliente->provincia === "H"): $prov = "Chaco";
+        elseif ($cliente->provincia === "U"): $prov = "Chubut";
+        elseif ($cliente->provincia === "X"): $prov = "Córdoba";
+        elseif ($cliente->provincia === "W"): $prov = "Corrientes";
+        elseif ($cliente->provincia === "E"): $prov = "Entre Ríos";
+        elseif ($cliente->provincia === "P"): $prov = "Formosa";
+        elseif ($cliente->provincia === "Y"): $prov = "Jujuy";
+        elseif ($cliente->provincia === "L"): $prov = "La Pampa";
+        elseif ($cliente->provincia === "F"): $prov = "La Rioja";
+        elseif ($cliente->provincia === "M"): $prov = "Mendoza";
+        elseif ($cliente->provincia === "N"): $prov = "Misiones";
+        elseif ($cliente->provincia === "Q"): $prov = "Neuquén";
+        elseif ($cliente->provincia === "R"): $prov = "Río Negro";
+        elseif ($cliente->provincia === "A"): $prov = "Salta";
+        elseif ($cliente->provincia === "J"): $prov = "San Juan";
+        elseif ($cliente->provincia === "D"): $prov = "San Luis";
+        elseif ($cliente->provincia === "Z"): $prov = "Santa Cruz";
+        elseif ($cliente->provincia === "S"): $prov = "Santa Fe";
+        elseif ($cliente->provincia === "G"): $prov = "Santiago del Estero";
+        elseif ($cliente->provincia === "V"): $prov = "Tierra del Fuego";
+        elseif ($cliente->provincia === "T"): $prov = "Tucumán"; 
+        else: $prov = ucwords(strtolower($cliente->provincia)); endif;
+        $ciudad = ucwords(strtolower($cliente->ciudad));
+        $tel = $cliente->tel;
+        $email = strtolower($cliente->email);
+        $user_id_ml = $cliente->user_id_ml;
+
+        $data = [];
+        $data['apellido'] = $apellido;
+        $data['nombre'] = $nombre;
+        $data['pais'] = $pais;
+        $data['provincia'] = $prov;
+        $data['ciudad'] = $ciudad;
+        $data['tel'] = $tel;
+        $data['email'] = $email;
+        if ($user_id_ml && $user_id_ml != "") {
+          $data['ml_user'] = $user_id_ml;
+        }
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::beginTransaction();
+
+        try {
+          DB::table('clientes')->insert($data);
+          DB::commit();
+
+          \Helper::messageFlash('Clientes','Cliente creado exitosamente.');
+
+          return redirect()->back();
+        } catch (Exception $e) {
+          DB::rollback();
+          return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor']);
+        }
+      }
+    }
 }

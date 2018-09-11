@@ -7,6 +7,16 @@
     <div class="container">
         <h1>Pedidos Cobrados</h1>
 
+        @if (count($errors) > 0)
+            <div class="alert alert-danger text-center">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <br />
 
         <div class="row">
@@ -106,7 +116,7 @@
                                 <a type="button" target="_blank" href="clientes_insertar_web_email.php?order_id={{ $ventasweb->order_id }}" class="btn btn-secondary btn-xs" title="corregir email de ML"><i class="fa fa-pencil" aria-hidden="true"></i> Modificar email de ML</a>
                             @else
                                 {{ $ventasweb->email }}
-                                <a type="button" target="_blank" href="clientes_insertar_web.php?order_item_id={{ $ventasweb->order_item_id  }}" class="btn btn-success btn-xs" title="agregar cliente a base de datos"><i class="fa fa-plus" aria-hidden="true"></i> cliente</a>
+                                <a type="button" href="{{ url('createCustomerWeb',$ventasweb->order_item_id)  }}" class="btn btn-success btn-xs" title="agregar cliente a base de datos"><i class="fa fa-plus" aria-hidden="true"></i> cliente</a>
                             @endif
 
                         @endif
