@@ -327,7 +327,7 @@ class SalesController extends Controller
 
                     DB::commit();
 
-                    return "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
+                    echo "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
 
 
                 } catch (Exception $e) {
