@@ -17,6 +17,14 @@
             </div>
         @endif
 
+        @if (isset($_GET['r']) && isset($_GET['c']) && isset($_GET['u']))
+            <div class="alert alert-danger text-center">
+                <ul>
+                    <li>Este pedido ya fue asignado por {{ $_GET['u'] }} <a href="{{ url('clientes', $_GET['c']) }}" class="alert-link" target="_blank">Ver venta</a></li>
+                </ul>
+            </div>
+        @endif
+
         <br />
 
         @if ($filtros)
@@ -46,8 +54,8 @@
                         <td title="{{ str_replace('-', ' ', $ventasweb->producto)  }}({{ $ventasweb->consola }})">{{ str_replace('-', ' ', $ventasweb->producto)  }} ({{ $ventasweb->consola }})
 
                             @if($ventasweb->cliente_email)
-                            <a title="Asignar" class="btn btn-info btn-xs" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" onClick='document.getElementById("ifr").src="ventas_insertar_web.php?order_item_id={{ $ventasweb->order_item_id  }}&titulo={{ $ventasweb->producto }}&consola={{ $ventasweb->consola }}&slot={{ ucwords($ventasweb->slot) }}";'><i class="fa fa-plus" aria-hidden="true"></i> asignar</a>
-                            <a title="Asignar" class="btn btn-warning btn-xs" type="button" href="ventas_insertar_web.php?order_item_id={{ $ventasweb->order_item_id  }}&titulo={{ $ventasweb->producto }}&consola={{ $ventasweb->consola }}&slot={{ ucwords($ventasweb->slot)  }}"><i class="fa fa-plus" aria-hidden="true"></i> asignar</a>
+                            
+                            <a title="Asignar" class="btn btn-warning btn-xs" type="button" href="{{ url('salesInsertWeb', [$ventasweb->order_item_id, $ventasweb->producto, $ventasweb->consola, ucwords($ventasweb->slot)]) }}"><i class="fa fa-plus" aria-hidden="true"></i> asignar</a>
                             @endif
                             @if($ventasweb->slot == 'secundario')
                             <span class="label label-danger" style="opacity:0.7">2°</span>
@@ -144,7 +152,7 @@
 
                 <li class="disabled"><span>«</span></li>
                 @else
-                <li><a href="{{url('web/sales')}}?pag={{ $previous }}">«</a></li>
+                <li><a href="{{url('web/sales/list')}}?pag={{ $previous }}">«</a></li>
                 @endif 
                
                @if ($paginas >= 1 && $paginas <= 5)
@@ -152,7 +160,7 @@
                    @php 
                    $active = isset($_GET['pag']) ? ($i+1) == $_GET['pag'] ? 'active' : "" : ($i+1) == 1 ? 'active' : ""; 
                    @endphp
-                   <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i+1 ?>"><?= $i+1 ?></a></li>
+                   <li class="{{ $active }}"><a href="{{url('web/sales/list')}}?pag=<?= $i+1 ?>"><?= $i+1 ?></a></li>
                  @endfor
                @else
                  @if (($paginaAct+4) <= ($paginas))
@@ -160,26 +168,26 @@
                         @php
                             $active = isset($_GET['pag']) ? ($i) == $_GET['pag'] ? 'active' : "" : ($i) == 1 ? 'active' : "";
                         @endphp
-                     <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i ?>"><?= $i ?></a></li>
+                     <li class="{{ $active }}"><a href="{{url('web/sales/list')}}?pag=<?= $i ?>"><?= $i ?></a></li>
                    @endfor
                  @elseif ($paginaAct == $paginas)
                    @for ($i=($paginaAct-4);$i<=$paginas;$i++)
                         @php
                             $active = isset($_GET['pag']) ? ($i) == $_GET['pag'] ? 'active' : "" : ($i) == 1 ? 'active' : ""; 
                         @endphp
-                     <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i ?>"><?= $i ?></a></li>
+                     <li class="{{ $active }}"><a href="{{url('web/sales/list')}}?pag=<?= $i ?>"><?= $i ?></a></li>
                    @endfor
                  @else
                    @for ($i=$paginaAct;$i<=$paginas;$i++)
                          @php 
                             $active = isset($_GET['pag']) ? ($i) == $_GET['pag'] ? 'active' : "" : ($i) == 1 ? 'active' : ""; 
                          @endphp
-                     <li class="{{ $active }}"><a href="{{url('web/sales')}}?pag=<?= $i ?>"><?= $i ?></a></li>
+                     <li class="{{ $active }}"><a href="{{url('web/sales/list')}}?pag=<?= $i ?>"><?= $i ?></a></li>
                    @endfor
                  @endif
                  @if (($paginaAct+4) < ($paginas))
                  <li class="disabled"><span>...</span></li>
-                 <li><a href="{{url('web/sales')}}?pag=<?= $paginas ?>"><?= $paginas ?></a></li>
+                 <li><a href="{{url('web/sales/list')}}?pag=<?= $paginas ?>"><?= $paginas ?></a></li>
                  @endif
                @endif
 
@@ -201,7 +209,7 @@
 
                 <li class="disabled"><span>»</span></li>
                 @else
-                <li><a href="{{url('web/sales')}}?pag={{ $next }}" rel="next">»</a></li>
+                <li><a href="{{url('web/sales/list')}}?pag={{ $next }}" rel="next">»</a></li>
                 @endif
             </ul>
 

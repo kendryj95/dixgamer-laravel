@@ -204,7 +204,9 @@ class Pedidos_CobradosController extends Controller
                                             ->groupBy('order_item_id')
                                             ->first();
 
-                $pedidos[] = $info;
+                if ($info != null) {
+                    $pedidos[] = $info;
+                }
             }
 
         }

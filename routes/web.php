@@ -158,6 +158,7 @@ Route::group(['middleware' => ['login']], function()
     Route::get('web/sales/{filtro}','Pedidos_CobradosController@test')->name('web/sales');
     Route::get('/web/sales', function() { return redirect('web/sales/list'); });
     Route::post('getDataClientWebSales','Pedidos_CobradosController@getDataClientWebSales')->name('getDataClientWebSales');
+    Route::get('salesInsertWeb/{oii}/{titulo}/{consola}/{slot?}','SalesController@salesInsertWeb');
 
   Route::get('usuario', 'UsuariosController@create');
 
