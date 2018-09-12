@@ -26,6 +26,7 @@
   @component('components.home.stock')
     @slot('stocks', $stocks)
     @slot('title', 'Stock')
+    @slot('OII', $OII)
   @endcomponent
 
   <!-- PS4 PRIMARIO  -->
@@ -34,6 +35,7 @@
     @slot('title', 'PS4 Primario')
     @slot('sectionId', 'pri')
     @slot('slot', 'Primario')
+    @slot('OII', $OII)
   @endcomponent
 
   <!-- PS4 Secundario  -->
@@ -42,6 +44,7 @@
     @slot('title', 'PS4 Secundario')
     @slot('sectionId', 'secu')
     @slot('slot', 'Secundario')
+    @slot('OII', $OII)
   @endcomponent
 
   <!-- PS3  -->
@@ -50,6 +53,7 @@
     @slot('title', 'PS3')
     @slot('sectionId', 'ps3')
     @slot('slot', 'Primario')
+    @slot('OII', $OII)
   @endcomponent
 
   <!-- PS3 Resetear -->
@@ -57,6 +61,7 @@
     @slot('datas', $ps3_reset_stocks)
     @slot('title', 'PS3 <span class="label label-warning">resetear</span>')
     @slot('sectionId', 'reset')
+    @slot('OII', $OII)
   @endcomponent
 
 

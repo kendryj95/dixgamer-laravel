@@ -11,11 +11,8 @@
 
         <!--- Si hay order item id directamente ya confirmo la venta y dejo de imprimir -->
             <?php if (isset($_GET['order_item_id'])) {
-                $insertGoTo = "ventas_insertar_web.php";
-                if (isset($_SERVER['QUERY_STRING'])) {
-                    $insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
-                    $insertGoTo .= $_SERVER['QUERY_STRING'];
-                }
+                echo '<link href="'.asset('css/bootstrap.css').'" rel="stylesheet">';
+                $insertGoTo = url('salesInsertWeb', [$_GET['order_item_id'], $colname_rsTIT, $colname_rsCON, $colname_rsSlot]);
                 exit("<a href='$insertGoTo' class='btn btn-success'>Confirmar</a></div>");
             }
             ?>

@@ -15,7 +15,7 @@
               </span>
               <a title="vender {{$data->titulo}}"
 
-                  href="{{ url('sales/manual/add',[$data->consola,$data->titulo,$slot]) }}">
+                  href="{{ url('sales/manual/add',[$data->consola,$data->titulo,$slot]) }}{{$OII}}">
 
                 <img src="{{asset('img/productos/'.$data->consola.'/'.$data->titulo.'.jpg')}}" alt="{{$data->consola}} - {{$data->titulo}}.jpg"
                     class="img img-responsive full-width"

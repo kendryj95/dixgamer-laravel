@@ -60,10 +60,7 @@
 				
 				<a type="button" href="{{ url('salesInsertWeb',[$venta->order_item_id, $titulo, $consola, $slot]) }}?c_id={{ $clientes->ID }}" class="btn btn-info pull-right" style="margin-bottom: 20px;"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i> Re Intentar Asignación</a>
 				
-				<?php $insertGoTo = "inicio.php";
-				if (isset($_SERVER['QUERY_STRING'])) {
-				$insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
-				$insertGoTo .= $_SERVER['QUERY_STRING'];}?>
+				<?php $insertGoTo = url('home') . "?order_item_id=$venta->order_item_id";?>
 				<a title="Asignar" class="btn btn-default pull-right" type="button" data-target=".new-example-modal-lg" onClick='document.getElementById("ifr2").src="<?php echo $insertGoTo; ?>";'><i class="fa fa-gamepad" aria-hidden="true"></i> Asignar Otro Producto</a>
 				<div class="row">
 						<!-- Large modal -->
@@ -80,3 +77,15 @@
 </div>
 
 @endsection
+
+@section('scripts')
+
+
+<script>
+	  function resizeIframe(obj) {
+		obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+	  }
+</script>
+
+
+@stop

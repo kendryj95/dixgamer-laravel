@@ -14,7 +14,7 @@
                 {{ str_replace('-', ' ', $stock->titulo) }}
               </span>
               <a title="vender {{$stock->titulo}}"
-                  href="{{ url('sales/manual/add',[$stock->consola,$stock->titulo,'No']) }}">
+                  href="{{ url('sales/manual/add',[$stock->consola,$stock->titulo,'No']) }}{{$OII}}">
 
                 {{-- <img src="/img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg" alt="{{$stock->consola}} - {{$stock->titulo}}.jpg" --}}
                 <img src="{{ asset('img/productos/'.$stock->consola.'/'.$stock->titulo.'.jpg')}}" alt="{{$stock->consola}} - {{$stock->titulo}}.jpg"

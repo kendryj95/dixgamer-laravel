@@ -234,6 +234,12 @@ class SalesController extends Controller
             ]);
         } else {
             $date = date('Y-m-d H:i:s');
+            $order_id_ml = '';
+            $slot_def = '';
+            $medio_cobro = '';
+            $ref_cobro = '';
+            $medio_venta = '';
+            $multiplo = '';
 
             if ($venta) {
                 $clientes_id = $existEmailCliente->ID;
@@ -247,11 +253,11 @@ class SalesController extends Controller
                 //Si es una vta de ps4 o plus slot que NO ES de ML asigno el slot desde la consulta SQL
                 //elseif --> antes de escapar el IF anterior que iba primero
 
-                if (($cons === "ps4") or ($row_rsSTK[0]->titulo === "plus-12-meses-slot")): $slot = ucwords($slot); $estado = "pendiente";
-                elseif ($cons === "ps3"): $slot = "Primario"; $estado = "pendiente";
+                if (($cons === "ps4") or ($row_rsSTK[0]->titulo === "plus-12-meses-slot")): $slot_def = ucwords($slot); $estado = "pendiente";
+                elseif ($cons === "ps3"): $slot_def = "Primario"; $estado = "pendiente";
 
                 //Si no cumple con ninguno de los parametros anteriores seguramente se trata de una venta de Gift Card y el slot se define en "No"
-                else: $slot = "No"; $estado = "listo";
+                else: $slot_def = "No"; $estado = "listo";
                 endif;
 
                 // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
@@ -288,7 +294,7 @@ class SalesController extends Controller
                 $data['stock_id'] = $stock_id;
                 $data['order_item_id'] = $order_item_id;
                 $data['cons'] = $cons;
-                $data['slot'] = $slot;
+                $data['slot'] = $slot_def;
                 $data['medio_venta'] = $medio_venta;
                 
                 if(($order_id_ml) && ($order_id_ml != "")){
@@ -321,7 +327,7 @@ class SalesController extends Controller
 
                     DB::commit();
 
-                    return redirect("clientes/$clientes_id");
+                    return "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
 
 
                 } catch (Exception $e) {

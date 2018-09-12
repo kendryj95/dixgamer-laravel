@@ -23,6 +23,13 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+
+      $OII = '';
+
+      if ($request->order_item_id) {
+        $OII .= "?order_item_id=$request->order_item_id";
+      }
+
       // Extraemos variable de item id
       $order_item_id = $request->order_item_id;
       // Buscamos por medio de un scope creado la orden
@@ -69,7 +76,8 @@ class HomeController extends Controller
               'ps4_primary_stocks',
               'ps4_secundary_stocks',
               'ps3_reset_stocks',
-              'ps3_stocks'
+              'ps3_stocks',
+              'OII'
             ));
     }
 }
