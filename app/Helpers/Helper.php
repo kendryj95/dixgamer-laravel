@@ -153,6 +153,28 @@ class Helper
       return $color;
     }
 
+    public static function medioCobroColor($medio){
+      $color = '';
+      if ($medio == 'MP' || $medio == 'MP - Tarjeta'): $color = "primary";
+      elseif ($medio == 'MP - Ticket'): $color = "success";
+      elseif ($medio == 'Banco'): $color = "default";
+      elseif ($medio == 'Fondos'): $color = "normal";
+      else: $color = "danger";
+      endif;
+
+      return $color;
+    }
+
+    public static function medioVentaColor($medio){
+      $color = '';
+      if ($medio == 'MercadoLibre'): $color = "warning";
+      elseif ($medio == 'Web'): $color = "info";
+      elseif ($medio == 'Mail'): $color = "danger";
+      endif;
+
+      return $color;
+    }
+
 
 
     public static function availableStock($account,$title,$console,$slot = null){

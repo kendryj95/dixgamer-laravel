@@ -276,17 +276,17 @@
             ?>
 
             <?php
-              if (strpos($dataCustomer->medio_venta, 'Web') !== false): $text = 'W'; $color1 = 'info';
-              elseif (strpos($dataCustomer->medio_venta, 'Mail') !== false): $text = 'M'; $color1 = 'danger';
-              elseif (strpos($dataCustomer->medio_venta, 'Mercado') !== false): $text = 'ML'; $color1 = 'warning';
+              if (strpos($dataCustomer->medio_venta, 'Web') !== false): $text = 'W'; $color1 = \Helper::medioVentaColor($dataCustomer->medio_venta);
+              elseif (strpos($dataCustomer->medio_venta, 'Mail') !== false): $text = 'M'; $color1 = \Helper::medioVentaColor($dataCustomer->medio_venta);
+              elseif (strpos($dataCustomer->medio_venta, 'Mercado') !== false): $text = 'ML'; $color1 = \Helper::medioVentaColor($dataCustomer->medio_venta);
               endif;
             ?>
 
             <?php
-              if (strpos($dataCustomer->medio_cobro, 'Transferencia') !== false): $text2 = 'Bco'; $color2 = 'default';
-              elseif (strpos($dataCustomer->medio_cobro, 'Ticket') !== false): $text2 = 'Cash'; $color2 = 'success';
-              elseif (strpos($dataCustomer->medio_cobro, 'Mercado') !== false): $text2 = 'MP'; $color2 = 'primary';
-              elseif (strpos($dataCustomer->medio_cobro, 'Fondo') !== false): $text2 = 'F'; $color2 = 'normal';
+              if ($dataCustomer->medio_cobro == 'Banco'): $text2 = 'Bco'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
+              elseif ($dataCustomer->medio_cobro == 'MP - Ticket'): $text2 = 'Cash'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
+              elseif ($dataCustomer->medio_cobro == 'MP' || $dataCustomer->medio_cobro   == 'MP - Tarjeta'): $text2 = 'MP'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
+              elseif ($dataCustomer->medio_cobro == 'Fondos'): $text2 = 'F'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
               endif;
             ?>
 

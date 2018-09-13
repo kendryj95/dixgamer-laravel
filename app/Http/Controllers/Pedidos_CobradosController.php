@@ -141,7 +141,17 @@ class Pedidos_CobradosController extends Controller
                                             (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='user_id_ml' AND post_id=$data->order_id) AS user_id_ml,
                                             (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='order_id_ml' AND post_id=$data->order_id) AS order_id_ml,
                                             (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method_title' AND post_id=$data->order_id) AS _payment_method_title,
-                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
+                                            (SELECT 
+                                                CASE
+                                                WHEN meta_value LIKE '%_card%' OR meta_value LIKE '%pago-basic' THEN 'MP - Tarjeta'  
+                                                WHEN meta_value LIKE 'account_money%' THEN 'MP'  
+                                                WHEN meta_value LIKE 'ticket_%' OR meta_value LIKE '%pago-ticket' THEN 'MP - Ticket'  
+                                                WHEN meta_value = 'bacs' THEN 'Banco'
+                                                WHEN meta_value = 'fondos' THEN 'Fondos'
+                                                ELSE 'No se encontró medio_pago'
+                                                END 
+                                                FROM cbgw_postmeta 
+                                                WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=$data->order_item_id) AS _qty,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=$data->order_item_id) AS _product_id,
@@ -185,7 +195,17 @@ class Pedidos_CobradosController extends Controller
                                             (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='user_id_ml' AND post_id=$data->order_id) AS user_id_ml,
                                             (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='order_id_ml' AND post_id=$data->order_id) AS order_id_ml,
                                             (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method_title' AND post_id=$data->order_id) AS _payment_method_title,
-                                            (SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
+                                            (SELECT 
+                                                CASE
+                                                WHEN meta_value LIKE '%_card%' OR meta_value LIKE '%pago-basic' THEN 'MP - Tarjeta'  
+                                                WHEN meta_value LIKE 'account_money%' THEN 'MP'  
+                                                WHEN meta_value LIKE 'ticket_%' OR meta_value LIKE '%pago-ticket' THEN 'MP - Ticket'  
+                                                WHEN meta_value = 'bacs' THEN 'Banco'
+                                                WHEN meta_value = 'fondos' THEN 'Fondos'
+                                                ELSE 'No se encontró medio_pago'
+                                                END 
+                                                FROM cbgw_postmeta 
+                                                WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=$data->order_item_id) AS _qty,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=$data->order_item_id) AS _product_id,
