@@ -211,13 +211,10 @@ class Pedidos_CobradosController extends Controller
 
         }
 
-        $filtros = false;
-
-        if (isset($filtro) && $filtro != "list") {
-            $filtros = true;
-        }
+        $numReg = count($pedidos);
+        $paginas = ceil($numReg/20);
         
-        return view('sales.web_sales')->with(['row_rsAsignarVta' => $pedidos, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => $mostrar, "filtros" => $filtros]);
+        return view('sales.web_sales')->with(['row_rsAsignarVta' => $pedidos, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => $mostrar]);
     }
 
     private function consultaPagination($condicion,$inicio, $fin)

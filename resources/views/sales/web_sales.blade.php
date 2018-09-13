@@ -27,16 +27,6 @@
 
         <br />
 
-        @if ($filtros)
-        <br>
-
-
-        <a href="{{url('web/sales/list')}}" class="btn btn-secondary" style="margin-bottom: 10px">Limpiar filtros</a>
-
-        @endif
-
-        <br>
-
         <table class="table table-striped" border="0" cellpadding="0" cellspacing="5">
             <tr>
                 <th width="50">ID</th>
@@ -55,7 +45,7 @@
 
                             @if($ventasweb->cliente_email)
                             
-                            <a title="Asignar" class="btn btn-warning btn-xs" type="button" href="{{ url('salesInsertWeb', [$ventasweb->order_item_id, $ventasweb->producto, $ventasweb->consola, ucwords($ventasweb->slot)]) }}"><i class="fa fa-plus" aria-hidden="true"></i> asignar</a>
+                            <a title="Asignar" class="btn btn-info btn-xs" type="button" href="{{ url('salesInsertWeb', [$ventasweb->order_item_id, $ventasweb->producto, $ventasweb->consola, ucwords($ventasweb->slot)]) }}"><i class="fa fa-plus" aria-hidden="true"></i> asignar</a>
                             @endif
                             @if($ventasweb->slot == 'secundario')
                             <span class="label label-danger" style="opacity:0.7">2°</span>
@@ -104,7 +94,7 @@
                                 <a type="button" target="_blank" href="clientes_insertar_web_email.php?order_id={{ $ventasweb->order_id }}" class="btn btn-secondary btn-xs" title="corregir email de ML"><i class="fa fa-pencil" aria-hidden="true"></i> Modificar email de ML</a>
                             @else
                                 {{ $ventasweb->email }}
-                                <a type="button" href="{{ url('createCustomerWeb',$ventasweb->order_item_id)  }}" class="btn btn-success btn-xs" title="agregar cliente a base de datos"><i class="fa fa-plus" aria-hidden="true"></i> cliente</a>
+                                <a type="button" href="{{ url('createCustomerWeb',$ventasweb->order_item_id)  }}" class="btn btn-info btn-xs" title="agregar cliente a base de datos"><i class="fa fa-plus" aria-hidden="true"></i> cliente</a>
                             @endif
 
                         @endif

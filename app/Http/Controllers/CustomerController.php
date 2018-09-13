@@ -937,7 +937,7 @@ class CustomerController extends Controller
 
           \Helper::messageFlash('Clientes','Cliente creado exitosamente.');
 
-          return redirect()->back();
+          return redirect("web/sales/$email");
         } catch (Exception $e) {
           DB::rollback();
           return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor']);
