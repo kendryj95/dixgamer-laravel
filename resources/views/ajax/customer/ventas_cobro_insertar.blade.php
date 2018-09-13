@@ -16,12 +16,15 @@
              <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span> 
              <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
               @if ($venta_stock->medio_venta == 'Web' || $venta_stock->medio_venta == 'Mail')
-                <option value="MercadoPago - Tarjeta" data-content="<span class='label label-primary'>MercadoPago - Tarjeta</span>">MercadoPago - Tarjeta</option>
-                <option value="MercadoPago - Ticket" data-content="<span class='label label-success'>MercadoPago - Ticket</span>">MercadoPago - Ticket</option>
-                <option value="Deposito/Transferencia" data-content="<span class='label label-info'>Deposito/Transferencia</span>">Deposito/Transferencia</option>
+                <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
+                <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
+                <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
+                <option value="Banco" data-content="<span class='label label-info'>Banco</span>">Banco</option>
+                <option value="Fondos" data-content="<span class='label label-normal'>Fondos</span>">Fondos</option>
               @else
-                <option value="MercadoPago - Tarjeta" data-content="<span class='label label-primary'>MercadoPago - Tarjeta</span>">MercadoPago - Tarjeta</option>
-                <option value="MercadoPago - Ticket" data-content="<span class='label label-success'>MercadoPago - Ticket</span>">MercadoPago - Ticket</option>
+                <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
+                <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
+                <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
               @endif
               </select>                
               </div> 
@@ -79,7 +82,7 @@
     $("form :input").change(function() {
       var val = $('#medio_cobro').val();
       //alert(val2); 
-      if (val == "Deposito/Transferencia") {
+      if (val == "Banco") {
         $("#porcentaje").html("<option value='0.00'>0%</option>");
       } else {
         let html = '<option value="0.13">13 %</option><option selected value="0.0538">6 %</option><option value="0.00">0 %</option>';

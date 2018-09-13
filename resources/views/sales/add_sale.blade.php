@@ -54,12 +54,22 @@
                     <div class="input-group form-group">
                         <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
                         <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
-                            <option selected value="MercadoPago"
-                                    data-content="<span class='label label-primary'>MercadoPago</span>">MercadoPago
+                            <option selected value="MP"
+                                    data-content="<span class='label label-primary'>MP</span>">MP
                             </option>
-                            <option value="Deposito/Transferencia"
-                                    data-content="<span class='label label-info'>Deposito/Transferencia</span>">
-                                Deposito/Transferencia
+                            <option value="MP - Tarjeta"
+                                    data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta
+                            </option>
+                            <option value="MP - Ticket"
+                                    data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket
+                            </option>
+                            <option value="Banco"
+                                    data-content="<span class='label label-info'>Banco</span>">
+                                Banco
+                            </option>
+                            <option value="Fondos"
+                                    data-content="<span class='label label-normal'>Fondos</span>">
+                                Banco
                             </option>
                         </select>
                     </div>
@@ -165,7 +175,7 @@
             });
 
             // To style only <select>s with the selectpicker class
-            $('.selectpicker').selectpicker();
+            // $('.selectpicker').selectpicker();
         });
     </script>
     <script type="text/javascript">
@@ -206,13 +216,13 @@
                 //alert(val2);
                 if (val == "MercadoLibre") {
                     $("#porcentaje").html("<option value='0.12'>12 %</option>");
-                } else if (val == "Mail" && val2 == "MercadoPago") {
+                } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
                     $("#porcentaje").html("<option value='0.0538'>6 %</option>");
-                } else if (val == "Mail" && val2 == "Deposito/Transferencia") {
+                } else if (val == "Mail" && val2 == "Banco") {
                     $("#porcentaje").html("<option value='0.00'>0 %</option>");
-                } else if (val == "Web" && val2 == "MercadoPago") {
+                } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
                     $("#porcentaje").html("<option value='0.0538'>6 %</option>");
-                } else if (val == "Web" && val2 == "Deposito/Transferencia") {
+                } else if (val == "Web" && val2 == "Banco") {
                     $("#porcentaje").html("<option value='0.00'>0 %</option>");
                 }
             });

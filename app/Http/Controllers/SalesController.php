@@ -161,8 +161,18 @@ class SalesController extends Controller
                               'p.ID as post_id',
                               'p.post_status as estado',
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_email' AND post_id=p.ID) AS email"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method_title' AND post_id=p.ID) AS medio_pago"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_payment_method' AND post_id=p.ID) AS medio_pago_2"),
+                              DB::raw("
+                                (SELECT 
+                                CASE
+                                WHEN meta_value LIKE '%_card%' OR meta_value LIKE '%pago-basic' THEN 'MP - Tarjeta'  
+                                WHEN meta_value LIKE 'account_money%' THEN 'MP'  
+                                WHEN meta_value LIKE 'ticket_%' OR meta_value LIKE '%pago-ticket' THEN 'MP - Ticket'  
+                                WHEN meta_value = 'bacs' THEN 'Banco'
+                                WHEN meta_value = 'fondos' THEN 'Fondos'
+                                ELSE 'No se encontró medio_pago'
+                                END  
+                                FROM cbgw_postmeta 
+                                WHERE meta_key='_payment_method' AND post_id=p.ID) AS medio_pago"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_Mercado_Pago_Payment_IDs' AND post_id=p.ID) AS ref_cobro"),
                               DB::raw("(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(meta_value, 'payment_id=', -1),'&',1) FROM cbgw_postmeta WHERE meta_key='_transaction_details_ticket' AND post_id=p.ID) AS ref_cobro_2"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id=p.ID) AS ref_cobro_3"),
@@ -264,10 +274,11 @@ class SalesController extends Controller
                 if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
                 $medio_venta = "MercadoLibre";
                 $order_id_ml = $venta->order_id_ml;
-                    if (strpos($venta->medio_pago_2, '_card') !== false): $medio_cobro = "Mercado Pago - Tarjeta";
+                $medio_cobro = $venta->medio_pago;
+                    /*if (strpos($venta->medio_pago_2, '_card') !== false): $medio_cobro = "Mercado Pago - Tarjeta";
                     // 2018-05-19 --> no estoy seguro si el medio de pago sale con la palabra ticket cuando es ticket
                     elseif (strpos($venta->medio_pago_2, 'ticket') !== false): $medio_cobro = "Mercado Pago - Ticket";
-                    else: $medio_cobro = "Mercado Pago"; endif;
+                    else: $medio_cobro = "Mercado Pago"; endif;*/
                 $ref_cobro = $venta->ref_cobro_3;
                 $multiplo = "0.12";
                 } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
@@ -277,8 +288,8 @@ class SalesController extends Controller
                     if (($venta->ref_cobro_2) && ($venta->ref_cobro_2 != "")): $ref_cobro = $venta->ref_cobro_2;
                     elseif (($venta->ref_cobro) && ($venta->ref_cobro != "")): $ref_cobro = $venta->ref_cobro;
                     endif;
-                    if (strpos($venta->medio_pago, 'Transferencia') !== false): $multiplo = "0.00";
-                    elseif (strpos($venta->medio_pago, 'Mercado Pago') !== false): $multiplo = "0.0538";
+                    if (strpos($venta->medio_pago, 'Banco') !== false): $multiplo = "0.00";
+                    elseif (strpos($venta->medio_pago, 'MP') !== false): $multiplo = "0.0538";
                     elseif (strpos($venta->medio_pago, 'Tarjeta') !== false): $multiplo = "0.0538";
                     elseif (strpos($venta->medio_pago, 'Ticket') !== false): $multiplo = "0.0538";
                     elseif (strpos($venta->medio_pago, 'PayPal') !== false): $multiplo = "0.99"; // TODAVIA NO SE LA TASA DE PAYPAL AVERIGUAR
