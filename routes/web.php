@@ -170,4 +170,9 @@ Route::group(['middleware' => ['login']], function()
 
   Route::post('usuario/edit', 'UsuariosController@storeEdit');
 
+  // Rutas de Control
+
+  Route::get('control_ventas_bancos','ControlsController@ventasPerBancos');
+  Route::get('verificar_venta_banco/{id}','ControlsController@verificarVentaPerBanco')->where(['id' => '[\d]+']);
+
 });
