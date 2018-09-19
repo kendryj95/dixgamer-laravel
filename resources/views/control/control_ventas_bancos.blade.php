@@ -56,19 +56,7 @@
 			$persona = $venta->ventas_usuario;
 		?>
 		
-        <?php
-		// Aplico un mejor criterio de "asignar" costo a las ventas de PS3, si el jugo tiene 4 o mas ventas le asigno costo proporcional, si tiene menos ventas le asigno solo el 25%
-		if($venta->q_vta > 3): $proporcional = (1 / $venta->q_vta);
-		else: $proporcional = 0.25;
-		endif;
-		?>
-        <?php 
-				if (($venta->consola == 'ps4') && ($venta->slot == 'Primario')): $costo = round($venta->costo * 0.6); 
-				elseif (($venta->consola == 'ps4') && ($venta->slot == 'Secundario')): $costo = round($venta->costo * 0.4);
-				elseif ($venta->consola == 'ps3'): $costo = round($venta->costo * $proporcional);
-				elseif (($venta->consola !== 'ps4') && ($venta->consola !== 'ps3') && ($venta->titulo !== 'plus-12-meses-slot')): $costo = round($venta->costo);
-            endif;
-			?>
+        
           	<td><?php echo $i+1;?></td>
           	<td><?php echo $venta->ID_ventas; ?></td>
             <td><?php echo date("d-M", strtotime($venta->ventas_Day)); ?></td>
@@ -77,7 +65,7 @@
             <td><small class="label label-<?php echo $color1;?>" style="opacity:0.7; font-weight:400;" title="<?php echo $venta->medio_venta; ?>"><?php echo $text;?></small> <small class="label label-<?php echo $color2;?>" style="opacity:0.7; font-weight:400;" title="<?php echo $venta->medio_cobro; ?>"><?php echo $text2;?></small></td>
             <td><span class="<?php if ($venta->precio < 1):?>badge badge-danger<?php endif;?>"><?php echo round($venta->precio); ?></span></td>
             <td><span class="badge badge-{{ \Helper::userColor($venta->ventas_usuario) }} pull-left" style="opacity:0.7; font-weight:400;" title="{{ $venta->ventas_usuario }}"><?php echo substr($venta->ventas_usuario,0 , 1); ?></span></td>
-            <td align="left">@if ($venta->verificado == 1) <i class="fa fa-check text-muted pull-left" title="Verificado"></i> @else <a href="{{ url('verificar_venta_banco',$venta->ID_ventas) }}" class="pull-left" title="Sin verificar"><i class="fa fa-check"></i></a> @endif</td>
+            <td align="left">@if ($venta->verificado == 1) <i class="fa fa-check text-muted pull-left" title="Verificado"></i> @else <a href="{{ url('verificar_venta_banco',$venta->cobro_ID) }}" class="pull-left" title="Sin verificar"><i class="fa fa-check"></i></a> @endif</td>
             
           </tr>
         @endforeach

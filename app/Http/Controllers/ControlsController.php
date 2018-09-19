@@ -9,9 +9,10 @@ class ControlsController extends Controller
 {
     public function ventasPerBancos()
     {
-    	$ventas = DB::table('ventas_cobro_bancos AS vcb')
+    	$ventas = DB::table('ventas_cobro')
     				->select(
-    					'vcb.ventas_id AS ID_ventas',
+    					'ventas.ID AS ID_ventas',
+    					'ventas_cobro.ID AS cobro_ID',
     					'clientes_id',
     					'stock_id',
     					'slot',
@@ -28,15 +29,13 @@ class ControlsController extends Controller
     					'consola',
     					'cuentas_id',
     					'costo',
-    					'q_vta',
     					'verificado'
     				)
-    				->leftjoin('ventas','ventas.ID','=','vcb.ventas_id')
-    				->leftjoin(DB::raw("(SELECT * FROM ventas_cobro WHERE medio_cobro='Banco') AS ventas_cobro"),'ventas_cobro.ventas_id','=','vcb.ventas_id')
+    				->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
     				->leftjoin('clientes','ventas.clientes_id','=','clientes.ID')
-    				->leftjoin(DB::raw("(select ID, titulo, consola, cuentas_id, costo, q_vta FROM stock LEFT JOIN (select count(*) as q_vta, stock_id from ventas group by stock_id) AS vendido ON stock.ID = vendido.stock_id) AS stock"),'ventas.stock_id','=','stock.ID')
-    				->groupBy('ID_ventas')
-    				->orderBy('ID_ventas','DESC')
+    				->leftjoin('stock','ventas.stock_id','=','stock.ID')
+    				->leftjoin('ventas_cobro_bancos AS vcb','ventas_cobro.ID','=','vcb.cobros_id')
+    				->where('medio_cobro','Banco')
     				->get();
 
     	$tamPag = 50;
@@ -59,9 +58,10 @@ class ControlsController extends Controller
 
     private function consultaPagination($inicio,$fin)
     {
-    	$ventas = DB::table('ventas_cobro_bancos AS vcb')
+    	$ventas = DB::table('ventas_cobro')
     				->select(
-    					'vcb.ventas_id AS ID_ventas',
+    					'ventas.ID AS ID_ventas',
+    					'ventas_cobro.ID AS cobro_ID',
     					'clientes_id',
     					'stock_id',
     					'slot',
@@ -78,15 +78,13 @@ class ControlsController extends Controller
     					'consola',
     					'cuentas_id',
     					'costo',
-    					'q_vta',
     					'verificado'
     				)
-    				->leftjoin('ventas','ventas.ID','=','vcb.ventas_id')
-    				->leftjoin(DB::raw("(SELECT * FROM ventas_cobro WHERE medio_cobro='Banco') AS ventas_cobro"),'ventas_cobro.ventas_id','=','vcb.ventas_id')
+    				->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
     				->leftjoin('clientes','ventas.clientes_id','=','clientes.ID')
-    				->leftjoin(DB::raw("(select ID, titulo, consola, cuentas_id, costo, q_vta FROM stock LEFT JOIN (select count(*) as q_vta, stock_id from ventas group by stock_id) AS vendido ON stock.ID = vendido.stock_id) AS stock"),'ventas.stock_id','=','stock.ID')
-    				->groupBy('ID_ventas')
-    				->orderBy('ID_ventas','DESC')
+    				->leftjoin('stock','ventas.stock_id','=','stock.ID')
+    				->leftjoin('ventas_cobro_bancos AS vcb','ventas_cobro.ID','=','vcb.cobros_id')
+    				->where('medio_cobro','Banco')
     				->offset($inicio)
     				->limit($fin)
     				->get();
@@ -99,7 +97,7 @@ class ControlsController extends Controller
     	DB::beginTransaction();
 
     	try {
-    		DB::table('ventas_cobro_bancos')->where('ventas_id',$id)->update(['verificado' => 1]);
+    		DB::table('ventas_cobro_bancos')->where('cobros_id',$id)->update(['verificado' => 1]);
     		DB::commit();
 
     		\Helper::messageFlash('Ventas Cobro','Venta verificada.');
