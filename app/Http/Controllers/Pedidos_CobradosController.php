@@ -231,9 +231,6 @@ class Pedidos_CobradosController extends Controller
 
         }
 
-        $numReg = count($pedidos);
-        $paginas = ceil($numReg/20);
-        
         return view('sales.web_sales')->with(['row_rsAsignarVta' => $pedidos, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => $mostrar]);
     }
 
