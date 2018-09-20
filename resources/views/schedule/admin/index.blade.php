@@ -39,7 +39,7 @@
 										<td><span class="label label-{{$shedule->color}}"><strong>{{strtoupper(substr($shedule->usuario,0,1))}}</strong></span></td>
 										<td>{{ number_format((float)$shedule->Q_horas, 2, ',', '') }}</td>
 										<td>@if ($shedule->verificado == 'si') <i class="fa fa-check fa-fw" style="color:#ddd;" aria-hidden="true"></i> @else <a class="text-center btn btn-success btn-xs" title="verificar" href="{{url("horarios/verificar/$shedule->ID")}}"><i class="fa fa-check fa-fw"  aria-hidden="true"></i></a> @endif</td>
-										<td><a href="horarios/edit/{{$shedule->ID}}" class="btn-xs"><i class="fa fa-pencil" title="Editar horario"></i></a></td>
+										<td><a href="javascript:void(0)" onclick="getPageAjax("{{ url('horarios/edit', $shedule->ID) }}", "#modalHorario", {{ $shedule->ID }})" class="btn-xs"><i class="fa fa-pencil" title="Editar horario"></i></a></td>
 	
 									</tr>
 								@endforeach
@@ -74,6 +74,17 @@
 
         @endif
 
+      </div>
+    </div>
+
+    <div class="modal fade modalHorario" id="modalHorario" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog modal-lg" style="top:40px;">
+        <div class="modal-content">
+          
+          <div class="modal-body" style="text-align:center;padding:10px;">
+          </div>
+          
+        </div>
       </div>
     </div>
 

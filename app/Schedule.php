@@ -36,7 +36,7 @@ class Schedule extends Model
   }
 
   public function ScopeShedulesDayAdmin($query){
-    return $query->select(DB::raw("*, (time_to_sec(timediff(fin, inicio)) / 3600) as Q_horas, usuarios.color"))
+    return $query->select(DB::raw("horario.*, (time_to_sec(timediff(fin, inicio)) / 3600) as Q_horas, usuarios.color"))
                 ->leftJoin('usuarios', 'horario.usuario', '=', 'usuarios.Nombre')
                 ->whereRaw("(date_format(Day, '%%Y-%%m')=date_format(NOW(), '%%Y-%%m') or (date_format(Day, '%%Y-%%m') = date_format((DATE_SUB(curdate(), INTERVAL 1 MONTH)), '%%Y-%%m'))) AND fin IS NOT NULL")
                 ->orderByRaw('Day DESC, inicio DESC');
