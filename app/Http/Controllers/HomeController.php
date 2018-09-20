@@ -30,14 +30,16 @@ class HomeController extends Controller
         $OII .= "?order_item_id=$request->order_item_id";
       }
 
-      // Extraemos variable de item id
-      $order_item_id = $request->order_item_id;
-      // Buscamos por medio de un scope creado la orden
-      $sales_order_item = Sale::salesFromOrderId($order_item_id)->first();
+      if (isset($request->order_item_id)) {
+        // Extraemos variable de item id
+        $order_item_id = $request->order_item_id;
+        // Buscamos por medio de un scope creado la orden
+        $sales_order_item = Sale::salesFromOrderId($order_item_id)->first();
 
-      // si la venta existe aviso al gestor
-      if ($sales_order_item) {
-        echo "Este pedido ya fue asignado por ".$sales_order_item->usuario." <br><a href='/clientes_detalles/".$sales_order_item->clientes_id."' target='_blank'>Ver Venta</a>";
+        // si la venta existe aviso al gestor
+        if ($sales_order_item) {
+          echo "Este pedido ya fue asignado por ".$sales_order_item->usuario." <br><a href='/clientes_detalles/".$sales_order_item->clientes_id."' target='_blank'>Ver Venta</a>";
+        }
       }
 
 
