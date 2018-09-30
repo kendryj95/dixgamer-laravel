@@ -42,10 +42,13 @@ Route::group(['middleware' => ['login']], function()
   Route::post('customer_ventas_modificar_store', 'CustomerController@ventasModificarStore');
   Route::get('customer_ventas_modificar_producto/{id}', 'CustomerController@ventasModificarProductos');
   Route::get('customer_ventas_modificar_producto_store/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@ventasModificarProductosStore');
+  Route::get('customer_duplicar_venta/{id}', 'CustomerController@duplicarVenta');
+  Route::get('customer_duplicar_venta_store/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@duplicarVentaStore');
   Route::get('customer_ventas_eliminar/{id}', 'CustomerController@ventasEliminar');
   Route::post('customer_ventas_eliminar', 'CustomerController@ventas_delete');
   Route::get('customer_ventas_quitar_producto/{id}', 'CustomerController@ventarQuitarProducto');
   Route::get('customer_confirmUpdateProduct/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@confirmUpdateProduct');
+  Route::get('customer_confirmDuplicarVenta/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@confirmDuplicarVenta');
   Route::post('customer_saveML', 'CustomerController@storeML');
   Route::get('customer_ventas_cobro_modificar/{id}', 'CustomerController@ventasCobroModificar');
   Route::post('customer_ventas_cobro_modificar', 'CustomerController@ventasCobroModificarStore');

@@ -106,7 +106,9 @@ class Pedidos_CobradosController extends Controller
                                 cbgw_woocommerce_order_items as wco
                                 LEFT JOIN cbgw_posts as p
                                 ON wco.order_id = p.ID
-                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order'
+                                LEFT JOIN ventas v ON wco.order_item_id=v.order_item_id
+                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order' and order_item_type='line_item'
+                                AND v.order_item_id IS NULL
                                 $condicion
                                 GROUP BY wco.order_item_id
                                 ORDER BY order_item_id DESC");
@@ -153,17 +155,26 @@ class Pedidos_CobradosController extends Controller
                                                 FROM cbgw_postmeta 
                                                 WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=$data->order_item_id) AS _qty,
-                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot_original,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=$data->order_item_id) AS _product_id,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_variation_id' AND order_item_id=$data->order_item_id) AS _variation_id) r"))
                                             ->select(
                                                 "r.*",
-                                                "v.cons AS consola",
                                                 "c.ID AS cliente_ID",
                                                 "c.email AS cliente_email",
                                                 "c.auto AS cliente_auto",
-                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola")
+                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola"),
+                                                DB::raw("(CASE 
+                                                             WHEN slot_original IS NOT NULL THEN slot_original 
+                                                             Else 
+                                                             (CASE WHEN q_variation = 2 then 'primario' 
+                                                             WHEN q_variation = 1 then 'secundario' 
+                                                             ELSE slot_original 
+                                                             END) 
+                                                             END) AS slot"),
+                                                "variaciones.*"
                                             )
+                                            ->leftjoin(DB::raw("(SELECT post_parent, count(*) as q_variation FROM `cbgw_posts` where post_type='product_variation' group by post_parent ASC ORDER BY `cbgw_posts`.`post_parent` DESC) as variaciones"),"r._product_id","=","variaciones.post_parent")
                                             ->leftjoin('clientes AS c','c.email','=','r.email')
                                             ->leftjoin('ventas AS v','v.order_item_id','=','r.order_item_id')
                                             ->where('r.email','LIKE',"$filtro%")
@@ -171,10 +182,8 @@ class Pedidos_CobradosController extends Controller
                                             ->groupBy('order_item_id')
                                             ->first();
 
-                if ($info != null) {
-                    
-                    $pedidos[] = $info;
-                }
+                
+                $pedidos[] = $info;
 
                 $mostrar = false;
 
@@ -207,26 +216,35 @@ class Pedidos_CobradosController extends Controller
                                                 FROM cbgw_postmeta 
                                                 WHERE meta_key='_payment_method' AND post_id=$data->order_id) AS _payment_method,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=$data->order_item_id) AS _qty,
-                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot,
+                                            (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$data->order_item_id) AS slot_original,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=$data->order_item_id) AS _product_id,
                                             (SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_variation_id' AND order_item_id=$data->order_item_id) AS _variation_id) r"))
                                             ->select(
                                                 "r.*",
-                                                "v.cons AS consola",
                                                 "c.ID AS cliente_ID",
                                                 "c.email AS cliente_email",
                                                 "c.auto AS cliente_auto",
-                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola")
+                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola"),
+                                                DB::raw("(CASE 
+                                                             WHEN slot_original IS NOT NULL THEN slot_original 
+                                                             Else 
+                                                             (CASE WHEN q_variation = 2 then 'primario' 
+                                                             WHEN q_variation = 1 then 'secundario' 
+                                                             ELSE slot_original 
+                                                             END) 
+                                                             END) AS slot"),
+                                                "variaciones.*"
                                             )
+                                            ->leftjoin(DB::raw("(SELECT post_parent, count(*) as q_variation FROM `cbgw_posts` where post_type='product_variation' group by post_parent ASC ORDER BY `cbgw_posts`.`post_parent` DESC) as variaciones"),"r._product_id","=","variaciones.post_parent")
                                             ->leftjoin('clientes AS c','c.email','=','r.email')
                                             ->leftjoin('ventas AS v','v.order_item_id','=','r.order_item_id')
                                             ->whereNull('v.order_item_id')
                                             ->groupBy('order_item_id')
                                             ->first();
 
-                if ($info != null) {
-                    $pedidos[] = $info;
-                }
+                
+                $pedidos[] = $info;
+
             }
 
         }
@@ -244,7 +262,9 @@ class Pedidos_CobradosController extends Controller
                                 cbgw_woocommerce_order_items as wco
                                 LEFT JOIN cbgw_posts as p
                                 ON wco.order_id = p.ID
-                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order' and wco.order_item_name NOT LIKE 'fifa 19%' and wco.order_item_name NOT LIKE 'pes 2019%'
+                                LEFT JOIN ventas v ON wco.order_item_id=v.order_item_id
+                                WHERE p.post_status = 'wc-processing' and p.post_type='shop_order' and order_item_type='line_item'
+                                AND v.order_item_id IS NULL
                                 $condicion
                                 GROUP BY wco.order_item_id
                                 ORDER BY order_item_id DESC LIMIT $inicio,$fin");

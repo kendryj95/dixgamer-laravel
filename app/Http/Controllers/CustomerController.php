@@ -389,6 +389,51 @@ class CustomerController extends Controller
       }
     }
 
+    public function duplicarVenta($id)
+    {
+
+      /***  Stock Nuevo  ***/
+      $obj = new \stdClass;
+      $obj->console_1 = 'ps4';
+      $obj->console_2 = 'ps3';
+      $obj->title = 'plus-12-meses-slot';
+
+      $stocks = Stock::showStock($obj)->get();
+      /***     PS4 PRIMARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps4';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'primary';
+      $ps4_primary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
+
+      //dd($stocks);
+      /***     PS4 SECUNDARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps4';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'secundary';
+      $ps4_secundary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
+
+      /***     PS3     ***/
+      $ps3_stocks =  Stock::ps3();
+
+      /***     PS3 Resetear    ***/
+      $ps3_reset_stocks =  Stock::ps3Resetear();
+
+      $id_ventas = $id;
+      return view('ajax.customer.venta_duplicar_producto',
+            compact(
+              'stocks',
+              'ps4_primary_stocks',
+              'ps4_secundary_stocks',
+              'ps3_reset_stocks',
+              'ps3_stocks',
+              'id_ventas'
+            ));
+    }
+
     public function ventasModificarProductos($id)
     {
 
@@ -432,6 +477,86 @@ class CustomerController extends Controller
               'ps3_stocks',
               'id_ventas'
             ));
+    }
+
+    public function confirmDuplicarVenta($consola, $titulo, $slot, $id_ventas)
+    {
+      $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+      $errors = [];
+      $stk_ID = '';
+      $consola = $consola;
+      $titulo = $titulo;
+      $slot = $slot;
+      $id_ventas = $id_ventas;
+
+      // dd($row_rsSTK);
+
+      if(!is_array($row_rsSTK)) {
+          $errors[] = "No hay stock disponibles.";
+      } else {
+        $stk_ID = $row_rsSTK[0]->ID_stk;
+      }
+
+      return view('ajax.customer.confirmDuplicarVenta', compact('errors', 'stk_ID', 'consola', 'titulo', 'slot', 'id_ventas'));
+
+      
+    }
+
+    public function duplicarVentaStore($consola, $titulo, $slot, $id_ventas)
+    {
+      
+      $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+      
+      $stk_ID = $row_rsSTK[0]->ID_stk;
+      
+      // Obtengo los datos de la venta anterior y ventas_cobro para duplicar los datos.
+      $venta_anterior = DB::table('ventas')->where('ID', $id_ventas)->first();
+      $venta_cobro_anterior = DB::table('ventas_cobro')->where('ventas_id', $id_ventas)->first();
+
+      DB::beginTransaction();
+
+      $date = date('Y-m-d H:i:s');
+      $vendedor = session()->get('usuario')->Nombre;
+
+      try {
+        
+        $data = [];
+        $data['clientes_id'] = $venta_anterior->clientes_id;
+        $data['stock_id'] = $stk_ID;
+        $data['order_item_id'] = $venta_anterior->order_item_id;
+        $data['cons'] = $consola;
+        $data['slot'] = $slot;
+        $data['medio_venta'] = $venta_anterior->medio_venta;
+        $data['order_id_ml'] = $venta_anterior->order_id_ml;
+        $data['order_id_web'] = $venta_anterior->order_id_web;
+        $data['estado'] = $venta_anterior->estado;
+        $data['Day'] = $date;
+        $data['usuario'] = $vendedor;
+
+        $idventa = DB::table('ventas')->insertGetId($data);
+
+        $data = [];
+        $data['ventas_id'] = $idventa;
+        $data['medio_cobro'] = $venta_cobro_anterior->medio_cobro;
+        $data['ref_cobro'] = $venta_cobro_anterior->ref_cobro;
+        $data['precio'] = 0;
+        $data['comision'] = 0;
+        $data['Day'] = $date;
+        $data['usuario'] = $vendedor;
+
+        DB::table('ventas_cobro')->insert($data);
+
+
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Venta duplicada.');
+
+        return redirect()->back();
+
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+      }
     }
 
     public function ventasModificarProductosStore($consola, $titulo, $slot, $id_ventas)
