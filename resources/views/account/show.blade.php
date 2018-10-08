@@ -178,7 +178,7 @@
 											</span>
 											-
 											<span id="months">
-												{{$account->year}}
+												{{$account->months}}
 											</span>
 											-
 											<span id="years">
