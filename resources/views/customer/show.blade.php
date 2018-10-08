@@ -911,8 +911,14 @@
 
                                     <div>
                                         <label>Correo electrónico</label>
-                                        <input type="text" class="form-control" id="correo_cliente" value="">
+                                        {{-- <input type="text" class="form-control" id="correo_cliente" value=""> --}}
                                         <input type="hidden" id="idcustomer" value="">
+
+                                        <div id="user-result-div2" class="input-group form-group">
+                                          <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                                          <input class="form-control" type="text" name="correo_cliente" id="correo_cliente" autocomplete="off" spellcheck="false" placeholder="Email" autofocus>
+                                          <span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -1243,6 +1249,32 @@
                     $('.modal-body #idcustomer').val(ID);
                 }
             });
+        });
+
+        var x_timer;
+        $("#correo_cliente").keyup(function (e){
+            clearTimeout(x_timer);
+            var user_name = $(this).val();
+            x_timer = setTimeout(function(){
+
+               document.getElementById("user-result").className = "fa fa-spinner fa-pulse fa-fw";
+
+                $.post('{{ url("customer_ctrl_email") }}', {'email':user_name}, function(data) {
+                  if (data) {
+                    document.getElementById("user-result").className = 'fa fa-ban';
+                  }else{
+                    document.getElementById("user-result").className = 'fa fa-check';
+                  }
+                  var test = document.getElementById("user-result");
+                  var testClass = test.className;
+
+                  switch(testClass){
+                    case "fa fa-ban": document.getElementById("user-result-div2").className = "input-group form-group has-error"; break;
+                    case "fa fa-check": document.getElementById("user-result-div2").className = "input-group form-group has-success"; break;
+                  }
+
+                });
+            }, 1000);
         });
 
         $('#saveEditEmail').on('click',function (e) {
