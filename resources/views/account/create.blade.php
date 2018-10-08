@@ -31,6 +31,7 @@
 						autocomplete="off"
 						spellcheck="false"
 						placeholder="Email real (secreto)"
+						value="{{ $idcuenta }}" 
 						autofocus>
 					<span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
 				</div>
@@ -42,6 +43,7 @@
 					name="mail_fake"
 					id="mail_fake"
 					autocomplete="off"
+					value="{{ $emailcuenta }}" 
 					placeholder="Email falso: 'alt. ...'">
 					<span class="input-group-addon"><i id="ml-user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
 				</div>
