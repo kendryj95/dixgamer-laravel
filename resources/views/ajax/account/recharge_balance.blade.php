@@ -38,14 +38,14 @@
         @endif
 
         @php
-            if(($gift->costo_usd*100) < 30) {
+            if(($gift->costo_usd) < 30) {
               $gifts_array[] = [
                 "account_id" => $account_id,
                 "titulo" => $gift->titulo,
                 "consola" => $gift->consola,
-                "costo_usd" => $gift->costo_usd*100
+                "costo_usd" => $gift->costo_usd
               ];
-            } elseif (($gift->costo_usd*100) < 60) {
+            } elseif (($gift->costo_usd) < 60) {
               if ($bandera1 == 2) { // Para 20+10 y 20+20
                 $gifts_array[] = [
                   "account_id" => $account_id,
@@ -66,7 +66,7 @@
                   "account_id" => $account_id,
                   "titulo" => $gift->titulo,
                   "consola" => $gift->consola,
-                  "costo_usd" => $gift->costo_usd*100
+                  "costo_usd" => $gift->costo_usd
               ];
             } else {
               if ($bandera3 != 0) {
@@ -81,7 +81,7 @@
                   "account_id" => $account_id,
                   "titulo" => $gift->titulo,
                   "consola" => $gift->consola,
-                  "costo_usd" => $gift->costo_usd*100
+                  "costo_usd" => $gift->costo_usd
               ];
             }
         @endphp
