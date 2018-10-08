@@ -34,16 +34,35 @@ class EditButtonsController extends Controller
     }
 
     public function saveDataEmail(Request $request){
+
+        $status = '';
+
         $prevName = DB::table('clientes')
             ->where('ID',$request->id)->first();
 
+        $check = DB::table('clientes_email')->where('email', $request->email)->first();
+
         if ($prevName->email != $request->email) {
-            DB::table('clientes')
-            ->where('ID',$request->id)->update(['email' => $request->email]);
+
+            if ($check) {
+                if (($check->email != $request->email) || ($check->email == $request->email && $check->clientes_id == $request->id)) {
+                    DB::table('clientes')
+                    ->where('ID',$request->id)->update(['email' => $request->email]);
+                    $status = 200;
+                } else {
+                    $status = 500;
+                }
+            } else {
+                DB::table('clientes')
+                ->where('ID',$request->id)->update(['email' => $request->email]);
+                $estatus = 200;
+            }
             
             DB::table('clientes_notas')->insert(['notas' => 'Email Anterior: ' . $prevName->email,
             'clientes_id' => $prevName->ID ,
             'usuario' => session()->get('usuario')->Nombre , 'Day' => (string)\Carbon\Carbon::now()]);
+        } else {
+            $status = 505;
         }
 
         $exists = DB::table('clientes_email')->where('email',$request->email)->first();
@@ -56,7 +75,7 @@ class EditButtonsController extends Controller
             DB::table('clientes_email')->insert($data);
         }
 
-        return Response()->json('Variable de Correo Actualizada');
+        echo json_encode(["status" => $status]);
     }
 
     public function saveDataML(Request $request){

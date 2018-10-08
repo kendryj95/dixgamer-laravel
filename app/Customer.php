@@ -151,7 +151,7 @@ class Customer extends Model
 
     // Almacenando clientes
     public function storeCustomer($customer){
-      DB::table('clientes')->insert($customer);
+      return DB::table('clientes')->insertGetId($customer);
     }
 
     public function scopeInfoCustomerVentas($query, $id)

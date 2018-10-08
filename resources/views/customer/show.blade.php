@@ -1257,9 +1257,17 @@
                   method: 'post',
                   url: '{{url("saveDataEmail")}}',
                   data: { '_token':token, 'email':email,'id':id },
-                  success: function (result) {
+                  success: function (response) {
 
-                      location.reload();
+                      var data = JSON.parse(response);
+
+                      if (data.status == 200) {
+                          location.reload();
+                      } else if(data.status == 505) {
+                        $('#alert-email').html('<p>Este email ya lo estás usando como primario.</p>').fadeIn();
+                      } else {
+                        $('#alert-email').html('<p>Este email ya existe.</p>').fadeIn();
+                      }
                   }
               });
             } else {

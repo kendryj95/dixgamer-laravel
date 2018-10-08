@@ -109,7 +109,13 @@ class CustomerController extends Controller
 
         // Creamos objeto de customer para llamar a la funcion creadora
         $c = new Customer();
-        $c->storeCustomer($customer);
+        $cliente_id = $c->storeCustomer($customer);
+
+        DB::table('clientes_email')->insert(['clientes_id' => $cliente_id, 'email' => $request->email]);
+
+        if ($request->ml_user != "") {
+          DB::table('clientes_ml_user')->insert(['clientes_id' => $cliente_id, 'ml_user' => $request->ml_user]);
+        }
 
         // Mensaje de notificacion
         \Helper::messageFlash('Clientes','Cliente guardado');
