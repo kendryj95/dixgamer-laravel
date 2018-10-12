@@ -1,6 +1,6 @@
 @if(count($stocks) > 0)
   <div class="row">
-    <div class="page-header"><h3>{{ $title }}</h3> </div>
+    <div class="page-header"><h3 style="color:#000;text-align: left;">{{ $title }}</h3> </div>
 
     <?php // Si hay stock los recorre ?>
     @foreach($stocks as $stock)
