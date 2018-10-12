@@ -159,7 +159,7 @@ class AccountController extends Controller
     {
         $vendedor = strtolower(session()->get('usuario')->Nombre);
         $emailcuenta1 = substr($vendedor, 0, 2);
-        $emailcuenta2 = (DB::table('cuentas')->count() + 1) - 15658;
+        $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 15658;
         $idcuenta = "dix" . $emailcuenta1 . $emailcuenta2;
         $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@abcdix.com";
 
