@@ -563,7 +563,7 @@
               @endif
 
               @if($dataCustomer->order_id_ml)
-                <span class="badge badge-normal" style="font-weight:400; font-size: 0.8em; color:#000">
+                <span class="badge badge-warning" style="font-weight:400; font-size: 0.8em; color:#000">
                   <a
                     target="_blank"
                     href="https://myaccount.mercadolibre.com.ar/sales/vop?orderId=<?php echo $dataCustomer->order_id_ml;?>&amp;role=buyer"
@@ -776,6 +776,7 @@
 
       @if(count($lowSalesByCustomerIds) > 0)
       <h3>Ventas eliminadas</h3>
+      <div class="row">
       @foreach($lowSalesByCustomerIds as $lowerSale)
           <div class="col-xs-12 col-sm-6 col-md-3 thumbnail" <?php if ($lowerSale->slot == 'Secundario'): ?>style="background-color:#efefef;"<?php endif; ?>>
               <span class="pull-right" style="width: 45%;">
@@ -792,7 +793,7 @@
         elseif (strpos($lowerSale->medio_venta, 'Mercado') !== false): $text3 = 'ML';
         endif;?>
               <?php
-        if (strpos($lowerSale->medio_cobro, 'Transferencia') !== false): $text4 = '<i class="fa fa-bank fa-xs fa-fw" aria-hidden="true"></i>';
+        if (strpos($lowerSale->medio_cobro, 'Transferencia') !== false || strpos($lowerSale->medio_cobro, 'Banco') !== false || strpos($lowerSale->medio_cobro, 'Fondos') !== false): $text4 = '<i class="fa fa-bank fa-xs fa-fw" aria-hidden="true"></i>';
         elseif (strpos($lowerSale->medio_cobro, 'Ticket') !== false): $text4 = '<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>';
         elseif (strpos($lowerSale->medio_cobro, 'Mercado') !== false): $text4 = 'MP';
         endif;?>
@@ -826,6 +827,7 @@
               </div>
 
         @endforeach
+        </div>
       @endif
       @endif
       </div>
