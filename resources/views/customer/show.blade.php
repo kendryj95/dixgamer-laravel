@@ -1295,6 +1295,8 @@
 
                       var data = JSON.parse(response);
 
+                      console.log(data);
+
                       if (data.status == 200) {
                           location.reload();
                       } else if(data.status == 505) {

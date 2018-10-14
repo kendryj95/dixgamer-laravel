@@ -63,7 +63,6 @@ class CustomerController extends Controller
         'email.required' => 'Email requerido',
         'email.email' => 'Ingrese Email valido',
         'email.unique' => 'Emal ya existe',
-        'ml_user.unique' => 'Usuario mercado libre ya existe',
         'apellido.required' => 'Apellido requerido',
         'nombre.required' => 'Nombre requerido',
         'pais.required' => 'Pais requerido',
@@ -74,14 +73,20 @@ class CustomerController extends Controller
         'cel.required' => 'Cel requerido'
       ];
       // Validamos
-      $v = Validator::make($request->all(), [
+      $validaciones = [
           'email' => 'required|email|unique:clientes,email',
           'apellido' => 'required',
           'nombre' => 'required',
-          'ml_user' => 'unique:clientes,ml_user',
           'pais' => 'required',
           'provincia' => 'required',
-      ], $msgs);
+      ];
+
+      if ($request->ml_user != "") {
+        $validaciones['ml_user'] = "unique:clientes,ml_user";
+        $msgs['email.unique'] = 'Usuario mercado libre ya existe';
+      }
+
+      $v = Validator::make($request->all(), $validaciones, $msgs);
 
       // Si hay errores retornamos a la pantalla anterior con los mensajes
       if ($v->fails())
@@ -208,13 +213,15 @@ class CustomerController extends Controller
 
     public function customerCtrlMlUsr(Request $request){
 
-      // Pasamos los filtros a la busqueda
-      $customer = DB::table('clientes AS c')->leftjoin('clientes_ml_user AS cml','c.id','=','cml.clientes_id')
-                    ->where('cml.ml_user',$request->ml_user)->first();
-      if ($customer) {
-        echo true;
-      }else{
-        echo false;
+      if (isset($request->ml_user) && $request->ml_user != "") {
+        // Pasamos los filtros a la busqueda
+        $customer = DB::table('clientes AS c')->leftjoin('clientes_ml_user AS cml','c.id','=','cml.clientes_id')
+                      ->where('cml.ml_user',$request->ml_user)->first();
+        if ($customer) {
+          echo true;
+        }else{
+          echo false;
+        }
       }
     }
 

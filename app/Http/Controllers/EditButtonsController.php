@@ -55,7 +55,7 @@ class EditButtonsController extends Controller
             } else {
                 DB::table('clientes')
                 ->where('ID',$request->id)->update(['email' => $request->email]);
-                $estatus = 200;
+                $status = 200;
             }
             
             DB::table('clientes_notas')->insert(['notas' => 'Email Anterior: ' . $prevName->email,

@@ -14,8 +14,10 @@ function check_email_ajax(page,email){
     	var testClass = test.className;
 
     	switch(testClass){
-        case "fa fa-ban": document.getElementById("user-result-div").className = "input-group form-group has-error"; break;
-      	case "fa fa-check": document.getElementById("user-result-div").className = "input-group form-group has-success"; break;
+        case "fa fa-ban": document.getElementById("user-result-div").className = "input-group form-group has-error";
+        document.getElementById('submiterInsert').disabled=true; break;
+      	case "fa fa-check": document.getElementById("user-result-div").className = "input-group form-group has-success";
+      	document.getElementById('submiterInsert').disabled=false; break;
       }
 
   	});
@@ -69,8 +71,10 @@ function check_ml_user_ajax(page,ml_user){
     	var testClass = test.className;
 
     	switch(testClass){
-        case "fa fa-ban": document.getElementById("ml-user-result-div").className = "input-group form-group has-error"; break;
-    	  case "fa fa-check": document.getElementById("ml-user-result-div").className = "input-group form-group has-success"; break;
+        case "fa fa-ban": document.getElementById("ml-user-result-div").className = "input-group form-group has-error";
+        document.getElementById('submiterInsert').disabled=true; break;
+    	  case "fa fa-check": document.getElementById("ml-user-result-div").className = "input-group form-group has-success";
+    	  document.getElementById('submiterInsert').disabled=false; break;
       }
 
   	});
