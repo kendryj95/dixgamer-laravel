@@ -1,10 +1,27 @@
+<style>
+  .backgroundCardPs {
+    background-color: #ccc;
+  }
+</style>
 @if(count($datas) > 0)
   <div class="row" id="{{ $sectionId }}">
     <div class="page-header"><h3 >{{ $title }}</h3> </div>
 
+    @php
+    $class_bg = '';
+    @endphp
+    @if($title == 'PS4 Secundario')
+  
+    @php
+
+    $class_bg = 'backgroundCardPs';
+    @endphp
+
+    @endif
+
     @foreach($datas as $data)
 
-      <div class="col-xs-6 col-sm-1b" style="width: 12.5%;">
+      <div class="col-xs-6 col-sm-1b {{ $class_bg }}" style="width: 12.5%;">
 
         <div class="thumbnail">
           <div>

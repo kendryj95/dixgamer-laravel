@@ -33,6 +33,7 @@ Route::group(['middleware' => ['login']], function()
 {
   Route::get('/', 'HomeController@index');
   Route::get('home', 'HomeController@index');
+  Route::get('asignar_producto', 'HomeController@asignar_producto');
 
   // Rutas para clientes
   Route::resource('clientes', 'CustomerController');

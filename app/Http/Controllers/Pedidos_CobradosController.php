@@ -183,7 +183,9 @@ class Pedidos_CobradosController extends Controller
                                             ->first();
 
                 
-                $pedidos[] = $info;
+                if ($info) {
+                    $pedidos[] = $info;
+                }    
 
                 $mostrar = false;
 

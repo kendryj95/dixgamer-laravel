@@ -27,9 +27,9 @@
 				<?php if ($venta->email): ?>
 				<?php echo $venta->email; ?>
 					<?php if (strpos($clientes->auto, 're') !== false):?>
-					<a type="button" target="_blank" href="clientes_detalles.php?id=<?php echo $clientes->ID; ?>" class="btn btn-danger btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Revendedor</a>
+					<a type="button" target="_blank" href="{{ url('clientes', $clientes->ID) }}" class="btn btn-danger btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Revendedor</a>
 					<?php else:?>
-					<a type="button" target="_blank" href="clientes_detalles.php?id=<?php echo $clientes->ID; ?>" class="btn btn-default btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Cte</a>
+					<a type="button" target="_blank" href="{{ url('clientes', $clientes->ID) }}" class="btn btn-default btn-xs"><i class="fa fa-user" aria-hidden="true"></i> Cte</a>
 					<?php endif;?>
 				<?php else:
 					if (strpos($venta->email, 'mercadolibre.com') !== false):?>
@@ -40,8 +40,8 @@
 					<?php endif;?>
 				<?php endif;?>
 				<br /><br />
-				<?php if (($venta->order_item_id) && ($venta->order_item_id != "")):?>
-						<a target="_blank" href="https://perfil.mercadolibre.com.ar/profile/showProfile?id=<?php echo $venta->order_item_id;?>&role=buyer" class="btn btn-primary btn-xs" type="submit" style="font-weight:400; opacity:0.6;"> <i class="fa fa-user" aria-hidden="true"></i></a> <?php echo $clientes->nombre; ?> <?php echo $clientes->apellido; ?>
+				<?php if (($venta->user_id_ml) && ($venta->user_id_ml != "")):?>
+						<a target="_blank" href="https://perfil.mercadolibre.com.ar/profile/showProfile?id=<?php echo $venta->user_id_ml;?>&role=buyer" class="btn btn-primary btn-xs" type="submit" style="font-weight:400; opacity:0.6;"> <i class="fa fa-user" aria-hidden="true"></i></a> <?php echo $clientes->nombre; ?> <?php echo $clientes->apellido; ?>
 						<a target="_blank" href="https://myaccount.mercadolibre.com.ar/messaging/orders/<?php echo $venta->order_id_ml;?>" class="btn btn-warning btn-xs" type="submit" style="font-weight:400; opacity:0.6;"> <i class="fa fa-comments" aria-hidden="true"></i></a>
 						<a target="_blank" href="https://myaccount.mercadolibre.com.ar/sales/vop?orderId=<?php echo $venta->order_id_ml;?>&role=buyer" class="btn btn-success btn-xs" type="submit"  style="font-weight:400; opacity:0.6;"> <i class="fa fa-shopping-bag" aria-hidden="true"></i></a>
 				<?php else:?>
@@ -60,7 +60,7 @@
 				
 				<a type="button" href="{{ url('salesInsertWeb',[$venta->order_item_id, $titulo, $consola, $slot]) }}?c_id={{ $clientes->ID }}" class="btn btn-info pull-right" style="margin-bottom: 20px;"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i> Re Intentar Asignación</a>
 				
-				<?php $insertGoTo = url('home') . "?order_item_id=$venta->order_item_id";?>
+				<?php $insertGoTo = url('asignar_producto') . "?order_item_id=$venta->order_item_id";?>
 				<a title="Asignar" class="btn btn-default pull-right" type="button" data-target=".new-example-modal-lg" onClick='document.getElementById("ifr2").src="<?php echo $insertGoTo; ?>";'><i class="fa fa-gamepad" aria-hidden="true"></i> Asignar Otro Producto</a>
 				<div class="row">
 						<!-- Large modal -->
