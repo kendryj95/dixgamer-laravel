@@ -54,7 +54,7 @@
 					
 					<?php $array = (explode(',', $linkPS, 10)); 
 
-						foreach ($array as $valor) { echo "<a class='btn btn-default btn-sm' title='Ver en la Tienda de PS' target='_blank' href='$valor'><img src='../img/gral/ps-store.png' width='18' /> Link PS </a> "; };
+						foreach ($array as $valor) { echo "<a class='btn btn-default btn-sm' title='Ver en la Tienda de PS' target='_blank' href='$valor'><img src='".asset('img/gral/ps-store.png')."' width='18' /> Link PS </a> "; };
 					?> 
 				<?php endif; ?>
 				
