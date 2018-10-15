@@ -81,11 +81,8 @@
             color:inherit !important;
             text-decoration: underline !important;
         }
-      
-    </style>
-    
+          
     <!-- Progressive Enhancements -->
-    <style>
         
         /* What it does: Hover styles for buttons */
         .button-td,
@@ -97,11 +94,17 @@
             background: #555555 !important;
             border-color: #555555 !important;
         }
+		.cursiva2 {color:#999;font-size:12px;}
+		.roja2 {}
+		</style>
+        
+		<style>
 
         /* Media Queries */
         @media screen and (max-width: 600px) {
 			.emailImage{
             height:auto !important;
+
             max-width:600px !important;
             width: 100% !important;
         	}
@@ -148,9 +151,7 @@
             table.center-on-narrow {
                 display: inline-block !important;
             }
-                
-        }
-
+		}	
     </style>
 
 </head>
@@ -185,70 +186,32 @@
             <!-- Hero Image, Flush : END -->
 
             <!-- 1 Column Text : BEGIN -->
-            <tr>
-                <td bgcolor="#ffffff" style="padding: 40px 40px; text-align: left; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><p style="font-size:18px">Hola [nombrecliente] [apellidocliente]!</p>
-                  <p></p>
-                  <p><em style="color:#e74c3c;">Compraste SECUNDARIO, abr&iacute;s el juego desde nuestra cuenta, necesitas estar conectado a internet cuando quieras jugar.</em><br />
-                    <em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
-                  <p>Mira el <a href="https://facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
-                  <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
-                    2) <strong>Aceptar las condiciones</strong> de Sony e inscribirse con estos datos:<br />
-  <br />
-  <strong> ID</strong> de inicio de sesion: [cuentamail] <br />
-<em>(incluir el punto y si hay gui&oacute;n medio tambi&eacute;n, son todas letras min&uacute;sculas, ninguna may&uacute;scula)</em><br />
-  <strong> Contrase&#241;a</strong>: [cuentapass] <br />
-  <em>(respetar may&uacute;sculas y min&uacute;sculas)</em><br />
-  <br />
-                    3) <strong>Iniciar Sesi&#243;n.</strong> <span style="color: #e74c3c;">Si te pregunta "cambiar tu PS4 principal" <strong>NO CAMBIAR</strong></span><br />
-                    4) Aceptar los datos de la cuenta (next / continue)<br />
-                    5) A veces pide vincular con Facebook, seleccionar <strong>"Do this later"</strong> o <strong>"Skip"</strong><br />
-                    6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong>
-					
-					<p>&iquest;Problemas? Mira el <a href="https://facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
-  <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br />
-  <br />
-  <a href="https://dixgamer.com/db/clientes_conf_est.php?id=[vta_id]&amp;c_id=[clientes_id]&amp;s_id=[stock_id]" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br />
-                  </p>
-                  <br />
-                  <span style="font-size:22px; font-family: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #e74c3c;">Atenci&oacute;n!</span><br />
-                  <br />
-                  <span style="color: #e74c3c;">1) No activar esta cuenta como primaria / principal nunca, si la ACTIVAS la vamos a bloquear y vas a perder el juego para siempre.</span><br />
-                  <span style="color: #e74c3c;">2) No modificar ningun dato de nuestra cuenta, si MODIFICAS la vamos a bloquear y vas a perder el juego para siempre.</span></td>
-            </tr>
-            
             <!-- 1 Column Text : BEGIN -->
             <tr>
-                <td bgcolor="#ffffff">
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top:2px solid #efefef;">
-                    	<tr>
-                          <td align="justify" style="padding: 20px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #666;"><p style="font-size:22px;">01. Preguntas Frecuentes</p>
-                       		<p><strong>&#191;C&oacute;mo funciona?</strong> Te enviamos una cuenta para acceder a la descarga del juego.<br /><em style="color:#999;font-size:12px;">(en tu playstation pod&eacute;s tener hasta 16 cuentas a la vez)</em></p>
-                       		<p><strong>&iquest;Que significa cuenta secundaria? </strong> Que las descargas desde esta cuenta se van a poder abrir &#250;nicamente desde nuestro usuario.</p>
-                          		<p><strong>La descarga demora mucho, &iquest;Por qu&eacute;?</strong> La velocidad de descarga depende de tu conexi&oacute;n a internet, el peso del juego y    los servidores de descarga.</p>
-                          		<p><strong>&iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja,  perd&eacute;s tu juego para siempre.</p>
-                            <br />
-                          </td>
+                <td bgcolor="#ffffff" style="padding: 40px 40px; text-align: left; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;">
+                
+                <p style="font-size:18px">Hola {{ $row_rsClient->nombre }} {{ $row_rsClient->apellido }}, gracias por tu nueva compra.</p>
+
+                <p>Para canjear tu c&#243;digo <strong>necesitas una cuenta de Estados Unidos</strong>, si no tienes, crearla es gratis y f&aacute;cil. Mira el <a href="https://facebook.com/dixgamer.arg/videos/919641484905635/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> desde minuto 1:20.</p>
+                <p>1) <strong>Prender</strong> la consola &gt; Ingresar a tu <strong>Cuenta de Estados Unidos</strong><br />
+                  2) Ingresar a la PlayStation Store (Tienda de PlayStation)<br />
+                  3) Ir la opci&#243;n Redeem Code (Canjear C&#243;digo)<br />
+                  4) Ingresar el c&#243;digo: <strong>{{ $row_rsClient->code }} </strong> <em style="color:#999;">(sin los guiones)</em> </p>
+					<p>¿Problemas? Mira el <a href="https://facebook.com/dixgamer.arg/videos/919641484905635/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> completo.</p>
+                <p><font  color="#999999"><em>Con este codigo puedes cargar saldo en tu cuenta americana y con ese saldo comprar lo que deseas (juegos, extras, pases de temporada, etc.)</em></font>
+					<p>En PS4 para utilizar los juegos desde otros usuarios de tu consola debes activar tu cuenta americana como Primaria.</p>
+					<p><font  color="#999999"><em>Pasos para Activar como Primaria:<br />
+  1) Abrir la cuenta americana &gt; Ir a Configuración &gt; PSN/Administración de cuentas &gt; Activar como tu PS4 principal &gt; Activar <br />
+  2) Ir a Configuración &gt; PSN/Administración de cuentas &gt; Restaurar Licencias &gt; Restaurar
+						</em></font></p><br />
+                                    </td>
             </tr>
+            <!-- 1 Column Text : BEGIN -->
+
+
+            <!-- Background Image with Text : BEGIN -->
+
             <tr>
-                <td>
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top:2px solid #efefef;">
-                    	<tr>
-                          <td style="padding: 20px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #666;"><p style="font-size:22px;">
-            		        <p style="font-size:22px;">02. Truco <em style="color:#999;font-size:12px;">(funciona en algunos juegos)</em></p>
-            		        <p>Los juegos que permiten multijugador local (jugar con mas de un joystick) se pueden jugar con tu usuario de siempre.</p>
-                            <p><strong>&iquest;C&oacute;mo?</strong> Video Tutorial: <a href="https://youtu.be/TzuRIrEvhW0" target="_blank">https://youtu.be/TzuRIrEvhW0</a></p>
-                            <p style="color:#666666;">A veces los usuarios que utilizan este tutorial reportan un problema con el joystick. <span>Si te aparece alg&uacute;n error en pantalla que no detecta tu joystick ac&aacute; est&aacute; la soluci&oacute;n:</span></p>
-                            <p style="color:#666666;">Procedimiento para 'resetear' tu joystick:<br />
-                              1) Apagar tu PS4<br />
-                              2) El bot&oacute;n Reset est&aacute; localizado en un peque&ntilde;o agujero en la parte posterior del mando, cerca del bot&oacute;n L2<br />
-                              3) Con un clip, presionar el bot&oacute;n Reset por un par de segundos<br />
-                              4) Conecta el mando a tu PlayStation 4 usando el cable USB<br />
-                            5) Enciende tu PS4 y presiona el bot&oacute;n PS del mando para iniciar sesi&oacute;n</p>
-                  </td>
-                  </tr>
-                  </table></td>
-					  </tr>
-                      <tr>
                 <!-- Bulletproof Background Images c/o https://backgrounds.cm -->
                 <td bgcolor="#444" valign="middle" style="text-align: center; background-position: center center !important; background-size: cover !important;">
 
@@ -261,7 +224,7 @@
                         <table role="presentation" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:2px solid #999;">
                             <tr>
                               <td valign="middle" style="text-align: center; padding: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #ffffff;"><p>ANTE CUALQUIER PROBLEMA</p>
-                                <p dir="ltr">Si ten&#233;s un error en la descarga o instalaci&oacute;n respond&#233; &#233;ste email adjuntando una foto del error que sale en pantalla. Sin la foto es imposible ayudarte.</p><p>
+                                <p dir="ltr">Si ten&#233;s un problema respond&#233; &#233;ste email adjuntando una foto del error que sale en pantalla. Sin la foto es imposible ayudarte.</p><p>
                                 &#xA1;Muchas Gracias!</p></td>
                             </tr>
                         </table>
@@ -272,9 +235,6 @@
                     <![endif]-->
                 </td>
             </tr>
-                      </table>
-                </td>
-            <!-- Background Image with Text : BEGIN -->
             <!-- Background Image with Text : END -->
            
             
@@ -343,4 +303,3 @@
     </center>
 </body>
 </html>
-

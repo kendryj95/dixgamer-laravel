@@ -70,6 +70,7 @@ $mail->Port = 587;
 $mail->SMTPSecure = 'tls';
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
+
 //Username to use for SMTP authentication - use full email address for gmail
 $mail->Username = "contacto@dixgamer.com";
 //Password to use for SMTP authentication
@@ -78,6 +79,7 @@ $mail->Password = "dqldervenulhfiad";
 $mail->setFrom('contacto@dixgamer.com', 'DixGamer.com');
 //Set an alternative reply-to address
 $mail->addReplyTo('contacto@dixgamer.com', 'DixGamer.com');
+
 //Set who the message is to be sent to
 $mail->addAddress($row_rsClient['email'], utf8_decode($row_rsClient['nombre']).' '.utf8_decode($row_rsClient['apellido']));
 //Set the subject line

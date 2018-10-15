@@ -623,7 +623,7 @@
               </small>
 
               @if ($dataCustomer->cuentas_id)
-                <a href="cuentas_detalles.php?id=<?php echo $dataCustomer->cuentas_id; ?>" class="btn btn-xs" title="Ir a Cuenta">
+                <a href="{{ url('cuentas', $dataCustomer->cuentas_id) }}" class="btn btn-xs" title="Ir a Cuenta">
                   <i class="fa fa-link fa-xs fa-fw" aria-hidden="true"></i>
                   <?php echo $dataCustomer->cuentas_id; ?>
                 </a>
@@ -666,10 +666,7 @@
                 <button
                   class="btn btn-<?php echo $colorcito;?> btn-xs"
                   type="button"
-                  data-toggle="modal"
-                  data-target=".bs-example-modal-lg"
-                  onClick='document.getElementById("ifr").src="mail_datos_gift.php?id=<?php echo $dataCustomer->ID_ventas; ?>";'>
-
+                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Gift')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
                   <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                   @if($dataCustomer->datos1 > 0)
@@ -683,9 +680,20 @@
                 <button
                   class="btn btn-<?php echo $colorcito;?> btn-xs"
                   type="button"
-                  data-toggle="modal"
-                  data-target=".bs-example-modal-lg"
-                  onClick='document.getElementById("ifr").src="mail_datos_plus.php?id=<?php echo $dataCustomer->ID_ventas; ?>";'>
+                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Plus')">
+                  <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
+                  <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
+                    @if($dataCustomer->datos1 > 0)
+                      <?php echo '('.$dataCustomer->datos1.')'; ?>
+                    @endif
+                </button>
+
+              @elseif ( ($dataCustomer->consola === "fifa-points") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'ps4') !== false)))
+
+                <button
+                  class="btn btn-<?php echo $colorcito;?> btn-xs"
+                  type="button"
+                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'FifaPoints')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
                   <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                     @if($dataCustomer->datos1 > 0)
@@ -699,9 +707,7 @@
                   <button
                     class="btn btn-<?php echo $colorcito;?> btn-xs"
                     type="button"
-                    data-toggle="modal"
-                    data-target=".bs-example-modal-lg"
-                    onClick='document.getElementById("ifr").src="mail_datos_<?php echo $dataCustomer->consola; ?><?php echo $dataCustomer->slot; ?>.php?id=<?php echo $dataCustomer->ID_ventas; ?>&c_id=<?php echo $dataCustomer->cuentas_id; ?>";'>
+                    onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}')">
                     <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                     @if($dataCustomer->datos1 > 0)
                      <?php echo '('.$dataCustomer->datos1.')';  ?>
@@ -1500,6 +1506,16 @@
         function isFB(fb) {
           var regex = /^(https:\/\/((www.facebook)|(facebook)).com\/)[A-Za-z0-9.\-\_]+(\/)?$/;
           return regex.test(fb);
+        }
+
+        function enviarEmailVenta(ventas_id, tipo, consola=null, slot=null, cuentas_id=null){
+
+          if (consola != null) {
+            window.location.assign("{{ url('enviar_email_venta') }}/"+ventas_id+"/"+tipo+"/"+consola+"/"+slot+"/"+cuentas_id);
+          } else {
+            window.location.assign("{{ url('enviar_email_venta') }}/"+ventas_id+"/"+tipo);
+          }
+          
         }
 
     </script>

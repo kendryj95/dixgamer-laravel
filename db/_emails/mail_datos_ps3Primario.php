@@ -71,6 +71,7 @@ $mail->Port = 587;
 $mail->SMTPSecure = 'tls';
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
+
 //Username to use for SMTP authentication - use full email address for gmail
 $mail->Username = "contacto@dixgamer.com";
 //Password to use for SMTP authentication
@@ -79,6 +80,7 @@ $mail->Password = "dqldervenulhfiad";
 $mail->setFrom('contacto@dixgamer.com', 'DixGamer.com');
 //Set an alternative reply-to address
 $mail->addReplyTo('contacto@dixgamer.com', 'DixGamer.com');
+
 //Set who the message is to be sent to
 $mail->addAddress($row_rsClient['email'], utf8_decode($row_rsClient['nombre']).' '.utf8_decode($row_rsClient['apellido']));
 //Set the subject line
@@ -87,7 +89,7 @@ $mail->Subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient['consola'].')
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
 // Agrego utfdecode para no tener problemas de acentos y demas yerbas (el contenido del mail viene en ISO no en UTF8)
-$mail->msgHTML(str_replace(array('[nombrecliente]','[apellidocliente]','[nombrejuego]','[vta_id]','[clientes_id]','[stock_id]','[cuentamail]','[cuentapass]'), array(utf8_decode($row_rsClient['nombre']),utf8_decode($row_rsClient['apellido']),substr($row_rsClient['titulo'],0,8),$row_rsClient['ID_ventas'],$row_rsClient['clientes_id'],$row_rsClient['stock_id'],$row_rsCuenta['mail_fake'],$row_rsCuenta['pass']), file_get_contents('mail_datos_ps3Primario_contenido.php')), dirname(__FILE__));
+$mail->msgHTML(str_replace(array('[nombrecliente]','[apellidocliente]','[nombrejuego]','[vta_id]','[clientes_id]','[stock_id]','[cuentamail]','[cuentapass]'), array(utf8_decode($row_rsClient['nombre']),utf8_decode($row_rsClient['apellido']),substr($row_rsClient['titulo'],0,6),$row_rsClient['ID_ventas'],$row_rsClient['clientes_id'],$row_rsClient['stock_id'],$row_rsCuenta['mail_fake'],$row_rsCuenta['pass']), file_get_contents('mail_datos_ps3Primario_contenido.php')), dirname(__FILE__));
 //Replace the plain text body with one created manually
 $mail->AltBody = 'Estos son los datos de descarga';
 //Attach an image file

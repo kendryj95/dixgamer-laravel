@@ -3,39 +3,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> <!-- utf-8 works for most cases -->
-	<meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> <!-- utf-8 works for most cases -->
+    <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
     <meta name=&#8221;x-apple-disable-message-reformatting&#8221;>  <!-- Disable auto-scale in iOS 10 Mail entirely -->
-	<title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+    <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
-	<!-- Web Font / @font-face : BEGIN -->
-	<!-- NOTE: If web fonts are not required, lines 9 - 26 can be safely removed. -->
-	
-	<!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
-	<!--[if mso]>
-		<style>
-			* {
-				font-family: sans-serif !important;
-			}
-		</style>
-	<![endif]-->
-	
-	<!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
-	<!--[if !mso]><!-->
-		<!-- insert web font reference, eg: <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
-	<!--<![endif]-->
+    <!-- Web Font / @font-face : BEGIN -->
+    <!-- NOTE: If web fonts are not required, lines 9 - 26 can be safely removed. -->
+    
+    <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
+    <!--[if mso]>
+        <style>
+            * {
+                font-family: sans-serif !important;
+            }
+        </style>
+    <![endif]-->
+    
+    <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+    <!--[if !mso]><!-->
+        <!-- insert web font reference, eg: <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
+    <!--<![endif]-->
 
-	<!-- Web Font / @font-face : END -->
-	
-	<!-- CSS Reset -->
+    <!-- Web Font / @font-face : END -->
+    
+    <!-- CSS Reset -->
     <style>
 
-		/* What it does: Remove spaces around the email design added by some email clients. */
-		/* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+        /* What it does: Remove spaces around the email design added by some email clients. */
+        /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
         html,
         body {
-	        margin: 0 auto !important;
+            margin: 0 auto !important;
             padding: 0 !important;
             height: 100% !important;
             width: 100% !important;
@@ -94,20 +94,20 @@
             background: #555555 !important;
             border-color: #555555 !important;
         }
-		.cursiva2 {color:#999;font-size:12px;}
-		.roja2 {}
-		</style>
+        .cursiva2 {color:#999;font-size:12px;}
+        .roja2 {}
+        </style>
         
-		<style>
+        <style>
 
         /* Media Queries */
         @media screen and (max-width: 600px) {
-			.emailImage{
+            .emailImage{
             height:auto !important;
 
             max-width:600px !important;
             width: 100% !important;
-        	}
+            }
             .email-container {
                 width: 100% !important;
                 margin: auto !important;
@@ -151,7 +151,7 @@
             table.center-on-narrow {
                 display: inline-block !important;
             }
-		}	
+        }   
     </style>
 
 </head>
@@ -166,11 +166,11 @@
 
         <!-- Email Header : BEGIN
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto;" class="email-container">
-			<tr>
-				<td style="padding: 20px 0; text-align: center">
-					<img src="../img/logo/logo-light.png">
-				</td>
-			</tr>
+            <tr>
+                <td style="padding: 20px 0; text-align: center">
+                    <img src="../img/logo/logo-light.png">
+                </td>
+            </tr>
         </table>
         <!-- Email Header : END -->
         
@@ -179,9 +179,9 @@
             
             <!-- Hero Image, Flush : BEGIN -->
             <tr>
-				<td align="center">
+                <td align="center">
                 <img src="https://dixgamer.com/img/web/mails/encabezado-nuevo.jpg" class="emailImage"  />
-				</td>
+                </td>
             </tr>
             <!-- Hero Image, Flush : END -->
 
@@ -190,41 +190,50 @@
             <tr>
                 <td bgcolor="#ffffff" style="padding: 40px 40px; text-align: left; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;">
                 
-                <p style="font-size:18px">Hola [nombrecliente] [apellidocliente], gracias por tu nueva compra.</p>
-                <p><em style="color:#999;">Leer COMPLETO para disfrutar tu PS PLUS Primario.</em></p>
+                <p style="font-size:18px">Hola {{ $row_rsClient->nombre }} {{ $row_rsClient->apellido }}, gracias por tu nueva compra.</p>
+                <p><em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
                 <br />
+                <p>Mira el <a href="https://business.facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
                 <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
                   2) <strong>Aceptar las condiciones</strong> de Sony e inscribirse con estos datos:<br />
   <br />
-  <strong> ID</strong> de inicio de sesion: [cuentamail] <br />
+  <strong> ID</strong> de inicio de sesion: {{ $row_rsCuenta->mail_fake }} <br />
 <em>(incluir el punto y si hay gui&oacute;n medio tambi&eacute;n, son todas letras min&uacute;sculas, ninguna may&uacute;scula)</em><br />
-  <strong> Contrase&#241;a</strong>: [cuentapass] <br />
+  <strong> Contrase&#241;a</strong>: {{ $row_rsCuenta->pass }} <br />
   <em>(respetar may&uacute;sculas y min&uacute;sculas)</em><br />
   <br />
                   3) <strong>Iniciar Sesi&#243;n</strong> y aceptar los datos de la cuenta (next / continue)<br />
                   4) A veces pide vincular con Facebook, seleccionar <strong>"Do this later"</strong> o <strong>"Skip"</strong><br />
                   5) <strong>Activar primario:</strong> Ir a Ajustes &gt; PlayStation Network/ Admin de cuentas &gt; Activar como tu PS4 principal &gt; Activar<br />
-                  <p><em style="color:#999;">Al completar el quinto paso vas a poder jugar on-line con cualquier usuario de tu consola.</em></p>
-6) Reiniciar la PS4. <strong>Ingresar con tu usuario personal. </strong><br /></p></td>
+                  6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong><br />
+                  7) Reiniciar la PS4 una vez que inicia la descarga. <strong>SI</strong>, cuando inicia la descarga reiniciamos la consola. <strong>Luego directamente ingresar con tu usuario. </strong>
+                    <p>&iquest;Problemas? Mira el <a href="https://business.facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
+                    
+  <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br /><br/>
+  <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br />
+                </p></td>
             </tr>
             <!-- 1 Column Text : BEGIN -->
             <tr>
                 <td bgcolor="#ffffff">
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top:2px solid #efefef;">
-                    	<tr>
+                        <tr>
                           <td align="justify" style="padding: 20px 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #666;"><p style="color: #e74c3c; font-size:22px;">IMPORTANTE</p>
-                            <p style="color: #e74c3c;">Compraste PS PLUS PRIMARIO luego de activar como "Primario" no tenes que abrir nuestra cuenta nunca mas. Excepto una vez al mes para descargar los juegos gratuitos. Abrir, iniciar la descarga y salir inmediatamente.</p>
+                            <p style="color: #e74c3c;">No modificar ningun dato de nuestra cuenta, si MODIFICAS la vamos a bloquear y vas a perder el juego para siempre.</p>
+                            <p style="color: #e74c3c;">Compraste el juego PRIMARIO luego de iniciar la descarga no tenes que abrir nuestra cuenta nunca mas.</p>
+                            
                             <p style="color:#999;font-size:12px;"><em>Para evitar abrirla por error pod&#233;s poner contrase&#241;a &#191;C&#243;mo?<br />
-                              Abrir nuestro Usuario &gt; Ajustes / Configuraci&#243;n &gt; Usuarios &gt; Configuracion de entrada al sistema &gt; Administracion de claves &gt; Colocar clave &gt; Reiniciar PS4</em></p>
-                            <span style="color: #e74c3c;">Si borras nuestro usuario perdés tu PS PLUS para jugar On-line.</span><br />
+                              Abrir nuestro Usuario &gt; Ajustes / Configuraci&#243;n &gt; Usuarios &gt; Configuracion de entrada al sistema &gt; Administracion de claves &gt; Colocar clave &gt; Reiniciar PS4</em></p>                            <span style="color: #e74c3c;">Si borras nuestro usuario se bloquea tu juego.</span><br />
                             <span style="color:#999;font-size:12px;"><em>&#191;Soluci&#243;n? Volver a agregar el usuario a tu consola.</em></span>
                             <p style="color:#e74c3c;">RECORDAR QUE PARA JUGAR VAS A USAR TU USUARIO PERSONAL</p><p><strong>---</strong></p>
-                            <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga de un juego abr&#237; tu usuario</strong> &gt; Notificaciones &gt; Descargas. Hasta que no termine el total de la barra de descargar no vas a poder jugarlo completo.</p>
-                            <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
+                            
                           <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu juego para siempre.</strong></p>
-                          <p>&gt; &#191;Puedo activar m&#225;s de una cuenta principal en mi consola? Si podes tener hasta 16 cuentas principales al mismo tiempo.</p>
-                          <p>&gt; &#191;Que significa activar como "Primario"? Que las descargas realizadas desde esta cuenta se van a poder utilizar desde todos los usuarios en tu PS4.</p></td>
-					  </tr>
+                          <p>&gt; &#191;Puedo activar m&#225;s de una cuenta primaria en mi consola? Si podes tener hasta 16 cuentas primaria al mismo tiempo.</p>
+                          <p>&gt; &#191;Que significa activar como "Primario"? Que las descargas realizadas desde esta cuenta se van a poder utilizar desde todos los usuarios en tu Play.</p>
+                          <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga abr&#237; tu usuario</strong> &gt; Notificaciones &gt; Descargas. Hasta que no termine el total de la barra de descargar no vas a poder jugar a todos los modos disponibles.</p>
+                            <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
+                          </td>
+                      </tr>
                            
                     </table>
                 </td>
@@ -277,45 +286,45 @@
             <tr>
                 <td style="padding: 0px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
                 <table class="flexible" width="600" align="center" style="margin:0 auto;" cellpadding="0" cellspacing="0">
-									<tr>
-										<td class="footer" style="padding:0 0 10px;">
-											<table width="100%" cellpadding="0" cellspacing="0">
-												<tr class="table-holder">
-													<th class="tfoot" width="400" align="left" style="vertical-align:top; padding:0;">
-														<table width="100%" cellpadding="0" cellspacing="0">
-															<tr>
-																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;">
-																	dixgamer.com, 2016. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a>
-																</td>
-															</tr>
-														</table>
-													</th>
-													<th class="thead" width="150" align="left" style="vertical-align:top; padding:0;">
-														<table class="center" align="right" cellpadding="0" cellspacing="0">
-															<tr>
-																<td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
-																	<a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-facebook.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="6" height="13" alt="fb" /></a>
-																</td>
-																<td width="20"></td>
-																<td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
-																	<a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-twitter.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="13" height="11" alt="tw" /></a>
-																</td>
-																<td width="19"></td>
-																<td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
-																	<a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-google-plus.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="19" height="15" alt="g+" /></a>
-																</td>
-																<td width="20"></td>
-																<td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
-																	<a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-linkedin.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="13" height="11" alt="in" /></a>
-																</td>
-															</tr>
-														</table>
-													</th>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
+                                    <tr>
+                                        <td class="footer" style="padding:0 0 10px;">
+                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                <tr class="table-holder">
+                                                    <th class="tfoot" width="400" align="left" style="vertical-align:top; padding:0;">
+                                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;">
+                                                                    dixgamer.com, 2016. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </th>
+                                                    <th class="thead" width="150" align="left" style="vertical-align:top; padding:0;">
+                                                        <table class="center" align="right" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
+                                                                    <a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-facebook.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="6" height="13" alt="fb" /></a>
+                                                                </td>
+                                                                <td width="20"></td>
+                                                                <td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
+                                                                    <a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-twitter.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="13" height="11" alt="tw" /></a>
+                                                                </td>
+                                                                <td width="19"></td>
+                                                                <td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
+                                                                    <a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-google-plus.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="19" height="15" alt="g+" /></a>
+                                                                </td>
+                                                                <td width="20"></td>
+                                                                <td class="btn" valign="top" style="line-height:0; padding:3px 0 0;">
+                                                                    <a target="_blank" style="text-decoration:none;" href="#"><img src="file:///D|/Downloads/markup/images/ico-linkedin.png" border="0" style="font:12px/15px Arial, Helvetica, sans-serif; color:#797c82;" align="left" vspace="0" hspace="0" width="13" height="11" alt="in" /></a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
                 </td>
             </tr>
         </table>

@@ -34,6 +34,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('/', 'HomeController@index');
   Route::get('home', 'HomeController@index');
   Route::get('asignar_producto', 'HomeController@asignar_producto');
+  
 
   // Rutas para clientes
   Route::resource('clientes', 'CustomerController');
@@ -57,6 +58,7 @@ Route::group(['middleware' => ['login']], function()
   Route::post('customer_addVentasCobro', 'CustomerController@addVentasCobroStore');
   Route::get('customer_setEmailPrimary/{id}/{id_cliente}', 'CustomerController@setEmailPrimary');
   Route::get('createCustomerWeb/{oii}', 'CustomerController@createCustomerWeb');
+  Route::get('enviar_email_venta/{venta_id}/{tipo}/{consola?}/{slot?}/{cuentas_id?}', 'CustomerController@emails');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');

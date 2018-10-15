@@ -197,7 +197,7 @@
                   2) <strong>Aceptar las condiciones</strong> de Sony e inscribirse con estos datos:<br />
   <br />
   <strong> ID</strong> de inicio de sesion: [cuentamail] <br />
-<em>(incluir el gui&oacute;n medio, son todas letras min&uacute;sculas, ninguna may&uacute;scula)</em><br />
+<em>(incluir el punto y si hay gui&oacute;n medio tambi&eacute;n, son todas letras min&uacute;sculas, ninguna may&uacute;scula)</em><br />
   <strong> Contrase&#241;a</strong>: [cuentapass] <br />
   <em>(respetar may&uacute;sculas y min&uacute;sculas)</em><br />
   <br />

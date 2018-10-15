@@ -12,6 +12,7 @@ use Validator;
 use Auth;
 use Schema;
 use DB;
+use Mail;
 class CustomerController extends Controller
 {
     /**
@@ -1081,5 +1082,165 @@ class CustomerController extends Controller
           return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor']);
         }
       }
+    }
+
+    public function emails($ventas_id, $tipo, $consola=null, $slot=null, $cuentas_id=null)
+    {
+
+      $vista = '';
+      $data = [];
+      $correo = '';
+      $subject = '';
+      $nombre = '';
+
+      switch ($tipo) {
+        case 'Juegos':
+          $vista = 'mail_datos_'.$consola.$slot;
+          $row_rsClient = DB::table('stock AS s')
+                              ->select(
+                                'ID AS ID_stock',
+                                'titulo',
+                                'consola',
+                                'cuentas_id',
+                                'c.*'
+                              )
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                                FROM ventas
+                                LEFT JOIN
+                                clientes
+                                ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
+                              ->where('ID_ventas', $ventas_id)
+                              ->orderBy('c.Day', 'DESC')
+                              ->first();
+
+          $row_rsCuenta = DB::table('cuentas')->select('ID','mail_fake','pass')->where('ID',$cuentas_id)->first();
+
+          $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+
+          $correo = $row_rsClient->email;
+          $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
+
+          $data['row_rsClient'] = $row_rsClient;
+          $data['row_rsCuenta'] = $row_rsCuenta;
+
+          break;
+        
+        case 'Gift':
+          
+          $vista = 'mail_datos_gift';
+          $row_rsClient = DB::table('stock AS s')
+                              ->select(
+                                'ID AS ID_stock',
+                                'titulo',
+                                'consola',
+                                'code',
+                                'cuentas_id',
+                                'c.*'
+                              )
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                                FROM ventas
+                                LEFT JOIN
+                                clientes
+                                ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
+                              ->where('ID_ventas', $ventas_id)
+                              ->orderBy('c.Day', 'DESC')
+                              ->first();
+
+          $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+
+          $correo = $row_rsClient->email;
+          $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
+
+          $data['row_rsClient'] = $row_rsClient;
+
+            break;
+        case 'Plus':
+
+          $vista = 'mail_datos_plus';
+          $row_rsClient = DB::table('stock AS s')
+                              ->select(
+                                'ID AS ID_stock',
+                                'titulo',
+                                'consola',
+                                'code',
+                                'cuentas_id',
+                                'c.*'
+                              )
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                                FROM ventas
+                                LEFT JOIN
+                                clientes
+                                ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
+                              ->where('ID_ventas', $ventas_id)
+                              ->orderBy('c.Day', 'DESC')
+                              ->first();
+
+          $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+
+          $correo = $row_rsClient->email;
+          $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
+
+          $data['row_rsClient'] = $row_rsClient;
+
+          break;
+
+        case 'FifaPoints':
+
+          $vista = 'mail_datos_fifapoints_ps4';
+          $row_rsClient = DB::table('stock AS s')
+                              ->select(
+                                'ID AS ID_stock',
+                                'titulo',
+                                'consola',
+                                'code',
+                                'cuentas_id',
+                                'c.*'
+                              )
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                                FROM ventas
+                                LEFT JOIN
+                                clientes
+                                ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
+                              ->where('ID_ventas', $ventas_id)
+                              ->orderBy('c.Day', 'DESC')
+                              ->first();
+
+          $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+
+          $correo = $row_rsClient->email;
+          $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
+
+          $data['row_rsClient'] = $row_rsClient;
+
+          break;
+      }
+
+      try {
+
+        DB::table('mailer')->insert([
+          'ventas_id' => $ventas_id,
+          'concepto' => 'datos1',
+          'Day' => date('Y-m-d H:i:s'),
+          'usuario' => session()->get('usuario')->Nombre
+        ]);
+
+        Mail::send('emails.'.$vista, $data, function($message) use ($correo, $nombre, $subject)
+        {
+            $message->to($correo, $nombre)->subject($subject);
+        });
+
+        \Helper::messageFlash('Clientes','Correo electronico enviado.');
+        return redirect()->back();
+      } catch (Exception $e) {
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el envío del email.']);
+      }
+
+      
+
+      
     }
 }

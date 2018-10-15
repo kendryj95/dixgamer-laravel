@@ -195,20 +195,21 @@
                 <p><em style="color:#e74c3c;">Ten&eacute;s 3 d&iacute;as para iniciar la descarga.</em><br />
 					<em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
 
-				<p>Mira el <a href="https://facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p> 
+				<p>Ver <a href="https://facebook.com/dixgamer.arg/videos/954394201430363/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p> 
                 <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
-                  2) Al usuario le colocamos de nombre <strong>"[nombrejuego] NO tocar"</strong><br />
-                  3) <strong>Abrimos el usuario</strong> creado y vamos a <strong>PSN</strong> <em>(PlayStation Network)</em> &gt; <strong>Inscribirse</strong><br />
-                  4) Seleccionamos "Usar una <strong>cuenta existente</strong>" y completamos con estos datos:<br />
-  <br />
-  <strong> ID</strong> de inicio de sesion: [cuentamail] <br />
-<em>(incluir el gui&oacute;n medio, son todas letras min&uacute;sculas, ninguna may&uacute;scula)</em><br />
+                  2) Le colocamos de nombre <strong>"[nombrejuego] NO Tocar"</strong><br />
+                  3) <strong>Abrimos el usuario creado</strong> y vamos a <strong>PSN</strong> <em>(PlayStation Network)</em> &gt; <strong>Inscribirse</strong> > Opción "Usar una <strong>cuenta existente</strong>"<br /><br />
+
+				  4) Completamos con estos datos:<br />
+                  <em>El <strong>ID de inicio de sesi&oacute;n</strong> son todas <span style="text-decoration:underline;">letras min&uacute;sculas y n&uacute;meros, debemos incluir el punto y si hay un gui&oacute;n medio tambi&eacute;n.</span></em><br />
+  <strong> ID</strong> de inicio de sesi&oacute;n: [cuentamail] <br />
+  <em>En la <strong>contrase&ntilde;a</strong> <span style="text-decoration:underline;">respetar las letras min&uacute;sculas y may&uacute;sculas.</span></em><br />
   <strong> Contrase&#241;a</strong>: [cuentapass] <br />
-  <em>(respetar may&uacute;sculas y min&uacute;sculas)</em><br />
   <br />
-                  5) Guardar la contrase&#241;a y continuar. Vamos a &quot;<strong>Proceed to PlayStation Store&quot;</strong> &gt; Iniciar Sesi&oacute;n <strong>y esperamos unos segundos</strong> a que abra la tienda de PlayStation.<br />
-                  6) En el men&uacute; de la izquierda vamos hacia abajo hasta <strong>&quot;View Downloads&quot;</strong> &gt; Iniciar la descarga de <strong>todos los items</strong>  y dejar en <strong>segundo plano</strong>.<br />
-                  7) <strong>Salir de nuestro usuario</strong> e ingresar con el tuyo.
+                  5) Guardar la contrase&#241;a y <strong>continuar.</strong><br >
+				6) Volvemos al <strong>menú principal del usuario creado > PSN</strong> > Iniciar Sesi&oacute;n > Administraci&oacute;n de Cuentas > Transaction Management > <strong>Download List</strong><br/>
+7) Iniciamos la descarga de <strong>todos los items</strong> poniendo en <strong>segundo plano.</strong><br />
+                  8) <strong>Salimos del usuario creado</strong> abriendo tu usuario personal (el que usas siempre).
                 <p>&iquest;Problemas? Mira el <a href="https://facebook.com/dixgamer.arg/videos/954394201430363/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
   <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br /><br/>
   <a href="https://dixgamer.com/db/clientes_conf_est.php?id=[vta_id]&amp;c_id=[clientes_id]&amp;s_id=[stock_id]" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br /><br />
@@ -220,7 +221,7 @@
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top:2px solid #efefef;">
                     	<tr>
                           <td align="justify" style="padding: 20px 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #666;"><p class="roja" style="font-size:22px;">IMPORTANTE</p>
-                            <p class="roja">Al comenzar la descarga salir de nuestro usuario y :<br />
+                            <p class="roja">Al comenzar la descarga salir de nuestro usuario y<br />
                               1) No abrirlo nunca m&aacute;s.<br />
                               2) No borrarlo de tu consola.<br />
                               En ambos casos se pierde el juego para siempre.</p>
@@ -228,7 +229,7 @@
                             <p class="roja">PARA JUGAR VAS A USAR TU USUARIO PERSONAL<br />
                             </p>
                             <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga abrí tu usuario</strong> &gt; red &gt; administracion de descargas</p>
-                            <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
+                            <p><strong>&gt; Si la descarga demora mucho</strong> deber&aacute;s ser paciente, depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
                           <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu juego para siempre.</strong></p></td>
 					  </tr>
                            
@@ -249,8 +250,8 @@
                     <div>
                         <table role="presentation" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:2px solid #999;">
                             <tr>
-                              <td valign="middle" style="text-align: center; padding: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #ffffff;"><p>ANTE CUALQUIER PROBLEMA</p>
-                                <p dir="ltr">Si ten&#233;s un error en la descarga o instalaci&oacute;n respond&#233; &#233;ste email adjuntando una foto del error que sale en pantalla. Sin la foto es imposible ayudarte.</p><p>
+                              <td valign="middle" style="text-align: center; padding: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #ffffff;"><p>¿PROBLEMAS?</p>
+                                <p dir="ltr">Si ten&#233;s dificultades respond&#233; &#233;ste email adjuntando una foto del error que sale en pantalla. Sin la foto es imposible ayudarte.</p><p>
                                 &#xA1;Muchas Gracias!</p></td>
                             </tr>
                         </table>
