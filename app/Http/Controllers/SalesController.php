@@ -83,9 +83,12 @@ class SalesController extends Controller
         $insert = DB::table('ventas')->insertGetId([
             'clientes_id'   => $request->clientes_id,
             'stock_id'      => $request->stk_ID,
+            'order_item_id' => $request->order_item_id,
             'cons'          => $request->consola,
             'slot'          => $request->slot,
             'medio_venta'   => $request->medio_venta,
+            'order_id_ml'   => $request->order_id_ml,
+            'order_id_web'   => $request->order_id_web,
             'estado'        => $request->estado,
             'Day'           => \Carbon\Carbon::now('America/New_York'),
             'Notas'         => $request->Notas,
@@ -349,6 +352,37 @@ class SalesController extends Controller
             }
         }
 
+    }
+
+    public function verificarOrderItemId($oii, $clientes_id)
+    {
+        $status = 0; // Status por default por si no existe el oii en la tabla "cbgw_woocommerce_order_items"
+        $datosOii = DB::table('cbgw_woocommerce_order_items')
+                        ->where('order_item_id', $oii)->first();
+        $data = [];
+
+        if ($datosOii) { // Si existe el Oii en la tabla
+            $existInVentas = DB::table('ventas')
+                                ->where('order_item_id', $oii)->first();
+
+            if ($existInVentas) { // ¿Existe en la tabla Ventas?
+                if ($existInVentas->clientes_id == $clientes_id) { // Verificar si el oii pertenece al cliente que se le va a asignar.
+                    $status = 2; // Status para devolver los datos
+                    $data['datosOii'] = $datosOii;
+                    $data['status'] = $status;
+                } else {
+                    $status = 1; // Status para avisar que ese oii pertenece a otro cliente.
+                    $data['existInVentas'] = $existInVentas;
+                    $data['status'] = $status;
+                }
+            } else {
+                $status = 2; // Status para devolver los datos
+                $data['datosOii'] = $datosOii;
+                $data['status'] = $status;
+            }
+        }
+
+        echo json_encode($data);
     }
 
 

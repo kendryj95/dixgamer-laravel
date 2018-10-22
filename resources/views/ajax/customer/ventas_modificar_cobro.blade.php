@@ -44,7 +44,7 @@
 				
 				
 				{{-- // si es admin permito modificar precio y comision --}}
-				@if ((session()->get('usuario')->Level ==  'Adm') || (session()->get('usuario')->Nombre ==  'Leo'))
+				@if (Helper::validateAdminAnalyst(session()->get('usuario')->Level))
 				<div class="col-md-5">
 	            <div class="input-group form-group">
 	              <span class="input-group-addon">precio</span>

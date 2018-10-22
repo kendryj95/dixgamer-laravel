@@ -155,8 +155,7 @@
                 <li><a href="https://dixgamer.com/db/publicaciones_detalles_secundario.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Secundarias</a></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_insertar.php"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
                 <li class="divider" role="separator"></li>
-                <li><a href="https://dixgamer.com/db/adwords_detalles.php"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
-                <li><a href="https://dixgamer.com/db/titulos.php"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> Titulos</a></li>
+                <li><a href="{{ url('adwords') }}"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="{{url('usuario')}}"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
                 <li><a href="{{url('usuario/list')}}"><i class="fa fa-users fa-fw" aria-hidden="true"></i> Listar usuarios</a></li>

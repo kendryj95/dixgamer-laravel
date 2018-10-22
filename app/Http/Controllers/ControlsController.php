@@ -108,4 +108,34 @@ class ControlsController extends Controller
     		return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
     	}
     }
+
+    ############### MODULO DE CONFIG ######################
+
+    public function adwords()
+    {
+        $query = "select
+                p.ID,
+                REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(p.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') AS titulo,
+                max( CASE WHEN pm.meta_key = 'consola' and  p.ID = pm.post_id THEN pm.meta_value END ) as consola,
+                max( CASE WHEN pm.meta_key = '_price' and p.ID = pm.post_id THEN pm.meta_value END ) as price,
+                round(max( CASE WHEN pm.meta_key = '_max_variation_price' and p.ID = pm.post_id THEN pm.meta_value END )) as max_price,
+                round(max( CASE WHEN pm.meta_key = '_min_variation_price' and p.ID = pm.post_id THEN pm.meta_value END )) as min_price,
+                post_status
+            from
+                cbgw_posts as p
+            LEFT JOIN
+                cbgw_postmeta as pm
+            ON
+               p.ID = pm.post_id
+            where
+                post_type = 'product' and
+                post_status = 'publish'
+            group by
+                p.ID
+            ORDER BY ID DESC, consola ASC, titulo ASC";
+
+        $adwords = DB::select($query);
+
+        return view('adwords.index', compact('adwords'));
+    }
 }

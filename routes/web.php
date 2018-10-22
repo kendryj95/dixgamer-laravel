@@ -154,6 +154,8 @@ Route::group(['middleware' => ['login']], function()
 
     Route::resource('horario','ScheduleController');
 
+
+
   });
 
   Route::get('sales/list','SalesController@index')->name('sales/list');
@@ -175,6 +177,10 @@ Route::group(['middleware' => ['login']], function()
   Route::get('usuario/edit/{id}', 'UsuariosController@edit')->where(['id' => '[0-9]+']);
 
   Route::post('usuario/edit', 'UsuariosController@storeEdit');
+
+  Route::get('adwords', 'ControlsController@adwords');
+
+  Route::get('verificarOii/{oii}/{clientes_id}', 'SalesController@verificarOrderItemId');
 
   // Rutas de Control
 

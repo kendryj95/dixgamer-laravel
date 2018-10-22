@@ -142,7 +142,7 @@ h1, .h1 { font-size:36px !important;}
     cursor:pointer;}
 /* acomodo el tamaño del selector de clientes en insertar venta manual */
 .twitter-typeahead, .tt-menu{width:100%;}
-.tt-menu {background-color: #BBBBBB;}
+.tt-menu {background-color: #BBBBBB;text-align: left; color: #434A54;}
 
 /* acomo el modal para ver las notas */
 .modal  {

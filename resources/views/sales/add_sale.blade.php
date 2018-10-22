@@ -1,6 +1,7 @@
 @extends('layouts.master-layouts')
 @section('container')
     <div class="container">
+
         <div class="row text-center" style="background-color:#cfcfcf;padding:5px; border: 1px dashed #efefef">
             <img class="img-rounded" width="60"
                  src="{{asset('img/productos')}}/<?php echo $colname_rsCON . "/" . $colname_rsTIT;?>.jpg"
@@ -79,7 +80,33 @@
                                placeholder="N° de Cobro">
                     </div>
                     <span id="faltacobro" style="color:#777;display:none;"><i id="user-result" class="fa fa-pencil"
-                                                                              aria-hidden="true"></i> completar</span>
+                                                                              aria-hidden="true"></i> Completar Nº de cobro</span>
+
+                    <div class="input-group form-group" id="order_ml">
+                        <span class="input-group-addon"><i class="fa fa-hashtag fa-fw"></i></span>
+                        <input class="form-control" type="text" name="order_id_ml" id="order_id_ml"
+                               placeholder="Order_id_ml">
+                    </div>
+                    <span id="faltaml" style="color:#777;display:none;"><i id="user-result" class="fa fa-pencil"
+                                                                              aria-hidden="true"></i> Completar Order_id_ml</span>
+
+                    <span class="text-danger" style="display: none" id="alert-error"></span>
+                    <div class="input-group form-group" id="order_item" style="display: none">
+                        <span class="input-group-addon"><i class="fa fa-hashtag fa-fw"></i></span>
+                        <input class="form-control" type="text" name="order_item_id" id="order_item_id"
+                               placeholder="Order_item_id" onblur="verificarOii(this.value)">
+                    </div>
+                    <span id="faltaitem" style="color:#777;display:none;"><i id="user-result" class="fa fa-pencil"
+                                                                              aria-hidden="true"></i> Completar Order_item_id</span>
+
+                    <div class="input-group form-group" id="order_web" style="display: none">
+                        <span class="input-group-addon"><i class="fa fa-hashtag fa-fw"></i></span>
+                        <input class="form-control" type="text" name="order_id_web" id="order_id_web"
+                               placeholder="Order_id_web" readonly>
+                    </div>
+                    <span id="faltaweb" style="color:#777;display:none;"><i id="user-result" class="fa fa-pencil"
+                                                                              aria-hidden="true"></i> Completar Order_id_web</span>
+                    
 
                     <input type="text" name="slot" value="<?php echo $colname_rsSlot;?>" hidden>
                     <br><br>
@@ -187,7 +214,25 @@
                     $('#submiter').prop('disabled', false);
                     document.getElementById("n_cobro").className = "input-group form-group has-error";
                     $("#faltacobro").show(300);
-                    isFormValid = true;
+                    
+                    return false;
+                } else if ($('#order_id_ml').val() == '' && $('#order_id_ml').is(':visible')) {
+                    $('#submiter').prop('disabled', false);
+                    document.getElementById("order_ml").className = "input-group form-group has-error";
+                    $("#faltaml").show(300);
+                    
+                    return false;
+                } else if ($('#order_item_id').val() == '' && $('#order_item_id').is(':visible')) {
+                    $('#submiter').prop('disabled', false);
+                    document.getElementById("order_item").className = "input-group form-group has-error";
+                    $("#faltaitem").show(300);
+                    
+                    return false;
+                } else if ($('#order_id_web').val() == '' && $('#order_id_web').is(':visible')) {
+                    $('#submiter').prop('disabled', false);
+                    document.getElementById("order_web").className = "input-group form-group has-error";
+                    $("#faltaweb").show(300);
+                    
                     return false;
                 }
             }
@@ -205,7 +250,7 @@
 
             cliente = document.getElementById("clientes").value;
             var String = cliente.substring(cliente.lastIndexOf('[ ')+1,cliente.lastIndexOf(' ]'));
-            document.getElementById("clientes_id").value = String;
+            document.getElementById("clientes_id").value = String.trim();
         },500);
     </script>
     <script type="text/javascript">
@@ -216,14 +261,29 @@
                 //alert(val2);
                 if (val == "MercadoLibre") {
                     $("#porcentaje").html("<option value='0.12'>12 %</option>");
+                    $('#order_ml').show();
+                    $('#order_item').hide().val('');
+                    $('#order_web').hide().val('');
                 } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
                     $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+                    $('#order_ml').hide().val('');
+                    $('#order_item').hide().val('');
+                    $('#order_web').hide().val('');
                 } else if (val == "Mail" && val2 == "Banco") {
                     $("#porcentaje").html("<option value='0.00'>0 %</option>");
+                    $('#order_ml').hide().val('');
+                    $('#order_item').hide().val('');
+                    $('#order_web').hide().val('');
                 } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
                     $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+                    $('#order_ml').hide().val('');
+                    $('#order_item').show();
+                    $('#order_web').show();
                 } else if (val == "Web" && val2 == "Banco") {
                     $("#porcentaje").html("<option value='0.00'>0 %</option>");
+                    $('#order_ml').hide().val('');
+                    $('#order_item').show();
+                    $('#order_web').show();
                 }
             });
         });
@@ -233,7 +293,7 @@
             $("#titulo-selec").change(function() {
                 var titulo = document.getElementById('titulo-selec').value;
                 var consola = document.getElementById('consola').value;
-                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
+                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
                 $('#image-swap').error(function() {
                     $("#image-swap").attr("alt", "no se encuentra");
                 });
@@ -243,7 +303,7 @@
             $("#consola").change(function() {
                 var consola = $(this).val();
                 var titulo = document.getElementById('titulo-selec').value;
-                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
+                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
                 $('#image-swap').error(function() {
                     $("#image-swap").attr("alt", "no se encuentra");
                 });
@@ -258,6 +318,47 @@
             r = m1*m2;
             document.getElementById("comision").value = r;
         },500);
+
+
+        function verificarOii(oii) {
+            let clientes_id = $('#clientes_id').val();
+            $('#alert-error').hide();
+
+            if (oii != "") {
+                $.ajax({
+                    url: '{{ url('verificarOii') }}/'+oii+'/'+clientes_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response){
+                        switch(response.status) {
+                            case 1:
+                                var html2 = `El orden_item_id pertenece al cliente <b><a href="{{ url('clientes') }}/${response.existInVentas.clientes_id}" style="color:#bb4442"> #${response.existInVentas.clientes_id} </a></b>`;
+
+                                $('#alert-error').html(html2).fadeIn();
+                                break;
+                            case 2:
+
+                                $('#order_id_web').val(response.datosOii.order_id);
+
+                                break;
+                            default:
+
+                                var html2 = `El orden_item_id no existe.`;
+
+                                $('#alert-error').text(html2).fadeIn();
+                                break;
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                        var html = `<p>Ha ocurrido un error inesperado al obtener el order_id_web.</p>`;
+
+                        $('#alert-error').html(html).fadeIn();
+                    }
+                });
+            }
+            
+        }
 
     </script>
 @endsection

@@ -65,6 +65,7 @@ foreach ($data as $value) {
             </div>
 
             <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+            <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
             <button class="btn btn-primary" type="submit">Modificar</button>
            <input type="reset" class="btn btn-secondary">
@@ -107,17 +108,24 @@ foreach ($data as $value) {
 
               <div class="input-group form-group oii">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id">
+                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id" onblur="verificarOii(this.value)">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
               <div class="input-group form-group oiw">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web">
+                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web" readonly>
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
+              <div class="input-group form-group oin" style="">
+                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+                <input class="form-control" type="text" id="oin" name="order_item_name" placeholder="order_item_name" readonly>
+                <span class="input-group-addon"><em class="text-muted">order item name</em></span>
+              </div>
+
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+              <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
               <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
               <input type="reset" class="btn btn-secondary">
@@ -132,17 +140,24 @@ foreach ($data as $value) {
 
               <div class="input-group form-group oii">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id">
+                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id" onblur="verificarOii(this.value)">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
               <div class="input-group form-group oiw">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web">
+                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web" readonly>
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
+              <div class="input-group form-group oin" style="">
+                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+                <input class="form-control" type="text" id="oin" name="order_item_name" placeholder="order_item_name" readonly>
+                <span class="input-group-addon"><em class="text-muted">order item name</em></span>
+              </div>
+
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+              <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
               <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
               <input type="reset" class="btn btn-secondary">
@@ -167,7 +182,14 @@ foreach ($data as $value) {
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
+              <div class="input-group form-group oin" style="display: none">
+                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+                <input class="form-control" type="text" id="oin" name="order_item_name" placeholder="order_item_name" readonly>
+                <span class="input-group-addon"><em class="text-muted">order item name</em></span>
+              </div>
+
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+              <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
               <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
               <input type="reset" class="btn btn-secondary">
@@ -194,6 +216,7 @@ foreach ($data as $value) {
                 
                   </div>
                   <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+                  <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
                 
                   <button class="btn btn-warning btn-block" id="addNote" type="button">Insertar</button>
                 
@@ -204,6 +227,8 @@ foreach ($data as $value) {
         {{-- </div> --}}
 
         @endif
+
+        <input type="hidden" id="clientes_id2" value="{{ $clientes->clientes_id }}">
         
       </div>
       <div class="col-sm-3">
@@ -320,4 +345,46 @@ foreach ($data as $value) {
       $('.oiw').show();
     }
   }
+
+  function verificarOii(oii) {
+      let clientes_id = $('clientes_id2').val();
+      $('#alert').hide();
+
+      if (oii != "") {
+          $.ajax({
+              url: '{{ url('verificarOii') }}/'+oii+'/'+clientes_id,
+              type: 'GET',
+              dataType: 'json',
+              success: function(response){
+                  switch(response.status) {
+                      case 1:
+                          var html2 = `<p>El orden_item_id pertenece al cliente <a href="{{ url('clientes') }}/${response.existInVentas.clientes_id}" class="alert-link"> #${response.existInVentas.clientes_id} </a></p>`;
+
+                          $('#alert').html(html2).fadeIn();
+                          break;
+                      case 2:
+
+                          $('#oiw').val(response.datosOii.order_id);
+                          $('#oin').val(response.datosOii.order_item_name);
+
+                          break;
+                      default:
+
+                          var html2 = `<p>El orden_item_id no existe.</p>`;
+
+                          $('#alert').html(html2).fadeIn();
+                          break;
+                  }
+              },
+              error: function(error){
+                  console.log(error);
+                  var html = `<p>Ha ocurrido un error inesperado al obtener el order_id_web.</p>`;
+
+                  $('#alert').html(html).fadeIn();
+              }
+          });
+      }
+      
+  }
+
 </script>

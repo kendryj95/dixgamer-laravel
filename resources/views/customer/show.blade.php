@@ -801,7 +801,7 @@
               <?php
         if (strpos($lowerSale->medio_cobro, 'Transferencia') !== false || strpos($lowerSale->medio_cobro, 'Banco') !== false || strpos($lowerSale->medio_cobro, 'Fondos') !== false): $text4 = '<i class="fa fa-bank fa-xs fa-fw" aria-hidden="true"></i>';
         elseif (strpos($lowerSale->medio_cobro, 'Ticket') !== false): $text4 = '<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>';
-        elseif (strpos($lowerSale->medio_cobro, 'Mercado') !== false): $text4 = 'MP';
+        elseif (strpos($lowerSale->medio_cobro, 'MP') !== false): $text4 = 'MP';
         endif;?>
         <small style="color:#CFCFCF;" title="<?php echo $lowerSale->medio_venta; ?>"><?php echo $text3;?></small> <small style="color:#CFCFCF;" title="<?php echo $lowerSale->medio_cobro; ?>"><?php echo $text4;?></small>
               <?php //if($lowerSale->estado == 'listo'):?>
