@@ -32,13 +32,15 @@ class SalesController extends Controller
 
         $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
 
-        if(! count($row_rsSTK) > 0) {
+        /*if(! count($row_rsSTK) > 0) {
             exit('No hay stock del Juego:'. $titulo ($consola));
+        }*/
+
+        if(!is_array($row_rsSTK)) {
+            return redirect()->back()->withErrors(["No hay stock del Juego: $titulo ($consola)"]);
+        } else {
+          $stk_ID = $row_rsSTK[0]->ID_stk;
         }
-
-        $stk_ID = $row_rsSTK[0]->ID_stk;
-
-
 
         $sqlAA = DB::select("SELECT CONCAT('[ ',ID,' ] ',nombre,' ',apellido,' - ',email) as nombre FROM clientes ORDER BY ID DESC");
 
@@ -79,10 +81,19 @@ class SalesController extends Controller
 
     public function saveManualSale(Request $request){
 
+        $row_rsSTK = Stock::StockDisponible($request->consola,$request->titulo, $request->slot);
+
+        if(!is_array($row_rsSTK)) {
+            return redirect()->back()->withErrors(["No hay stock del Juego: $titulo ($consola)"]);
+        } else {
+          $stk_ID = $row_rsSTK[0]->ID_stk;
+        }
+
+        // dd($row_rsSTK);
 
         $insert = DB::table('ventas')->insertGetId([
             'clientes_id'   => $request->clientes_id,
-            'stock_id'      => $request->stk_ID,
+            'stock_id'      => $stk_ID,
             'order_item_id' => $request->order_item_id,
             'cons'          => $request->consola,
             'slot'          => $request->slot,

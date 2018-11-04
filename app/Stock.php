@@ -98,6 +98,7 @@ class Stock extends Model
         return $query->select(DB::raw("ID AS ID_stock,
                       titulo,
                       consola,
+                      stock.usuario,
                       cuentas_id AS stock_cuentas_id,
                       medio_pago, costo_usd,
                       costo,

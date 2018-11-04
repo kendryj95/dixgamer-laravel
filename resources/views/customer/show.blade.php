@@ -194,6 +194,11 @@
                         <a href="#!" id="doseller" data-customer="{{ $customer->ID }}" data-update="no" type="button" class="btn btn-danger btn-xs pull-right">Revendedor</a>
                     @endif
                 @endif
+                @if(Helper::lessAdministrator(session()->get('usuario')->Level))
+                    @if($customer->auto == 're')
+                        <label for="" class="label label-danger pull-right" style="padding: 6px">Revendedor</label>
+                    @endif
+                @endif
 
 
 
@@ -355,7 +360,7 @@
 
                   <small style="color:#CFCFCF;">
                     <?php // si es el admin muestro los ID de cobros como links para editar los cobros?>
-                      @if(Helper::validateAdministrator(session()->get('usuario')->Level))
+                      @if(Helper::validateAdminAnalystAsistent(session()->get('usuario')->Level))
                         <?php
                           $array = (explode(',', $dataCustomer->ID_cobro, 10));
                         ?>

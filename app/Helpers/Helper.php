@@ -31,6 +31,13 @@ class Helper
       }
 
       return false;
+    }// Valida si es analista, asistente o administrador
+    public static function validateAdminAnalystAsistent($level){
+      if ($level == 'Adm' || $level == 'Analista' || $level == 'Asistente') {
+        return true;
+      }
+
+      return false;
     }
 
 

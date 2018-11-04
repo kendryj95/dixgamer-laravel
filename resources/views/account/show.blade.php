@@ -407,6 +407,10 @@
   @if(count($stocks) > 0)
 		@foreach($stocks as $stock)
 			@php $cant_productos++; @endphp
+
+			<?php
+              $color = Helper::userColor($stock->usuario);
+            ?>
     	<div class="col-xs-12 col-sm-4 col-md-3">
 				<div class="thumbnail">
 					<span class="pull-right" style="width: 45%;">
@@ -454,6 +458,13 @@
 										<i class="fa fa-shopping-cart fa-fw" aria-hidden="true"></i>
 										{{$stock->Q_venta}}x
 									</small>
+
+									<span
+									  class="badge badge-<?php echo $color;?> pull-right"
+									  style="opacity:0.7; font-weight:400;"
+									  title="<?php echo $stock->usuario; ?>">
+									  <?php echo substr($stock->usuario, 0, 1); ?>
+									</span>
             		</p>
 
             		<p>

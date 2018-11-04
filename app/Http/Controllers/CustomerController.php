@@ -578,7 +578,18 @@ class CustomerController extends Controller
       
       $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
       
-      $stk_ID = $row_rsSTK[0]->ID_stk;
+      // $stk_ID = $row_rsSTK[0]->ID_stk;
+
+      $errors = [];
+
+      if(!is_array($row_rsSTK)) {
+          // $errors[] = "No hay stock disponibles.";
+        return redirect()->back()->withErrors(["No hay stock disponible para el Juego: $titulo ($consola)"]);
+      } else {
+        $stk_ID = $row_rsSTK[0]->ID_stk;
+      }
+
+      // dd($row_rsSTK);
 
       $stock_anterior = DB::table('stock AS s')
                           ->select(
