@@ -23,9 +23,9 @@
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></span>
 						<select id="titulo-selec" name="titulo" class="selectpicker form-control" data-live-search="true" data-size="5">
-
+								<option value="">Selecciona Stock</option>
 							@foreach($titles as $title)
-								<option value="{{$title->producto}}">{{str_replace('-', ' ', $title->producto)}}</option>
+								<option value="{{explode(" (",$title->nombre_web)[0]}}">{{str_replace('-', ' ', $title->nombre_web)}}</option>
 							@endforeach
 
 							</select>
@@ -44,14 +44,16 @@
 
 					@endphp
 
-					<div class="input-group form-group">
+					<input type="hidden" name="consola" id="consola">
+
+					<!-- <div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-cube fa-fw"></i></span>
 						<select id="consola" name="consola" class="selectpicker form-control" onchange="return GameVerifyFunction();">
 							@php $color = ''; @endphp
 							@foreach ($consolas_stock as $cons)
-
+					
 							@if (!in_array($cons, $consolas))
-
+					
 							@php
 								switch ($cons) {
 									case 'ps4':
@@ -73,14 +75,14 @@
 							@endphp
 							
 							<option value="{{$cons}}" data-content="<span @if ($cons == "ps3") style='background-color: #000' @endif class='label label-{{$color}}'>{{$cons}}</span>">{{$cons}}</option>
-
+					
 							@endif
-
+					
 							@endforeach
 							
 							
 						</select>
-					</div>
+					</div> -->
 
 					<div class="input-group form-group text-center" style="width:100%">
 					</div>
@@ -143,7 +145,12 @@
 			jQuery(function($) {
 							$("form").on('change', function() {
 									var titulo = document.getElementById('titulo-selec').value;
-					var consola = document.getElementById('consola').value;
+					var select = document.getElementById('titulo-selec');
+
+					var consola = (select.options[select.selectedIndex].text.substr(-4)).replace(")","");
+
+					document.getElementById('consola').value = consola;
+
 					$("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
 					$('#image-swap').load(function() {
 									document.getElementById("alerta").innerHTML = "";
@@ -151,6 +158,13 @@
 					$('#image-swap').error(function() {
 						document.getElementById("alerta").innerHTML = "no se encuentra";
 					});
+
+						if (titulo == "") {
+							document.getElementById('submiter').disabled = true;
+						} else {
+							document.getElementById('submiter').disabled = false;
+						}
+
 							}).trigger('change');
 
 							// To style only <select>s with the selectpicker class
