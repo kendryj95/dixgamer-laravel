@@ -108,7 +108,7 @@ class WpPost extends Model
     }
 
 
-    public function lastGameStockTitles(){
+    /*public function lastGameStockTitles(){
       return DB::select(DB::raw("
         SELECT web.*, stk.*
         FROM
@@ -118,6 +118,11 @@ class WpPost extends Model
         ON producto = titulo
         ORDER BY Q_Stk DESC
       "));
+    }*/
+
+    public function lastGameStockTitles()
+    {
+      return DB::select("SELECT * FROM (SELECT CONCAT(titulo,' (',consola,')') as nombre_web FROM (select p.ID, REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(p.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') as titulo, max( CASE WHEN pm.meta_key = 'consola' and p.ID = pm.post_id THEN pm.meta_value END ) as consola, post_status from cbgw_posts as p LEFT JOIN cbgw_postmeta as pm ON p.ID = pm.post_id where post_type = 'product' and post_status = 'publish' group by p.ID ORDER BY `consola` DESC, `titulo` ASC) as resultado WHERE (consola IN ('ps4', 'ps3') OR titulo LIKE '%slot%') GROUP BY nombre_web) AS rdo LEFT JOIN (SELECT CONCAT(titulo,' (',consola,')') as nombre_db, COUNT(*) AS Q_Stk, Day FROM stock WHERE Day >= (DATE_ADD(CURDATE(), INTERVAL -45 DAY)) and (consola IN ('ps4', 'ps3') OR titulo LIKE '%slot%') GROUP BY nombre_db) AS stk ON nombre_web = nombre_db ORDER BY `stk`.`Q_Stk` DESC");
     }
 
 

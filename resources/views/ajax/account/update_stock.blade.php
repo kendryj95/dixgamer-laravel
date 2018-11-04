@@ -18,15 +18,18 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></span>
 						<select id="titulo-selec" name="titulo" class="selectpicker form-control" data-live-search="true" data-size="5">
-
+								<option value="">Seleccione stock</option>
 							@foreach($titles as $title)
-								<option value="{{$title->producto}}">{{str_replace('-', ' ', $title->producto)}}</option>
+								
+								<option value="{{explode(" (",$title->nombre_web)[0]}}">{{str_replace('-', ' ', $title->nombre_web)}}</option>
 							@endforeach
 
 							</select>
 					</div>
 
-					<div class="input-group form-group">
+					<input type="hidden" name="consola" id="consola">
+
+					<!-- <div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-cube fa-fw"></i></span>
 						<select id="consola" name="consola" class="selectpicker form-control">
 							<option selected value="ps4" data-content="<span class='label label-primary'>ps4</span>">ps4</option>
@@ -35,7 +38,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 							<option value="steam" data-content="<span class='label label-default'>steam</span>">steam</option>
 							<option value="psvita" data-content="<span class='label label-info'>psvita</span>">psvita</option>
 						</select>
-					</div>
+					</div> -->
 
 					<div class="input-group form-group">
 						<span class="input-group-addon"><em>Costo en USD</em></span>
@@ -56,7 +59,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 						</span>
 					</div>
 
-					<button class="btn btn-primary btn-block" type="submit">Guardar</button>
+					<button class="btn btn-primary btn-block" type="submit" id="submiter">Guardar</button>
 				</form>
 
 			</div>
@@ -69,7 +72,12 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 			jQuery(function($) {
 							$("form").on('change', function() {
 									var titulo = document.getElementById('titulo-selec').value;
-					var consola = document.getElementById('consola').value;
+									var select = document.getElementById('titulo-selec');
+
+					var consola = (select.options[select.selectedIndex].text.substr(-4)).replace(")","");
+
+					document.getElementById('consola').value = consola;
+
 					$("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
 					$('#image-swap').load(function() {
 									document.getElementById("alerta").innerHTML = "";
@@ -77,6 +85,13 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 					$('#image-swap').error(function() {
 						document.getElementById("alerta").innerHTML = "no se encuentra";
 					});
+
+						if (titulo == "") {
+							document.getElementById('submiter').disabled = true;
+						} else {
+							document.getElementById('submiter').disabled = false;
+						}
+
 							}).trigger('change');
 
 							$('.selectpicker').selectpicker();
