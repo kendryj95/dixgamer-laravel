@@ -150,10 +150,8 @@ foreach ($data as $value) {
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
-              <div class="input-group form-group oin" style="">
-                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input class="form-control" type="text" id="oin" name="order_item_name" placeholder="order_item_name" readonly>
-                <span class="input-group-addon"><em class="text-muted">order item name</em></span>
+              <div class="oin" style="">
+                <h6 id="oin" style="color: #000; text-align: left; margin: 0"></h6>
               </div>
 
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
@@ -182,10 +180,8 @@ foreach ($data as $value) {
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
-              <div class="input-group form-group oin" style="display: none">
-                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input class="form-control" type="text" id="oin" name="order_item_name" placeholder="order_item_name" readonly>
-                <span class="input-group-addon"><em class="text-muted">order item name</em></span>
+              <div class="oin" style="display: none">
+                <h6 id="oin"></h6>
               </div>
 
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
@@ -365,7 +361,7 @@ foreach ($data as $value) {
                       case 2:
 
                           $('#oiw').val(response.datosOii.order_id);
-                          $('#oin').val(response.datosOii.order_item_name);
+                          $('#oin').text(response.datosOii.order_item_name);
 
                           break;
                       default:
