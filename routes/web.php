@@ -144,6 +144,9 @@ Route::group(['middleware' => ['login']], function()
         Route::get('horarios/verificar/{id}', 'ScheduleController@verificarHorario');
         Route::get('horarios/edit/{id}', 'ScheduleController@editarHorario')->where(['id' => '[0-9]+']);
         Route::post('horarios/editar', 'ScheduleController@editHorario');
+
+        Route::get('carga_gc/{carga?}', 'ControlsController@cargaGC');
+        Route::post('carga_gc_store', 'ControlsController@cargaGC_store');
     });
 
 
