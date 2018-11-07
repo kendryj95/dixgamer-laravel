@@ -118,10 +118,8 @@ foreach ($data as $value) {
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
-              <div class="input-group form-group oin" style="">
-                <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input class="form-control" type="text" id="oin" name="order_item_name" placeholder="order_item_name" readonly>
-                <span class="input-group-addon"><em class="text-muted">order item name</em></span>
+              <div class="oin" style="">
+                <h6 id="oin" style="color: #000; text-align: left; margin: 0"></h6>
               </div>
 
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
@@ -170,18 +168,18 @@ foreach ($data as $value) {
 
               <div class="input-group form-group oii" style="display: none">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_item_id }}" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id">
+                <input value="{{ $clientes->order_item_id }}" onblur="verificarOii(this.value)" class="form-control" type="text" id="oii" name="order_item_id" placeholder="order_item_id">
                 <span class="input-group-addon"><em class="text-muted">order item id</em></span>
               </div>
 
               <div class="input-group form-group oiw" style="display: none">
                 <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web">
+                <input value="{{ $clientes->order_id_web }}" class="form-control" type="text" id="oiw" name="order_id_web" placeholder="order_id_web" readonly>
                 <span class="input-group-addon"><em class="text-muted">order id web</em></span>
               </div>
 
               <div class="oin" style="display: none">
-                <h6 id="oin"></h6>
+                <h6 id="oin" style="color: #000; text-align: left; margin: 0"></h6>
               </div>
 
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
@@ -331,19 +329,22 @@ foreach ($data as $value) {
       $('.oiml').hide();
       $('.oii').hide();
       $('.oiw').hide();
+      $('.oin').hide();
     } else if(value == 'MercadoLibre') {
       $('.oiml').show();
       $('.oii').show();
       $('.oiw').show();
+      $('.oin').show();
     } else {
       $('.oiml').hide();
       $('.oii').show();
       $('.oiw').show();
+      $('.oin').show();
     }
   }
 
   function verificarOii(oii) {
-      let clientes_id = $('clientes_id2').val();
+      let clientes_id = $('#clientes_id2').val();
       $('#alert').hide();
 
       if (oii != "") {
@@ -355,6 +356,8 @@ foreach ($data as $value) {
                   switch(response.status) {
                       case 1:
                           var html2 = `<p>El orden_item_id pertenece al cliente <a href="{{ url('clientes') }}/${response.existInVentas.clientes_id}" class="alert-link"> #${response.existInVentas.clientes_id} </a></p>`;
+                          $('#oiw').val('');
+                          $('#oin').text('');
 
                           $('#alert').html(html2).fadeIn();
                           break;
@@ -367,6 +370,8 @@ foreach ($data as $value) {
                       default:
 
                           var html2 = `<p>El orden_item_id no existe.</p>`;
+                          $('#oiw').val('');
+                          $('#oin').text('');
 
                           $('#alert').html(html2).fadeIn();
                           break;
