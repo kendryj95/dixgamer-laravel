@@ -127,11 +127,11 @@ class Helper
 
 
     // Creando session flash titulo y body
-    public static function messageFlash($title = '',$body = ''){
+    public static function messageFlash($title = '',$body = '', $tipo = 'success'){
       $obj = new \stdClass;
       $obj->title = $title;
       $obj->body = $body;
-      \Session::flash('success', $obj);
+      \Session::flash($tipo, $obj);
     }
 
 

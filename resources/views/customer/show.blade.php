@@ -430,6 +430,13 @@
                           href='https://www.mercadopago.com.ar/activities?q={{$valor}}'>
                             <i aria-hidden='true' class='fa fa-external-link'></i>
                           </a>
+                          <a
+                            class='btn-xs'
+                            title='Actualizar importes de MP'
+                            type='button'
+                            href='{{ url("update_amounts", $valor) }}'>
+                            <i class='fa fa-refresh' aria-hidden='true'></i>
+                          </a>
                         </small>
                     @endforeach
                   @endif

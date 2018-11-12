@@ -196,7 +196,14 @@
             {{ Session::get('success')->body }}
         </div>
       </div>
-
+    @elseif(Session::has('warning'))
+      <div class="container text-center">
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">{{ Session::get('warning')->title }}:</span>
+            {{ Session::get('warning')->body }}
+        </div>
+      </div>
     @endif
 
     

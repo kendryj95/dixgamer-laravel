@@ -1254,4 +1254,40 @@ class CustomerController extends Controller
 
       
     }
+
+    public function updateAmounts($cobro)
+    {
+
+      $ref_cobro_count = DB::table('ventas_cobro')->where('ref_cobro', $cobro)->count();
+
+      if ($ref_cobro_count > 1) {
+        \Helper::messageFlash('Clientes',"Existe más de un registro con ésta ref. de cobro", "warning");
+        return redirect()->back();
+      } else {
+        $amounts = DB::table('mercadopago')->where('ref_op', $cobro)->get();
+        $data = [];
+        foreach ($amounts as $amount) {
+          if (strpos($amount->concepto, 'Costo') !== false || strpos($amount->concepto, 'Comision') !== false) {
+            $data['comision'] = -1 * $amount->importe;
+          } else {
+
+            $data['precio'] = $amount->importe;
+          }
+        }
+
+        DB::beginTransaction();
+
+        try {
+          DB::table('ventas_cobro')->where('ref_cobro', $cobro)->update($data);
+          DB::commit();
+
+          \Helper::messageFlash('Clientes','Importes de MP actualizados al cobro #'.$cobro);
+          return redirect()->back();
+
+        } catch (Exception $e) {
+          DB::rollback();
+          return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
+        }
+      }
+    }
 }
