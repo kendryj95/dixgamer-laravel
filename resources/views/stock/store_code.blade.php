@@ -169,7 +169,7 @@
         var titulo = document.getElementById('clientes_id1').value;
         var consola = document.getElementById('clientes_id2').value;
 
-        $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
+        $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
 
         $('#image-swap').load(function() {
           document.getElementById("alerta").innerHTML = "";

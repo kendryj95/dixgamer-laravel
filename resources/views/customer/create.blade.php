@@ -21,7 +21,7 @@
           {{ csrf_field() }}
           <div id="user-result-div" class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-            <input class="form-control" type="text" name="email" id="email" autocomplete="off" spellcheck="false" placeholder="Email" autofocus>
+            <input class="form-control" type="text" style="text-transform: lowercase;" name="email" id="email" autocomplete="off" spellcheck="false" placeholder="Email" autofocus>
             <span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
           </div>
 
@@ -37,7 +37,7 @@
 
           <div id="ml-user-result-div" class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-snapchat-ghost fa-fw"></i></span>
-            <input class="form-control" type="text" name="ml_user" id="ml_user" autocomplete="off" placeholder="Usuario ML">
+            <input class="form-control" type="text" style="text-transform: uppercase;" name="ml_user" id="ml_user" autocomplete="off" placeholder="Usuario ML">
             <span class="input-group-addon"><i id="ml-user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
           </div>
 

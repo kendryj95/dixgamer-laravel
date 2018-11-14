@@ -4,7 +4,7 @@
 
         <div class="row text-center" style="background-color:#cfcfcf;padding:5px; border: 1px dashed #efefef">
             <img class="img-rounded" width="60"
-                 src="{{asset('img/productos')}}/<?php echo $colname_rsCON . "/" . $colname_rsTIT;?>.jpg"
+                 src="/img/productos/<?php echo $colname_rsCON . "/" . $colname_rsTIT;?>.jpg"
                  alt="<?php echo $colname_rsTIT . " - " . $colname_rsCON;?>"/><h4 style="display: inline">
                 Asignar <?php echo $colname_rsTIT . " (" . $colname_rsCON . ")";?></h4>
         <?php if (($colname_rsCON === "ps4") or ($colname_rsTIT === "plus-12-meses-slot")): echo '<em style="font-size:0.8m">' . $colname_rsSlot . '</em>'; endif;?>
@@ -293,7 +293,7 @@
             $("#titulo-selec").change(function() {
                 var titulo = document.getElementById('titulo-selec').value;
                 var consola = document.getElementById('consola').value;
-                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
+                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
                 $('#image-swap').error(function() {
                     $("#image-swap").attr("alt", "no se encuentra");
                 });
@@ -303,7 +303,7 @@
             $("#consola").change(function() {
                 var consola = $(this).val();
                 var titulo = document.getElementById('titulo-selec').value;
-                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
+                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
                 $('#image-swap').error(function() {
                     $("#image-swap").attr("alt", "no se encuentra");
                 });

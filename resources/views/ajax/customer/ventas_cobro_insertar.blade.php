@@ -4,7 +4,7 @@
   <div class="alert alert-danger text-center" id="alert-ventasInsert" style="display:none"></div>
   <div class="row">
       <div class="col-sm-3">
-  	   <img class="img-rounded pull-right" width="100" src="{{asset('img/productos')}}/{{ $venta_stock->consola }}/{{ $venta_stock->titulo }}.jpg" alt="{{ $venta_stock->titulo }} - {{ $venta_stock->consola }}" />
+  	   <img class="img-rounded pull-right" width="100" src="/img/productos/{{ $venta_stock->consola }}/{{ $venta_stock->titulo }}.jpg" alt="{{ $venta_stock->titulo }} - {{ $venta_stock->consola }}" />
       </div>
       <div class="col-sm-6">
       <form method="post" name="form1" id="form1" action="{{ url('customer_addVentasCobro') }}">

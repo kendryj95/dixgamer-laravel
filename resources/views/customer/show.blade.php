@@ -888,7 +888,7 @@
 
                                    <div id="user-result-div" class="input-group form-group">
                                      <span class="input-group-addon"><i class="fa fa-snapchat-ghost fa-fw"></i></span>
-                                     <input value="" class="form-control" type="text" name="ml_user" id="ml_user" autocomplete="off" spellcheck="false" placeholder="ML User" autofocus>
+                                     <input value="" class="form-control" style="text-transform: uppercase;" type="text" name="ml_user" id="ml_user" autocomplete="off" spellcheck="false" placeholder="ML User" autofocus>
                                    </div>
 
                                    <input type="hidden" name="id_cliente" value="{{$customer->ID}}">
@@ -936,7 +936,7 @@
 
                                         <div id="user-result-div2" class="input-group form-group">
                                           <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-                                          <input class="form-control" type="text" name="correo_cliente" id="correo_cliente" autocomplete="off" spellcheck="false" placeholder="Email" autofocus>
+                                          <input class="form-control" style="text-transform: lowercase;" type="text" name="correo_cliente" id="correo_cliente" autocomplete="off" spellcheck="false" placeholder="Email" autofocus>
                                           <span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
                                         </div>
                                     </div>

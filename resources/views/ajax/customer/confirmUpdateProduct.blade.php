@@ -11,7 +11,7 @@
 	@else
 
 			<div class="row text-center" style="background-color:#cfcfcf;padding:5px; border: 1px dashed #efefef">
-				<img class="img-rounded" width="60" src="{{asset('img/productos')}}/{{$consola}}/{{$titulo}}.jpg" alt="{{ $titulo }} - {{ $consola }}" /><h4 style="display: inline; color: #000"> Asignar {{ $titulo }} ({{ $consola }})</h4>
+				<img class="img-rounded" width="60" src="/img/productos/{{$consola}}/{{$titulo}}.jpg" alt="{{ $titulo }} - {{ $consola }}" /><h4 style="display: inline; color: #000"> Asignar {{ $titulo }} ({{ $consola }})</h4>
 
 				@if (($consola === "ps4") || ($titulo === "plus-12-meses-slot"))
 

@@ -60,7 +60,7 @@
           	<td><?php echo $i+1;?></td>
           	<td><?php echo $venta->ID_ventas; ?></td>
             <td><?php echo date("d-M", strtotime($venta->ventas_Day)); ?></td>
-            <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/<?php echo $venta->consola."/".$venta->titulo.".jpg";?>"alt="" /></td>
+            <td><img class="img-rounded" width="50" id="image-swap" src="/img/productos/<?php echo $venta->consola."/".$venta->titulo.".jpg";?>"alt="" /></td>
             <td><a title="Ir a Cliente" href="{{ url('clientes', $venta->clientes_id) }}"><?php echo $venta->nombre; ?> <?php echo $venta->apellido; ?></a><br /><br /><span style="opacity:0.5" class="text-muted btn-xs"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> <?php echo $venta->stock_id; ?></span> <?php if ($venta->cuentas_id):?><a style="opacity:0.5" class="text-muted btn-xs" href="{{ url('cuentas', $venta->cuentas_id) }}" title="Ir a Cuenta"><i class="fa fa-link fa-xs fa-fw" aria-hidden="true"></i> <?php echo $venta->cuentas_id; ?></a> <?php endif; ?><?php if ($venta->slot == 'Secundario'): ?><span class="label label-danger" style="opacity:0.5">2°</span><?php endif; ?></td>
             <td><small class="label label-<?php echo $color1;?>" style="opacity:0.7; font-weight:400;" title="<?php echo $venta->medio_venta; ?>"><?php echo $text;?></small> <small class="label label-<?php echo $color2;?>" style="opacity:0.7; font-weight:400;" title="<?php echo $venta->medio_cobro; ?>"><?php echo $text2;?></small></td>
             <td><span class="<?php if ($venta->precio < 1):?>badge badge-danger<?php endif;?>"><?php echo round($venta->precio); ?></span></td>

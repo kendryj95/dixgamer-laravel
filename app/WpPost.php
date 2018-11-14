@@ -102,7 +102,7 @@ class WpPost extends Model
                   post_status = 'publish'
               group by
                   p.ID
-              ORDER BY `consola` DESC, `titulo` ASC) as resultado WHERE consola IN ('amazon','facebook','google-play','ps','xbox','nintendo','fifa-points','steam') and titulo != 'plus-12-meses-slot') AS rdo
+              ORDER BY `consola` DESC, `titulo` ASC) as resultado WHERE consola IN ('amazon','facebook','google-play','ps','xbox','nintendo','fifa-points','steam', 'fortnite') and titulo != 'plus-12-meses-slot') AS rdo
 
       "));
     }

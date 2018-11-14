@@ -47,14 +47,14 @@ class EditButtonsController extends Controller
             if ($check) {
                 if (($check->email != $request->email) || ($check->email == $request->email && $check->clientes_id == $request->id)) {
                     DB::table('clientes')
-                    ->where('ID',$request->id)->update(['email' => $request->email]);
+                    ->where('ID',$request->id)->update(['email' => strtolower($request->email)]);
                     $status = 200;
                 } else {
                     $status = 500;
                 }
             } else {
                 DB::table('clientes')
-                ->where('ID',$request->id)->update(['email' => $request->email]);
+                ->where('ID',$request->id)->update(['email' => strtolower($request->email)]);
                 $status = 200;
             }
             
@@ -70,7 +70,7 @@ class EditButtonsController extends Controller
         if (!$exists) {
             $data = [];
             $data['clientes_id'] = $request->id;
-            $data['email'] = $request->email;
+            $data['email'] = strtolower($request->email);
             
             DB::table('clientes_email')->insert($data);
         }

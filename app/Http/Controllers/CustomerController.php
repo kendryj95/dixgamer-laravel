@@ -99,7 +99,7 @@ class CustomerController extends Controller
       try {
         // Creamos el arreglo del usuario
         $customer = [];
-        $customer['email'] = $request->email;
+        $customer['email'] = strtolower($request->email);
         $customer['nombre'] = $request->nombre;
         $customer['apellido'] = $request->apellido;
         $customer['pais'] = $request->pais;
@@ -117,7 +117,7 @@ class CustomerController extends Controller
         $c = new Customer();
         $cliente_id = $c->storeCustomer($customer);
 
-        DB::table('clientes_email')->insert(['clientes_id' => $cliente_id, 'email' => $request->email]);
+        DB::table('clientes_email')->insert(['clientes_id' => $cliente_id, 'email' => strtolower($request->email)]);
 
         if ($request->ml_user != "") {
           DB::table('clientes_ml_user')->insert(['clientes_id' => $cliente_id, 'ml_user' => $request->ml_user]);
@@ -125,7 +125,7 @@ class CustomerController extends Controller
 
         // Mensaje de notificacion
         \Helper::messageFlash('Clientes','Cliente guardado');
-        return redirect('clientes?column=email&word='.$request->email);
+        return redirect('clientes?column=email&word='.strtolower($request->email));
       } catch (\Exception $e) {
         return redirect()->back()->withErrors(['Intentelo nuevamente']);
       }
@@ -830,7 +830,7 @@ class CustomerController extends Controller
       ]);
 
       $data = [];
-      $data['ml_user'] = $request->ml_user;
+      $data['ml_user'] = strtoupper($request->ml_user);
 
       DB::beginTransaction();
 
@@ -1073,7 +1073,7 @@ class CustomerController extends Controller
         $data['provincia'] = $prov;
         $data['ciudad'] = $ciudad;
         $data['tel'] = $tel;
-        $data['email'] = $email;
+        $data['email'] = strtolower($email);
         if ($user_id_ml && $user_id_ml != "") {
           $data['ml_user'] = $user_id_ml;
         }
@@ -1082,7 +1082,8 @@ class CustomerController extends Controller
         DB::beginTransaction();
 
         try {
-          DB::table('clientes')->insert($data);
+          $clientes_id = DB::table('clientes')->insertGetId($data);
+          DB::table('clientes_email')->insert(["clientes_id"=> $clientes_id, "email" => strtolower($email)]);
           DB::commit();
 
           \Helper::messageFlash('Clientes','Cliente creado exitosamente.');

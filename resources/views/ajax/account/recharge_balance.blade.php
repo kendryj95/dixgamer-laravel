@@ -43,7 +43,7 @@
                 "account_id" => $account_id,
                 "titulo" => $gift->titulo,
                 "consola" => $gift->consola,
-                "costo_usd" => $gift->costo_usd
+                "costo_usd" => number_format($gift->costo_usd,0,"","")
               ];
             } elseif (($gift->costo_usd) < 60) {
               if ($bandera1 == 2) { // Para 20+10 y 20+20
@@ -66,7 +66,7 @@
                   "account_id" => $account_id,
                   "titulo" => $gift->titulo,
                   "consola" => $gift->consola,
-                  "costo_usd" => $gift->costo_usd
+                  "costo_usd" => number_format($gift->costo_usd,0,"","")
               ];
             } else {
               if ($bandera3 != 0) {
@@ -81,7 +81,7 @@
                   "account_id" => $account_id,
                   "titulo" => $gift->titulo,
                   "consola" => $gift->consola,
-                  "costo_usd" => $gift->costo_usd
+                  "costo_usd" => number_format($gift->costo_usd,0,"","")
               ];
             }
         @endphp
@@ -109,7 +109,7 @@
                     @if ($gift['titulo'] == 'plus-12-meses')
                       <h4>{{ $gift['titulo'] }}</h4>
                     @else
-                      <h2>{{ $gift['costo_usd'] }} USD</h2>
+                      <h2>{{ $gift['costo_usd'] }}</h2>
                     @endif
                     
                 </div> 

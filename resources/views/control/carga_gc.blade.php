@@ -74,7 +74,7 @@
           @foreach ($row_Diario as $diario)
           <tr>
           	<td><?php echo $diario->Q; ?> x </td>
-            <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/<?php echo $diario->consola."/".$diario->titulo.".jpg";?>" alt="" /></td>
+            <td><img class="img-rounded" width="50" id="image-swap" src="/img/productos/<?php echo $diario->consola."/".$diario->titulo.".jpg";?>" alt="" /></td>
             <td><?php echo str_replace('-', ' ', $diario->titulo);?></td>
             
 			<td><?php echo $diario->costo_usd; ?></td>
@@ -113,7 +113,7 @@
           @foreach ($row_Mensual as $mensual)
           <tr>
           	<td><?php echo $mensual->Q; ?> x </td>
-            <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/<?php echo $mensual->consola."/".$mensual->titulo.".jpg";?>" alt="" /></td>
+            <td><img class="img-rounded" width="50" id="image-swap" src="/img/productos/<?php echo $mensual->consola."/".$mensual->titulo.".jpg";?>" alt="" /></td>
             <td><?php echo str_replace('-', ' ', $mensual->titulo);?></td>
             
 			<td><?php echo $mensual->costo_usd; ?></td>
@@ -158,7 +158,7 @@
           @foreach ($row_Total as $total)
           <tr>
           	<td><?php echo $total->Q; ?> x </td>
-            <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/<?php echo $total->consola."/".$total->titulo.".jpg";?>" alt="" /></td>
+            <td><img class="img-rounded" width="50" id="image-swap" src="/img/productos/<?php echo $total->consola."/".$total->titulo.".jpg";?>" alt="" /></td>
             <td><?php echo str_replace('-', ' ', $total->titulo);?></td>
             
 			<td><?php echo $total->costo_usd; ?></td>
