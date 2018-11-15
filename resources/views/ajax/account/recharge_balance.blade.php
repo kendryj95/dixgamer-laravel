@@ -13,7 +13,7 @@
       @endphp
       @foreach($gifts as $gift)
 
-        @if ($gift->titulo == 'gift-card-10-usd' || $gift->titulo == 'gift-card-50-usd') <!-- Determinar si las dos gift card están disponibles -->
+        @if ($gift->titulo == 'gift-card-10-usd' || $gift->titulo == 'gift-card-50-usd' || $gift->titulo == 'gift-card-25-usd') <!-- Determinar si las dos gift card están disponibles -->
 
           @php
 
@@ -21,7 +21,7 @@
           @endphp
         @endif
 
-        @if ($gift->titulo == 'gift-card-10-usd' || $gift->titulo == 'gift-card-20-usd') <!-- Determinar si las dos gift card están disponibles -->
+        @if ($gift->titulo == 'gift-card-10-usd' || $gift->titulo == 'gift-card-20-usd' || $gift->titulo == 'gift-card-25-usd') <!-- Determinar si las dos gift card están disponibles -->
 
           @php
 
@@ -29,7 +29,7 @@
           @endphp
         @endif
 
-        @if ($gift->titulo == 'gift-card-20-usd') <!-- Determinar si las dos gift card están disponibles -->
+        @if ($gift->titulo == 'gift-card-20-usd' || $gift->titulo == 'gift-card-25-usd') <!-- Determinar si las dos gift card están disponibles -->
 
           @php
 
@@ -46,20 +46,33 @@
                 "costo_usd" => number_format($gift->costo_usd,0,"","")
               ];
             } elseif (($gift->costo_usd) < 60) {
-              if ($bandera1 == 2) { // Para 20+10 y 20+20
+              if ($bandera1 >= 2) { // Para 20+10 y 20+20
                 $gifts_array[] = [
                   "account_id" => $account_id,
                   "titulo" => 'gift-card-30-usd-org',
                   "consola" => $gift->consola,
                   "costo_usd" => 30
                 ];
+                $gifts_array[] = [
+                  "account_id" => $account_id,
+                  "titulo" => 'gift-card-35-usd-org',
+                  "consola" => $gift->consola,
+                  "costo_usd" => 35
+                ];
               }
-              if ($bandera2 == 2) {
+              if ($bandera2 >= 2) {
                 $gifts_array[] = [
                   "account_id" => $account_id,
                   "titulo" => 'gift-card-40-usd-org',
                   "consola" => $gift->consola,
                   "costo_usd" => 40
+                ];
+
+                $gifts_array[] = [
+                  "account_id" => $account_id,
+                  "titulo" => 'gift-card-45-usd-org',
+                  "consola" => $gift->consola,
+                  "costo_usd" => 45
                 ];
               }
               $gifts_array[] = [
@@ -68,6 +81,14 @@
                   "consola" => $gift->consola,
                   "costo_usd" => number_format($gift->costo_usd,0,"","")
               ];
+              if ($bandera3 == 2) {
+                $gifts_array[] = [
+                  "account_id" => $account_id,
+                  "titulo" => 'gift-card-55-usd-org',
+                  "consola" => $gift->consola,
+                  "costo_usd" => 55
+                ];
+              }
             } else {
               if ($bandera3 != 0) {
                 $gifts_array[] = [
