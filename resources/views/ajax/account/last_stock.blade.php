@@ -18,7 +18,7 @@
 								<div style="filter: brightness(50%); opacity:0.5;">
 						@endif
 									<img
-										src="/img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg "
+										src="{{asset('img/productos')}}/{{$stock->consola}}/{{$stock->titulo}}.jpg "
 										alt="{{$stock->consola}} - {{$stock->titulo}}.jpg" class="img img-responsive full-width" />
 								</div>
 

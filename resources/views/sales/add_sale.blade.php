@@ -293,7 +293,7 @@
             $("#titulo-selec").change(function() {
                 var titulo = document.getElementById('titulo-selec').value;
                 var consola = document.getElementById('consola').value;
-                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
+                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
                 $('#image-swap').error(function() {
                     $("#image-swap").attr("alt", "no se encuentra");
                 });
@@ -303,7 +303,7 @@
             $("#consola").change(function() {
                 var consola = $(this).val();
                 var titulo = document.getElementById('titulo-selec').value;
-                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "/img/productos/" + consola + "/" + titulo + ".jpg" : "");
+                $("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
                 $('#image-swap').error(function() {
                     $("#image-swap").attr("alt", "no se encuentra");
                 });

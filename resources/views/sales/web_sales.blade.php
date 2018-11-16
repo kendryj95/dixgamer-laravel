@@ -40,7 +40,7 @@
                     <tr height="90">
 
                         <td id="{{ $ventasweb->order_item_id  }}"><input type="hidden" id="verificaCliente" value="prueba@cliente.com"><span class="label label-default" style="opacity:0.7;">pedido #{{ $ventasweb->order_id }}</span><a target="_blank" href="https://dixgamer.com/wp-admin/post.php?post={{ $ventasweb->order_id }}&action=edit" class="text-muted btn-xs" title="ver pedido en la adm del sitio"><i class="fa fa-external-link" aria-hidden="true"></i> </a><br /><br /><span class="label label-normal" style="font-weight:400; opacity:0.5;">order_item_id #{{ $ventasweb->order_item_id  }}</span></td>
-                        <td><img class="img-rounded" width="50" id="image-swap" src="/img/productos/{{ $ventasweb->consola }}/{{ $ventasweb->producto.'.jpg' }} "alt="" /></td>
+                        <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $ventasweb->consola }}/{{ $ventasweb->producto.'.jpg' }} "alt="" /></td>
                         <td title="{{ str_replace('-', ' ', $ventasweb->producto)  }}({{ $ventasweb->consola }})">{{ str_replace('-', ' ', $ventasweb->producto)  }} ({{ $ventasweb->consola }})
 
                             @if($ventasweb->cliente_email)

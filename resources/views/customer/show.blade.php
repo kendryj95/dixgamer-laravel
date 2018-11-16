@@ -550,7 +550,7 @@
             <img
               class="img img-responsive img-rounded full-width"
               style="width:54%; margin:0;"
-              alt="<?php echo $dataCustomer->titulo;?>" src="../img/productos/<?php echo $dataCustomer->consola."/".$dataCustomer->titulo.".jpg"; ?>">
+              alt="<?php echo $dataCustomer->titulo;?>" src="{{asset('img/productos')}}/<?php echo $dataCustomer->consola."/".$dataCustomer->titulo.".jpg"; ?>">
             <div class="clearfix"></div>
 
             <div style="opacity: 0.3; padding: 4px 2px;">
@@ -835,7 +835,7 @@
 
               </span>
 
-              <img class="img img-responsive img-rounded full-width" style="width:54%; margin:0; opacity:0.8;" alt="<?php echo $dataCustomer->titulo;?>" src="../img/productos/<?php echo $lowerSale->consola."/".$lowerSale->titulo.".jpg"; ?>">
+              <img class="img img-responsive img-rounded full-width" style="width:54%; margin:0; opacity:0.8;" alt="<?php echo $dataCustomer->titulo;?>" src="{{asset('img/productos')}}/<?php echo $lowerSale->consola."/".$lowerSale->titulo.".jpg"; ?>">
               <span class="label label-default <?php echo $lowerSale->consola; ?>" style="position: relative; bottom: 22px; left: 5px; float:left;"><?php echo $lowerSale->consola; ?></span>
               <div class="caption text-center">
               <?php if ($lowerSale->cuentas_id):?><a href="cuentas_detalles.php?id=<?php echo $lowerSale->cuentas_id; ?>" class="btn btn-xs" title="Ir a Cuenta"><i class="fa fa-link fa-xs fa-fw" aria-hidden="true"></i> <?php echo $lowerSale->cuentas_id; ?></a> <?php endif; ?>

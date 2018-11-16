@@ -36,7 +36,7 @@
                 class="img-rounded"
                 width="50"
                 id="image-swap"
-                src="/img/productos/{{$stock->consola}}/{{$stock->titulo}}.jpg"
+                src="{{asset('img/productos')}}/{{$stock->consola}}/{{$stock->titulo}}.jpg"
                 alt="" />
               </td>
 

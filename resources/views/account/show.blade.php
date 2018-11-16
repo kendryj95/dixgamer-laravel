@@ -601,7 +601,7 @@
 							@foreach($lastAccountGames as $last)
 								<div class="col-sm-5" >
 									<div>
-										<img src="/img/productos/<?php echo $last->consola."/".$last->titulo.".jpg"; ?>"
+										<img src="{{asset('img/productos')}}/<?php echo $last->consola."/".$last->titulo.".jpg"; ?>"
 											 alt="<?php echo $last->consola." - ".$last->titulo.".jpg"; ?>" class="img img-responsive full-width" />
 									</div>
 
