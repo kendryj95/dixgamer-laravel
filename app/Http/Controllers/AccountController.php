@@ -179,7 +179,6 @@ class AccountController extends Controller
       $msgs = [
         'mail.required' => 'Email requerido',
         'mail_fake.required' => 'Email falso requerido',
-        'mail.email' => 'Ingrese Email valido',
         'mail_fake.email' => 'Ingrese Email falso valido',
         'mail.unique' => 'Emal ya existe',
         'mail_fake.unique' => 'Email falso ya existe',
@@ -189,7 +188,7 @@ class AccountController extends Controller
       ];
       // Validamos
       $v = Validator::make($request->all(), [
-          'mail' => 'required|email|unique:cuentas,mail',
+          'mail' => 'required|unique:cuentas,mail',
           'surname' => 'required',
           'name' => 'required',
           'mail_fake' => 'required|email|unique:cuentas,mail_fake',
