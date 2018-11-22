@@ -24,18 +24,18 @@
               </a>
             </div>
 
-            <span class="badge @if($stock->q_stock > 4) badge-success @else badge-danger @endif pull-right"
+            <span class="badge @if($stock->Q_Stock > 4) badge-success @else badge-danger @endif pull-right"
                   style="position: relative; top: 8px; left: -8px;">
 
               <?php // Valido que sea administrador o analista para mostrar valor real ?>
               @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level))
-                  {{$stock->q_stock}}
+                  {{$stock->Q_Stock}}
               @else
 
-                @if($stock->q_stock > 10)
+                @if($stock->Q_Stock > 10)
                   +10
                 @else
-                  {{$stock->q_stock}}
+                  {{$stock->Q_Stock}}
                 @endif
 
               @endif

@@ -116,7 +116,7 @@
 
           <div class="thumbnail">
 
-            <div style="height: 305px; border: 1px solid #ccc">
+            <div style="height: 185px; border: 1px solid #ccc">
               <a
                 title="cargar saldo"
                 onclick="request(event)"
@@ -124,8 +124,6 @@
               
                 <div style="color: #000">
                     <br>
-                    <br>
-                    <br><br>
                     <br>
                     @if ($gift['titulo'] == 'plus-12-meses')
                       <h4>{{ $gift['titulo'] }}</h4>

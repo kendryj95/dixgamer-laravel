@@ -27,7 +27,7 @@ class Stock extends Model
 
     // Scope que retorna el STOCK dependiento de un objeto que le pasemos
     public function ScopeShowStock($query, $obj){
-        return $query->Select(
+        /*return $query->Select(
             'stock.ID AS id_stk',
             'stock.consola',
             'stock.titulo',
@@ -51,7 +51,34 @@ class Stock extends Model
             ->where('stock.consola', '!=', $obj->console_2)
             ->where('q_vta', NULL)
             ->where('stock.titulo','!=', $obj->title)
-            ->groupBy('consola','titulo')->orderBy('consola','desc');
+            ->groupBy('consola','titulo')->orderBy('consola','desc');*/
+
+            return $query->Select(
+            'stock.ID AS id_stk',
+            'stock.consola',
+            'stock.titulo',
+            'stock.cuentas_id AS stk_ctas_id',
+            'ID_vtas',
+            'Q_vta',
+            'dayvta',
+            DB::raw('round(AVG(costo),0) as costo'),
+            DB::raw('COUNT(*) AS Q_Stock')
+        )
+            ->leftjoin(DB::raw('
+          (SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
+            FROM ventas
+            GROUP BY stock_id
+            ORDER BY ID DESC) AS vendido'
+            ), function($join)
+            {
+                $join->on('stock.ID', '=', 'vendido.stock_id');
+            })
+            ->where('stock.consola', '!=', $obj->console_1)
+            ->where('stock.consola', '!=', $obj->console_2)
+            ->where('stock.consola', '!=', 'xps')
+            ->where('q_vta', NULL)
+            ->where('stock.titulo','!=', $obj->title)
+            ->groupBy('consola','titulo')->orderBy(DB::raw("consola, SUBSTRING(titulo, 1, 5), costo"));
     }
 
     // Scope que retorna primary or secudary PS4
