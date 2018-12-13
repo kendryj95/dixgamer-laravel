@@ -222,7 +222,7 @@ class AccountController extends Controller
         $account['usuario'] = session()->get('usuario')->Nombre;
         $account['address'] = $request->address;
         $account['reg_date'] = Date('Y-m-d H:i:s');
-        $ac->createAccount($account);
+        $id_account = $ac->createAccount($account);
 
 
 
@@ -230,7 +230,7 @@ class AccountController extends Controller
         \Helper::messageFlash('Cuentas','Cuenta guardada');
 
 
-        return redirect('/cuentas?column=mail&word='.$request->mail);
+        return redirect('/cuentas/'.$id_account);
       } catch (\Exception $e) {
         return redirect()->back()->withErrors(['Intentelo nuevamente']);
       }

@@ -228,7 +228,7 @@
 
 								@foreach($accountBalances as $balance)
 									@if(!empty($balance->costo_usd))
-										@if(Helper::validateAdministrator(session()->get('usuario')->Level))
+										@if(Helper::validateAdministrator(session()->get('usuario')->Level) && $balance->code != NULL)
 											<div class="dropdown" style="display:inline;">
 												<button
 													class="btn btn-default dropdown-toggle btn-xs"
@@ -261,13 +261,14 @@
 
 									@if(!empty($balance->costo_usd))
 										<em>
+								@if ($balance->code != NULL)
 			                <small
 												class="label label-default">
 												{{ str_replace('-', '', $balance->code) }}
 											</small>
 
 											@if(Helper::validateAdministrator(session()->get('usuario')->Level))
-												<span class="text-mued" style="font-size:0.6em;">
+												<span class="text-muted" style="font-size:0.6em;">
 													({{ substr($balance->code_prov, 0 , 3) }}) {{$balance->n_order}}
 												</span>
 											@endif
@@ -277,6 +278,7 @@
 													title="Fondeado por {{ $balance->usuario }}">
 													{{ substr($balance->usuario ,0 , 1) }}
 												</span>
+								@endif
 			                <small
 												class="pull-right text-muted">
 													{{$balance->costo_usd}}

@@ -184,7 +184,7 @@ class Account extends Model
     }
 
     public function createAccount($arrayAcount){
-      return DB::table('cuentas')->insert($arrayAcount);
+      return DB::table('cuentas')->insertGetId($arrayAcount);
     }
 
     public function updateAccount($data,$id){

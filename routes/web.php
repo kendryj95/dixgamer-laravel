@@ -60,6 +60,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('createCustomerWeb/{oii}', 'CustomerController@createCustomerWeb');
   Route::get('enviar_email_venta/{venta_id}/{tipo}/{consola?}/{slot?}/{cuentas_id?}', 'CustomerController@emails');
   Route::get('update_amounts/{cobro}', 'CustomerController@updateAmounts');
+  Route::get('delete_amounts/{id}', 'CustomerController@deleteAmount');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');

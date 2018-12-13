@@ -109,7 +109,7 @@ class SalesController extends Controller
 
         $venta_ID = $insert;
 
-        $insert2 = DB::table('ventas_cobro')->insert([
+        $insert2 = DB::table('ventas_cobro')->insertGetId([
             'ventas_id'     => $venta_ID,
             'medio_cobro'   => $request->medio_cobro,
             'ref_cobro'     => $request->ref_cobro,
@@ -119,6 +119,11 @@ class SalesController extends Controller
             'Notas'         => $request->Notas,
             'usuario'       => session()->get('usuario')->Nombre
         ]);
+
+        if ($request->medio_cobro == 'Banco') {
+            $data['cobros_id'] = $insert2;
+            DB::table('ventas_cobro_bancos')->insert($data);
+        }
 
         return redirect(url('clientes',$request->clientes_id));
     }

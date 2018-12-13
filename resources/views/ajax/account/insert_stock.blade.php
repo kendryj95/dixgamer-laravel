@@ -23,7 +23,6 @@
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></span>
 						<select id="titulo-selec" name="titulo" class="selectpicker form-control" data-live-search="true" data-size="5">
-								<option value="">Selecciona Stock</option>
 							@foreach($titles as $title)
 								<option value="{{explode(" (",$title->nombre_web)[0]}}">{{str_replace('-', ' ', $title->nombre_web)}}</option>
 							@endforeach

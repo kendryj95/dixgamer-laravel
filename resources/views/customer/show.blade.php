@@ -423,6 +423,7 @@
                         class='caption text-center'>
                           {{$valor}}
                           <a
+                          style='padding: 0'
                           title='ver cobro en MP'
                           target='_blank'
                           class='btn-xs'
@@ -431,11 +432,20 @@
                             <i aria-hidden='true' class='fa fa-external-link'></i>
                           </a>
                           <a
+                          style='padding: 0'
                             class='btn-xs'
                             title='Actualizar importes de MP'
                             type='button'
                             href='{{ url("update_amounts", $valor) }}'>
                             <i class='fa fa-refresh' aria-hidden='true'></i>
+                          </a>
+                          <a
+                          style='padding: 0'
+                            class='btn-xs'
+                            title='Eliminar cobro'
+                            type='button'
+                            href='{{ url("delete_amounts", $dataCustomer->ID_cobro) }}'>
+                            <i class='fa fa-trash text-danger' aria-hidden='true'></i>
                           </a>
                         </small>
                     @endforeach
@@ -556,7 +566,7 @@
             <div style="opacity: 0.3; padding: 4px 2px;">
               @if($dataCustomer->order_item_id)
                 <span class="badge badge-normal" style="font-weight:400; font-size: 0.8em; color:#000">
-                  	oii #<?php echo $dataCustomer->order_item_id;?></span>
+                    oii #<?php echo $dataCustomer->order_item_id;?></span>
               @endif
 
               @if($dataCustomer->order_id_web)
@@ -811,6 +821,7 @@
         elseif (strpos($lowerSale->medio_venta, 'Mercado') !== false): $text3 = 'ML';
         endif;?>
               <?php
+              $text4 = '';
         if (strpos($lowerSale->medio_cobro, 'Transferencia') !== false || strpos($lowerSale->medio_cobro, 'Banco') !== false || strpos($lowerSale->medio_cobro, 'Fondos') !== false): $text4 = '<i class="fa fa-bank fa-xs fa-fw" aria-hidden="true"></i>';
         elseif (strpos($lowerSale->medio_cobro, 'Ticket') !== false): $text4 = '<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>';
         elseif (strpos($lowerSale->medio_cobro, 'MP') !== false): $text4 = 'MP';

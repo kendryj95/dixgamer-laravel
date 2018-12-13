@@ -163,7 +163,7 @@ class Pedidos_CobradosController extends Controller
                                                 "c.ID AS cliente_ID",
                                                 "c.email AS cliente_email",
                                                 "c.auto AS cliente_auto",
-                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola"),
+                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id GROUP BY meta_value) AS consola"),
                                                 DB::raw("(CASE 
                                                              WHEN slot_original IS NOT NULL THEN slot_original 
                                                              Else 
@@ -226,7 +226,7 @@ class Pedidos_CobradosController extends Controller
                                                 "c.ID AS cliente_ID",
                                                 "c.email AS cliente_email",
                                                 "c.auto AS cliente_auto",
-                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id) AS consola"),
+                                                DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='consola' AND post_id=r._product_id GROUP BY meta_value) AS consola"),
                                                 DB::raw("(CASE 
                                                              WHEN slot_original IS NOT NULL THEN slot_original 
                                                              Else 
@@ -245,7 +245,10 @@ class Pedidos_CobradosController extends Controller
                                             ->first();
 
                 
-                $pedidos[] = $info;
+                if ($info) {
+                    
+                    $pedidos[] = $info;
+                }
 
             }
 

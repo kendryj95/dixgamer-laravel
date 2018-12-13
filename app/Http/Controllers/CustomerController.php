@@ -1270,7 +1270,7 @@ class CustomerController extends Controller
         if (count($amounts) > 0) {
           $data = [];
           foreach ($amounts as $amount) {
-            if (strpos($amount->concepto, 'Costo') !== false || strpos($amount->concepto, 'Comision') !== false) {
+            if (strpos($amount->concepto, 'Costo') !== false || strpos($amount->concepto, 'Comisión') !== false) {
               $data['comision'] = -1 * $amount->importe;
             } else {
 
@@ -1296,6 +1296,21 @@ class CustomerController extends Controller
         }
 
         
+      }
+    }
+
+    public function deleteAmount($id)
+    {
+      DB::beginTransaction();
+
+      try {
+        DB::table('ventas_cobro')->where('ID', $id)->delete();
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Cobro eliminado exitosamente.');
+        return redirect()->back();
+      } catch (Exception $e) {
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
       }
     }
 }
