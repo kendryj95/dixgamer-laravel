@@ -25,7 +25,6 @@
 		                    <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
 		                    <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
 		                    <option value="Banco" data-content="<span class='label label-info'>Banco</span>">Banco</option>
-		                    <option value="Fondos" data-content="<span class='label label-normal'>Fondos</span>">Fondos</option>
 	                    @else
 		                    <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
 		                    <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>

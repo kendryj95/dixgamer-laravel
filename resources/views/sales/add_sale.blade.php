@@ -68,10 +68,6 @@
                                     data-content="<span class='label label-info'>Banco</span>">
                                 Banco
                             </option>
-                            <option value="Fondos"
-                                    data-content="<span class='label label-normal'>Fondos</span>">
-                                Banco
-                            </option>
                         </select>
                     </div>
                     <div class="input-group form-group" id="n_cobro">

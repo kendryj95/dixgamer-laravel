@@ -288,10 +288,10 @@
             ?>
 
             <?php
-              if ($dataCustomer->medio_cobro == 'Banco'): $text2 = 'Bco'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
-              elseif ($dataCustomer->medio_cobro == 'MP - Ticket'): $text2 = 'Cash'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
-              elseif ($dataCustomer->medio_cobro == 'MP' || $dataCustomer->medio_cobro   == 'MP - Tarjeta'): $text2 = 'MP'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
-              elseif ($dataCustomer->medio_cobro == 'Fondos'): $text2 = 'F'; $color2 = \Helper::medioCobroColor($dataCustomer->medio_cobro);
+              if (strpos($dataCustomer->medio_cobro,'Banco') !== false): $text2 = 'Bco'; $color2 = 'default';
+              elseif (strpos($dataCustomer->medio_cobro,'Ticket') !== false): $text2 = 'Cash'; $color2 = 'success';
+              elseif (strpos($dataCustomer->medio_cobro,'MP') !== false): $text2 = 'MP'; $color2 = 'primary';
+              elseif (strpos($dataCustomer->medio_cobro,'Fondo') !== false): $text2 = 'F'; $color2 = 'normal';
               endif;
             ?>
 

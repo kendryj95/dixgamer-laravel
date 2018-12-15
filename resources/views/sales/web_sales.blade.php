@@ -52,24 +52,39 @@
                             @endif
 
                             <br /><br />
-                            @if($ventasweb->_payment_method == 'MP' || $ventasweb->_payment_method == 'MP - Tarjeta')
+                            @php
+                            $color = '';
+                            $text = '';
+                            @endphp
+                            @if(strpos($ventasweb->_payment_method, '_card') !== false)
                                 <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
                                 <?php $text = 'MP'; ?>
-                                <span class="label label-{{ $color }}" style="font-weight:400; opacity:0.7;">{{ $text }}</span>
-                            @elseif($ventasweb->_payment_method == 'MP - Ticket')
+                            @elseif(strpos($ventasweb->_payment_method, 'account_money') !== false)
                                 <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
                                 <?php $text = 'Cash'; ?>
-                                <span class="label label-{{ $color }}" style="font-weight:400; opacity:0.7;">{{ $text }}</span>
-                            @elseif($ventasweb->_payment_method == 'Banco')
+                            @elseif(strpos($ventasweb->_payment_method, '-basic') !== false)
                                 <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
                                 <?php $text = 'Bco'; ?>
-                                <span class="label label-{{ $color }}" style="font-weight:400; opacity:0.7;">{{ $text }}</span>
-                            @elseif($ventasweb->_payment_method == 'Fondos')
+                            @elseif(strpos($ventasweb->_payment_method, 'digital_currency_consumer_credits') !== false)
                                 <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
                                 <?php $text = 'Fdos'; ?>
-                                <span class="label label-{{ $color }}" style="font-weight:400; opacity:0.7;">{{ $text }}</span>
+                            @elseif(strpos($ventasweb->_payment_method, 'ticket') !== false)
+                                <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
+                                <?php $text = 'Fdos'; ?>
+                            @elseif(strpos($ventasweb->_payment_method, 'atm') !== false)
+                                <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
+                                <?php $text = 'Fdos'; ?>
+                            @elseif(strpos($ventasweb->_payment_method, 'bacs') !== false)
+                                <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
+                                <?php $text = 'Fdos'; ?>
+                            @elseif(strpos($ventasweb->_payment_method, 'yith_funds') !== false)
+                                <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
+                                <?php $text = 'Fdos'; ?>
                             @endif
-
+                            <span class="label label-{{ $color }}" style="font-weight:400; opacity:0.7;">{{ $text }}</span>
+                            @if ($ventasweb->_qty > 1)
+                                <span class="badge badge-danger">ATENCIÓN {{ $ventasweb->_qty }} UNIDADES</span>
+                            @endif
 
                         </td>
 

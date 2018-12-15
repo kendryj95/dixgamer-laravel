@@ -162,10 +162,14 @@ class Helper
 
     public static function medioCobroColor($medio){
       $color = '';
-      if ($medio == 'MP' || $medio == 'MP - Tarjeta'): $color = "primary";
-      elseif ($medio == 'MP - Ticket'): $color = "success";
-      elseif ($medio == 'Banco'): $color = "default";
-      elseif ($medio == 'Fondos'): $color = "normal";
+      if (strpos($medio, '_card') !== false): $color = "primary";
+      elseif (strpos($medio, 'account_money') !== false): $color = "primary";
+      elseif (strpos($medio, '-basic') !== false): $color = "primary";
+      elseif (strpos($medio, 'digital_currency_consumer_credits') !== false): $color = "success";
+      elseif (strpos($medio, 'ticket') !== false): $color = "success";
+      elseif (strpos($medio, 'atm') !== false): $color = "success";
+      elseif (strpos($medio, 'bacs') !== false): $color = "default";
+      elseif (strpos($medio, 'yith_funds') !== false): $color = "normal";
       else: $color = "danger";
       endif;
 
@@ -186,7 +190,7 @@ class Helper
 
     public static function availableStock($account,$title,$console,$slot = null){
       if( ($console && ($console == "ps4")) or ($title && ($title == "plus-12-meses-slot")) ):
-	       if($slot && (ucwords($slot) == "primary")):
+         if($slot && (ucwords($slot) == "primary")):
             /***     PS4 PRIMARIO     ***/
             $obj = new \stdClass;
             $obj->console = 'ps4';

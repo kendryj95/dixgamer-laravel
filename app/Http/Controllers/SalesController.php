@@ -182,16 +182,9 @@ class SalesController extends Controller
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_email' AND post_id=p.ID) AS email"),
                               DB::raw("
                                 (SELECT 
-                                CASE
-                                WHEN meta_value LIKE '%_card%' OR meta_value LIKE '%pago-basic' THEN 'MP - Tarjeta'  
-                                WHEN meta_value LIKE 'account_money%' THEN 'MP'  
-                                WHEN meta_value LIKE 'ticket_%' OR meta_value LIKE '%pago-ticket' THEN 'MP - Ticket'  
-                                WHEN meta_value = 'bacs' THEN 'Banco'
-                                WHEN meta_value = 'fondos' THEN 'Fondos'
-                                ELSE 'No se encontró medio_pago'
-                                END  
+                                meta_value 
                                 FROM cbgw_postmeta 
-                                WHERE meta_key='_payment_method' AND post_id=p.ID) AS medio_pago"),
+                                WHERE meta_key='_payment_method' AND post_id=p.ID) AS _payment_method"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_Mercado_Pago_Payment_IDs' AND post_id=p.ID) AS ref_cobro"),
                               DB::raw("(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(meta_value, 'payment_id=', -1),'&',1) FROM cbgw_postmeta WHERE meta_key='_transaction_details_ticket' AND post_id=p.ID) AS ref_cobro_2"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id=p.ID) AS ref_cobro_3"),
@@ -289,30 +282,37 @@ class SalesController extends Controller
                 else: $slot_def = "No"; $estado = "listo";
                 endif;
 
+                // Defino el multiplo de la comisión por defecto de MP que es 5,38 %
+                $multiplo = "0.0538";
+                
+                // DEFINO EL MEDIO DE COBRO CON LAS OPCIONES PREDEFINIDAS 14/12/2018
+                if (strpos($venta->_payment_method, 'card') !== false): $medio_cobro = "MP - Tarjeta";
+                elseif (strpos($venta->_payment_method, 'account') !== false): $medio_cobro = "MP - Saldo";
+                elseif (strpos($venta->_payment_method, 'basic') !== false): $medio_cobro = "MP";
+                elseif (strpos($venta->_payment_method, 'ticket') !== false): $medio_cobro = "MP - Ticket";
+                elseif (strpos($venta->_payment_method, 'atm') !== false): $medio_cobro = "MP - Ticket";
+                elseif (strpos($venta->_payment_method, 'digital') !== false): $medio_cobro = "MP"; // mercado credito
+                    
+                // si es por banco cambio multiplo de comisión a 0%
+                elseif (strpos($venta->_payment_method, 'bacs') !== false): $medio_cobro = "Banco"; $multiplo = "0.00";
+                elseif (strpos($venta->_payment_method, 'yith') !== false): $medio_cobro = "Fondos"; $multiplo = "0.00";
+                else: $medio_cobro = "No encontrado";
+                endif;
+                
+
                 // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
                 if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
                 $medio_venta = "MercadoLibre";
                 $order_id_ml = $venta->order_id_ml;
-                $medio_cobro = $venta->medio_pago;
-                    /*if (strpos($venta->medio_pago_2, '_card') !== false): $medio_cobro = "Mercado Pago - Tarjeta";
-                    // 2018-05-19 --> no estoy seguro si el medio de pago sale con la palabra ticket cuando es ticket
-                    elseif (strpos($venta->medio_pago_2, 'ticket') !== false): $medio_cobro = "Mercado Pago - Ticket";
-                    else: $medio_cobro = "Mercado Pago"; endif;*/
                 $ref_cobro = $venta->ref_cobro_3;
-                $multiplo = "0.12";
+                $multiplo = "0.13";
                 } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
                 //2017-08 Paso el ref_cobro_2 como primer alternativa para ver si se reducen los errores de REF DE COBRO WEB
                 $medio_venta = "Web";
-                $medio_cobro = ucwords(strtolower($venta->medio_pago));
                     if (($venta->ref_cobro_2) && ($venta->ref_cobro_2 != "")): $ref_cobro = $venta->ref_cobro_2;
                     elseif (($venta->ref_cobro) && ($venta->ref_cobro != "")): $ref_cobro = $venta->ref_cobro;
                     endif;
-                    if (strpos($venta->medio_pago, 'Banco') !== false): $multiplo = "0.00";
-                    elseif (strpos($venta->medio_pago, 'MP') !== false): $multiplo = "0.0538";
-                    elseif (strpos($venta->medio_pago, 'Tarjeta') !== false): $multiplo = "0.0538";
-                    elseif (strpos($venta->medio_pago, 'Ticket') !== false): $multiplo = "0.0538";
-                    elseif (strpos($venta->medio_pago, 'PayPal') !== false): $multiplo = "0.99"; // TODAVIA NO SE LA TASA DE PAYPAL AVERIGUAR
-                    else: $comision = "0.99"; endif; // HAGO ESTO PARA DETECTAR SI HAY UN ERROR FACILMENTE
+                    
                 }
 
                 $order_id_web = $venta->order_id;
