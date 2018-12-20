@@ -117,7 +117,7 @@
                     <div class="col-md-3" style="opacity:0.7">
                         <div class="input-group form-group">
                             <select id="porcentaje" class="form-control">
-                                <option selected value="0.12">12 %</option>
+                                <option selected value="0.13">13 %</option>
                                 <option value="0.0538">6 %</option>
                                 <option value="0.00">0 %</option>
                             </select>
@@ -256,7 +256,7 @@
                 var val2 = $('#medio_cobro').val();
                 //alert(val2);
                 if (val == "MercadoLibre") {
-                    $("#porcentaje").html("<option value='0.12'>12 %</option>");
+                    $("#porcentaje").html("<option value='0.13'>13 %</option>");
                     $('#order_ml').show();
                     $('#order_item').hide().val('');
                     $('#order_web').hide().val('');
