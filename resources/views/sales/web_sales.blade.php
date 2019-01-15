@@ -127,13 +127,13 @@
 
         </table>
 
-    @if ($mostrar)
-
+    <!-- @if ($mostrar)
+    
     <div class="col-md-12">
-
+    
         <ul class="pager">
           <ul class="pagination">
-
+    
             @php
                 if (isset($_GET['pag'])) {
                   if ($_GET['pag'] != 1) {
@@ -146,7 +146,7 @@
                 }
             @endphp
                 @if ($previous == 1 && (!isset($_GET['pag']) || $_GET['pag'] == 1))
-
+    
                 <li class="disabled"><span>«</span></li>
                 @else
                 <li><a href="{{url('web/sales/list')}}?pag={{ $previous }}">«</a></li>
@@ -187,9 +187,9 @@
                  <li><a href="{{url('web/sales/list')}}?pag=<?= $paginas ?>"><?= $paginas ?></a></li>
                  @endif
                @endif
-
+    
                 @php
-
+    
                     if (isset($_GET['pag'])) {
                       if ($_GET['pag'] != $paginas) {
                         $next = intval($_GET['pag']) + 1;
@@ -199,21 +199,21 @@
                     } else {
                       $next = 2;
                     }
-
+    
                 @endphp
-
+    
                 @if (($next == $paginas) || (!isset($_GET['pag']) && ($paginas-1)==0))
-
+    
                 <li class="disabled"><span>»</span></li>
                 @else
                 <li><a href="{{url('web/sales/list')}}?pag={{ $next }}" rel="next">»</a></li>
                 @endif
             </ul>
-
+    
         </ul>
-
+    
     </div>
-  @endif
+      @endif -->
         <div class="container">
             <div class="row">
                 <!-- Large modal -->

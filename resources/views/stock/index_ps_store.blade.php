@@ -6,7 +6,7 @@
 
 
 <div class="container">
-	<h1>Listado de Links a PS Store</h1>
+  <h1>Listado de Links a PS Store</h1>
     @if (count($errors) > 0)
           <div class="alert alert-danger text-center">
             <ul>
@@ -27,7 +27,7 @@
           @if(Helper::validateAdministrator(session()->get('usuario')->Level))
             <th>Agregar Link</th>
             <th>Post ID</th>
-      		@endif
+          @endif
         </tr>
 
         @if(count($stocks) > 0)
@@ -102,9 +102,9 @@
 
       </table>
       <div>
-        <div class="col-md-12">
-          {{ $stocks->render() }}
-        </div>
+        <!-- <div class="col-md-12">
+          {{-- {{ $stocks->render() }} --}}
+        </div> -->
       </div>
     </div>
 </div><!--/.container-->

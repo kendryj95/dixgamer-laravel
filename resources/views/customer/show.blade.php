@@ -1160,6 +1160,10 @@
                                 </div>
                                 <div class="card-body">
 
+                                  <div class="alert alert-danger" id="alert-fb-mod" style="display:none">
+                                    <p>Coloque una URL de su cuenta de FB valida.</p>
+                                  </div>
+
                                     <div>
                                         <input type="text" class="form-control" id="cuentafacebookmodify">
                                         <input type="hidden" class="form-control" id="idcustomer">
@@ -1500,15 +1504,22 @@
             var face = $('#cuentafacebookmodify').val();
             var id = $('#idcustomer').val();
             var token = $('#token').val();
-            $.ajax({
-                method: 'post',
-                url: '{{url('saveFB')}}',
-                data: { '_token':token,'face':face,'id':id },
-                success: function (result) {
 
-                    location.reload();
-                }
-            });
+            if (isFB(face)) {
+              $.ajax({
+                  method: 'post',
+                  url: '{{url('saveFB')}}',
+                  data: { '_token':token,'face':face,'id':id },
+                  success: function (result) {
+
+                      location.reload();
+                  }
+              });
+            } else {
+              $('#alert-fb-mod').fadeIn();
+            }
+
+
         });
 
         function isEmail(email) {
@@ -1527,7 +1538,7 @@
         }
 
         function isFB(fb) {
-          var regex = /^(https:\/\/((www.facebook)|(facebook)).com\/)[A-Za-z0-9.\-\_]+(\/)?$/;
+          var regex = /^(https:\/\/((www.facebook)|((web.)?facebook)).com\/)(profile.php\?)?[A-Za-z0-9.\-\_\=]+(\/)?$/;
           return regex.test(fb);
         }
 

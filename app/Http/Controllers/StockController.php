@@ -46,7 +46,7 @@ class StockController extends Controller
     }
     public function indexLinkPsStore()
     {
-        $stocks = WpPost::linkStore()->paginate(50);
+        $stocks = WpPost::linkStore();
         return view('stock.index_ps_store',compact(
           'stocks'
         ));

@@ -100,7 +100,7 @@ class HomeController extends Controller
 
         // si la venta existe aviso al gestor
         if ($sales_order_item) {
-          echo "Este pedido ya fue asignado por ".$sales_order_item->usuario." <br><a href='/clientes_detalles/".$sales_order_item->clientes_id."' target='_blank'>Ver Venta</a>";
+          echo "Este pedido ya fue asignado por ".$sales_order_item->usuario." <br><a href='". url('clientes',$sales_order_item->clientes_id) ."' target='_blank'>Ver Venta</a>";
         }
       }
 

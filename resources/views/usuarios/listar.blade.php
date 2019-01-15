@@ -1,19 +1,19 @@
 @extends('layouts.master-layouts')
 
-@section('title', 'Listar Clientes')
+@section('title', 'Listar Usuarios')
 
 @section('container')
 <div class="container">
   <h1>Listar Usuarios</h1>
   @if (count($errors) > 0)
-				<div class="alert alert-danger text-center">
-					<ul>
-						@foreach ($errors->all() as $error)
-							<li>{{ $error }}</li>
-						@endforeach
-					</ul>
-				</div>
-	@endif
+        <div class="alert alert-danger text-center">
+          <ul>
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+  @endif
 
 <!-- verificando -->
 

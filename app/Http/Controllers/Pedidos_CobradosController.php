@@ -88,10 +88,14 @@ class Pedidos_CobradosController extends Controller
             return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata]);
     }
 
-    public function test($filtro)
+    public function test($filtro = null)
     {
 
         $pedido = " and post_id!=''";
+
+        if ($filtro != null) {
+            $pedido = " and post_id=$filtro";
+        }
 
         $passdata = DB::select("
 SELECT pedido.*, clientes.ID as cliente_ID, clientes.email as cliente_email, clientes.auto as cliente_auto
@@ -152,7 +156,7 @@ GROUP BY pedido.order_item_id
 ORDER BY order_item_id DESC");
 
 
-        $tamPag = 20;
+        /*$tamPag = 20;
         $numReg = count($passdata);
         $paginas = ceil($numReg/$tamPag);
         $limit = "";
@@ -165,11 +169,14 @@ ORDER BY order_item_id DESC");
             $limit = ($paginaAct-1) * $tamPag;
         }
 
-        $pedidos = $this->consultaPagination($pedido,$limit,$tamPag);
+        $pedidos = $this->consultaPagination($pedido,$limit,$tamPag);*/
+
+        $paginaAct = '';
+        $paginas = '';
 
         
 
-        return view('sales.web_sales')->with(['row_rsAsignarVta' => $pedidos, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => true]);
+        return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => true]);
     }
 
     private function consultaPagination($pedido,$inicio, $fin)

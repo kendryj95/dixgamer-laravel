@@ -29,9 +29,9 @@
    <!-- 2017-12-30 Agrego nuevo css de BootFLAT -->
   <link href="{{ asset('css/bootflat.css') }}" rel="stylesheet">
 
-	<!-- Estilo personalizado por mi -->
-	<link href="{{ asset('css/personalizado.css') }}" rel="stylesheet">
-	<link href="{{ asset('css/style.css') }}" rel="stylesheet">
+  <!-- Estilo personalizado por mi -->
+  <link href="{{ asset('css/personalizado.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
   @stack('css')
   
@@ -83,7 +83,7 @@
               <ul class="dropdown-menu">
                 <li><a href="{{ url('stock') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
                 <li><a href="{{ url('catalogo_link_ps_store') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Link PS Store</a></li>
-				        <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
+                <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
 
                 @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level))
                     <li class="divider" role="separator"></li>
@@ -104,7 +104,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Vtas<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('sales/list') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
-				<!--
+        <!--
                 <li><a href="https://dixgamer.com/db/ventas_web_sin_oii.php"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin order_item_id</a></li>
 
                 <li class="divider" role="separator"></li>
@@ -119,7 +119,7 @@
                 -->
               </ul>
             </li>
-            <li><a href="{{ url('web/sales/list') }}"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>
+            <li><a href="{{ url('web/sales') }}"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>
 
             @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <li class="dropdown">
@@ -148,9 +148,9 @@
            <li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>
               <ul class="dropdown-menu">
-              	<li><a href="https://dixgamer.com/db/_control/balance.php"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Balance</a></li>
+                <li><a href="https://dixgamer.com/db/_control/balance.php"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Balance</a></li>
                 <li><a href="https://dixgamer.com/db/_control/balance_productos.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
-				        <li><a href="https://dixgamer.com/db/_control/balance_productos_dias.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
+                <li><a href="https://dixgamer.com/db/_control/balance_productos_dias.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_detalles.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Publicaciones</a></li>
@@ -165,22 +165,22 @@
             </li>
           
 
-      			<li class="dropdown">
+            <li class="dropdown">
                 <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Control<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                	<li><a href="{{url('horarios')}}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
-        				  <li class="divider" role="separator"></li>
-        				  <li><a href="{{ url('carga_gc') }}"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
-        				  <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
-        				  <li class="divider" role="separator"></li>
+                  <li><a href="{{url('horarios')}}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
+                  <li class="divider" role="separator"></li>
+                  <li><a href="{{ url('carga_gc') }}"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
+                  <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
+                  <li class="divider" role="separator"></li>
                   <li><a href="https://dixgamer.com/db/_control/control_mp.php"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
-                	<li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
+                  <li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
                   <li><a href="https://dixgamer.com/db/_control/control_ventas.php"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas</a></li>
                   <li><a href="{{ url('control_ventas_bancos') }}"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas por Bancos</a></li>
                </ul>
             </li>
           @endif
-			<!--  Termina Admin   -->
+      <!--  Termina Admin   -->
             <li><a href="{{ url('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
           </ul>
         </div><!-- /.nav-collapse -->
@@ -227,14 +227,14 @@
   <!-- Activar popover -->
 
   <script>
-  	$(document).ready(function(){
-  		$('[data-toggle="popover"]').popover();
+    $(document).ready(function(){
+      $('[data-toggle="popover"]').popover();
 
 
       @if(Session::has('success'))
           $('#modal_success').modal('toggle');
       @endif
-  	});
+    });
   </script>
 
   @yield('scripts')
