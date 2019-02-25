@@ -170,6 +170,7 @@ Route::group(['middleware' => ['login']], function()
   });
 
   Route::get('sales/list','SalesController@index')->name('sales/list');
+  Route::post('sales/list','SalesController@index')->name('sales/list');
   Route::get('sales/manual/add/{consola}/{titulo}/{slot}','SalesController@addManualSale')->name('sales/manual/add/{consola}/{titulo}/{slot}');
   Route::post('saveManualSale','SalesController@saveManualSale')->name('saveManualSale');
   //Route::get('web/sales','Pedidos_CobradosController@index')->name('web/sales');

@@ -12,15 +12,24 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Schema;
 
 class SalesController extends Controller
 {
     //
     public function index(Request $request){
 
-        $datos = $this->QueryIndex();
+        // Ventas con filtro
+        $obj = new \stdClass;
+        $obj->column = $request->column;
+        $obj->word = $request->word;
 
-        return view('sales.sales_list')->with(['datos' => $datos]);
+        $datos = Sales::getData()->salesByCustomColumn($obj)->orderBy('ventas.ID','DESC')->paginate(50);
+        // $datos = $this->QueryIndex();
+
+        $columns = Schema::getColumnListing('ventas');
+
+        return view('sales.sales_list')->with(['datos' => $datos, 'columns' => $columns]);
     }
 
     public function addManualSale(Request $request, $consola, $titulo, $slot){

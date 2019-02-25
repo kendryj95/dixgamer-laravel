@@ -90,7 +90,7 @@
                           @endif
                           @php $array = explode(',', $value->ventas_id, 10); @endphp
                           @foreach($array as $valor)
-                            {{ $valor }} <button class="btn btn-default btn-xs"><i class="fa fa-search"></i></button>
+                            {{ $valor }} <a href="{{ url('sales/list') }}?column=ventas.ID&word={{$valor}}" class="btn btn-default btn-xs" target="_blank"><i class="fa fa-search"></i></a>
                           @endforeach
                         </small>
                       </td>
