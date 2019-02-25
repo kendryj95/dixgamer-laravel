@@ -213,4 +213,388 @@ class ControlsController extends Controller
             return redirect()->back()->withErrors(['Ha ocurrido algo inesperado, por favor vuelva a intentarlo']);
         }
     }
+
+    public function controlMP()
+    {
+        $conceptos = $this->getConceptos();
+
+        $cobros_mp_pareja = $this->getCobrosMPPareja();
+
+        $cobros_bd_pareja = $this->getCobrosBDPareja();
+
+        $cobros_bd_sin_pareja = $this->getCobrosBDSinPareja();
+
+        $cobros_mp_sin_pareja = $this->getCobrosMPSinPareja();
+
+        return view('control.control_mp', compact('conceptos','cobros_mp_pareja','cobros_bd_pareja','cobros_bd_sin_pareja','cobros_mp_sin_pareja'));
+
+    }
+
+    public function controlMPBaja(Request $request)
+    {
+        if (isset($request->nro_mov)) {
+            DB::beginTransaction();
+
+            try {
+                $insert = "INSERT INTO mercadopago_baja (nro_mov, concepto, ref_op, importe, saldo) SELECT nro_mov, concat('Anulación de ',concepto), ref_op, (importe * -1), saldo FROM mercadopago WHERE nro_mov=?";
+
+                DB::insert($insert, [$request->nro_mov]);
+
+                DB::commit();
+
+                \Helper::messageFlash('Cobros MP','Anulación aplicada correctamente.');
+
+                return redirect()->back();
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso. Por favor vuelva a intentarlo']);
+            }
+        }
+    }
+
+    public function controlMPBajaEnvio(Request $request)
+    {
+        if (isset($request->dif) && isset($request->ref_cobro)) {
+            DB::beginTransaction();
+
+            try {
+                $insert = "INSERT INTO mercadopago_baja (concepto, ref_op, importe, saldo) SELECT 'Anulación de Ingreso por envío', ref_op, (? * -1), saldo FROM mercadopago WHERE ref_op=? LIMIT 1";
+
+                DB::insert($insert, [$request->dif, $request->ref_cobro]);
+
+                DB::commit();
+
+                \Helper::messageFlash('Cobros MP','Anulación de Ingreso por envío aplicada correctamente.');
+
+                return redirect()->back();
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso. Por favor vuelva a intentarlo']);
+            }
+        }
+    }
+
+    public function controlMPCrearVentaCero(Request $request)
+    {
+        $ref_cobro = isset($request->ref_cobro) ? $request->ref_cobro : false;
+        $importe = isset($request->importe) ? $request->importe : false;
+        $colname_rsCliente = isset($request->c_id) ? $request->c_id : false;
+
+        $date = date('Y-m-d H:i:s');
+
+        if ($ref_cobro && $importe && $colname_rsCliente) {
+            DB::beginTransaction();
+
+            try {
+                $insertSQL = "INSERT INTO ventas (clientes_id, stock_id, cons, slot, medio_venta, estado, Day, usuario, Notas) VALUES ('$colname_rsCliente', '0', 'ps', 'No', 'Mail', 'listo', '$date', '$vendedor', 'Creado por control para reflejar realidad de cobro')";
+
+                DB::insert($insertSQL);
+
+                $ventaid = DB::getPdo()->lastInsertId();
+
+                $importeTotal = ($importe / 0.9446);
+                $comision = ($importeTotal * 0.0538);
+                
+                $insertSQL222 = "INSERT INTO ventas_cobro (ventas_id, medio_cobro, ref_cobro, precio, comision, Day, usuario) VALUES ('$ventaid', 'MercadoPago', '$ref_cobro', '$importeTotal', '$comision', '$date', '$vendedor')";
+
+                DB::insert($insertSQL222);
+
+                DB::commit();
+
+                \Helper::messageFlash('Cobros MP','Proceso aplicado correctamente.');
+
+                return redirect('clientes/'.$colname_rsCliente);
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso. Por favor vuelva a intentarlo']);
+            }
+        }
+
+    }
+
+    public function controlMPActualizarImportes(Request $request)
+    {
+        $ref_op = isset($request->ref_op) ? $request->ref_op : false;
+
+        if ($ref_op) {
+            $cobro = DB::table('mercadopago')->where('ref_op', $ref_op)->where('importe','>',0)->first();
+
+            $comis = DB::table('mercadopago')->where('ref_op', $ref_op)->where('importe','<',0.00)->whereIn('concepto', ['Cargo Mercado Pago','Costo de Mercado Pago','Comisión por venta de Mercado Libre'])->first();
+
+            $actual = DB::table('ventas_cobro')->where('ref_cobro', $ref_op)->first();
+
+            $actual_cobro = $actual->precio;
+            $actual_comision = $actual->comision;
+
+            $cobrado = $cobro->importe;
+            $comision = (-1.00 * $comis->importe);
+
+            DB::update("UPDATE ventas_cobro SET precio=?, comision=? WHERE ref_cobro=?", [$cobrado, $comision, $ref_op]);
+
+            $mensaje = '';
+            if (($cobrado - $actual_cobro) != 0) {
+                $mensaje .= 'Importe de ' . $actual_cobro . ' a ' . $cobrado;
+            }
+            if (($comision - $actual_comision) != 0) {
+                if ($mensaje != '') {
+                    $mensaje .= ' y comision de ' . $actual_comision . ' a ' . $comision;
+                } else {
+                    $mensaje .= 'Comision de ' . $actual_comision . ' a ' . $comision;
+                }
+            }
+
+            \Helper::messageFlash('Cobros MP',$mensaje);
+
+            return redirect()->back();
+        }
+    }
+
+    public function controlMPBajaSlotLibre(Request $request)
+    {
+        if (isset($request->dif) && isset($request->ref_cobro)) {
+            $insert = "INSERT INTO mercadopago_baja (concepto, ref_op, importe, saldo) SELECT 'Regala plata - No descargó', ref_op, (? * -1), saldo FROM mercadopago WHERE ref_op=? LIMIT 1";
+
+            DB::insert($insert, [$request->dif, $request->ref_cobro]);
+
+            \Helper::messageFlash('Cobros MP','Proceso aplicado correctamente.');
+
+            return redirect('/');
+        }
+    }
+
+    private function getConceptos()
+    {
+        $words = array(             "Percepción RG 4240 IVA Servicios Digitales Internacionales",
+        "Anulación de comisión por venta de MercadoLibre",
+        "Anulación de cargo MercadoPago",
+                       "Anulación de cargo Mercado Pago",
+        "Anulación de costo de envío por MercadoEnvíos",
+                       "Anulación de cargo por envío",
+        "Anulación de costo de MercadoPago",
+                       "Anulación de costo de Mercado Pago",
+                       "Anulación de comisión por venta de Mercado Libre",
+        "Anulación de dinero retenido por contracargo",
+        "Anulación de retiro de dinero a cuenta bancaria",
+                                    "Anulación de retención de ingresos brutos de Entre Ríos",
+                                    "Anulación de retención de ingresos brutos de Santa Fe",
+                                    "Anulación de retención de ingresos brutos de Santiago del Estero",
+                                    "Anulación parcial de retención de ingresos brutos de Córdoba",
+        "Anulación de retención de ingresos brutos de Córdoba",
+                       "Anulación de retención de ingresos brutos de Catamarca",
+        "Anulación parcial de costo de MercadoPago",
+                       "Anulación parcial de costo de Mercado Pago",
+        "Cargo MercadoPago",
+                       "Cargo Mercado Pago",
+                       "Cargo por envío",
+        "Cobro",
+        "Cobro Adicional",
+        "Cobro por descuento a tu contraparte",
+        "Comisión por venta de MercadoLibre",
+                       "Comisión por venta de Mercado Libre",
+        "Costo de envío por MercadoEnvíos",
+        "Costo de MercadoPago",
+                       "Costo de Mercado Pago",
+        "Devolución de cobro",
+        "Devolución de cobro Adicional",
+        "Devolución de cobro por descuento a tu contraparte",
+        "Devolución de dinero recibido",
+        "Devolución parcial de cobro",
+                       "Devolución parcial de ingreso de dinero",
+                       "Devolución parcial de pago",
+        "Devolución por Compra Protegida",
+        "Dinero recibido",
+        "Dinero retenido por contracargo",
+                       "Ingreso de dinero",
+        "Pago",
+        "Pago adicional",
+        "Percepción Ing. Brutos CAP. FED.",
+        "Percepción Ing. Brutos Pcia. Bs. As.",
+        "Recarga de celular",
+                                    "Retención de ingresos brutos de Mendoza",
+                                    "Retención de ingresos brutos de Neuquén",
+                                    "Retención de ingresos brutos de Santiago del Estero",
+        "Retención de ingresos brutos de Catamarca",
+        "Retención de ingresos brutos de Entre Ríos",
+        "Retención de ingresos brutos de La Pampa",
+        "Retención de ingresos brutos de Santa Fe",
+        "Retención de ingresos brutos de Córdoba",
+        "Retiro de dinero a cuenta bancaria" );
+
+        $whereClause = "";
+        foreach( $words as $word) {
+           $whereClause .= " concepto != '" . $word . "' AND";
+        }
+
+        // Remove last 'and'
+        $whereClause = substr($whereClause, 0, -3);
+        /**** query para descubrir si hay nuevo concepto de operación en mercadopago cargado a la base de datos y por ende no tenido en cuenta en los querys al momento de incorporarlo */
+        
+        $query_rsNewConcept = "SELECT concepto FROM mercadopago WHERE $whereClause GROUP BY concepto";
+
+        $conceptos = DB::select($query_rsNewConcept);
+
+        return $conceptos;
+
+    }
+
+    private function getCobrosMPPareja()
+    {
+        /*** SI AGREGO CONCEPTO QUE NO ES VENTA O COBRO (serían percepciones, retiros, pagos de mis compras, etc) AGREGARLO TMB EN "WHERE NOT LIKE" variable $wherenotlike   */ 
+
+        $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
+        AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
+        AND concepto NOT LIKE '%Anulación de retención de ingresos brutos de%' 
+        AND concepto NOT LIKE '%Anulación parcial de retención de ingresos brutos de%' 
+        AND concepto != 'Recarga de celular' 
+        AND concepto != 'Pago' 
+        AND concepto != 'Pago adicional' 
+        AND concepto != 'Retiro de dinero a cuenta bancaria' 
+        AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' 
+        AND concepto !='Percepción RG 4240 IVA Servicios Digitales Internacionales'";
+
+        $query_rsGRAL = "SELECT mp.*, cobro.*, (imp_mp - imp_db) as dif # SACO LA DIFERENCIA ENTRE MP Y LA DB
+        FROM 
+            (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov, # agrupo los mov de una misma operacion
+                 GROUP_CONCAT(concepto SEPARATOR ', ') AS concepto, # y agrupo los conceptos de esos movimientos
+                 SUM(importe) AS imp_mp # sumo el total final (saldo) de esa operacion
+                 FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
+                     
+                 WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep), 
+                 GROUP BY ref_op # los agrupo por operacion
+              ) as mp
+        LEFT JOIN
+                (SELECT ref_cobro, 
+                IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
+                GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos las ventas que tienen esa ref de cobro
+                clientes_id
+                FROM ventas_cobro
+                    LEFT JOIN (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
+                    ON ventas_cobro.ventas_id = vtas.ID
+                    GROUP BY ref_cobro
+                ) as cobro
+        ON mp.ref_op = cobro.ref_cobro # No necesito mas esto -> COLLATE utf8_spanish_ci uno la tabla de mercadopago a la table de cobros";
+        $query_rsCXP = $query_rsGRAL;
+        $query_rsCXP .= "
+        WHERE ((imp_mp >= (imp_db + 0.50)) OR (imp_mp<= (imp_db - 0.50))) # filtro las que tengan diferencia entre importes > a 50 centavos
+        ORDER BY `dif` ASC";
+
+        $cobros_mp_pareja = DB::select($query_rsCXP);
+
+        return $cobros_mp_pareja;
+    }
+
+    private function getCobrosBDPareja()
+    {
+        $query_rsGRAL2 = "SELECT db.*, mp.*, (imp_mp - imp_db) as dif
+        FROM 
+        (SELECT ventas_cobro.Day,
+                ref_cobro, 
+                IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
+                GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos los ID de ventas que tienen esa ref de cobro
+                ventas_cobro.usuario,
+                clientes_id
+            FROM ventas_cobro
+                LEFT JOIN 
+                (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
+            ON ventas_cobro.ventas_id = vtas.ID 
+            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%mercado%'
+            GROUP BY ref_cobro) as db
+        LEFT JOIN
+            (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov,
+            GROUP_CONCAT(concepto SEPARATOR ', ') AS concepto,
+            SUM(importe) AS imp_mp
+            FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
+            WHERE concepto NOT LIKE '%Percepción Ing. Brutos%' AND concepto NOT LIKE '%Retención de ingresos brutos de%' AND concepto != 'Recarga de celular' AND concepto != 'Pago' AND concepto != 'Pago adicional' AND concepto != 'Anulación de retención de ingresos brutos de Córdoba' AND concepto != 'Retiro de dinero a cuenta bancaria' AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' AND concepto != 'Anulación de retención de ingresos brutos de Catamarca' GROUP BY ref_op) as mp
+        ON db.ref_cobro = mp.ref_op # No necesito mas esto -> COLLATE utf8_spanish_ci";
+        $query_rsCobrosDB = $query_rsGRAL2;
+        $query_rsCobrosDB .= "
+        WHERE ((imp_mp >= (imp_db + 0.50)) OR (imp_mp<= (imp_db - 0.50))) # filtro las que tengan diferencia entre importes > a 50 centavos
+        ORDER BY `dif` ASC";
+
+        $cobros_bd_pareja = DB::select($query_rsCobrosDB);
+
+        return $cobros_bd_pareja;
+    }
+
+    private function getCobrosBDSinPareja()
+    {
+        $query_rsGRAL2 = "SELECT db.*, mp.*, (imp_mp - imp_db) as dif
+        FROM 
+        (SELECT ventas_cobro.Day,
+                ref_cobro, 
+                IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
+                GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos los ID de ventas que tienen esa ref de cobro
+                ventas_cobro.usuario,
+                clientes_id
+            FROM ventas_cobro
+                LEFT JOIN 
+                (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
+            ON ventas_cobro.ventas_id = vtas.ID 
+            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%mercado%'
+            GROUP BY ref_cobro) as db
+        LEFT JOIN
+            (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov,
+            GROUP_CONCAT(concepto SEPARATOR ', ') AS concepto,
+            SUM(importe) AS imp_mp
+            FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
+            WHERE concepto NOT LIKE '%Percepción Ing. Brutos%' AND concepto NOT LIKE '%Retención de ingresos brutos de%' AND concepto != 'Recarga de celular' AND concepto != 'Pago' AND concepto != 'Pago adicional' AND concepto != 'Anulación de retención de ingresos brutos de Córdoba' AND concepto != 'Retiro de dinero a cuenta bancaria' AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' AND concepto != 'Anulación de retención de ingresos brutos de Catamarca' GROUP BY ref_op) as mp
+        ON db.ref_cobro = mp.ref_op # No necesito mas esto -> COLLATE utf8_spanish_ci";
+
+        $query_rsCobrosDB2 = $query_rsGRAL2; /*** es la misma tabla QUE ARRIBA pero le hago distinto filtro */
+        $query_rsCobrosDB2 .= "
+        WHERE ref_op IS NULL and imp_db != '0.00' # filtro las op. de DB que no tienen pareja en MP y que tienen importe distinto a 0
+        ORDER BY imp_db DESC";
+
+        $cobros_bd_sin_pareja = DB::select($query_rsCobrosDB2);
+
+        return $cobros_bd_sin_pareja;
+    }
+
+    private function getCobrosMPSinPareja()
+    {
+
+        /*** SI AGREGO CONCEPTO QUE NO ES VENTA O COBRO (serían percepciones, retiros, pagos de mis compras, etc) AGREGARLO TMB EN "WHERE NOT LIKE" variable $wherenotlike   */ 
+
+        $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
+        AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
+        AND concepto NOT LIKE '%Anulación de retención de ingresos brutos de%' 
+        AND concepto NOT LIKE '%Anulación parcial de retención de ingresos brutos de%' 
+        AND concepto != 'Recarga de celular' 
+        AND concepto != 'Pago' 
+        AND concepto != 'Pago adicional' 
+        AND concepto != 'Retiro de dinero a cuenta bancaria' 
+        AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' 
+        AND concepto !='Percepción RG 4240 IVA Servicios Digitales Internacionales'";
+
+        $query_rsGRAL = "SELECT mp.*, cobro.*, (imp_mp - imp_db) as dif # SACO LA DIFERENCIA ENTRE MP Y LA DB
+        FROM 
+            (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov, # agrupo los mov de una misma operacion
+                 GROUP_CONCAT(concepto SEPARATOR ', ') AS concepto, # y agrupo los conceptos de esos movimientos
+                 SUM(importe) AS imp_mp # sumo el total final (saldo) de esa operacion
+                 FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
+                     
+                 WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep), 
+                 GROUP BY ref_op # los agrupo por operacion
+              ) as mp
+        LEFT JOIN
+                (SELECT ref_cobro, 
+                IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
+                GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos las ventas que tienen esa ref de cobro
+                clientes_id
+                FROM ventas_cobro
+                    LEFT JOIN (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
+                    ON ventas_cobro.ventas_id = vtas.ID
+                    GROUP BY ref_cobro
+                ) as cobro
+        ON mp.ref_op = cobro.ref_cobro # No necesito mas esto -> COLLATE utf8_spanish_ci uno la tabla de mercadopago a la table de cobros";
+
+        $query_rsCXP2 = $query_rsGRAL; /*** es la misma tabla QUE ARRIBA pero le hago distinto filtro */
+        $query_rsCXP2 .= "
+        WHERE ref_cobro IS NULL and imp_mp != '0.00' # filtro las op. de mp que no tienen pareja en bd y que tienen importe distinto a 0
+        ORDER BY imp_mp ASC";
+
+        $cobros_mp_sin_pareja = DB::select($query_rsCXP2);
+
+        return $cobros_mp_sin_pareja;
+    }
 }

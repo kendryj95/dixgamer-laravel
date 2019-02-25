@@ -342,6 +342,8 @@ $totalRows_Notas = mysql_num_rows($Notas);
 				if (($row_rsClient['ref_cobro'] != "") & ((count(explode(',', $row_rsClient['ID_cobro'], 10))) != (count(explode(',', $row_rsClient['ref_cobro'], 10))))):?>
 					<?php echo '<a href="ventas_cobro_modificar.php?id=' . $row_rsClient['ID_cobro'] . '" class="label label-danger" style="font-size:0.7em;">Modificar Ref Cobro</a>';
 				endif;?>
+<?php echo '<a href="ventas_cobro_modificar.php?id=' . $row_rsClient['ID_cobro'] . '" class="label label-danger" style="font-size:0.7em;">Modificar Ref Cobro</a>'; ?>
+
 				<?php  // si es venta Web pero no tiene order item id se debe corregir
 				if ((strpos($row_rsClient['medio_venta'], 'Web') !== false) & (is_null($row_rsClient['order_item_id']))):?>
 					<?php //echo '<a href="ventas_modificar.php?id=' . $row_rsClient['ID_ventas'] . '" class="label label-danger" style="font-size:0.7em;">Falta order_item_id</a>';?>

@@ -173,7 +173,7 @@
                   <li><a href="{{ url('carga_gc') }}"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
                   <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
                   <li class="divider" role="separator"></li>
-                  <li><a href="https://dixgamer.com/db/_control/control_mp.php"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
+                  <li><a href="{{ url('control_mp') }}"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
                   <li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
                   <li><a href="https://dixgamer.com/db/_control/control_ventas.php"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas</a></li>
                   <li><a href="{{ url('control_ventas_bancos') }}"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas por Bancos</a></li>
