@@ -426,4 +426,58 @@ class StockController extends Controller
     {
         //
     }
+
+    public function publicacionesSecundariasML()
+    {
+      $publicaciones = $this->getDatosPublicacionesSecundariasML();
+
+      return view('stock.publicaciones_secundarias', compact('publicaciones'));
+    }
+
+    private function getDatosPublicacionesSecundariasML()
+    {
+
+      $query = "SELECT * FROM
+(SELECT COUNT(ID_stk) AS q_stk, REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(titulo)), ' ', '-'), '''', ''), '’', ''), '.', '') AS producto, consola, SUM(Q_vta) as q_vta, SUM(Q_vta_pri) as vta_pri, SUM(Q_vta_sec) as vta_sec, (SUM(Q_vta_pri) - SUM(Q_vta_sec)) as libre FROM 
+(SELECT ID AS ID_stk, titulo, consola, ID_vta, IFNULL(Q_vta,0) AS Q_vta, IFNULL(Q_vta_pri,0) AS Q_vta_pri, IFNULL(Q_vta_sec,0) AS Q_vta_sec
+FROM stock
+LEFT JOIN
+(SELECT ventas.ID as ID_vta, stock_id, SUM(case when slot = 'Primario' then 1 else null end) AS Q_vta_pri, SUM(case when slot = 'Secundario' then 1 else null end) AS Q_vta_sec, MAX(estado) AS vta_estado, COUNT(*) AS Q_vta, Day AS dayvta
+FROM ventas
+GROUP BY stock_id) AS vendido
+ON ID = stock_id
+WHERE (consola = 'ps4')
+ORDER BY consola, titulo, ID DESC) AS resultado
+GROUP BY titulo)
+AS final
+LEFT JOIN
+(select
+    p.ID,
+    REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(p.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') AS titulo,
+    max( CASE WHEN pm.meta_key = 'consola' and  p.ID = pm.post_id THEN pm.meta_value END ) as cons,
+  max( CASE WHEN pm.meta_key = '_price' and p.ID = pm.post_id THEN pm.meta_value END ) as price,
+  round(max( CASE WHEN pm.meta_key = '_price' and p.ID = pm.post_id THEN pm.meta_value END )) as max_price,
+  round(min( CASE WHEN pm.meta_key = '_price' and p.ID = pm.post_id THEN pm.meta_value END )) as min_price,
+    post_status
+from
+    cbgw_posts as p
+LEFT JOIN
+    cbgw_postmeta as pm
+ON
+   p.ID = pm.post_id
+where
+    post_type = 'product' and
+    post_status = 'publish'
+group by
+    p.ID
+ORDER BY `cons` ASC, `titulo` ASC) as web
+ON final.producto = web.titulo
+WHERE libre > 0 AND cons = 'ps4' #ahora también agrupo por consola y titulo para evitar los duplicados de productos de la web (los que genero para WS)
+GROUP BY consola, titulo
+ORDER BY libre DESC";
+
+      $publicaciones = DB::select($query);
+
+      return $publicaciones;
+    }
 }

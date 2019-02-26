@@ -154,7 +154,7 @@
                 <li class="divider" role="separator"></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_detalles.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Publicaciones</a></li>
-                <li><a href="https://dixgamer.com/db/publicaciones_detalles_secundario.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Secundarias</a></li>
+                <li><a href="{{ url('publicaciones_secundarias_ml') }}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Secundarias</a></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_insertar.php"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="{{ url('adwords') }}"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
