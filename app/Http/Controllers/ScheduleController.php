@@ -138,14 +138,25 @@ class ScheduleController extends Controller
 
     ######### ACCIONES DE ADMINISTRADOR ##############
 
-    public function indexAdmin()
+    public function indexAdmin($filtro = null)
     {
-        $shedulesDayAdmin = Schedule::shedulesDayAdmin()->get();
-        $shedulesMonthAdmin = Schedule::shedulesMonthAdmin()->get();
-        // dd($shedulesMonth);
+        $user = $filtro;
+        $shedulesDayAdmin = Schedule::shedulesDayAdmin()->withUser($filtro)->get();
+        $shedulesMonthAdmin = Schedule::shedulesMonthAdmin()->withUser($filtro)->get();
+        $usuarios = Schedule::getUsuariosHorario()->get();
+
+        if ($filtro != null) {
+          $conFiltro = 'Si';
+        } else {
+          $conFiltro = 'No';
+        }
+        
         return view('schedule.admin.index', compact(
           'shedulesMonthAdmin',
-          'shedulesDayAdmin'
+          'shedulesDayAdmin',
+          'usuarios',
+          'conFiltro',
+          'user'
         ));
     }
 

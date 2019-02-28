@@ -64,5 +64,19 @@ class Schedule extends Model
 
   }
 
+  public function scopeGetUsuariosHorario($query)
+  {
+    return $query->select('usuario')->groupBy('usuario');
+  }
+
+  public function scopeWithUser($query, $user)
+  {
+    if (!empty($user)) {
+      return $query->where('usuario', $user);
+    } else {
+      return $query;
+    }
+  }
+
 
 }

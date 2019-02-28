@@ -9,6 +9,26 @@
     <!-- InstanceBeginEditable name="body" -->
 
     <div class="row">
+    	<div class="col-md-12">
+    		<a class="btn @if($conFiltro == 'No') btn-success @else btn-default @endif btn-sm" href="{{ url('horarios') }}" title="Ver Todos" style="margin:5px 0 0 0;">Todos</a>
+
+    		@foreach($usuarios as $value)
+
+    		  <a
+    		    class="btn @if($conFiltro == 'Si' && $user == $value->usuario) btn-success @else btn-default @endif btn-sm"
+    		    href="{{ url('horarios', $value->usuario) }}"
+    		    title="Filtrar {{$value->usuario}}"
+    		    style="margin:5px 0 0 0;">
+
+    		    {{$value->usuario}}
+
+    		  </a>
+
+    		@endforeach
+    	</div>
+    </div>
+
+    <div class="row">
 
       <div class="col-md-6">
 
