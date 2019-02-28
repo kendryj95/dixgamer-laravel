@@ -6,11 +6,25 @@
 
       <label for="column">Buscar en: </label> <br>
       <select name="column" class="form-control">
+        @php $selected = ''; @endphp
         @foreach($columns as $column)
           @if(app('request')->input('column') == $column)
             <option selected value="{{ $column }}"> {{$column}} </option>
           @else
-              <option value="{{ $column }}" @if ($column == 'mail_fake') selected @endif> {{$column}} </option>
+              @if($path == 'cuentas')
+                @if($column == 'mail_fake')
+                  @php $selected = 'selected'; @endphp
+                @else
+                  @php $selected = ''; @endphp
+                @endif
+              @else
+                @if($column == 'email')
+                  @php $selected = 'selected'; @endphp
+                @else
+                  @php $selected = ''; @endphp
+                @endif
+              @endif
+              <option value="{{ $column }}" {{ $selected }}> {{$column}} </option>
           @endif
         @endforeach
       </select>

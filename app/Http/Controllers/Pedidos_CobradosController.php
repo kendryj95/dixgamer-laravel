@@ -91,10 +91,17 @@ class Pedidos_CobradosController extends Controller
     public function test($filtro = null)
     {
 
-        $pedido = " and post_id!=''";
+        $condicion = " and post_id!=''";
+        $condicion2 = '';
+        $cliente = [];
 
         if ($filtro != null) {
-            $pedido = " and post_id=$filtro";
+            if (intval($filtro)) {
+                $condicion = " and post_id=$filtro";
+                $cliente = $this->consultarPedido($filtro);
+            } else {
+                $condicion2 = " where clientes.email LIKE '%$filtro%'";
+            }
         }
 
         $passdata = DB::select("
@@ -136,7 +143,7 @@ SELECT pedido.*, clientes.ID as cliente_ID, clientes.email as cliente_email, cli
                             LEFT JOIN cbgw_postmeta as pm ON wco.order_id = pm.post_id
                             LEFT JOIN cbgw_woocommerce_order_itemmeta as wcom ON wco.order_item_id = wcom.order_item_id
                             where 
-                            p.post_status = 'wc-processing' " . $pedido . " group by 
+                            p.post_status = 'wc-processing' " . $condicion . " group by 
                             wco.order_item_id
                             ORDER BY order_item_id DESC) as primer
                 LEFT JOIN
@@ -152,6 +159,7 @@ SELECT pedido.*, clientes.ID as cliente_ID, clientes.email as cliente_email, cli
     LEFT JOIN
     clientes
     ON pedido.email = clientes.email
+    $condicion2
 GROUP BY pedido.order_item_id
 ORDER BY order_item_id DESC");
 
@@ -176,7 +184,7 @@ ORDER BY order_item_id DESC");
 
         
 
-        return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => true]);
+        return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => true, "cliente" => $cliente]);
     }
 
     private function consultaPagination($pedido,$inicio, $fin)
@@ -245,6 +253,13 @@ ORDER BY order_item_id DESC LIMIT $inicio,$fin");
         $cliente = DB::table('clientes')->where('email', $request->email)->first();
 
         return Response()->json($cliente);
+    }
+
+    private function consultarPedido($pedido)
+    {
+        $resultado = DB::select("SELECT clientes_id, order_id_web, nombre, apellido FROM ventas LEFT JOIN clientes on ventas.clientes_id = clientes.ID where ventas.order_id_web=?", [$pedido]);
+
+        return $resultado;
     }
 
 }

@@ -23,9 +23,13 @@
                     <li>Este pedido ya fue asignado por {{ $_GET['u'] }} <a href="{{ url('clientes', $_GET['c']) }}" class="alert-link" target="_blank">Ver venta</a></li>
                 </ul>
             </div>
+        @elseif (count($cliente) > 0)
+            <p>El pedido <strong>{{ $cliente[0]->order_id_web }}</strong> ya fue asignado al cliente <a href="{{ url('clientes', $cliente[0]->clientes_id) }}" target="_blank"><strong>{{ $cliente[0]->nombre }} {{ $cliente[0]->apellido }}</strong></a></p>
         @endif
 
         <br />
+
+        @if(count($row_rsAsignarVta) > 0)
 
         <table class="table table-striped" border="0" cellpadding="0" cellspacing="5">
             <tr>
@@ -49,6 +53,9 @@
                             @endif
                             @if($ventasweb->slot == 'secundario')
                             <span class="label label-danger" style="opacity:0.7">2°</span>
+                            @endif
+                            @if ($ventasweb->cliente_auto == "si")
+                                <a type="button" class="text-muted btn-xs text-danger" title="tiene historial favorable"><i class="fa fa-star" aria-hidden="true"></i></a>
                             @endif
 
                             <br /><br />
@@ -126,6 +133,8 @@
 
 
         </table>
+
+        @endif
 
     <!-- @if ($mostrar)
     
