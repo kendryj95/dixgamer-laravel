@@ -82,6 +82,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> Stk<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('stock') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+                <li><a href="{{ url('stocks_cargados') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Cargados</a></li>
                 <li><a href="{{ url('catalogo_link_ps_store') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Link PS Store</a></li>
                 <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
 

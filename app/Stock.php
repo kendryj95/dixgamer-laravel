@@ -326,6 +326,26 @@ class Stock extends Model
             ->where('ID',$account);
     }
 
+    public function ScopeGetDatosCargados($query, $fecha_ini, $fecha_fin)
+    {
+        return $query->select(
+            DB::raw("COUNT(*) AS Q"),
+            'titulo',
+            'consola',
+            DB::raw("GROUP_CONCAT(cuentas_id) AS cuentas"),
+            'usuario',
+            DB::raw("(SELECT color FROM usuarios WHERE usuario = stock.usuario) AS color")
+        )
+        ->where('Day','>',$fecha_ini)
+        ->where('Day','<',$fecha_fin)
+        ->groupBy('titulo')
+        ->groupBy('consola')
+        ->groupBy('usuario')
+        ->orderBy('usuario')
+        ->orderBy('consola')
+        ->orderBy('titulo');
+    }
+
 
     public function ScopePs3Resetear($query){
         return DB::select(DB::raw("

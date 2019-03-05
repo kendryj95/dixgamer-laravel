@@ -104,6 +104,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('catalogo_link_ps_store', 'StockController@indexLinkPsStore');
   Route::get('productos_catalogo', 'StockController@indexCatalogueProduct');
   Route::get('publicaciones_secundarias_ml', 'StockController@publicacionesSecundariasML');
+  Route::get('stocks_cargados', 'StockController@indexCargados');
 
 
 

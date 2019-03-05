@@ -46,7 +46,7 @@ class StockController extends Controller
     }
     public function indexLinkPsStore()
     {
-        $stocks = WpPost::linkStore();
+        $stocks = WpPost::linkStore()->get();
         return view('stock.index_ps_store',compact(
           'stocks'
         ));
@@ -479,5 +479,24 @@ ORDER BY libre DESC";
       $publicaciones = DB::select($query);
 
       return $publicaciones;
+    }
+
+    public function indexCargados(Request $request)
+    {
+      $fecha_fin = isset($request->fecha_fin) ? $request->fecha_fin : date('Y-m-d');
+      $fecha_ini = isset($request->fecha_ini) ? $request->fecha_ini : $this->defaultFechaIni();
+
+      $cargados = Stock::getDatosCargados($fecha_ini, $fecha_fin)->get();
+
+      return view('stock.index_cargados', compact('cargados','fecha_fin','fecha_ini'));
+    }
+
+    private function defaultFechaIni()
+    {
+      $hoy = strtotime(date('Y-m-d'));
+      $fecha_ini = strtotime('-7 days', $hoy);
+      $fecha_ini = date('Y-m-d', $fecha_ini);
+
+      return $fecha_ini;
     }
 }
