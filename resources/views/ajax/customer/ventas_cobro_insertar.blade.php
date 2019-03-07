@@ -30,7 +30,7 @@
               
         <div class="input-group form-group" id="n_cobro">
                 <span class="input-group-addon"><i class="fa fa-hashtag fa-fw"></i></span>
-                <input class="form-control" type="text" name="ref_cobro" id="ref_cobro" placeholder="Ref. de Cobro">             
+                <input class="form-control" type="text" name="ref_cobro" id="ref_cobro" onchange="limpiarReferencia(this.value)" placeholder="Ref. de Cobro">             
               </div>
               <span id="faltacobro" style="color:#777;display:none;"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i> completar</span>
                    
@@ -60,10 +60,10 @@
               </div>
               </div>
                           
-              <div class="input-group form-group">
+              <!-- <div class="input-group form-group">
                 <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
                 <input class="form-control" type="text" name="Notas_cobro" placeholder="Notas del cobro">
-              </div>
+              </div> --> <!-- SE COMENTA TEMPORALMENTE EL DÍA 07/03/2019 POR ORDEN DE VICTOR -->
 
               <button class="btn btn-primary botonero" id="submiter" type="button">Insertar</button>
           
@@ -148,6 +148,10 @@
   function isNum(carac) {
     var regex = /^(\d+)$/g;
     return regex.test(carac);
+  }
+
+  function limpiarReferencia(ref_cobro) {
+    document.getElementById('ref_cobro').value = ref_cobro.trim();
   }
 
 </script>

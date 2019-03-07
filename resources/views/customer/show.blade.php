@@ -6,7 +6,20 @@
 
   @if($customer)
     <div class="container">
-    <h1>Cliente #{{$customer->ID}}</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <h1>Cliente #{{$customer->ID}}</h1>
+      </div>
+      <div class="col-md-6">
+        @if(Session::has('alert_cliente'))
+          <div class="alert alert-success" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">{{ Session::get('alert_cliente')->title }}:</span>
+              {{ Session::get('alert_cliente')->body }}
+          </div>
+        @endif
+      </div>
+    </div>
 
     @if (count($errors) > 0)
           <div class="alert alert-danger text-center">
@@ -315,7 +328,7 @@
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/3','#modalVentas')">Modificar order</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/4','#modalVentas')">Agregar nota</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_duplicar_venta")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Duplicar venta</a></li>
-                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar venta</a></li>
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar cobros</a></li>
                     </ul>
                   </div>
                 <p>
@@ -431,6 +444,7 @@
                           href='https://www.mercadopago.com.ar/activities?q={{$valor}}'>
                             <i aria-hidden='true' class='fa fa-external-link'></i>
                           </a>
+                          @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
                           <a
                           style='padding: 0'
                             class='btn-xs'
@@ -447,6 +461,7 @@
                             href='{{ url("delete_amounts", $dataCustomer->ID_cobro) }}'>
                             <i class='fa fa-trash text-danger' aria-hidden='true'></i>
                           </a>
+                          @endif
                         </small>
                     @endforeach
                   @endif
@@ -831,7 +846,7 @@
               {{-- <small style="color:#CFCFCF;"><i class="fa fa-download fa-fw" aria-hidden="true"></i></small> --}}
               <?php //endif; ?>
               </p>
-        <?php if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($dataCustomer->costo * 0.6) ?>
+        <?php if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo * 0.6) ?>
               <?php elseif (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo * 0.4) ?>
               <?php elseif ($lowerSale->consola == 'ps3'): $costo2 = round($lowerSale->costo * 0.25) ?>
               <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot')&& ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo * 0.6) ?>
@@ -846,7 +861,7 @@
 
               </span>
 
-              <img class="img img-responsive img-rounded full-width" style="width:54%; margin:0; opacity:0.8;" alt="<?php echo $dataCustomer->titulo;?>" src="{{asset('img/productos')}}/<?php echo $lowerSale->consola."/".$lowerSale->titulo.".jpg"; ?>">
+              <img class="img img-responsive img-rounded full-width" style="width:54%; margin:0; opacity:0.8;" alt="<?php echo $lowerSale->titulo;?>" src="{{asset('img/productos')}}/<?php echo $lowerSale->consola."/".$lowerSale->titulo.".jpg"; ?>">
               <span class="label label-default <?php echo $lowerSale->consola; ?>" style="position: relative; bottom: 22px; left: 5px; float:left;"><?php echo $lowerSale->consola; ?></span>
               <div class="caption text-center">
               <?php if ($lowerSale->cuentas_id):?><a href="cuentas_detalles.php?id=<?php echo $lowerSale->cuentas_id; ?>" class="btn btn-xs" title="Ir a Cuenta"><i class="fa fa-link fa-xs fa-fw" aria-hidden="true"></i> <?php echo $lowerSale->cuentas_id; ?></a> <?php endif; ?>

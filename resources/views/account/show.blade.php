@@ -12,29 +12,43 @@
 @section('container')
 <div class="container">
 
-	<h1>
-		Cuenta #{{$account->ID}}
+	<div class="row">
+		<div class="col-md-6">
+			<h1>
+				Cuenta #{{$account->ID}}
 
-		<a
-			title="Cuenta anterior"
-			style="color:#ccc;"
-			id="paginaAnt"
-			href="{{ url('cuentas/'.$back->ID) }}"
-			target="_self">
-				<
-		</a>
-		@if(!empty($next))
-		<a
-			title="Cuenta siguiente"
-			style="color:#ccc;"
-			id="paginaPrev"
-			href="{{ url('cuentas/'.$next->ID) }}"
-			target="_self">
-				>
-		</a>
-		@else
-		@endif
-	</h1>
+				<a
+					title="Cuenta anterior"
+					style="color:#ccc;"
+					id="paginaAnt"
+					href="{{ url('cuentas/'.$back->ID) }}"
+					target="_self">
+						<
+				</a>
+				@if(!empty($next))
+				<a
+					title="Cuenta siguiente"
+					style="color:#ccc;"
+					id="paginaPrev"
+					href="{{ url('cuentas/'.$next->ID) }}"
+					target="_self">
+						>
+				</a>
+				@else
+				@endif
+			</h1>
+		</div>
+		<div class="col-md-6">
+			@if(Session::has('alert_cuenta'))
+			  <div class="alert alert-success" role="alert">
+			      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			      <span class="sr-only">{{ Session::get('alert_cuenta')->title }}:</span>
+			      {{ Session::get('alert_cuenta')->body }}
+			  </div>
+			@endif
+		</div>
+	</div>
+
 		@if (count($errors) > 0)
 					<div class="alert alert-danger text-center">
 						<ul>

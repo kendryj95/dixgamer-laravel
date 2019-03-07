@@ -110,7 +110,7 @@ class AccountController extends Controller
         $this->rst->storeRequestResetAccount($data);
 
         // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Solicitud de reseteo creada');
+        \Helper::messageFlash('Cuentas','Solicitud de reseteo creada','alert_cuenta');
 
         return redirect('cuentas/'.$id);
       } catch (\Exception $e) {
@@ -161,7 +161,7 @@ class AccountController extends Controller
         $emailcuenta1 = substr($vendedor, 0, 2);
         $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 15658;
         $idcuenta = "dix" . $emailcuenta1 . $emailcuenta2;
-        $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@abcdix.com";
+        $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@game24hs.com"; // cambio de abcdix.com a game24hs.com 2019-02-25
 
 
         return view('account.create', compact('idcuenta', 'emailcuenta'));
@@ -227,7 +227,7 @@ class AccountController extends Controller
 
 
         // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Cuenta guardada');
+        \Helper::messageFlash('Cuentas','Cuenta guardada','alert_cuenta');
 
 
         return redirect('/cuentas/'.$id_account);
@@ -283,7 +283,7 @@ class AccountController extends Controller
         $this->tks->storeCodes($data);
 
         // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Cuenta copiada');
+        \Helper::messageFlash('Cuentas','Cuenta copiada','alert_cuenta');
 
 
         return redirect('cuentas/'.$account_id);
@@ -453,7 +453,9 @@ class AccountController extends Controller
 
       if ($request->saldo_act != 0) {
         if ($costo_usd > $request->saldo_act) {
-          return redirect()->back()->withErrors('El costo utilizado para actualizar el producto no puede ser mayor al saldo que tienes disponible.');
+          if ($stock->titulo == $request->titulo) { // Que valide solo cuando está tratando de actualizar el costo con el mismo stock
+            return redirect()->back()->withErrors('El costo utilizado para actualizar el producto no puede ser mayor al saldo que tienes disponible.');
+          }
         }
       }
 
@@ -485,7 +487,7 @@ class AccountController extends Controller
 
 
           // Mensaje de notificacion
-          \Helper::messageFlash('Cuentas','Stock actualizado');
+          \Helper::messageFlash('Cuentas','Stock actualizado','alert_cuenta');
           return redirect('cuentas/'.$account_id);
           redirect('cuentas/'.$account_id);
         } catch (\Exception $e) {
@@ -552,6 +554,11 @@ class AccountController extends Controller
 
 
       try {
+
+        if ($this->validarStock($request->cuentas_id, $request->titulo, $request->consola)) {
+          return redirect('cuentas/'.$request->cuentas_id)->withErrors("Ya existe el juego $request->titulo ($request->consola) en esta cuenta.");
+        } 
+
         $data = [];
         $data['titulo'] = $request->titulo;
         $data['consola'] = $request->consola;
@@ -564,11 +571,19 @@ class AccountController extends Controller
         $data['usuario'] = session()->get('usuario')->Nombre;
 
         $this->tks->storeStockAccount($data);
-        \Helper::messageFlash('Cuentas','Stock agregado');
+        \Helper::messageFlash('Cuentas','Stock agregado','alert_cuenta');
         return redirect('cuentas/'.$request->cuentas_id);
       } catch (\Exception $e) {
         return redirect('/cuentas')->withErrors('Intentelo nuevamente');
       }
+
+    }
+
+    private function validarStock($id_cuenta, $titulo, $consola) {
+
+      $resultado = DB::table('stock')->where('cuentas_id', $id_cuenta)->where('titulo', $titulo)->where('consola', $consola)->first();
+
+      return $resultado;
 
     }
 
@@ -622,7 +637,7 @@ class AccountController extends Controller
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
                 // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
                 // return redirect('cuentas/'.$account);
                 $band = true;
               } catch (\Exception $e) {
@@ -668,7 +683,7 @@ class AccountController extends Controller
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
                 // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
                 // return redirect('cuentas/'.$account);
                 $band = true;
               } catch (\Exception $e) {
@@ -713,7 +728,7 @@ class AccountController extends Controller
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
                 // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
                 // return redirect('cuentas/'.$account);
                 $band = true;
               } catch (\Exception $e) {
@@ -758,7 +773,7 @@ class AccountController extends Controller
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
                 // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
                 // return redirect('cuentas/'.$account);
                 $band = true;
               } catch (\Exception $e) {
@@ -804,7 +819,7 @@ class AccountController extends Controller
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
                 // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
                 // return redirect('cuentas/'.$account);
                 $band = true;
               } catch (\Exception $e) {
@@ -850,7 +865,7 @@ class AccountController extends Controller
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
                 // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado');
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
                 // return redirect('cuentas/'.$account);
                 $band = true;
               } catch (\Exception $e) {
@@ -890,7 +905,7 @@ class AccountController extends Controller
             // Eliminando stock
             $stock = Stock::where('ID',$stock->ID)->delete();
             // Mensaje de notificacion
-            // \Helper::messageFlash('Cuentas','Saldo agregado');
+            // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
             // return redirect('cuentas/'.$account);
             $band = true;
           } catch (\Exception $e) {
@@ -900,7 +915,7 @@ class AccountController extends Controller
         }
 
         if ($band) {
-          \Helper::messageFlash('Cuentas','Saldo agregado');
+          \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
             return redirect('cuentas/'.$account);
         } else {
           return redirect('/cuentas')->withErrors('Intentelo nuevamente');
@@ -986,7 +1001,7 @@ class AccountController extends Controller
         $data['usuario'] = session()->get('usuario')->Nombre;
 
         $this->tks->storeStockAccount($data);
-        \Helper::messageFlash('Cuentas','Stock masivo agregado');
+        \Helper::messageFlash('Cuentas','Stock masivo agregado','alert_cuenta');
         return redirect('cuentas/'.$id);
 
       } catch (\Exception $e) {
@@ -1010,7 +1025,7 @@ class AccountController extends Controller
         $data['usuario']= session()->get('usuario')->Nombre;
         $this->rst->storeResetAccount($data);
 
-        \Helper::messageFlash('Cuentas','Cuenta reseteada');
+        \Helper::messageFlash('Cuentas','Cuenta reseteada','alert_cuenta');
         return redirect('cuentas/'.$id);
 
       } catch (\Exception $e) {
@@ -1066,7 +1081,7 @@ class AccountController extends Controller
         // Eliminando saldo actual
         DB::table('saldo')->where('ex_stock_id',$request->id)->delete();
         // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Saldo retornado');
+        \Helper::messageFlash('Cuentas','Saldo retornado','alert_cuenta');
         return redirect('cuentas/'.$request->c_id);
       } catch (\Exception $e) {
         return redirect('cuentas/'.$request->c_id)->withErrors('Intentelo nuevamente');
@@ -1134,7 +1149,7 @@ class AccountController extends Controller
 
 
         // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Cuenta editada');
+        \Helper::messageFlash('Cuentas','Cuenta editada','alert_cuenta');
         return redirect('cuentas/'.$id);
       } catch (\Exception $e) {
         return redirect('cuentas/'.$id)->withErrors('Intentelo nuevamente');
@@ -1206,7 +1221,7 @@ class AccountController extends Controller
 
 
         // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Dirección editada');
+        \Helper::messageFlash('Cuentas','Dirección editada','alert_cuenta');
         return redirect('cuentas/'.$id);
       } catch (\Exception $e) {
         return redirect('cuentas/'.$id)->withErrors('Intentelo nuevamente');
@@ -1231,7 +1246,7 @@ class AccountController extends Controller
         $account['pass'] = $npass;
         $this->acc->updateAccount($account,$id);
         // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Password editado');
+        \Helper::messageFlash('Cuentas','Password editado','alert_cuenta');
         return redirect('cuentas/'.$id);
       } catch (\Exception $e) {
         return redirect('cuentas/'.$id)->withErrors('Intentelo nuevamente');
@@ -1274,7 +1289,7 @@ class AccountController extends Controller
 
           $this->ac->storeNote($data);
           // Mensaje de notificacion
-          \Helper::messageFlash('Cuentas','Nota Creada');
+          \Helper::messageFlash('Cuentas','Nota Creada','alert_cuenta');
           return redirect('cuentas/'.$id);
         } catch (\Exception $e) {
           return redirect('/cuentas')->withErrors('Intentelo nuevamente');

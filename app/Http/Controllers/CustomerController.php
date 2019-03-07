@@ -270,7 +270,7 @@ class CustomerController extends Controller
 
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta asignada.');
+            \Helper::messageFlash('Clientes','Venta asignada.', 'alert_cliente');
 
             return redirect('clientes/'.$request->clientes_id);
 
@@ -291,7 +291,7 @@ class CustomerController extends Controller
             DB::table('ventas')->where('ID', $request->ID)->update($data);
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta modificada.');
+            \Helper::messageFlash('Clientes','Venta modificada.', 'alert_cliente');
 
             return redirect()->back();
 
@@ -366,7 +366,7 @@ class CustomerController extends Controller
 
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta modificada.');
+            \Helper::messageFlash('Clientes','Venta modificada.', 'alert_cliente');
 
             return redirect()->back();
 
@@ -390,7 +390,7 @@ class CustomerController extends Controller
             DB::table('ventas_notas')->insert($data);
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta modificada.');
+            \Helper::messageFlash('Clientes','Venta modificada.', 'alert_cliente');
 
             return redirect()->back();
 
@@ -563,7 +563,7 @@ class CustomerController extends Controller
 
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Venta duplicada.');
+        \Helper::messageFlash('Clientes','Venta duplicada.', 'alert_cliente');
 
         return redirect()->back();
 
@@ -640,7 +640,7 @@ class CustomerController extends Controller
 
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Venta de producto modificado.');
+        \Helper::messageFlash('Clientes','Venta de producto modificado.', 'alert_cliente');
 
         return redirect()->back();
 
@@ -687,7 +687,7 @@ class CustomerController extends Controller
 
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta y cobro eliminado.');
+            \Helper::messageFlash('Clientes','Venta y cobro eliminado.', 'alert_cliente');
 
             return redirect()->back();
 
@@ -714,7 +714,7 @@ class CustomerController extends Controller
 
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Cobro eliminado.');
+            \Helper::messageFlash('Clientes','Cobro eliminado.', 'alert_cliente');
 
             return redirect()->back();
 
@@ -733,7 +733,7 @@ class CustomerController extends Controller
             DB::table('ventas')->where('ID', $request->ID)->delete();
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta eliminada.');
+            \Helper::messageFlash('Clientes','Venta eliminada.', 'alert_cliente');
 
             return redirect()->back();
           } catch (Exception $e) {
@@ -787,7 +787,7 @@ class CustomerController extends Controller
 
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Producto removido.');
+        \Helper::messageFlash('Clientes','Producto removido.', 'alert_cliente');
 
         return redirect()->back();
       } catch (Exception $e) {
@@ -839,7 +839,7 @@ class CustomerController extends Controller
 
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Usuario ML agregado.');
+        \Helper::messageFlash('Clientes','Usuario ML agregado.', 'alert_cliente');
 
         return redirect()->back();
       } catch (Exception $e) {
@@ -907,7 +907,7 @@ class CustomerController extends Controller
 
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Cobro de venta modificado.');
+        \Helper::messageFlash('Clientes','Cobro de venta modificado.', 'alert_cliente');
 
         return redirect('clientes/'.$request->clientes_id);
       } catch (Exception $e) {
@@ -978,7 +978,7 @@ class CustomerController extends Controller
 
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Cobro de venta agregada.');
+        \Helper::messageFlash('Clientes','Cobro de venta agregada.', 'alert_cliente');
 
         return redirect('clientes/'.$request->clientes_id);
       } catch (Exception $e) {
@@ -999,7 +999,7 @@ class CustomerController extends Controller
         DB::table('clientes')->where('ID',$id_cliente)->update(['email' => $email->email]);
         
         DB::commit();
-        \Helper::messageFlash('Clientes','Email actualizado.');
+        \Helper::messageFlash('Clientes','Email actualizado.', 'alert_cliente');
 
         return redirect()->back();
       } catch (Exception $e) {
@@ -1245,7 +1245,7 @@ class CustomerController extends Controller
             $message->to($correo, $nombre)->subject($subject);
         });
 
-        \Helper::messageFlash('Clientes','Correo electronico enviado.');
+        \Helper::messageFlash('Clientes','Correo electronico enviado.', 'alert_cliente');
         return redirect()->back();
       } catch (Exception $e) {
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el envío del email.']);
@@ -1262,7 +1262,7 @@ class CustomerController extends Controller
       $ref_cobro_count = DB::table('ventas_cobro')->where('ref_cobro', $cobro)->count();
 
       if ($ref_cobro_count > 1) {
-        \Helper::messageFlash('Clientes',"Existe más de un registro con ésta ref. de cobro", "warning");
+        \Helper::messageFlash('Clientes',"Existe más de un registro con ésta ref. de cobro", "warning", 'alert_cliente');
         return redirect()->back();
       } else {
         $amounts = DB::table('mercadopago')->where('ref_op', $cobro)->get();
@@ -1284,7 +1284,7 @@ class CustomerController extends Controller
             DB::table('ventas_cobro')->where('ref_cobro', $cobro)->update($data);
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Importes de MP actualizados al cobro #'.$cobro);
+            \Helper::messageFlash('Clientes','Importes de MP actualizados al cobro #'.$cobro, 'alert_cliente');
             return redirect()->back();
 
           } catch (Exception $e) {
@@ -1307,7 +1307,7 @@ class CustomerController extends Controller
         DB::table('ventas_cobro')->where('ID', $id)->delete();
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Cobro eliminado exitosamente.');
+        \Helper::messageFlash('Clientes','Cobro eliminado exitosamente.', 'alert_cliente');
         return redirect()->back();
       } catch (Exception $e) {
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
