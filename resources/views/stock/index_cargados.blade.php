@@ -9,14 +9,24 @@
 	<h1>Listar Stocks Cargados</h1>
 <div class="row">
     <form action="{{ url('stocks_cargados') }}" method="get" class="form-inline">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label for="fecha_ini">Fecha Inicio:</label>
             <input type="date" name="fecha_ini" id="fecha_ini" value="{{ $fecha_ini}}" class="form-control">
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label for="fecha_fin">Fecha Fin:</label>
             <input type="date" name="fecha_fin" id="fecha_fin" value="{{ $fecha_fin}}" class="form-control">
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="usuario">Usuario:</label>
+            <select name="usuario" id="usuario" class="form-control">
+                <option value="">Seleccione usuario</option>
+                @foreach($usuarios as $usuario)
+                <option value="{{ $usuario->usuario }}" @if(app('request')->input('usuario') == $usuario->usuario) selected @endif>{{ $usuario->usuario }}</option>
+                @endforeach
+            </select>
         </div>
 
         <div class="form-group">
@@ -52,8 +62,8 @@
                         </td>
                         <td style="vertical-align: middle;">
                             @php $array = explode(',', $value->cuentas); @endphp
-                            @foreach ($array as $valor)
-                                <a href="{{ url('cuentas', $valor) }}" target="_blank">{{ $valor }}</a> <br>
+                            @foreach ($array as $i => $valor)
+                                <a href="{{ url('cuentas', $valor) }}" target="_blank">{{ $valor }}</a>@if($i != (count($array) - 1)),&nbsp;@endif
                             @endforeach
                         </td>
                         <td style="vertical-align: middle;">

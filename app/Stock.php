@@ -326,15 +326,14 @@ class Stock extends Model
             ->where('ID',$account);
     }
 
-    public function ScopeGetDatosCargados($query, $fecha_ini, $fecha_fin)
+    public function ScopeGetDatosCargados($query, $fecha_ini, $fecha_fin, $usuario)
     {
-        return $query->select(
+        $sql = $query->select(
             DB::raw("COUNT(*) AS Q"),
             'titulo',
             'consola',
             DB::raw("GROUP_CONCAT(cuentas_id) AS cuentas"),
-            'usuario',
-            DB::raw("(SELECT color FROM usuarios WHERE usuario = stock.usuario) AS color")
+            'usuario'
         )
         ->where('Day','>',$fecha_ini)
         ->where('Day','<',$fecha_fin)
@@ -344,6 +343,19 @@ class Stock extends Model
         ->orderBy('usuario')
         ->orderBy('consola')
         ->orderBy('titulo');
+
+        if (!empty($usuario)) {
+           $sql = $sql->where('usuario','=',$usuario);
+        }
+
+        return $sql;
+
+
+    }
+
+    public function ScopeUsersStock($query)
+    {
+        return $query->select('usuario')->groupBy('usuario');
     }
 
 

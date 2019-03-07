@@ -485,10 +485,12 @@ ORDER BY libre DESC";
     {
       $fecha_fin = isset($request->fecha_fin) ? $request->fecha_fin : date('Y-m-d');
       $fecha_ini = isset($request->fecha_ini) ? $request->fecha_ini : $this->defaultFechaIni();
+      $usuario = isset($request->usuario) ? $request->usuario : '';
 
-      $cargados = Stock::getDatosCargados($fecha_ini, $fecha_fin)->get();
+      $cargados = Stock::getDatosCargados($fecha_ini, $fecha_fin, $usuario)->get();
+      $usuarios = Stock::usersStock()->get();
 
-      return view('stock.index_cargados', compact('cargados','fecha_fin','fecha_ini'));
+      return view('stock.index_cargados', compact('cargados','fecha_fin','fecha_ini','usuarios'));
     }
 
     private function defaultFechaIni()
