@@ -220,6 +220,39 @@ foreach ($data as $value) {
             </div>
         {{-- </div> --}}
 
+        @elseif ($opt == 5)
+        <h1 style="color:#000">Modificar Stock</h1>
+
+        <form action="{{ url('customer_ventas_modificar_store') }}" method="post" id="form_mod_manual">
+
+          {{csrf_field()}}
+          
+          <input type="hidden" name="opt" value="5">
+          
+
+          <div class="input-group form-group">
+            <span class="input-group-addon"><i class="fa fa-bookmark"></i></span>
+            <select name="slot" id="slot" class="form-control">
+              <option value="">Seleccione Slot</option>
+              <option value="No">No</option>
+              <option value="Primario">Primario</option>
+              <option value="Secundario">Secundario</option>
+            </select>
+            <span class="input-group-addon">Slot</span>
+          </div>
+
+          <div class="input-group form-group">
+            <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+            <input type="text" name="stock" id="stock" class="form-control">
+            <span class="input-group-addon">Nro. Stock</span>
+          </div>
+          
+          <input type="hidden" name="ID" value="{{ $clientes->ID }}">
+          <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
+
+          <button class="btn btn-primary btn-block" id="btnModManual" type="button">Modificar</button>
+        </form>
+
         @endif
 
         <input type="hidden" id="clientes_id2" value="{{ $clientes->clientes_id }}">
@@ -240,6 +273,17 @@ foreach ($data as $value) {
       $(this).prop('disabled', true);
 
       $('#form_addNote').submit();
+    });
+
+    $('#btnModManual').on('click', function(){
+
+      if ($('#slot').val() != "" && $('#stock').val() != "") {
+        $(this).prop('disabled', true);
+
+        $('#form_mod_manual').submit();
+      }
+
+
     });
 
     @if($opt == 1)

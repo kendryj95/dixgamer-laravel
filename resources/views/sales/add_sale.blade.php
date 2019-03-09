@@ -140,11 +140,11 @@
                         <input class="form-control" type="text" name="Notas" placeholder="Notas de la venta">
                     </div>
 
-                    <div class="input-group form-group">
+                    <!-- <div class="input-group form-group">
                         <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
                         <input class="form-control" type="text" name="Notas_cobro" placeholder="Notas del cobro">
                     </div>
-
+                     -->
                     <button class="btn btn-primary botonero" id="submiter" type="button">Insertar</button>
                     <input type="hidden" name="MM_insert" value="form1">
 

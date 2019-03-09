@@ -364,7 +364,8 @@ class ControlsController extends Controller
 
     private function getConceptos()
     {
-        $words = array(             "Percepción RG 4240 IVA Servicios Digitales Internacionales",
+        $words = array("Percepción RG 4240 IVA Servicios Digitales Internacionales",
+                                    "Anulación de percepción RG 4240 IVA Servicios Digitales Internacionales",
         "Anulación de comisión por venta de MercadoLibre",
         "Anulación de cargo MercadoPago",
                        "Anulación de cargo Mercado Pago",
@@ -375,8 +376,10 @@ class ControlsController extends Controller
                        "Anulación de comisión por venta de Mercado Libre",
         "Anulación de dinero retenido por contracargo",
         "Anulación de retiro de dinero a cuenta bancaria",
+                                    "Anulación de devolución por Compra Protegida",
                                     "Anulación de retención de ingresos brutos de Entre Ríos",
                                     "Anulación de retención de ingresos brutos de Santa Fe",
+                                    "Anulación parcial de retención de ingresos brutos de Santa Fe",
                                     "Anulación de retención de ingresos brutos de Santiago del Estero",
                                     "Anulación parcial de retención de ingresos brutos de Córdoba",
         "Anulación de retención de ingresos brutos de Córdoba",
@@ -401,9 +404,11 @@ class ControlsController extends Controller
         "Devolución parcial de cobro",
                        "Devolución parcial de ingreso de dinero",
                        "Devolución parcial de pago",
+                       "Devolución de pago",
         "Devolución por Compra Protegida",
         "Dinero recibido",
         "Dinero retenido por contracargo",
+                       "Dinero retenido",
                        "Ingreso de dinero",
         "Pago",
         "Pago adicional",
@@ -413,6 +418,9 @@ class ControlsController extends Controller
                                     "Retención de ingresos brutos de Mendoza",
                                     "Retención de ingresos brutos de Neuquén",
                                     "Retención de ingresos brutos de Santiago del Estero",
+                                    "Retención de ingresos brutos de Tucumán",
+                                    "Retención de Ingresos brutos de Río Negro",
+                                    "Retención de Ingresos brutos de Jujuy",
         "Retención de ingresos brutos de Catamarca",
         "Retención de ingresos brutos de Entre Ríos",
         "Retención de ingresos brutos de La Pampa",
@@ -445,12 +453,16 @@ class ControlsController extends Controller
         AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
         AND concepto NOT LIKE '%Anulación de retención de ingresos brutos de%' 
         AND concepto NOT LIKE '%Anulación parcial de retención de ingresos brutos de%' 
+                                    AND concepto != 'Devolución de pago'
+                                    AND concepto != 'Descuento recibido'
         AND concepto != 'Recarga de celular' 
         AND concepto != 'Pago' 
         AND concepto != 'Pago adicional' 
         AND concepto != 'Retiro de dinero a cuenta bancaria' 
         AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' 
-        AND concepto !='Percepción RG 4240 IVA Servicios Digitales Internacionales'";
+        AND concepto != 'Percepción RG 4240 IVA Servicios Digitales Internacionales'
+                                    AND concepto != 'Anulación de percepción RG 4240 IVA Servicios Digitales Internacionales'"
+        ;
 
         $query_rsGRAL = "SELECT mp.*, cobro.*, (imp_mp - imp_db) as dif # SACO LA DIFERENCIA ENTRE MP Y LA DB
         FROM 
@@ -475,7 +487,7 @@ class ControlsController extends Controller
         ON mp.ref_op = cobro.ref_cobro # No necesito mas esto -> COLLATE utf8_spanish_ci uno la tabla de mercadopago a la table de cobros";
         $query_rsCXP = $query_rsGRAL;
         $query_rsCXP .= "
-        WHERE ((imp_mp >= (imp_db + 0.50)) OR (imp_mp<= (imp_db - 0.50))) # filtro las que tengan diferencia entre importes > a 50 centavos
+        WHERE ((imp_mp >= (imp_db + 1.5)) OR (imp_mp<= (imp_db - 1.5))) # filtro las que tengan diferencia entre importes > a 50 centavos
         ORDER BY `dif` ASC";
 
         $cobros_mp_pareja = DB::select($query_rsCXP);
@@ -508,7 +520,7 @@ class ControlsController extends Controller
         ON db.ref_cobro = mp.ref_op # No necesito mas esto -> COLLATE utf8_spanish_ci";
         $query_rsCobrosDB = $query_rsGRAL2;
         $query_rsCobrosDB .= "
-        WHERE ((imp_mp >= (imp_db + 0.50)) OR (imp_mp<= (imp_db - 0.50))) # filtro las que tengan diferencia entre importes > a 50 centavos
+        WHERE ((imp_mp >= (imp_db + 1.5)) OR (imp_mp<= (imp_db - 1.5))) # filtro las que tengan diferencia entre importes > a 50 centavos
         ORDER BY `dif` ASC";
 
         $cobros_bd_pareja = DB::select($query_rsCobrosDB);

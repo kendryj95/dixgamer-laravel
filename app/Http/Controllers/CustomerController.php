@@ -400,6 +400,25 @@ class CustomerController extends Controller
           }
 
           break;
+        case 5:
+          try {
+            $data = [];
+            $data['slot'] = $request->slot;
+            $data['stock_id'] = $request->stock;
+
+            DB::table('ventas')->where('ID',$request->ID)->update($data);
+
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Stock modificado manualmente', 'alert_cliente');
+
+            return redirect()->back();
+          } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
       }
     }
 
@@ -740,6 +759,76 @@ class CustomerController extends Controller
             DB::rollback();
 
             return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+
+          break;
+
+      case 4:
+
+          try {
+
+            ## ELIMINANDO PRODUCTO.
+
+            $stock_anterior = DB::table('stock AS s')
+                                ->select(
+                                  'v.stock_id',
+                                  's.titulo',
+                                  'v.cons',
+                                  'v.slot'
+                                )
+                                ->leftjoin('ventas AS v', 's.ID', '=', 'v.stock_id')
+                                ->where('v.ID',$request->ID)->first();
+
+            $nota = '';
+
+            if ($stock_anterior->cons == "ps4") {
+              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot";
+            } else {
+              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons";
+            }
+
+            $data = [];
+            $data['stock_id'] = 1;
+            $data['cons'] = 'ps';
+            $data['slot'] = 'No';
+
+            DB::table('ventas')->where('ID',$request->ID)->update($data);
+
+            $data = [];
+            $data['id_ventas'] = $request->ID;
+            $data['Notas'] = $nota;
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('ventas_notas')->insert($data);
+
+            ## ELIMINANDO COBROS
+
+            $cobros = DB::table('ventas_cobro')->where('ventas_id', $request->ID)->get();
+
+            foreach ($cobros as $cobro) {
+              DB::table('ventas_cobro')->where('ID', $cobro->ID)->delete();
+
+              $notas = "Cobro eliminado #$cobro->ID ($cobro->medio_cobro), ref #$cobro->ref_cobro, +$cobro->precio - $cobro->comision";
+
+              $data = [];
+              $data['id_ventas'] = $cobro->ventas_id;
+              $data['Notas'] = $notas;
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
+
+              DB::table('ventas_notas')->insert($data);
+            }
+
+            DB::commit();
+
+            \Helper::messageFlash('Clientes','Venta y cobros eliminados.', 'alert_cliente');
+
+            return redirect()->back();
+          } catch (Exception $e) {
+              DB::rollback();
+
+              return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
           }
 
           break;
@@ -1304,7 +1393,18 @@ class CustomerController extends Controller
       DB::beginTransaction();
 
       try {
+        $cobro = DB::table('ventas_cobro')->where('ID', $id)->first();
         DB::table('ventas_cobro')->where('ID', $id)->delete();
+
+        $notas = "Cobro eliminado #$cobro->ID ($cobro->medio_cobro), ref #$cobro->ref_cobro, +$cobro->precio - $cobro->comision";
+
+        $data = [];
+        $data['id_ventas'] = $cobro->ventas_id;
+        $data['Notas'] = $notas;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('ventas_notas')->insert($data);
         DB::commit();
 
         \Helper::messageFlash('Clientes','Cobro eliminado exitosamente.', 'alert_cliente');

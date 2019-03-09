@@ -1,5 +1,5 @@
 <div class="container">
-	<h1 style="color: #000">Eliminar cobro</h1>
+	<h1 style="color: #000">Eliminar Venta y Cobro</h1>
     <div class="row">
         <div class="col-sm-3">
         </div>
@@ -21,19 +21,32 @@
             </form> <!-- SE OCULTA ESTE FORMULARIO EL DÍA 07/03/2019 POR ORDEN DE VICTOR. -->
             {{-- <br /><br /> --}}
         
-            <form method="post" name="form2" action="{{ url('customer_ventas_eliminar') }}">
+            <form style="display: none" method="post" name="form2" action="{{ url('customer_ventas_eliminar') }}">
                 {{csrf_field()}}
 
-    			<div class="input-group form-group">
-    				<span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
-    				<textarea class="form-control" rows="2" name="Notas_baja" id="Notas_baja" style="font-size: 18px;" placeholder="Nota"></textarea>
-    			</div>
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
+                    <textarea class="form-control" rows="2" name="Notas_baja" id="Notas_baja" style="font-size: 18px;" placeholder="Nota"></textarea>
+                </div>
                 
                 <button class="btn btn-danger" type="submit" ><i class="fa fa-frown-o fa-fw"></i> Eliminar Cobro</button>
                 <input type="hidden" name="opt" value="2">
                 <input type="hidden" name="ID" value="{{ $ventas->ID }}">
                 <input type="hidden" name="clientes_id" value="{{ $ventas->clientes_id }}">
-            </form><br /><br />
+            </form><!-- <br /><br /> -->
+
+            <form method="post" name="form2" action="{{ url('customer_ventas_eliminar') }}">
+                {{csrf_field()}}
+
+    			<p style="color: #000">¿Está seguro de que quiere eliminar la venta y cobro?</p>
+                
+                <button class="btn btn-danger" type="submit" ><i class="fa fa-frown-o fa-fw"></i> Sí, Eliminar Venta y Cobro</button>
+                <input type="hidden" name="opt" value="4">
+                <input type="hidden" name="ID" value="{{ $ventas->ID }}">
+                <input type="hidden" name="clientes_id" value="{{ $ventas->clientes_id }}">
+            </form><!-- <br /><br /> -->
+
+
         @else
             <form method="post" name="form3" action="{{ url('customer_ventas_eliminar') }}">
                 {{csrf_field()}}

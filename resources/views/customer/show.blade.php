@@ -326,9 +326,10 @@
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/1','#modalVentas')">Modificar cliente</a></li>
                       {{-- <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/2','#modalVentas')">Modificar medio venta</a></li> --}}
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/3','#modalVentas')">Modificar order</a></li>
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/5','#modalVentas')">Modificar manual</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/4','#modalVentas')">Agregar nota</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_duplicar_venta")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Duplicar venta</a></li>
-                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar cobros</a></li>
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar venta y cobros</a></li>
                     </ul>
                   </div>
                 <p>
@@ -364,7 +365,7 @@
 
                 </p>
 
-                <p>
+                <p style="display: inline-block;">
                   <small
                     class="label label-<?php echo $color2;?>"
                     style="opacity:0.7; font-weight:400;"
@@ -388,13 +389,18 @@
                             onclick="getPageAjax('{{ url("customer_ventas_cobro_modificar") }}','#modalVentas',{{ $valor }})" >
                             {{$valor}}
                           </a>
-                          <a
-                            class='btn-xs'
-                            title='Actualizar importes'
-                            type='button'
-                            href='control_mp_actualizar_comision.php?id={{$valor}}'>
-                            <i class='fa fa-refresh' aria-hidden='true'></i>
-                          </a>
+                          
+                         
+                          <div class="dropdown" style="display: inline-block;">
+                            <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;" title="Eliminar cobro">
+                              <i aria-hidden="true" class="fa fa-trash text-danger"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                              <li class="dropdown-header">¿Desea eliminar el cobro?</li>
+                              <li role="separator" class="divider"></li>
+                              <li><a href="{{ url('delete_amounts',$valor) }}">Sí, Eliminar</a></li>
+                            </ul>
+                          </div>
                         @endforeach
                       @else
                         {{$dataCustomer->ID_cobro}}
@@ -452,14 +458,6 @@
                             type='button'
                             href='{{ url("update_amounts", $valor) }}'>
                             <i class='fa fa-refresh' aria-hidden='true'></i>
-                          </a>
-                          <a
-                          style='padding: 0'
-                            class='btn-xs'
-                            title='Eliminar cobro'
-                            type='button'
-                            href='{{ url("delete_amounts", $dataCustomer->ID_cobro) }}'>
-                            <i class='fa fa-trash text-danger' aria-hidden='true'></i>
                           </a>
                           @endif
                         </small>
@@ -645,11 +643,11 @@
                       <i aria-hidden="true" class="fa fa-pencil"></i>
                   </a>
                   @if ($dataCustomer->ID_stock != 1)
-                  <div class="dropup" style="display: inline-block;">
+                  <div class="dropdown" style="display: inline-block;">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-remove text-muted"></i>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <ul style="top:-50px;left:25px" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                       <li class="dropdown-header">¿Deseas quitar producto?</li>
                       <li role="separator" class="divider"></li>
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, remover</a></li>
