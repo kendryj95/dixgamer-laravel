@@ -378,10 +378,9 @@
                         <?php
                           $array = (explode(',', $dataCustomer->ID_cobro, 10));
                         ?>
-
                         @foreach($array as $valor)
                           <a
-                            style='color:#CFCFCF; padding:0px 2px; font-size:0.8em;'
+                            style='@if($valor == "") visibility: hidden; @endif color:#CFCFCF; padding:0px 2px; font-size:0.8em;'
                             title='Editar Cobro en DB'
                             data-toggle="modal"
                             data-target="#modalVentas"
@@ -391,7 +390,7 @@
                           </a>
                           
                          
-                          <div class="dropdown" style="display: inline-block;">
+                          <div class="dropdown" style="display: inline-block;@if($valor == "") visibility: hidden; @endif">
                             <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;" title="Eliminar cobro">
                               <i aria-hidden="true" class="fa fa-trash text-danger"></i>
                             </button>

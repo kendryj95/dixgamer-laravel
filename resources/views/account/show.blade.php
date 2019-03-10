@@ -347,16 +347,36 @@
 
 								@if ( ($maxDayReset->Max_Day_Solicitado === NULL) or (($solicitud < $reseteo) && ($maxDayReset->Max_Day_Reseteado != NULL)))
 
-			 						<button
-										class="btn btn-normal btn-xs pull-right"
+									<div class="dropdown">
+										<button
+										class="btn btn-normal btn-xs dropdown-toggle pull-right"
 										style="opacity: 0.5;"
 										type="button"
-										data-toggle="modal"
-										data-target=".bs-example-modal-lg"
-										onClick='getPageAjax("{{url('solicitar_reseteo_cuenta')}}","#modal-container",{{$account->ID}});'>
+										data-toggle="dropdown"
+										aria-haspopup="true"
+										aria-expanded="false">
 											<i class="fa fa-fw fa-power-off"></i>
 											Pedir Reseteo
 										</button>
+
+										<ul style="left:355px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+											<li class="dropdown-header">¿Seguro deseas</li>
+											<li class="dropdown-header">pedir reseteo?</li>
+											<li role="separator" class="divider"></li>
+											<li>
+												<form class=" text-center" id="form_resetear" action="{{url('solicitar_reseteo_cuenta',[$account->ID])}}" method="post">
+													{{ csrf_field() }}
+													<button
+														class="btn btn-danger btn-block"
+														title="cambiar pass"
+														id="resetear"
+														type="button">
+														Si, seguro!
+													</button>
+												</form>
+											</li>
+										</ul>
+									</div>
 
 				  			@else
 				 						<span
@@ -656,7 +676,7 @@
 
   @if (count($soldConcept)>0)
 
-    <div class="table-responsive">
+    <div class="">
     <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
     <thead>
               <tr>
@@ -670,7 +690,36 @@
 		  <tbody>
         @foreach($soldConcept as $sc)
 
-            <td><?php echo date("d M 'y", strtotime($sc->Day)); ?></td>
+            <td><?php echo date("d M 'y", strtotime($sc->Day)); ?> 
+
+            	@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+
+            	<a class="btn btn-default btn-xs" type="button"
+					data-toggle="modal"
+					data-target=".bs-example-modal-lg"
+					onClick='getPageAjax("{{url('modify_date_operations',[$sc->id,$sc->concepto])}}","#modal-container")'><i aria-hidden="true" class="fa fa-pencil text-muted"></i></a>
+				<div class="dropdown" style="display: inline-block;">
+					<button
+					class="btn btn-default btn-xs dropdown-toggle"
+					style="opacity: 0.5;"
+					type="button"
+					data-toggle="dropdown"
+					aria-haspopup="true"
+					aria-expanded="false">
+						<i class="fa fa-fw fa-close text-muted"></i>
+					</button>
+
+					<ul style="top: -79px; left: 40px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+						<li class="dropdown-header">¿Seguro deseas eliminar</li>
+						<li class="dropdown-header">este registro?</li>
+						<li role="separator" class="divider"></li>
+						<li>
+							<a href="{{ url('delete_operations',[$sc->id,$sc->concepto]) }}">Sí, Eliminar</a>
+						</li>
+					</ul>
+				</div>
+				@endif
+			</td>
             <?php if ($sc->concepto == 'contra'):?>
             <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;"><i class="fa fa-key fa-fw"></i> Nueva contra: <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
 			<?php elseif ($sc->concepto == 'notas'):?>
@@ -726,7 +775,7 @@
 			  </td>
             <td><span class="label <?php if ($sc->slot == 'Primario'):?>label-default<?php endif;?>"><?php echo $sc->titulo; ?></span> <?php if ($sc->slot == 'Secundario'): ?><span class="label label-danger" style="opacity:0.7">2°</span><?php endif; ?> <span class="label label-default <?php echo $sc->consola; ?>"><?php echo $sc->consola; ?></span> <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
 
-            <td style="text-align:right;"><a class="btn btn-xs btn-default" type="button" title="Modificar venta" href="ventas_modificar.php?id=<?php echo $sc->ID_stock; ?>"><i aria-hidden="true" class="fa fa-pencil"></i></a></td>
+            <td style="text-align:right;"></td>
             <?php endif;?>
           </tr>
       @endforeach

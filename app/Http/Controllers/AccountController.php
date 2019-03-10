@@ -104,7 +104,7 @@ class AccountController extends Controller
         $data = [];
         $data['cuentas_id'] = $id;
         $data['Day'] = $this->dte;
-        $data['Notas'] = $request->note;
+        $data['Notas'] = '';
         $data['usuario'] = session()->get('usuario')->Nombre;
 
         $this->rst->storeRequestResetAccount($data);
@@ -392,6 +392,7 @@ class AccountController extends Controller
 
       // Traemos el stock
       $stock = Stock::where('ID',$stock_id)->first();
+      $total_stocks = Stock::stockDetailSold($account_id)->count();
       $titles = $this->wp_pst->lastGameStockTitles();
 
       return view('ajax.account.update_stock',compact(
@@ -399,6 +400,7 @@ class AccountController extends Controller
         'stock',
         'titles',
         'expense',
+        'total_stocks',
         'accountBalance'
       ));
     }
@@ -1312,6 +1314,74 @@ class AccountController extends Controller
         echo true;
       }else{
         echo false;
+      }
+    }
+
+    public function modifyDateOperations($id, $tipo)
+    {
+      $id = $id;
+      $tipo = $tipo;
+
+      return view('ajax.account.modificar_fecha_operaciones',compact('id','tipo'));
+    }
+
+    public function modifyDateOperationsStore(Request $request)
+    {
+      DB::beginTransaction();
+
+      try {
+        switch ($request->tipo) {
+          case 'contra':
+            DB::table('cta_pass')->where('ID',$request->id)->update(['Day' => $request->Day]);
+            break;
+          
+          case 'reset':
+            DB::table('reseteo')->where('ID',$request->id)->update(['Day' => $request->Day]);
+            break;
+          case 'resetear':
+            DB::table('resetear')->where('ID',$request->id)->update(['Day' => $request->Day]);
+            break;
+          case 'notas':
+            DB::table('cuentas_notas')->where('ID',$request->id)->update(['Day' => $request->Day]);
+            break;
+        }
+        DB::commit();
+
+        \Helper::messageFlash('Cuentas','Fecha de la operación modificada','alert_cuenta');
+        return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Intentelo nuevamente']);
+      }
+    }
+
+    public function deleteOperation($id, $tipo)
+    {
+      DB::beginTransaction();
+
+      try {
+        switch ($tipo) {
+          case 'contra':
+            DB::table('cta_pass')->where('ID',$id)->delete();
+            break;
+          
+          case 'reset':
+            DB::table('reseteo')->where('ID',$id)->delete();
+            break;
+          case 'resetear':
+            DB::table('resetear')->where('ID',$id)->delete();
+            break;
+          case 'notas':
+            DB::table('cuentas_notas')->where('ID',$id)->delete();
+            break;
+        }
+        DB::commit();
+
+        \Helper::messageFlash('Cuentas','Registro de la operación eliminada','alert_cuenta');
+        return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Intentelo nuevamente']);
       }
     }
 }

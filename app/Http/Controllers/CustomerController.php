@@ -807,7 +807,10 @@ class CustomerController extends Controller
             $cobros = DB::table('ventas_cobro')->where('ventas_id', $request->ID)->get();
 
             foreach ($cobros as $cobro) {
-              DB::table('ventas_cobro')->where('ID', $cobro->ID)->delete();
+              $data = [];
+              $data['precio']='0';
+              $data['comision']='0';
+              DB::table('ventas_cobro')->where('ID', $cobro->ID)->update($data);
 
               $notas = "Cobro eliminado #$cobro->ID ($cobro->medio_cobro), ref #$cobro->ref_cobro, +$cobro->precio - $cobro->comision";
 

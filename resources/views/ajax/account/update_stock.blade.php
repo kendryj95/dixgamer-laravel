@@ -19,8 +19,8 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 						<span class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></span>
 						<select id="titulo-selec" name="titulo" class="selectpicker form-control" data-live-search="true" data-size="5">
 							@foreach($titles as $title)
-								
-								<option value="{{explode(" (",$title->nombre_web)[0]}}">{{str_replace('-', ' ', $title->nombre_web)}}</option>
+								@php $titulo = explode(" (",$title->nombre_web)[0] @endphp
+								<option value="{{explode(" (",$title->nombre_web)[0]}}" @if($titulo == $stock->titulo) selected @endif>{{str_replace('-', ' ', $title->nombre_web)}}</option>
 							@endforeach
 
 							</select>
@@ -47,7 +47,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 							class="form-control"
 							type="number"
 							step="0.01"
-							name="costo_usd" value="{{$stock->costo_usd}}" @if ($saldo == 0) readonly @endif>
+							name="costo_usd" value="{{$stock->costo_usd}}" @if ($saldo == 0 && $total_stocks > 1) readonly @endif>
 							<input type="hidden" name="saldo_act" value="{{$saldo}}">
 							<input type="hidden" name="costo_act" value="{{$stock->costo_usd}}">
 
