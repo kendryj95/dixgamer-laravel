@@ -129,10 +129,10 @@ class SalesController extends Controller
             'usuario'       => session()->get('usuario')->Nombre
         ]);
 
-        if ($request->medio_cobro == 'Banco') {
+        /*if ($request->medio_cobro == 'Banco') { // COMENTADO EL DÍA 12/03/2019 POR ORDEN DE VICTOR
             $data['cobros_id'] = $insert2;
             DB::table('ventas_cobro_bancos')->insert($data);
-        }
+        }*/
 
         return redirect(url('clientes',$request->clientes_id));
     }

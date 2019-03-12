@@ -364,12 +364,12 @@
 											<li class="dropdown-header">pedir reseteo?</li>
 											<li role="separator" class="divider"></li>
 											<li>
-												<form class=" text-center" id="form_resetear" action="{{url('solicitar_reseteo_cuenta',[$account->ID])}}" method="post">
+												<form class=" text-center" id="form_reseteo" action="{{url('solicitar_reseteo_cuenta',[$account->ID])}}" method="post">
 													{{ csrf_field() }}
 													<button
 														class="btn btn-danger btn-block"
 														title="cambiar pass"
-														id="resetear"
+														id="reseteo"
 														type="button">
 														Si, seguro!
 													</button>
@@ -819,6 +819,11 @@
 			$('#resetear').on('click', function(){
 				$(this).prop('disabled', true);
 				$('#form_resetear').submit();
+			});
+
+			$('#reseteo').on('click', function(){
+				$(this).prop('disabled', true);
+				$('#form_reseteo').submit();
 			});
 		});
 		/*

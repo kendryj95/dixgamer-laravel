@@ -73,11 +73,11 @@
 					<input class="form-control" type="hidden" id="comision" name="comision" value="{{ $ventas_cobro->comision }}">
 				@endif
 	                        
-	            <div class="input-group form-group">
+	            {{--<div class="input-group form-group">
 	              <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
 					
 	              <input class="form-control" type="text" name="Notas_cobro" placeholder="Notas del cobro" value="{{ $ventas_cobro->Notas }}">
-	            </div>
+	            </div>--}}
 
 	            <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
 	        <input type="hidden" name="ID" value="{{ $ventas_cobro->ID }}">
