@@ -402,11 +402,40 @@ class CustomerController extends Controller
           break;
         case 5:
           try {
+
+            $stock_anterior = DB::table('stock AS s')
+                                ->select(
+                                  'v.stock_id',
+                                  's.titulo',
+                                  'v.cons',
+                                  'v.slot'
+                                )
+                                ->leftjoin('ventas AS v', 's.ID', '=', 'v.stock_id')
+                                ->where('v.ID',$request->ID)->first();
+            
             $data = [];
             $data['slot'] = $request->slot;
             $data['stock_id'] = $request->stock;
 
             DB::table('ventas')->where('ID',$request->ID)->update($data);
+
+            $nota = '';
+
+            if ($stock_anterior->cons == "ps4") {
+              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot";
+            } else {
+              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons";
+            }
+
+            $data = [];
+            $data['id_ventas'] = $request->ID;
+            $data['Notas'] = $nota;
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('ventas_notas')->insert($data);
+
+
 
             DB::commit();
 

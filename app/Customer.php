@@ -160,6 +160,8 @@ class Customer extends Model
               ->select(
                 'ventas.ID',
                 'clientes_id',
+                'stock_id',
+                'slot',
                 'order_item_id',
                 'order_id_web',
                 'order_id_ml',

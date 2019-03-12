@@ -441,6 +441,8 @@ class AccountController extends Controller
       /// SI EL COSTO EN USD ES 9.99, 19.99, etc... LE SUMO UN CENTAVO
       $costo_usd = round($request->costo_usd, 1);
 
+      $saldo_acumulado = $request->costo_act + $request->saldo_act;
+
       //// CALCULO EL SALDO LIBRE DE LA CUENTA EN USD Y EN ARS
       $saldo_libre_usd = ($accountBalance->costo_usd - $expense->costo_usd);
       $saldo_libre_ars = ($accountBalance->costo - $expense->costo);
@@ -454,7 +456,7 @@ class AccountController extends Controller
       }
 
       if ($request->saldo_act != 0) {
-        if ($costo_usd > $request->saldo_act) {
+        if ($costo_usd > $saldo_acumulado) {
           if ($stock->titulo == $request->titulo) { // Que valide solo cuando está tratando de actualizar el costo con el mismo stock
             return redirect()->back()->withErrors('El costo utilizado para actualizar el producto no puede ser mayor al saldo que tienes disponible.');
           }
@@ -481,10 +483,10 @@ class AccountController extends Controller
           $data = [];
           $data['titulo'] = $request->titulo;
           $data['consola'] = $request->consola;
-          if ($request->saldo_act != 0) { // solo se actualiza el saldo de los productos solo si la cta tiene saldo disponible.
+          //if ($request->saldo_act != 0) { // solo se actualiza el saldo de los productos solo si la cta tiene saldo disponible.
             $data['costo_usd'] = $costo_usd;
             $data['costo'] = $costo_ars;
-          }
+          //}
           $this->tks->updateStockById($request->stock_id,$data);
 
 

@@ -747,7 +747,7 @@
 					<span id="newpass-copy" style="font-size:15px; background: none; font-weight: normal; color:#111;"><p>Por mantenimiento de los servidores actualizamos la contraseña de ésta Cuenta/Usuario,<br /><br />
 						La nueva contraseña es: <?php echo $account->pass;?><br /><br />						
 						<!-- Aprovecho para contarte que nuestros paVos de Fortnite bajaron de precio, <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/">ver paVos baratos</a><br /><br /> -->
-						<b><{{ $sc->nombre }}></b> te cuento que tenemos pavos de fortnite a muy buen precio. <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/" target="_blank">Link</a
+						Te cuento que tenemos pavos de fortnite a muy buen precio. <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/" target="_blank">Link</a><br>
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					</div>
@@ -759,7 +759,7 @@
 						3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.<br /><br />
 						Contraseña: <?php echo $account->pass;?><br /><br />						
 						<!-- Aprovecho para contarte que nuestros paVos de Fortnite bajaron de precio, <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/">ver paVos baratos</a><br /><br /> -->
-						<b><{{ $sc->nombre }}></b> te cuento que tenemos pavos de fortnite a muy buen precio. <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/" target="_blank">Link</a
+						Te cuento que tenemos pavos de fortnite a muy buen precio. <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/" target="_blank">Link</a><br>
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					</div>

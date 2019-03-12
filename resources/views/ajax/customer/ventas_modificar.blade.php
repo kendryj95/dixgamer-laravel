@@ -231,20 +231,20 @@ foreach ($data as $value) {
           
 
           <div class="input-group form-group">
-            <span class="input-group-addon"><i class="fa fa-bookmark"></i></span>
-            <select name="slot" id="slot" class="form-control">
-              <option value="">Seleccione Slot</option>
-              <option value="No">No</option>
-              <option value="Primario">Primario</option>
-              <option value="Secundario">Secundario</option>
-            </select>
-            <span class="input-group-addon">Slot</span>
+            <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+            <input type="text" name="stock" id="stock" class="form-control" value="{{ $clientes->stock_id }}">
+            <span class="input-group-addon">Nro. Stock (actual: {{ $clientes->stock_id }})</span>
           </div>
 
           <div class="input-group form-group">
-            <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-            <input type="text" name="stock" id="stock" class="form-control">
-            <span class="input-group-addon">Nro. Stock</span>
+            <span class="input-group-addon"><i class="fa fa-bookmark"></i></span>
+            <select name="slot" id="slot" class="form-control">
+              <option value="">Seleccione Slot</option>
+              <option value="No" @if($clientes->slot == 'No') selected @endif>No</option>
+              <option value="Primario" @if($clientes->slot == 'Primario') selected @endif>Primario</option>
+              <option value="Secundario" @if($clientes->slot == 'Secundario') selected @endif>Secundario</option>
+            </select>
+            <span class="input-group-addon">Slot (actual: {{ $clientes->slot }})</span>
           </div>
           
           <input type="hidden" name="ID" value="{{ $clientes->ID }}">
