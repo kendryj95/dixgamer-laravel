@@ -1392,8 +1392,8 @@ class CustomerController extends Controller
           $data = [];
           foreach ($amounts as $amount) {
             if (strpos($amount->concepto, 'Costo') !== false || strpos($amount->concepto, 'Comisión') !== false) {
-              $data['comision'] = -1 * $amount->importe;
-            } else {
+              $data['comision'] = ((-1) * $amount->importe);
+            } elseif(strpos($amount->concepto, 'Cobro') !== false) {
 
               $data['precio'] = $amount->importe;
             }

@@ -66,6 +66,7 @@
 	                <span class="input-group-addon">com</span>
 	                <input class="form-control" type="text" id="comision" name="comision" value="{{ $ventas_cobro->comision }}">
 	            </div>
+	            <input type="checkbox" id="calculo_automatico" checked> <span style="color: #000">Comisión Automatica</span>
 	            </div>
 				 {{-- Si no es Admin oculto los campos de precio y comision para que no se puedan modificar --}}
 				@else
@@ -148,10 +149,12 @@
     });
 
     window.setInterval(function() {
-      m1 = document.getElementById("precio").value;
-      m2 = document.getElementById("porcentaje").value;
-      r = m1*m2;
-      document.getElementById("comision").value = r;
+    	if ($('#calculo_automatico').is(':checked')) {
+    		m1 = document.getElementById("precio").value;
+    		m2 = document.getElementById("porcentaje").value;
+    		r = m1*m2;
+    		document.getElementById("comision").value = r;
+    	} 
     },500);
 
     // To style only <select>s with the selectpicker class

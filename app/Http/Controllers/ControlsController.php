@@ -509,7 +509,7 @@ class ControlsController extends Controller
                 LEFT JOIN 
                 (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
             ON ventas_cobro.ventas_id = vtas.ID 
-            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%mercado%'
+            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%'
             GROUP BY ref_cobro) as db
         LEFT JOIN
             (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov,
@@ -542,7 +542,7 @@ class ControlsController extends Controller
                 LEFT JOIN 
                 (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
             ON ventas_cobro.ventas_id = vtas.ID 
-            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%mercado%'
+            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%'
             GROUP BY ref_cobro) as db
         LEFT JOIN
             (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov,
