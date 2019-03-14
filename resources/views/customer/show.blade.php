@@ -788,6 +788,17 @@
                   @endphp
                   Antes asignado a cliente <a href="{{ url('clientes', $cliente) }}" class="alert-link" target="_blank">#{{ $cliente }}</a>
 
+                  @elseif(strpos($venta_nota->Notas, "Antes tenía") !== false) {{-- Solo notas para cambios de productos --}}
+
+                  @php
+                  $string = $venta_nota->Notas;
+                  $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
+                  $cuenta = substr($string, $pos+1);
+                  $nota = substr($string, 0, $pos);
+                  @endphp
+
+                  {{$nota}} <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a>
+
                   @else
 
                   {{ ($venta_nota->Notas) }}

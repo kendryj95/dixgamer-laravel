@@ -194,7 +194,7 @@ class Stock extends Model
         return DB::select(DB::raw("
               SELECT *
               FROM
-              (SELECT ID AS id, 'venta' as concepto, client.Day, ID AS ID_stock, titulo, consola, cuentas_id, clientes_id, slot, ventas_Notas, apellido, nombre, email,  NULL as new_pass, NULL as usuario
+              (SELECT client.ID_ventas AS id, 'venta' as concepto, client.Day, ID AS ID_stock, titulo, consola, cuentas_id, clientes_id, slot, ventas_Notas, apellido, nombre, email,  NULL as new_pass, NULL as usuario
               FROM stock
               RIGHT JOIN
               (SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, medio_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day, clientes.ID AS ID_clientes, apellido, nombre, email

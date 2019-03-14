@@ -1323,8 +1323,30 @@ class AccountController extends Controller
     {
       $id = $id;
       $tipo = $tipo;
+      $day = '';
 
-      return view('ajax.account.modificar_fecha_operaciones',compact('id','tipo'));
+      switch ($tipo) {
+        case 'contra':
+          $day = DB::table('cta_pass')->where('ID',$id)->first();
+          break;
+        
+        case 'reset':
+          $day = DB::table('reseteo')->where('ID',$id)->first();
+          break;
+        case 'resetear':
+          $day = DB::table('resetear')->where('ID',$id)->first();
+          break;
+        case 'notas':
+          $day = DB::table('cuentas_notas')->where('ID',$id)->first();
+          break;
+        case 'venta':
+          $day = DB::table('ventas')->where('ID',$id)->first();
+          break;
+      }
+
+      $day = date('Y-m-d', strtotime($day->Day));
+
+      return view('ajax.account.modificar_fecha_operaciones',compact('id','tipo', 'day'));
     }
 
     public function modifyDateOperationsStore(Request $request)
@@ -1345,6 +1367,9 @@ class AccountController extends Controller
             break;
           case 'notas':
             DB::table('cuentas_notas')->where('ID',$request->id)->update(['Day' => $request->Day]);
+            break;
+          case 'venta':
+            DB::table('ventas')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
         }
         DB::commit();
@@ -1375,6 +1400,9 @@ class AccountController extends Controller
             break;
           case 'notas':
             DB::table('cuentas_notas')->where('ID',$id)->delete();
+            break;
+          case 'ventas':
+            DB::table('ventas')->where('ID',$id)->delete();
             break;
         }
         DB::commit();
