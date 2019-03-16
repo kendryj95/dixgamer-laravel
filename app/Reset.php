@@ -20,4 +20,20 @@ class Reset extends Model
     public function storeRequestResetAccount($data){
       DB::table('resetear')->insert($data);
     }
+
+    public function ScopeGetDatosReseteados($query, $fecha_ini, $fecha_fin, $usuario)
+    {
+        $sql = $query->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)->where(DB::raw('DATE(Day)'),'<=',$fecha_fin);
+
+        if (!empty($usuario)) {
+           $sql = $sql->where('usuario','=',$usuario);
+        }
+
+        return $sql;
+    }
+
+    public function ScopeGetUsersReset($query)
+    {
+      return $query->select('usuario')->groupBy('usuario');
+    }
 }

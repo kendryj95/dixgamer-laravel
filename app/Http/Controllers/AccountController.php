@@ -1414,4 +1414,25 @@ class AccountController extends Controller
         return redirect()->back()->withErrors(['Intentelo nuevamente']);
       }
     }
+
+    public function indexReseteados(Request $request)
+    {
+      $fecha_fin = isset($request->fecha_fin) ? $request->fecha_fin : date('Y-m-d');
+      $fecha_ini = isset($request->fecha_ini) ? $request->fecha_ini : $this->defaultFechaIni();
+      $usuario = isset($request->usuario) ? $request->usuario : '';
+
+      $reseteados = Reset::getDatosReseteados($fecha_ini, $fecha_fin, $usuario)->paginate(50);
+      $usuarios = Reset::getUsersReset()->get();
+
+      return view('account.index_reseteados', compact('reseteados','fecha_fin','fecha_ini','usuarios'));
+    }
+
+    private function defaultFechaIni()
+    {
+      $hoy = strtotime(date('Y-m-d'));
+      $fecha_ini = strtotime('-7 days', $hoy);
+      $fecha_ini = date('Y-m-d', $fecha_ini);
+
+      return $fecha_ini;
+    }
 }

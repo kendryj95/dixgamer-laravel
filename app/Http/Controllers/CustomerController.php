@@ -804,6 +804,7 @@ class CustomerController extends Controller
                                 ->select(
                                   'v.stock_id',
                                   's.titulo',
+                                  's.cuentas_id',
                                   'v.cons',
                                   'v.slot'
                                 )
@@ -813,9 +814,9 @@ class CustomerController extends Controller
             $nota = '';
 
             if ($stock_anterior->cons == "ps4") {
-              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot";
+              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
             } else {
-              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons";
+              $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
             }
 
             $data = [];
@@ -879,6 +880,7 @@ class CustomerController extends Controller
                             ->select(
                               'v.stock_id',
                               's.titulo',
+                              's.cuentas_id',
                               'v.cons',
                               'v.slot'
                             )
@@ -888,9 +890,9 @@ class CustomerController extends Controller
         $nota = '';
 
         if ($stock_anterior->cons == "ps4") {
-          $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot";
+          $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
         } else {
-          $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons";
+          $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
         }
 
         $data = [];

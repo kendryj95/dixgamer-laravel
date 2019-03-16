@@ -9,6 +9,7 @@ use Schema;
 use DB;
 use App\Stock;
 use App\WpPost;
+use App\Reset;
 use Illuminate\Support\Facades\Input;
 
 class StockController extends Controller
