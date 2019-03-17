@@ -42,6 +42,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Fecha</th>
                     <th>Cuenta</th>
                     <th>Usuario</th>
                 </tr>
@@ -53,8 +54,15 @@
                         <td style="vertical-align: middle;">
                             {{ $i + 1 }}
                         </td>
+                        <td style="vertical-align: middle;">{{ date('d-m', strtotime($value->Day)) }}</td>
                         <td style="vertical-align: middle;">
-                            <a href="{{ url('cuentas',$value->cuentas_id) }}" target="_blank">{{ $value->cuentas_id }}</a>
+                            @php
+                                $array = explode(',', $value->cuentas_id);
+                            @endphp
+                            @foreach($array as $j => $valor)
+
+                                <a href="{{ url('cuentas',$valor) }}" target="_blank">{{ $valor }}</a>@if($j != (count($array) - 1)), @endif
+                            @endforeach
                         </td>
                         <td style="vertical-align: middle;">
                             <span class="label label-{{\Helper::userColor($value->usuario)}}" title="{{ $value->usuario }}"><strong>{{strtoupper(substr($value->usuario,0,1))}}</strong></span>
@@ -70,7 +78,13 @@
             <div class="col-md-12">
 
               <ul class="pager">
-                {{ $reseteados->render() }}
+                {{ $reseteados->appends(
+                    [
+                      'fecha_ini' => app('request')->input('fecha_ini'),
+                      'fecha_fin' => app('request')->input('fecha_fin'),
+                      'usuario' => app('request')->input('usuario')
+                    ]
+                    )->render() }}
               </ul>
 
             </div>

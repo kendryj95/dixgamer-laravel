@@ -23,7 +23,12 @@ class Reset extends Model
 
     public function ScopeGetDatosReseteados($query, $fecha_ini, $fecha_fin, $usuario)
     {
-        $sql = $query->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)->where(DB::raw('DATE(Day)'),'<=',$fecha_fin);
+        $sql = $query->select(
+          DB::raw('GROUP_CONCAT(cuentas_id) AS cuentas_id'),
+          'Day',
+          'usuario'
+        )
+        ->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)->where(DB::raw('DATE(Day)'),'<=',$fecha_fin)->groupBy(DB::raw('DATE(Day), usuario'));
 
         if (!empty($usuario)) {
            $sql = $sql->where('usuario','=',$usuario);
