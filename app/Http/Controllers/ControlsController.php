@@ -609,4 +609,34 @@ class ControlsController extends Controller
 
         return $cobros_mp_sin_pareja;
     }
+
+    public function configGeneral()
+    {
+        $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
+        $cuentas_excluidas = DB::table('configuraciones')->where('ID',1)->value('cuentas_excluidas');
+        return view('config.general', compact('oferta_fortnite','cuentas_excluidas'));
+    }
+
+    public function configGeneralStore(Request $request)
+    {
+        switch ($request->opt) {
+            case 1: // Texto Fortnite
+                $data = [];
+                $data['oferta_fortnite'] = $request->oferta_fortnite;
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Texto para ofertas fortnite actualizado.');
+                return redirect()->back();
+                break;
+            
+            case 2: // Cuentas Excluidas
+                $data = [];
+                $data['cuentas_excluidas'] = $request->cuentas_excluidas;
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Cuentas excluidas en PS3 Resetear actualizada.');
+                return redirect()->back();
+                break;
+        }
+    }
 }

@@ -42,6 +42,7 @@
                 <thead>
                 <tr>
                     <th>Cantidad</th>
+                    <th>Cover</th>
                     <th>Producto</th>
                     <th>Cuentas</th>
                     <th>Usuario</th>
@@ -55,6 +56,9 @@
                             {{ $value->Q }}
                         </td>
                         <td style="vertical-align: middle;">
+                            <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $value->consola }}/{{ $value->titulo.'.jpg' }} "alt="" />
+                        </td>
+                        <td style="vertical-align: middle;width: 250px">
                             {{ $value->titulo }}
                             <span class="label label-default {{$value->consola}}">
                                 {{$value->consola}}
@@ -72,7 +76,7 @@
                     </tr>
                     @endforeach
                 @else
-                    <td colspan = '4' class="text-center">No se encontraron datos</td>
+                    <td colspan = '5' class="text-center">No se encontraron datos</td>
                 @endif
                 </tbody>
             </table>

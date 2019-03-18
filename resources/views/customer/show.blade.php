@@ -642,6 +642,7 @@
                       <i aria-hidden="true" class="fa fa-pencil"></i>
                   </a> --}}
 
+                  @if ($dataCustomer->ID_stock != 1)
                   <div class="dropdown" style="display: inline-block;">
                     <button class="btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-pencil text-muted"></i>
@@ -653,7 +654,7 @@
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/5','#modalVentas')">Manual</a></li>
                     </ul>
                   </div>
-                  @if ($dataCustomer->ID_stock != 1)
+                  
                   <div class="dropdown" style="display: inline-block;">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-remove text-muted"></i>
@@ -789,15 +790,20 @@
                   Antes asignado a cliente <a href="{{ url('clientes', $cliente) }}" class="alert-link" target="_blank">#{{ $cliente }}</a>
 
                   @elseif(strpos($venta_nota->Notas, "Antes tenía") !== false) {{-- Solo notas para cambios de productos --}}
+                   @if(strpos($venta_nota->Notas, "#", 14)) {{-- Esta validación que funcione las notas anteriores antes de colocar el link para las cuentas --}}
 
-                  @php
-                  $string = $venta_nota->Notas;
-                  $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
-                  $cuenta = substr($string, $pos+1);
-                  $nota = substr($string, 0, $pos);
-                  @endphp
+                    @php
+                    $string = $venta_nota->Notas;
+                    $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
+                    $cuenta = substr($string, $pos+1);
+                    $nota = substr($string, 0, $pos);
+                    @endphp
 
-                  {{$nota}} <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a>
+                    {{$nota}} <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a>
+
+                    @else
+                      {{ $venta_nota->Notas }}
+                    @endif
 
                   @else
 

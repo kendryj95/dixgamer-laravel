@@ -334,6 +334,7 @@ class AccountController extends Controller
         $next = Account::Siguiente($id)->first();
         $back = Account::Previo($id)->first();
       //dd($soldConcept);
+        $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
 
       return view('account.show',compact(
                 'account',
@@ -349,7 +350,8 @@ class AccountController extends Controller
                 'paccount',
                 'lastAccountGames',
                 'next',
-                'back'
+                'back',
+                'oferta_fortnite'
       ));
 
     }

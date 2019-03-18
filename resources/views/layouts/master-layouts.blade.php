@@ -32,6 +32,9 @@
   <!-- Estilo personalizado por mi -->
   <link href="{{ asset('css/personalizado.css') }}" rel="stylesheet">
   <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('js/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}">
+
+  <!-- <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=i7mex8wkvz9vr56kpy7j8liybj29rqaiqzj4cvwsznajz481"></script> -->
 
   @stack('css')
   
@@ -87,16 +90,16 @@
                 <li><a href="{{ url('catalogo_link_ps_store') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Link PS Store</a></li>
                 <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
 
-                @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level))
+                @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
                     <li class="divider" role="separator"></li>
                     <li><a href="{{ url('stock_insertar_codigo') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P1</a></li>
                 @endif
 
-                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
                   <li><a href="{{ url('stock_insertar_codigo_g') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P2</a></li>
                 @endif
 
-                @if(Helper::validateAdministrator(session()->get('usuario')->Level))
+                @if(Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
                   <li><a href="{{ url('stock_insertar_codigo_p3') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P3</a></li>
                 @endif
               </ul>
@@ -161,6 +164,7 @@
                 <li class="divider" role="separator"></li>
                 <li><a href="{{ url('adwords') }}"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
                 <li class="divider" role="separator"></li>
+                <li><a href="{{url('config/general')}}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> General</a></li>
                 <li><a href="{{url('usuario')}}"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
                 <li><a href="{{url('usuario/list')}}"><i class="fa fa-users fa-fw" aria-hidden="true"></i> Listar usuarios</a></li>
               </ul>
@@ -223,6 +227,9 @@
   <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
   <script src="{{ asset('js/typeahead.bundle.js') }}"></script>
+  <script type="text/javascript" src="{{asset('js/tinymce/tinymce.min.js')}}"></script>
+  <script type="text/javascript" src="{{asset('js/tinymce/skins/custom/jquery.tinymce.min.js')}}"></script> 
+  <script src="{{ asset('js/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
 
   <script>new Clipboard('.btn-copiador');</script>
 

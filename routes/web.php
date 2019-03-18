@@ -162,6 +162,8 @@ Route::group(['middleware' => ['login']], function()
         Route::get('control_mp_crear_venta_cero/{ref_cobro}/{importe}/{c_id}', 'ControlsController@controlMPCrearVentaCero');
         Route::get('control_mp_actualizar_importes/{ref_op}', 'ControlsController@controlMPActualizarImportes');
         Route::get('control_mp_baja_slot_libre/{dif}/{ref_cobro}', 'ControlsController@controlMPBajaSlotLibre');
+        Route::get('config/general', 'ControlsController@configGeneral');
+        Route::post('config/general', 'ControlsController@configGeneralStore');
     });
 
 

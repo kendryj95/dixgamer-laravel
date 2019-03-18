@@ -40,6 +40,20 @@ class Helper
       return false;
     }
 
+    public static function permissionPerUser($nombre, $acceso)
+    {
+      $usuarios = [
+        'Fran'
+      ];
+      switch ($acceso) {
+        case 'Gift':
+          return in_array($nombre, $usuarios); // Si el usuario está en la lista, tiene permisos.
+          break;
+      }
+
+      return false;
+    }
+
 
     // Retorna nombre aleatorio
     public static function getRandomName(){
@@ -230,6 +244,26 @@ class Helper
       }
 
       return $accountBalance->costo_usd - $expense->costo_usd;
+    }
+
+    public static function getMonthLetter($mes)
+    {
+      $meses = [
+        'Ene',
+        'Feb',
+        'Mar',
+        'Abr',
+        'May',
+        'Jun',
+        'Jul',
+        'Ago',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dic'
+      ];
+
+      return $meses[$mes-1];
     }
 
 }

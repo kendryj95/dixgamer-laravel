@@ -26,7 +26,8 @@ class Reset extends Model
         $sql = $query->select(
           DB::raw('GROUP_CONCAT(cuentas_id) AS cuentas_id'),
           'Day',
-          'usuario'
+          'usuario',
+          DB::raw('COUNT(cuentas_id) AS Q')
         )
         ->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)->where(DB::raw('DATE(Day)'),'<=',$fecha_fin)->groupBy(DB::raw('DATE(Day), usuario'));
 

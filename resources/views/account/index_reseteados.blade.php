@@ -42,8 +42,9 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Fecha</th>
+                    <th style="width: 100px">Fecha</th>
                     <th>Cuenta</th>
+                    <th>Cantidad</th>
                     <th>Usuario</th>
                 </tr>
                 </thead>
@@ -54,7 +55,16 @@
                         <td style="vertical-align: middle;">
                             {{ $i + 1 }}
                         </td>
-                        <td style="vertical-align: middle;">{{ date('d-m', strtotime($value->Day)) }}</td>
+                        <td style="vertical-align: middle;">
+                            @php
+                            $dia = date('d', strtotime($value->Day));
+                            $mes = date('n', strtotime($value->Day));
+                            $mes = \Helper::getMonthLetter($mes);
+                            $anio = date('Y', strtotime($value->Day));
+                            $fecha = "$dia-$mes-$anio";
+                            @endphp
+                            {{ $fecha }}
+                        </td>
                         <td style="vertical-align: middle;">
                             @php
                                 $array = explode(',', $value->cuentas_id);
@@ -65,12 +75,15 @@
                             @endforeach
                         </td>
                         <td style="vertical-align: middle;">
+                            {{ $value->Q }}
+                        </td>
+                        <td style="vertical-align: middle;">
                             <span class="label label-{{\Helper::userColor($value->usuario)}}" title="{{ $value->usuario }}"><strong>{{strtoupper(substr($value->usuario,0,1))}}</strong></span>
                         </td>
                     </tr>
                     @endforeach
                 @else
-                    <td colspan = '3' class="text-center">No se encontraron datos</td>
+                    <td colspan = '5' class="text-center">No se encontraron datos</td>
                 @endif
                 </tbody>
             </table>

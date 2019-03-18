@@ -360,6 +360,7 @@ class Stock extends Model
 
 
     public function ScopePs3Resetear($query){
+        $cuentas_excluidas = DB::table('configuraciones')->where('ID',1)->value('cuentas_excluidas');
         return DB::select(DB::raw("
         SELECT ID AS id_stk, titulo, consola, cuentas_id AS stk_ctas_id, costo, ID_reseteo AS id_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, id_vta, q_vta, dayvta, (DATEDIFF(NOW(), dayvta) - 1) AS days_from_vta
         FROM stock
@@ -374,7 +375,7 @@ class Stock extends Model
         FROM ventas
         GROUP BY stock_id) AS vendido
         ON ID = stock_id
-        WHERE (consola = 'ps3') AND ((Q_vta >= '2' AND ID_reseteo IS NULL) OR (((Q_vta >= '2') AND ((Q_reseteado + 1) = FLOOR(Q_vta/2))) AND DATEDIFF(NOW(), dayreseteo) > '180')) AND cuentas_id NOT IN (6, 361)
+        WHERE (consola = 'ps3') AND ((Q_vta >= '2' AND ID_reseteo IS NULL) OR (((Q_vta >= '2') AND ((Q_reseteado + 1) = FLOOR(Q_vta/2))) AND DATEDIFF(NOW(), dayreseteo) > '180')) AND cuentas_id NOT IN ($cuentas_excluidas)
         ORDER BY consola, titulo, ID DESC"));
 
     }

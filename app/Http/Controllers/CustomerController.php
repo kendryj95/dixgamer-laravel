@@ -428,15 +428,15 @@ class CustomerController extends Controller
               $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
             }
 
-            $data = [];
-            $data['id_ventas'] = $request->ID;
-            $data['Notas'] = $nota;
-            $data['Day'] = date('Y-m-d H:i:s');
-            $data['usuario'] = session()->get('usuario')->Nombre;
+            if ($this->isNotStockDefault($stock_anterior->stock_id)) {
+              $data = [];
+              $data['id_ventas'] = $request->ID;
+              $data['Notas'] = $nota;
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
 
-            DB::table('ventas_notas')->insert($data);
-
-
+              DB::table('ventas_notas')->insert($data);
+            }
 
             DB::commit();
 
@@ -680,13 +680,17 @@ class CustomerController extends Controller
 
         DB::table('ventas')->where('ID', $id_ventas)->update($data);
 
-        $data = [];
-        $data['id_ventas'] = $id_ventas;
-        $data['Notas'] = $nota;
-        $data['Day'] = date('Y-m-d H:i:s');
-        $data['usuario'] = session()->get('usuario')->Nombre;
+        if ($this->isNotStockDefault($stock_anterior)) {
+          $data = [];
+          $data['id_ventas'] = $id_ventas;
+          $data['Notas'] = $nota;
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
 
-        DB::table('ventas_notas')->insert($data);
+          DB::table('ventas_notas')->insert($data);
+          
+        }
+
 
         DB::commit();
 
@@ -819,40 +823,47 @@ class CustomerController extends Controller
               $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
             }
 
-            $data = [];
-            $data['stock_id'] = 1;
-            $data['cons'] = 'ps';
-            $data['slot'] = 'No';
+            if ($this->isNotStockDefault($stock_anterior->stock_id)) {
+              $data = [];
+              $data['stock_id'] = 1;
+              $data['cons'] = 'ps';
+              $data['slot'] = 'No';
 
-            DB::table('ventas')->where('ID',$request->ID)->update($data);
+              DB::table('ventas')->where('ID',$request->ID)->update($data);
 
-            $data = [];
-            $data['id_ventas'] = $request->ID;
-            $data['Notas'] = $nota;
-            $data['Day'] = date('Y-m-d H:i:s');
-            $data['usuario'] = session()->get('usuario')->Nombre;
+              
+              $data = [];
+              $data['id_ventas'] = $request->ID;
+              $data['Notas'] = $nota;
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
 
-            DB::table('ventas_notas')->insert($data);
+              DB::table('ventas_notas')->insert($data);
+            }
+
 
             ## ELIMINANDO COBROS
 
             $cobros = DB::table('ventas_cobro')->where('ventas_id', $request->ID)->get();
 
             foreach ($cobros as $cobro) {
-              $data = [];
-              $data['precio']='0';
-              $data['comision']='0';
-              DB::table('ventas_cobro')->where('ID', $cobro->ID)->update($data);
 
-              $notas = "Cobro eliminado #$cobro->ID ($cobro->medio_cobro), ref #$cobro->ref_cobro, +$cobro->precio - $cobro->comision";
+              if ($cobro->precio != 0 && $cobro->comision != 0) {
+                $data = [];
+                $data['precio']='0';
+                $data['comision']='0';
+                DB::table('ventas_cobro')->where('ID', $cobro->ID)->update($data);
 
-              $data = [];
-              $data['id_ventas'] = $cobro->ventas_id;
-              $data['Notas'] = $notas;
-              $data['Day'] = date('Y-m-d H:i:s');
-              $data['usuario'] = session()->get('usuario')->Nombre;
+                $notas = "Cobro eliminado #$cobro->ID ($cobro->medio_cobro), ref #$cobro->ref_cobro, +$cobro->precio - $cobro->comision";
 
-              DB::table('ventas_notas')->insert($data);
+                $data = [];
+                $data['id_ventas'] = $cobro->ventas_id;
+                $data['Notas'] = $notas;
+                $data['Day'] = date('Y-m-d H:i:s');
+                $data['usuario'] = session()->get('usuario')->Nombre;
+
+                DB::table('ventas_notas')->insert($data);
+              }
             }
 
             DB::commit();
@@ -902,13 +913,17 @@ class CustomerController extends Controller
 
         DB::table('ventas')->where('ID',$id)->update($data);
 
-        $data = [];
-        $data['id_ventas'] = $id;
-        $data['Notas'] = $nota;
-        $data['Day'] = date('Y-m-d H:i:s');
-        $data['usuario'] = session()->get('usuario')->Nombre;
+        if ($this->isNotStockDefault($stock_anterior->stock_id)) {
+          
+          $data = [];
+          $data['id_ventas'] = $id;
+          $data['Notas'] = $nota;
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
 
-        DB::table('ventas_notas')->insert($data);
+          DB::table('ventas_notas')->insert($data);
+        }
+
 
         DB::commit();
 
@@ -1448,5 +1463,10 @@ class CustomerController extends Controller
       } catch (Exception $e) {
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
       }
+    }
+
+    private function isNotStockDefault($stock_id)
+    {
+      return $stock_id != 1 || false;
     }
 }
