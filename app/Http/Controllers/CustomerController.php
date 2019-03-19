@@ -428,7 +428,6 @@ class CustomerController extends Controller
               $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
             }
 
-            if ($this->isNotStockDefault($stock_anterior->stock_id)) {
               $data = [];
               $data['id_ventas'] = $request->ID;
               $data['Notas'] = $nota;
@@ -436,7 +435,6 @@ class CustomerController extends Controller
               $data['usuario'] = session()->get('usuario')->Nombre;
 
               DB::table('ventas_notas')->insert($data);
-            }
 
             DB::commit();
 
@@ -680,7 +678,6 @@ class CustomerController extends Controller
 
         DB::table('ventas')->where('ID', $id_ventas)->update($data);
 
-        if ($this->isNotStockDefault($stock_anterior)) {
           $data = [];
           $data['id_ventas'] = $id_ventas;
           $data['Notas'] = $nota;
@@ -689,7 +686,6 @@ class CustomerController extends Controller
 
           DB::table('ventas_notas')->insert($data);
           
-        }
 
 
         DB::commit();
@@ -881,9 +877,11 @@ class CustomerController extends Controller
       }
     }
 
-    public function ventarQuitarProducto($id)
+    public function ventarQuitarProducto(Request $request, $id)
     {
       DB::beginTransaction();
+
+      $slot = isset($request->slot) ? $request->slot : '';
 
       try {
 
@@ -913,7 +911,6 @@ class CustomerController extends Controller
 
         DB::table('ventas')->where('ID',$id)->update($data);
 
-        if ($this->isNotStockDefault($stock_anterior->stock_id)) {
           
           $data = [];
           $data['id_ventas'] = $id;
@@ -922,7 +919,26 @@ class CustomerController extends Controller
           $data['usuario'] = session()->get('usuario')->Nombre;
 
           DB::table('ventas_notas')->insert($data);
-        }
+
+          if ($slot != '') {
+            if ($slot == 'Primario') {
+              $data = [];
+              $data['id_ventas'] = $id;
+              $data['Notas'] = 'PS4 no estaba activa';
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
+
+              DB::table('ventas_notas')->insert($data);
+            } elseif($slot == 'Secundario') {
+              $data = [];
+              $data['id_ventas'] = $id;
+              $data['Notas'] = 'Posiblemente no está usando';
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
+
+              DB::table('ventas_notas')->insert($data);
+            }
+          }
 
 
         DB::commit();

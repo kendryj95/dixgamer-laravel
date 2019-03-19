@@ -642,7 +642,6 @@
                       <i aria-hidden="true" class="fa fa-pencil"></i>
                   </a> --}}
 
-                  @if ($dataCustomer->ID_stock != 1)
                   <div class="dropdown" style="display: inline-block;">
                     <button class="btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-pencil text-muted"></i>
@@ -655,14 +654,20 @@
                     </ul>
                   </div>
                   
+                  @if ($dataCustomer->ID_stock != 1)
                   <div class="dropdown" style="display: inline-block;">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-remove text-muted"></i>
                     </button>
-                    <ul style="top:-50px;left:25px" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <ul style="top:-65px;left:25px" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                       <li class="dropdown-header">¿Deseas quitar producto?</li>
                       <li role="separator" class="divider"></li>
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, remover</a></li>
+                      @if($dataCustomer->slot == 'Secundario')
+                      <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?slot={{$dataCustomer->slot}}">Sí, tal vez no usa</a></li>
+                      @elseif($dataCustomer->slot == 'Primario')
+                      <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?slot={{$dataCustomer->slot}}">Sí, ps4 no activa</a></li>
+                      @endif
                     </ul>
                   </div>
                   @endif

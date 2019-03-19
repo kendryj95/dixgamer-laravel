@@ -32,7 +32,7 @@ class Customer extends Model
     // Si no, solo retorna los datos que se mandan en $query
     public function ScopeCustomerByEmail($query,$email){
       if (!empty($email)) {
-        $query->where('email','like','%'.$email.'%');
+        $query->leftjoin('clientes_email AS ce','ce.clientes_id','=','clientes.clientes_id')->where('email','like','%'.$email.'%')->orWhere('ce.email','like','%'.$email.'%');
       }else{
         return $query;
       }
@@ -134,7 +134,12 @@ class Customer extends Model
     // Buscamos cliente por filtro
     public function ScopeCustomerByCustomColumn($query,$obj){
       if (!empty($obj->column) && !empty($obj->word)) {
-        $query->where($obj->column,'like','%'.$obj->word.'%');
+        if ($obj->column == 'email') {
+          $query->select('clientes.*')->leftjoin('clientes_email AS ce','ce.clientes_id','=','clientes.ID')->where('clientes.email','like','%'.$obj->word.'%')->orWhere('ce.email','like','%'.$obj->word.'%')->groupBy('clientes.ID');
+        } else {
+
+          $query->where($obj->column,'like','%'.$obj->word.'%');
+        }
       }else{
         return $query;
       }

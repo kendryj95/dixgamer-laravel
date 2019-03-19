@@ -17,7 +17,7 @@
 	<div class="row">
 	  <div class="col-lg-3">
 	    <ul class="nav nav-pills nav-stacked">
-	      <li role="presentation" class="active"><a  data-toggle="tab" href="#menu1">Oferta Fortnite</a></li>
+	      <li role="presentation" class="active"><a  data-toggle="tab" href="#menu1">Mensaje extra email</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu2">Cuentas Excluidas - PS3 Resetear</a></li>
 	    </ul>
 	  </div>
@@ -30,7 +30,7 @@
 						{{ csrf_field() }}
 						<input type="hidden" name="opt" value="1">
 						<div class="form-group">
-							<label for="">Texto para ofertas Fortnite:</label>
+							<label for="">Texto para el mensaje extra email:</label>
 							<textarea name="oferta_fortnite" id="form" cols="30" rows="10" class="form-control">{{ $oferta_fortnite }}</textarea>
 						</div>
 						<button type="submit" class="btn btn-primary btn-block">Actualizar</button>
