@@ -20,7 +20,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 						<select id="titulo-selec" name="titulo" class="selectpicker form-control" data-live-search="true" data-size="5">
 							@foreach($titles as $title)
 								@php $titulo = explode(" (",$title->nombre_web)[0] @endphp
-								<option value="{{explode(" (",$title->nombre_web)[0]}}" @if($titulo == $stock->titulo) selected @endif>{{str_replace('-', ' ', $title->nombre_web)}}</option>
+								<option value="{{explode(" (",$title->nombre_web)[0]}}" @if($titulo == $stock->titulo && $stock->consola == $title->consola) selected @endif>{{str_replace('-', ' ', $title->nombre_web)}}</option>
 							@endforeach
 
 							</select>
