@@ -1,16 +1,8 @@
-@extends('layouts.master-layouts')
 
-@section('title', 'Editar horario')
+<link href="{{asset('plugins/timepicker/css/timepicker.less')}}" rel="stylesheet">
 
-@push('css')
-
-<link rel="stylesheet" href="{{asset('plugins/timepicker/css/timepicker.less')}}">
-
-@endpush
-
-@section('container')
   <div class="container text-center">
-  	<h1>Editar horario</h1>
+    <h1 style="color:#000">Editar horario</h1>
     @if (count($errors) > 0)
           <div class="alert alert-danger text-center">
             <ul>
@@ -77,11 +69,9 @@
     </div>
   </div>
 </div><!--/.container-->
-@endsection
 
 
 
-@section('scripts')
 <script type="text/javascript" src="{{asset('plugins/timepicker/js/bootstrap-timepicker.js')}}"></script>
 
 <script type="text/javascript">
@@ -94,4 +84,3 @@
       defaultTime: false
   });
 </script>
-@stop

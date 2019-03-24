@@ -59,7 +59,8 @@
 										<td><span class="label label-{{$shedule->color}}"><strong>{{strtoupper(substr($shedule->usuario,0,1))}}</strong></span></td>
 										<td>{{ number_format((float)$shedule->Q_horas, 2, ',', '') }}</td>
 										<td>@if ($shedule->verificado == 'si') <i class="fa fa-check fa-fw" style="color:#ddd;" aria-hidden="true"></i> @else <a class="text-center btn btn-success btn-xs" title="verificar" href="{{url("horarios/verificar/$shedule->ID")}}"><i class="fa fa-check fa-fw"  aria-hidden="true"></i></a> @endif</td>
-										<td><a href="javascript:void(0)" onclick='getPageAjax("{{ url('horarios/edit') }}", "#modalHorario", {{ $shedule->ID }})' class="btn-xs"><i class="fa fa-pencil" title="Editar horario"></i></a></td>
+										<td><a href="javascript:void(0)" data-toggle="modal"
+												data-target=".modalHorario" onclick='getPageAjax("{{ url('horarios/edit') }}", "#modalHorario", {{ $shedule->ID }})' class="btn-xs"><i class="fa fa-pencil" title="Editar horario"></i></a></td>
 	
 									</tr>
 								@endforeach

@@ -14,6 +14,9 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 					{{ csrf_field() }}
 
 					<input type="hidden" name="stock_id" value="{{ $stock->ID }}">
+					<input type="hidden" name="opt" value="{{ $opt }}">
+
+					@if($opt == 1)
 
 					<div class="input-group form-group">
 						<span class="input-group-addon"><i class="fa fa-gamepad fa-fw"></i></span>
@@ -28,16 +31,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 
 					<input type="hidden" name="consola" id="consola">
 
-					<!-- <div class="input-group form-group">
-						<span class="input-group-addon"><i class="fa fa-cube fa-fw"></i></span>
-						<select id="consola" name="consola" class="selectpicker form-control">
-							<option selected value="ps4" data-content="<span class='label label-primary'>ps4</span>">ps4</option>
-							<option value="ps3" data-content="<span class='label label-warning' style='background-color:#000;'>ps3</span>">ps3</option>
-							<option value="ps" data-content="<span class='label label-danger'>psn</span>">psn</option>
-							<option value="steam" data-content="<span class='label label-default'>steam</span>">steam</option>
-							<option value="psvita" data-content="<span class='label label-info'>psvita</span>">psvita</option>
-						</select>
-					</div> -->
+					@elseif($opt == 2)
 
 					<div class="input-group form-group">
 						<span class="input-group-addon"><em>Costo en USD</em></span>
@@ -47,6 +41,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 							class="form-control"
 							type="number"
 							step="0.01"
+							onchange="formatearCosto(this.value)"
 							name="costo_usd" value="{{$stock->costo_usd}}" @if ($saldo == 0 && $total_stocks > 1) readonly @endif>
 							<input type="hidden" name="saldo_act" value="{{$saldo}}">
 							<input type="hidden" name="costo_act" value="{{$stock->costo_usd}}">
@@ -57,6 +52,8 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 								</em>
 						</span>
 					</div>
+
+					@endif
 
 					<button class="btn btn-primary btn-block" type="submit" id="submiter">Guardar</button>
 				</form>
@@ -70,14 +67,21 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 		<script type="text/javascript">
 			jQuery(function($) {
 							$("form").on('change', function() {
+
+								@if($opt == 1)
 									var titulo = document.getElementById('titulo-selec').value;
 									var select = document.getElementById('titulo-selec');
+
 
 					var consola = (select.options[select.selectedIndex].text.substr(-4)).replace(")","");
 
 					document.getElementById('consola').value = consola;
 
+
+
 					$("#image-swap").attr("src", (titulo !== "" &&  + consola !== "") ? "{{asset('img/productos')}}/" + consola + "/" + titulo + ".jpg" : "");
+
+					
 					$('#image-swap').load(function() {
 									document.getElementById("alerta").innerHTML = "";
 									});
@@ -85,16 +89,43 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 						document.getElementById("alerta").innerHTML = "no se encuentra";
 					});
 
+					@endif
+
+					@if($opt == 1)
+
 						if (titulo == "") {
 							document.getElementById('submiter').disabled = true;
 						} else {
 							document.getElementById('submiter').disabled = false;
 						}
 
+					@else
+
+					if ($('#proporcion_usd').val() == "") {
+						document.getElementById('submiter').disabled = true;
+					} else {
+						document.getElementById('submiter').disabled = false;
+					}
+
+
+					@endif
+
 							}).trigger('change');
 
 							$('.selectpicker').selectpicker();
 					})
+
+			function formatearCosto(valor)
+			{
+				console.log(valor);
+				let existeComa = valor.indexOf(',');
+
+				if (existeComa >= 0) {
+					document.getElementById('proporcion_usd').value = valor.replace(",",".");
+				} else {
+					console.log('no existe');
+				}
+			}
 		</script>
 	@else
 		<h1 style="color:#000">Cuenta no encontrada</h1>

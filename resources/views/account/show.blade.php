@@ -457,7 +457,7 @@
 								type="button"
 								data-toggle="modal"
 								data-target=".bs-example-modal-lg"
-								onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}","#modal-container");'>
+								onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}/1","#modal-container");'>
 									<i class="fa fa-pencil"></i>
 								</button>
 							</span>
@@ -551,10 +551,11 @@
 										<small>
 											<strong>
 												{{$stock->costo_usd}}
-											</strong>
+											</strong> 
+											<!-- <a href="javascript:;" title="Modificar Costo"><i class="fa fa-pencil"></i></a> -->
 										</small>
 
-										@if(!$quantityStock->Q > 1 )
+										{{-- @if(!$quantityStock->Q > 1 ) --}}
 											<a
 												title="Modificar Costo"
 												class="btn-xs text-muted"
@@ -562,10 +563,10 @@
 												type="button"
 												data-toggle="modal"
 												data-target=".bs-example-modal-lg"
-												onClick='document.getElementById("ifr").src="stock_modificar_costo.php?s_id={{$stock->ID_stock}}&c_id={{$stock->stock_cuentas_id}}";'>
+												onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}/2","#modal-container");'>
 												<i aria-hidden="true" class="fa fa-pencil"></i>
 											</a>
-										@endif
+										{{-- @endif --}}
 
 									</p>
 

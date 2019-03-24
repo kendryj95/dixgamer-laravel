@@ -382,10 +382,12 @@ class AccountController extends Controller
       ));
     }
 
-    public function editStockAccount($stock_id,$account_id){
+    public function editStockAccount($stock_id,$account_id,$opt){
       $obj = new \stdClass;
       $obj->column = 'ID';
       $obj->word = $account_id;
+
+      $opt = $opt;
 
       // traemos la cuenta por el ID
       $account = Account::AccountByColumnWord($obj)->first();
@@ -403,94 +405,107 @@ class AccountController extends Controller
         'titles',
         'expense',
         'total_stocks',
-        'accountBalance'
+        'accountBalance',
+        'opt'
       ));
     }
 
     public function updateStockAccount(Request $request,$account_id){
-      // Mensajes de alerta
-      $msgs = [
-        'titulo.required' => 'Titulo requerido',
-        'stock_id.required' => 'Intentelo nuevamente',
-        'consola.required' => 'Consola requerida'
-      ];
-      // Validamos
-      $v = Validator::make($request->all(), [
-          'titulo' => 'required',
-          'consola' => 'required',
-          'stock_id' => 'required'
-      ], $msgs);
-
-
-      // Si hay errores retornamos a la pantalla anterior con los mensajes
-      if ($v->fails())
-      {
-          return redirect()->back()->withErrors($v->errors());
-      }
+      // dd($request->all());
 
       $obj = new \stdClass;
       $obj->column = 'ID';
       $obj->word = $account_id;
+
+      $opt = $request->opt;
 
       // traemos la cuenta por el ID
       $account = Account::AccountByColumnWord($obj)->first();
 
       // Traemos el stock
       $stock = Stock::where('ID',$request->stock_id)->first();
-      $expense = Stock::stockExpensesByAccountId($account_id)->first();
-      $accountBalance = Balance::totalBalanceAccount($account_id)->first();
-
-      /// SI EL COSTO EN USD ES 9.99, 19.99, etc... LE SUMO UN CENTAVO
-      $costo_usd = round($request->costo_usd, 1);
-
-      $saldo_acumulado = $request->costo_act + $request->saldo_act;
-
-      //// CALCULO EL SALDO LIBRE DE LA CUENTA EN USD Y EN ARS
-      $saldo_libre_usd = ($accountBalance->costo_usd - $expense->costo_usd);
-      $saldo_libre_ars = ($accountBalance->costo - $expense->costo);
-
-      /// SI EL SALDO A QUEDAR LUEGO DE INSERTAR UN PRODUCTO ES MAYOR O IGUAL A 9.99, CARGO COSTO ARS PROPORCIONAL
-      if (($saldo_libre_usd - $costo_usd) >= 9.99) {
-        $costo_ars = ($saldo_libre_ars * ($costo_usd/$saldo_libre_usd));
-      } else {
-      /// SI EL SALDO A QUEDAR ES MENOR A 9.99 LE ASIGNO EL TOTAL EN PESOS LIBRES > ABSORBO TODO EL COSTO EN PESOS
-        $costo_ars = $saldo_libre_ars;
-      }
-
-      if ($request->saldo_act != 0) {
-        if ($costo_usd > $saldo_acumulado) {
-          if ($stock->titulo == $request->titulo) { // Que valide solo cuando está tratando de actualizar el costo con el mismo stock
-            return redirect()->back()->withErrors('El costo utilizado para actualizar el producto no puede ser mayor al saldo que tienes disponible.');
-          }
-        }
-      }
+      // $expense = Stock::stockExpensesByAccountId($account_id)->first();
+      
 
       if ($account && $stock) {
         try {
 
           $operador = session()->get('usuario')->Nombre;
           $notes = [];
-          $notes['cuentas_id'] = $account_id;
-          if ($request->saldo_act != 0) {
-            $notes['Notas'] = "Modificacion de juego #$stock->ID, antes $stock->titulo y costo $request->costo_act a $costo_usd ($stock->consola)";
-          } else {
+          $data = [];
 
-            $notes['Notas'] = "Modificacion de juego #$stock->ID, antes $stock->titulo ($stock->consola)";
+          switch ($opt) {
+            case 1:
+
+            // Mensajes de alerta
+            $msgs = [
+              'titulo.required' => 'Titulo requerido',
+              'stock_id.required' => 'Intentelo nuevamente',
+              'consola.required' => 'Consola requerida'
+            ];
+            // Validamos
+            $v = Validator::make($request->all(), [
+                'titulo' => 'required',
+                'consola' => 'required',
+                'stock_id' => 'required'
+            ], $msgs);
+
+
+            // Si hay errores retornamos a la pantalla anterior con los mensajes
+            if ($v->fails())
+            {
+                return redirect()->back()->withErrors($v->errors());
+            }
+
+              $notes['Notas'] = "Modificacion de juego #$stock->ID, antes $stock->titulo ($stock->consola)";
+
+              $data['titulo'] = $request->titulo;
+              $data['consola'] = $request->consola;
+
+              break;
+            
+            case 2:
+
+            $accountBalance = Balance::totalBalanceAccount($account_id)->first();
+
+            /// SI EL COSTO EN USD ES 9.99, 19.99, etc... LE SUMO UN CENTAVO
+            $costo_usd = round($request->costo_usd, 1);
+
+            $saldo_acumulado = $request->costo_act + $request->saldo_act;
+
+            //// CALCULO EL SALDO LIBRE DE LA CUENTA EN USD Y EN ARS
+            $saldo_libre_usd = ($accountBalance->costo_usd);
+            $saldo_libre_ars = ($accountBalance->costo);
+
+            /// SI EL SALDO A QUEDAR LUEGO DE INSERTAR UN PRODUCTO ES MAYOR O IGUAL A 9.99, CARGO COSTO ARS PROPORCIONAL
+            if (($saldo_libre_usd - $costo_usd) > 9.99) {
+              $costo_ars = ($saldo_libre_ars * ($costo_usd/$saldo_libre_usd));
+            } else {
+            /// SI EL SALDO A QUEDAR ES MENOR A 9.99 LE ASIGNO EL TOTAL EN PESOS LIBRES > ABSORBO TODO EL COSTO EN PESOS
+              $costo_ars = $saldo_libre_ars;
+            }
+
+            if ($request->saldo_act != 0) {
+              if ($costo_usd > $saldo_acumulado) {
+                if ($stock->titulo == $request->titulo) { // Que valide solo cuando está tratando de actualizar el costo con el mismo stock
+                  return redirect()->back()->withErrors('El costo utilizado para actualizar el producto no puede ser mayor al saldo que tienes disponible.');
+                }
+              }
+            }
+
+              $notes['Notas'] = "Modificacion de juego #$stock->ID, antes costo $request->costo_act a $costo_usd";
+
+              $data['costo_usd'] = $costo_usd;
+              $data['costo'] = $costo_ars;
+              break;
           }
+
+          $notes['cuentas_id'] = $account_id;
           $notes['usuario'] = session()->get('usuario')->Nombre;
           $notes['Day'] = $this->dte;
           DB::table('cuentas_notas')->insert([$notes]);
 
-
-          $data = [];
-          $data['titulo'] = $request->titulo;
-          $data['consola'] = $request->consola;
-          //if ($request->saldo_act != 0) { // solo se actualiza el saldo de los productos solo si la cta tiene saldo disponible.
-            $data['costo_usd'] = $costo_usd;
-            $data['costo'] = $costo_ars;
-          //}
           $this->tks->updateStockById($request->stock_id,$data);
-
 
           // Mensaje de notificacion
           \Helper::messageFlash('Cuentas','Stock actualizado','alert_cuenta');

@@ -95,7 +95,7 @@ Route::group(['middleware' => ['login']], function()
   Route::post('stock_insertar_cuenta/{id}', 'AccountController@storeStockAccount');
   Route::get('stock_pre_insertar_cuenta/{id}', 'AccountController@createLastStock');
   Route::post('guardar_stock_masivo/{id}', 'AccountController@storeLastStock');
-  Route::get('actualizar_stock_cuenta/{stock_id}/{account_id}', 'AccountController@editStockAccount');
+  Route::get('actualizar_stock_cuenta/{stock_id}/{account_id}/{opt}', 'AccountController@editStockAccount');
   Route::post('actualizar_stock_cuenta/{account_id}', 'AccountController@updateStockAccount');
   Route::post('repetir_ultima_cuenta/{account_id}', 'AccountController@repeatLastAccount');
   Route::get('modify_date_operations/{id}/{tipo}', 'AccountController@modifyDateOperations');
