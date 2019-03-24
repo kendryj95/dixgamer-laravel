@@ -663,10 +663,15 @@
                       <li class="dropdown-header">¿Deseas quitar producto?</li>
                       <li role="separator" class="divider"></li>
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, remover</a></li>
+                      @if($dataCustomer->consola == 'ps4')
                       @if($dataCustomer->slot == 'Secundario')
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?slot={{$dataCustomer->slot}}">Sí, tal vez no usa</a></li>
                       @elseif($dataCustomer->slot == 'Primario')
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?slot={{$dataCustomer->slot}}">Sí, ps4 no activa</a></li>
+                      @endif
+
+                      @elseif($dataCustomer->consola == 'ps3')
+                      <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?cons={{$dataCustomer->consola}}">Sí, no descargó</a></li>
                       @endif
                     </ul>
                   </div>

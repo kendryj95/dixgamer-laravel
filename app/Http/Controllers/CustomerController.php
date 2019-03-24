@@ -882,6 +882,7 @@ class CustomerController extends Controller
       DB::beginTransaction();
 
       $slot = isset($request->slot) ? $request->slot : '';
+      $consola = isset($request->cons) ? $request->cons : '';
 
       try {
 
@@ -938,6 +939,14 @@ class CustomerController extends Controller
 
               DB::table('ventas_notas')->insert($data);
             }
+          } elseif ($consola != '') {
+            $data = [];
+            $data['id_ventas'] = $id;
+            $data['Notas'] = 'Parece que no usó slot de descarga';
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('ventas_notas')->insert($data);
           }
 
 
