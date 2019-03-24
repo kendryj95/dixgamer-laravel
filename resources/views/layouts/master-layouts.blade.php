@@ -109,6 +109,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Vtas<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('sales/list') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+                <li><a href="{{ url('sales/lista_cobro') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Cobros</a></li>
         <!--
                 <li><a href="https://dixgamer.com/db/ventas_web_sin_oii.php"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin order_item_id</a></li>
 

@@ -17,6 +17,12 @@
                 @else
                   @php $selected = ''; @endphp
                 @endif
+              @elseif($path == 'sales/lista_cobro')
+                @if($column == 'medio_cobro')
+                  @php $selected = 'selected'; @endphp
+                @else
+                  @php $selected = ''; @endphp
+                @endif
               @else
                 @if($column == 'email')
                   @php $selected = 'selected'; @endphp

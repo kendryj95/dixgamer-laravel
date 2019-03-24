@@ -410,5 +410,19 @@ class SalesController extends Controller
         echo json_encode($data);
     }
 
+    public function listaCobros(Request $request)
+    {
+        $obj = new \stdClass;
+        $obj->column = $request->column;
+        $obj->word = $request->word;
+
+        $datos = Sales::getDatosCobros()->salesByCustomColumn($obj)->paginate(50);
+
+        $columns = Schema::getColumnListing('ventas_cobro');
+
+        return view('sales.lista_cobros')->with(['datos' => $datos, 'columns' => $columns]);
+
+    }
+
 
 }

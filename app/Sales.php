@@ -69,4 +69,21 @@ class Sales extends Model
       }
     }
 
+    public function ScopeGetDatosCobros($query)
+    {
+        $query->select(
+            'medio_venta',
+            'medio_cobro',
+            'ref_cobro',
+            'precio',
+            'comision',
+            'clientes_id',
+            'vc.ID AS id_venta_cobro',
+            DB::raw("CONCAT_WS(' ', nombre, apellido) AS cliente")
+        )
+        ->rightjoin('ventas_cobro AS vc','ventas.ID','=','vc.ventas_id')
+        ->join('clientes AS c','ventas.clientes_id','=','c.ID')
+        ->orderBy('vc.ID','DESC');
+    }
+
 }
