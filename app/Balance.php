@@ -75,6 +75,23 @@ class Balance extends Model
           ->orderBy('ID','DESC');
     }
 
+    public function ScopeLastAccountIdBalance($query, $seller)
+    {
+      $query->select('cuentas_id')->where('usuario',$seller)->orderBy('ID','DESC');
+    }
+
+    public function ScopeLastGiftsCharged($query,$seller,$lastAccountId)
+    {
+      $query->select(
+        'titulo',
+        'Day'
+      )
+      ->where('usuario',$seller)
+      ->where('cuentas_id',$lastAccountId)
+      ->orderBy('ID','DESC')
+      ->limit(3);
+    }
+
 
 
 

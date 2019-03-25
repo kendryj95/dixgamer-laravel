@@ -668,6 +668,24 @@
 						</div>
 					<?php endif;?>
 
+		<?php else: ?>
+
+		@if(count($stocks) == 0)
+
+		<p>
+			<a href="{{ url('repetir_gift_juego', $account->ID) }}" class="btn btn-default btn-lg"><i class="fa fa-gamepad"></i> Repetir Juego</a>
+			{{--<form action="{{ url('repetirGiftAndJuego') }}" method="post">
+				{{ csrf_field() }}
+				<input type="hidden" name="saldo_usd" value="{{$saldo}}">
+				<input type="hidden" name="saldo_ars" value="{{$saldoARS}}">
+				<input type="hidden" name="account_id" value="{{$account->ID}}">
+
+				<button type="submit" class="btn btn-default btn-lg"><i class="fa fa-gamepad"></i> Repetir Juego</button>
+			</form>--}}
+		</p>
+
+		@endif
+
      	<?php endif;?>
      </div>
 
@@ -745,16 +763,17 @@
 				-->
 				<div style="position:absolute; top:-1000; left:-1000px;">
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="newpass-copy" style="font-size:15px; background: none; font-weight: normal; color:#111;"><p>Por mantenimiento de los servidores actualizamos la contraseña de ésta Cuenta/Usuario,<br /><br />
-						La nueva contraseña es: <?php echo $account->pass;?><br /><br />						
-						<!-- Aprovecho para contarte que nuestros paVos de Fortnite bajaron de precio, <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/">ver paVos baratos</a><br /><br /> -->
+					<span id="newpass-copy" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por mantenimiento de los servidores actualizamos la contraseña de ésta Cuenta/Usuario,<br /><br />
+						La nueva contraseña es: <?php echo $account->pass;?><br /><br />
+
 						{!! html_entity_decode($oferta_fortnite) !!}<br>
+
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					</div>
 					
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="reactivar-copy" style="font-size:15px; background: none; font-weight: normal; color:#111;"><p>Por favor ingresá a nuestra cuenta/usuario una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:<br /><br />
+					<span id="reactivar-copy" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por favor ingresá a nuestra cuenta/usuario una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:<br /><br />
 						1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar<br />
 						2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar<br />
 						3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.<br /><br />

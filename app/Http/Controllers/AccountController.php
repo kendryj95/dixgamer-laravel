@@ -1452,4 +1452,154 @@ class AccountController extends Controller
 
       return $fecha_ini;
     }
+
+    public function repetirGiftAndJuego($account_id)
+    {
+      $giftsCharged = $this->getLastGiftsCharged();
+
+      if (count($giftsCharged) > 0) {
+        
+        foreach ($giftsCharged as $gift) {
+          # PROCESO PARA GUARDADO DE LAS ULTIMAS GIFT CARGADAS POR ESTE USUARIO A UNA MISMA CUENTA_ID.
+          $stock_valido = \Helper::availableStock($account_id,$gift,'');
+
+          if (is_array($stock_valido)) { 
+            $stock_valido_id = $stock_valido[0]->ID_stk;
+            $stock = Stock::stockDetail($stock_valido_id)->first();
+
+            $date = date('Y-m-d H:i:s', time());
+            $data = [
+              'cuentas_id'=>$account_id,
+              'ex_stock_id'=>$stock->ID,
+              'titulo'=>$gift,
+              'consola'=>$stock->consola,
+              'medio_pago'=>$stock->medio_pago,
+              'costo_usd'=>$stock->costo_usd,
+              'costo'=>$stock->costo,
+              'code'=>$stock->code,
+              'code_prov'=>$stock->code_prov,
+              'n_order'=>$stock->n_order,
+              'Day'=>date('Y-m-d'),
+              'ex_Day_stock'=>$stock->Day,
+              'Notas'=>$stock->Notas,
+              'usuario'=>session()->get('usuario')->Nombre,
+              'ex_usuario'=>$stock->usuario
+            ];
+
+            try {
+              $this->blc->storeBalanceAccount($data);
+
+              // Eliminando stock
+              $stock = Stock::where('ID',$stock->ID)->delete();
+              // Mensaje de notificacion
+              // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+              // return redirect('cuentas/'.$account);
+              $band = true;
+            } catch (\Exception $e) {
+              // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+              $band = false;
+            }
+
+            #---------
+
+            $lastAccountGames = $this->tks->lastAccountUserGames(session()->get('usuario')->Nombre); // Ultimo juego cargado por este usuario.
+
+            if (count($lastAccountGames) > 0) {
+              $ultimo_juego = $lastAccountGames[0];
+              $lastGames = $this->tks->lastAccountByIdAndUser(session()->get('usuario')->Nombre,$ultimo_juego);
+              if (!$lastGames)
+                return redirect()->back()->withErrors(['Intentelo nuevamente. Ha ocurrido un error inesperado.']);
+
+              $data = [];
+
+              $saldos = $this->getSaldosCuenta($account_id);
+
+              foreach ($lastGames as $key => $game) {
+                $costo = ($game->costo_usd / $saldos['saldo']) * $saldos['saldoARS'];
+                // Arreglo que se guarda en $data para guardar multiples juegos de una sola ves
+                $data[$key] = [
+                  'cuentas_id' => $account_id,
+                  'consola' => $game->consola,
+                  'titulo' => $game->titulo,
+                  'medio_pago' => 'Saldo',
+                  'costo_usd' => $game->costo_usd,
+                  'costo' => $costo,
+                  'Day' => $this->dte,
+                  'usuario' => session()->get('usuario')->Nombre,
+                ];
+              }
+
+              try {
+                // mandamos a guardar el arreglo de juegos
+                $this->tks->storeCodes($data);
+
+                // Mensaje de notificacion
+                \Helper::messageFlash('Cuentas','Gift y Juego Cargado','alert_cuenta');
+
+
+                return redirect('cuentas/'.$account_id);
+              } catch (\Exception $e) {
+                dd($e->getMessage());
+                return redirect()->back()->withErrors(['Intentelo nuevamente. Ocurrió un error en el proceso.']);
+
+              }
+            } else {
+              return redirect()->back()->withErrors(['No hay stock para repetir el ultimo juego cargado con este usuario.']);
+            }
+            
+          } else {
+            return redirect()->back()->withErrors(['No hay gift en stock para repetir la ultima(s) gift cargada con este usuario.']);
+          }
+        }
+
+      } else {
+        return redirect()->back()->withErrors(['No se ha encontrado las ultimas gift cargadas con este vendedor.']);
+      }
+    }
+
+    private function getLastGiftsCharged()
+    {
+      $vendedor = session()->get('usuario')->Nombre;
+
+      $lastAccountIdBalance = Balance::lastAccountIdBalance($vendedor)->value('cuentas_id');
+      $giftsCargadas = [];
+
+      if ($lastAccountIdBalance) {
+        $lastGiftsCharged = Balance::lastGiftsCharged($vendedor, $lastAccountIdBalance)->get();
+
+        if (count($lastGiftsCharged) > 0) {
+          
+          $fecha_cargada_tmp = date('Y-m-d', strtotime($lastGiftsCharged[0]->Day));
+
+          foreach ($lastGiftsCharged as $value) {
+            $fecha_gift = date('Y-m-d', strtotime($value->Day));
+            if ($fecha_gift == $fecha_cargada_tmp) { // Filtro para solo tomar las ultimas gifts cargadas en el mismo día.
+              $giftsCargadas[] = $value->titulo;
+            }
+          }
+        } 
+      }
+
+      return $giftsCargadas; 
+    }
+
+    private function getSaldosCuenta($account_id)
+    {
+      $saldo = 0.00;
+      $saldoARS = 0.00;
+
+      $accountBalances = Balance::accountBalance($id);
+
+      foreach ($accountBalances as $balance) {
+        $saldo = $saldo + $balance->costo_usd;
+        $saldoARS = $saldoARS + $balance->costo;
+      }
+
+      $saldos = [
+        'saldo' => $saldo,
+        'saldoARS' => $saldoARS
+      ];
+
+      return $saldos;
+    }
 }

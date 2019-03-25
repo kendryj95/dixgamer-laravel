@@ -98,6 +98,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('actualizar_stock_cuenta/{stock_id}/{account_id}/{opt}', 'AccountController@editStockAccount');
   Route::post('actualizar_stock_cuenta/{account_id}', 'AccountController@updateStockAccount');
   Route::post('repetir_ultima_cuenta/{account_id}', 'AccountController@repeatLastAccount');
+  Route::get('repetir_gift_juego/{account_id}', 'AccountController@repetirGiftAndJuego');
   Route::get('modify_date_operations/{id}/{tipo}', 'AccountController@modifyDateOperations');
   Route::post('modify_date_operations_store', 'AccountController@modifyDateOperationsStore');
   Route::get('delete_operations/{id}/{tipo}', 'AccountController@deleteOperation');
