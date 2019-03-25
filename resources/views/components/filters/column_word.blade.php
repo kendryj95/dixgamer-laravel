@@ -18,7 +18,7 @@
                   @php $selected = ''; @endphp
                 @endif
               @elseif($path == 'sales/lista_cobro')
-                @if($column == 'medio_cobro')
+                @if($column == 'ref_cobro')
                   @php $selected = 'selected'; @endphp
                 @else
                   @php $selected = ''; @endphp
