@@ -63,7 +63,7 @@ class Sales extends Model
 
     public function ScopeSalesByCustomColumn($query,$obj){
       if (!empty($obj->column) && !empty($obj->word)) {
-        $query->where($obj->column,'like','%'.$obj->word.'%');
+        $query->where("ventas.$obj->column",'like','%'.$obj->word.'%');
       }else{
         return $query;
       }
