@@ -416,7 +416,7 @@ class SalesController extends Controller
         $obj->column = $request->column;
         $obj->word = $request->word;
 
-        $datos = Sales::getDatosCobros()->salesByCustomColumn($obj)->paginate(50);
+        $datos = Sales::getDatosCobros()->salesCobrosByCustomColumn($obj)->paginate(50);
 
         $columns = Schema::getColumnListing('ventas_cobro');
 

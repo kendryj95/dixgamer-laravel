@@ -69,6 +69,14 @@ class Sales extends Model
       }
     }
 
+    public function ScopeSalesCobrosByCustomColumn($query,$obj){
+      if (!empty($obj->column) && !empty($obj->word)) {
+        $query->where($obj->column,'like','%'.$obj->word.'%');
+      }else{
+        return $query;
+      }
+    }
+
     public function ScopeGetDatosCobros($query)
     {
         $query->select(
