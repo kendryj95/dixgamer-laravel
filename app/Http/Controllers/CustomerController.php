@@ -309,6 +309,7 @@ class CustomerController extends Controller
             $order_item_id = isset($request->order_item_id) ? $request->order_item_id : NULL;
             $order_id_web = isset($request->order_id_web) ? $request->order_id_web : NULL;
             $order_id_ml = isset($request->order_id_ml) ? $request->order_id_ml : NULL;
+            $fecha_venta = isset($request->Day) ? $request->Day : NULL;
 
             $venta = DB::table('ventas')->where('ID', $request->ID)->first();
 
@@ -337,6 +338,7 @@ class CustomerController extends Controller
 
             $data = [];
             $data['medio_venta'] = $request->medio_venta;
+            $data['Day'] = $request->fecha_venta;
             if ($request->medio_venta == 'Mail') {
               $data['order_item_id'] = NULL;
               $data['order_id_web'] = NULL;
@@ -1026,7 +1028,8 @@ class CustomerController extends Controller
                           'vc.Notas',
                           'vc.ventas_id',
                           'v.clientes_id',
-                          'v.medio_venta'
+                          'v.medio_venta',
+                          'vc.Day'
                         )
                         ->leftjoin('ventas AS v', 'vc.ventas_id', '=', 'v.ID')
                         ->where('vc.ID',$id)
@@ -1063,6 +1066,7 @@ class CustomerController extends Controller
       try {
         $data = [];
         $data['medio_cobro'] = $request->medio_cobro;
+        $data['Day'] = $request->Day;
         $data['ref_cobro'] = $request->ref_cobro;
         $data['precio'] = $request->precio;
         $data['comision'] = $request->comision;

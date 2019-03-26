@@ -1505,7 +1505,7 @@ class AccountController extends Controller
             $lastAccountGames = $this->tks->lastAccountUserGames(session()->get('usuario')->Nombre); // Ultimo juego cargado por este usuario.
 
             if (count($lastAccountGames) > 0) {
-              $ultimo_juego = $lastAccountGames[0];
+              $ultimo_juego = $lastAccountGames[0]->ID;
               $lastGames = $this->tks->lastAccountByIdAndUser(session()->get('usuario')->Nombre,$ultimo_juego);
               if (!$lastGames)
                 return redirect()->back()->withErrors(['Intentelo nuevamente. Ha ocurrido un error inesperado.']);

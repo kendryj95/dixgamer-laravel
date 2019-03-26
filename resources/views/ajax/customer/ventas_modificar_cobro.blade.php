@@ -9,6 +9,16 @@
 	    <form method="post" name="form1" id="form1" action="{{ url('customer_ventas_cobro_modificar') }}">
 
 	    	{{ csrf_field() }}
+
+	    	@if(\Helper::validateAdministrator(session()->get('usuario')->Nombre))
+
+	    	<div class="input-group form-group">
+	    	  <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+	    	  <input value="{{ date('Y-m-d',strtotime($ventas_cobro->Day)) }}" class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Cobro">
+	    	  <span class="input-group-addon"><em class="text-muted">Fecha Cobro</em></span>
+	    	</div>
+
+	    	@endif
 	    		
 	    		@php $colorcons = ''; @endphp
 	            @if (strpos($ventas_cobro->medio_cobro, 'Ticket') !== false) @php $colorcons = 'success'; @endphp

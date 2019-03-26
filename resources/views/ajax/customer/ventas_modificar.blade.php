@@ -81,6 +81,16 @@ foreach ($data as $value) {
 
             <input type="hidden" name="opt" value="3">
 
+            @if(\Helper::validateAdministrator(session()->get('usuario')->Nombre))
+
+            <div class="input-group form-group">
+              <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+              <input value="{{ date('Y-m-d',strtotime($clientes->Day)) }}" class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Venta">
+              <span class="input-group-addon"><em class="text-muted">Fecha Venta</em></span>
+            </div>
+
+            @endif
+
             @php $colorventa = ''; @endphp
 
             @if ($clientes->medio_venta == 'MercadoLibre') @php $colorventa='warning'; @endphp
