@@ -81,11 +81,12 @@ foreach ($data as $value) {
 
             <input type="hidden" name="opt" value="3">
 
-            @if(\Helper::validateAdministrator(session()->get('usuario')->Nombre))
+            @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
 
             <div class="input-group form-group">
               <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
               <input value="{{ date('Y-m-d',strtotime($clientes->Day)) }}" class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Venta">
+              <input type="hidden" name="fecha_old" value="{{$clientes->Day}}">
               <span class="input-group-addon"><em class="text-muted">Fecha Venta</em></span>
             </div>
 

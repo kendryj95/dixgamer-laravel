@@ -1,5 +1,5 @@
 <div class="container">
-	<h1 class="text-center" style="color: #000">Modificar cobro #{{ $ventas_cobro->ventas_id }}</h1>
+	<h1 class="text-center" style="color: #000">Modificar cobro #{{ $ventas_cobro->ID }}</h1>
 	<div class="alert alert-danger text-center" id="alert-ventasInsert" style="display:none"></div>
     <!-- InstanceBeginEditable name="body" -->
 	<div class="row">
@@ -10,11 +10,12 @@
 
 	    	{{ csrf_field() }}
 
-	    	@if(\Helper::validateAdministrator(session()->get('usuario')->Nombre))
+	    	@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
 
 	    	<div class="input-group form-group">
 	    	  <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
 	    	  <input value="{{ date('Y-m-d',strtotime($ventas_cobro->Day)) }}" class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Cobro">
+	    	  <input type="hidden" name="fecha_old" value="{{$ventas_cobro->Day}}">
 	    	  <span class="input-group-addon"><em class="text-muted">Fecha Cobro</em></span>
 	    	</div>
 
@@ -45,7 +46,7 @@
 	            
 				<div class="input-group form-group" id="n_cobro">
 	              <span class="input-group-addon"><i class="fa fa-hashtag fa-fw"></i></span>
-	              <input class="form-control" type="text" name="ref_cobro" id="ref_cobro" placeholder="Ref. de Cobro" value="{{ $ventas_cobro->ref_cobro }}">             
+	              <input class="form-control" type="text" name="ref_cobro" id="ref_cobro" onchange="limpiarReferencia(this.value)" placeholder="Ref. de Cobro" value="{{ $ventas_cobro->ref_cobro }}">             
 	            </div>
 	            <span id="faltacobro" style="color:#777;display:none;"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i> completar</span>
 	                 
@@ -176,5 +177,9 @@
   function isNum(carac) {
     var regex = /^(\d+)$/g;
     return regex.test(carac);
+  }
+
+  function limpiarReferencia(ref_cobro) {
+    document.getElementById('ref_cobro').value = ref_cobro.trim();
   }
 </script>
