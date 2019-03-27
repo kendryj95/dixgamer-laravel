@@ -56,7 +56,7 @@
                             $array = explode(',', $value->nro_mov, 10);
                           @endphp
                           @foreach($array as $valor)
-                            {{ $valor }}&nbsp;<a href="{{ url('control_mp_baja', $valor) }}"><i aria-hidden='true' class='fa fa-trash-o'></i></a> <br>
+                            {{ $valor }} {{--<a class='btn-xs' type='button' href="{{ url('control_mp_baja', $valor) }}"><i aria-hidden='true' class='fa fa-trash-o'></i></a>--}}<a class='btn-xs mov{{trim($valor)}}' type='button' href="javascript:void(0)" onclick="eliminarMovimiento({{trim($valor)}})"><i aria-hidden='true' class='fa fa-trash-o'></i></a><br />
                           @endforeach
                         </small>
                       </td>
@@ -90,7 +90,7 @@
                           @endif
                           @php $array = explode(',', $value->ventas_id, 10); @endphp
                           @foreach($array as $valor)
-                            {{ $valor }} <a href="{{ url('sales/list') }}?column=ventas.ID&word={{$valor}}" class="btn btn-default btn-xs" target="_blank"><i class="fa fa-search"></i></a>
+                            {{ $valor }} <a href="{{ url('sales/list') }}?column=ID&word={{$valor}}" class="btn btn-default btn-xs" target="_blank"><i class="fa fa-search"></i></a>
                           @endforeach
                         </small>
                       </td>
@@ -126,7 +126,7 @@
                     <small>
                       @php $array = explode(',',$value->nro_mov, 10); @endphp
                       @foreach($array as $valor)
-                        {{ $valor }} <a href="{{ url('control_mp_baja', $valor) }}" class="btn-xs"><i aria-hidden='true' class='fa fa-trash-o'></i></a> <br>
+                        {{ $valor }} {{--<a class='btn-xs' type='button' href="{{ url('control_mp_baja', $valor) }}"><i aria-hidden='true' class='fa fa-trash-o'></i></a>--}}<a class='btn-xs mov{{trim($valor)}}' type='button' href="javascript:void(0)" onclick="eliminarMovimiento({{trim($valor)}})"><i aria-hidden='true' class='fa fa-trash-o'></i></a><br />
                       @endforeach
                     </small>
                   </td>
@@ -209,7 +209,7 @@
                         <small>
                           @php $array = explode(',',$value->nro_mov,10); @endphp
                           @foreach($array as $valor)
-                            {{ $valor }} <a class='btn-xs' type='button' href="{{ url('control_mp_baja', $valor) }}"><i aria-hidden='true' class='fa fa-trash-o'></i></a><br />
+                            {{ $valor }} {{--<a class='btn-xs' type='button' href="{{ url('control_mp_baja', $valor) }}"><i aria-hidden='true' class='fa fa-trash-o'></i></a>--}}<a class='btn-xs mov{{trim($valor)}}' type='button' href="javascript:void(0)" onclick="eliminarMovimiento({{trim($valor)}})"><i aria-hidden='true' class='fa fa-trash-o'></i></a><br />
                           @endforeach
                         </small>
                       </td>
@@ -238,6 +238,32 @@
           </div>
         </div>      
     </div><!--/.container-->
+
+    <script>
+      
+      function eliminarMovimiento(valor)
+      {
+        $.ajax({
+          url: '{{url("control_mp_baja")}}/'+valor,
+          type: 'GET',
+          dataType: 'json',
+          success: function(response) {
+            if (response.status == 1) {
+              let html = '<span class="label label-danger" title="Movimiento eliminado">Elim.</span>';
+
+              $('.mov'+valor).replaceWith(html);
+            } else {
+              alert('Ha ocurrido un error inesperado durante el proceso de eliminación.');
+            }
+          },
+          error: function(error) {
+            alert('Ha ocurrido un error inesperado');
+          }
+        });
+        
+      }
+
+    </script>
 
 
 

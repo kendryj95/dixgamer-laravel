@@ -11,6 +11,15 @@
         {{ csrf_field() }}
         <input type="text" id="clientes_id" name="clientes_id" value="{{ $cliente->ID }}" hidden>
         <input type="text" id="ventas_id" name="ventas_id" value="{{ $venta_stock->ID }}" hidden>
+
+        @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+
+        <div class="input-group form-group">
+          <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+          <input value="" class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Cobro">
+        </div>
+
+        @endif
               
              <div class="input-group form-group">
              <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span> 
@@ -37,28 +46,31 @@
         <br />
 
         <div class="col-sm-5">
+          <label for="">&nbsp;</label>
               <div class="input-group form-group">
-                <span class="input-group-addon">precio</span>
+                <span class="input-group-addon">$</span>
                 <input class="form-control" type="text" id="precio" name="precio" value="">
         </div>
               </div>
               
               <div class="col-sm-3" style="opacity:0.7">
+                <label for="">&nbsp;</label>
               <div class="input-group form-group">
               <select id="porcentaje" class="form-control">
                 <option value="0.13">13 %</option>
-                  <option selected value="0.0538">6 %</option>
+                  <option value="0.0538">6 %</option>
                   <option value="0.00">0 %</option>
               </select>  
               </div>
               </div>
               
         <div class="col-sm-4">
+          <input type="checkbox" id="calculo_automatico" checked> <label for="calculo_automatico" style="color: #000">Comisión Automatica</label>
               <div class="input-group form-group">
                   <span class="input-group-addon">comision</span>
                   <input class="form-control" type="text" id="comision" name="comision" value="">
               </div>
-              <input type="checkbox" id="calculo_automatico" checked> <span style="color: #000">Comisión Automatica</span>
+              
               </div>
                           
               <!-- <div class="input-group form-group">
@@ -85,7 +97,7 @@
       if (val == "Banco") {
         $("#porcentaje").html("<option value='0.00'>0%</option>");
       } else {
-        let html = '<option value="0.13">13 %</option><option selected value="0.0538">6 %</option><option value="0.00">0 %</option>';
+        let html = '<option value="0.13" selected>13 %</option><option value="0.0538">6 %</option><option value="0.00">0 %</option>';
         $("#porcentaje").html(html);
       } 
     });

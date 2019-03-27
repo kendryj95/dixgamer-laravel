@@ -1141,7 +1141,13 @@ class CustomerController extends Controller
         $data['ref_cobro'] = $request->ref_cobro;
         $data['precio'] = $request->precio;
         $data['comision'] = $request->comision;
-        $data['Day'] = date('Y-m-d H:i:s');
+        if (isset($request->Day)) {
+          $hora = date('H:i:s');
+          $data['Day'] = $request->Day . " " . $hora;
+        } else {
+          $data['Day'] = date('Y-m-d H:i:s');
+        }
+        
         $data['Notas'] = $request->Notas_cobro;
         $data['usuario'] = session()->get('usuario')->Nombre;
 

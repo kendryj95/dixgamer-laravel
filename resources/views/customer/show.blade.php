@@ -46,7 +46,7 @@
               {{$customer->nombre}} {{$customer->apellido}}
 
               <button title="Modificar Nombre" id="modificarNombre" class="btn btn-xs btn-default pull-right" type="button"
-                      data-toggle="modal" data-target="#exampleModal_samuel" data-customer="{{ $customer->ID }}">
+                      data-toggle="modal" data-target="#editarCliente" data-customer="{{ $customer->ID }}">
               <i aria-hidden="true" class="fa fa-pencil"></i>
               </button>
 
@@ -464,9 +464,12 @@
                   @endif
 
                   <?php  // si hay un solo cobro ID y mas de 1 ref de cobro para ese ID (caso de array importado con varias ref de cobros desde MP) habilito la modif ?>
-                  @if(($dataCustomer->ref_cobro != "") & ((count(explode(',', $dataCustomer->ID_cobro, 10))) != (count(explode(',', $dataCustomer->ref_cobro, 10)))))
+                  @if(($dataCustomer->ref_cobro != "") && ((count(explode(',', $dataCustomer->ID_cobro, 10))) != (count(explode(',', $dataCustomer->ref_cobro, 10)))))
                     <a
-                      href="ventas_cobro_modificar.php?id={{$dataCustomer->ID_cobro}}"
+                      data-toggle="modal"
+                      data-target="#modalVentas"
+                      href='javascript:void(0)'
+                      onclick="getPageAjax('{{ url("customer_ventas_cobro_modificar") }}','#modalVentas',{{ $dataCustomer->ID_cobro }})"
                       class="label label-danger"
                       style="font-size:0.7em;">
                       Modificar Ref Cobro
@@ -475,7 +478,7 @@
 
 
                   <?php  // si es venta Web pero no tiene order item id se debe corregir ?>
-                  @if ((strpos($dataCustomer->medio_venta, 'Web') !== false) & (is_null($dataCustomer->order_item_id))):
+                  @if ((strpos($dataCustomer->medio_venta, 'Web') !== false) && (is_null($dataCustomer->order_item_id))):
                     <?php //echo '<a href="ventas_modificar.php?id=' . $dataCustomer->ID_ventas . '" class="label label-danger" style="font-size:0.7em;">Falta order_item_id</a>';?>
                     <button
                       class="label label-danger"
@@ -1130,6 +1133,51 @@
                         </div>
                       </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="editarCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document" style="top:40px;">
+                <div class="modal-content">
+
+                  <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 450px;">
+                      <h5 class="modal-title" id="exampleModalLabel">Modificar Cliente #{{$customer->ID}}</h5>
+
+                  </div>
+                    
+                    <div class="modal-body">
+
+                      <div class="container">
+                        <div class="row" style="margin-left: auto; margin-right: auto; width: 450px;">
+
+                            <div class="card">
+                              <div class="card-header"></div>
+                              <div class="card-body">
+                                <div class="input-group form-group">
+                                  <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                  <input type="text" id="nombres_cliente" class="form-control">
+                                
+                                </div>
+                                
+                                <div class="input-group form-group">
+                                  <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                  <input type="text" id="apellidos_cliente" class="form-control">
+                                
+                                </div>
+                                <input type="hidden" id="idcustomer" value="{{$customer->ID}}">
+                                
+                              </div>
+                            </div>
+
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
+
+                        <button type="button" id="saveEditName" class="btn btn-primary btn-block">Salvar Cambios</button>
                     </div>
                 </div>
             </div>

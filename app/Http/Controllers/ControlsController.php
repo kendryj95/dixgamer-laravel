@@ -232,6 +232,7 @@ class ControlsController extends Controller
 
     public function controlMPBaja(Request $request)
     {
+        $status = 0;
         if (isset($request->nro_mov)) {
             DB::beginTransaction();
 
@@ -242,13 +243,19 @@ class ControlsController extends Controller
 
                 DB::commit();
 
-                \Helper::messageFlash('Cobros MP','Anulación aplicada correctamente.');
+                // \Helper::messageFlash('Cobros MP','Anulación aplicada correctamente.');
 
-                return redirect()->back();
+                // return redirect()->back();
+                $status = 1;
             } catch (Exception $e) {
                 DB::rollback();
-                return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso. Por favor vuelva a intentarlo']);
+                // return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso. Por favor vuelva a intentarlo']);
+                $status = 2;
             }
+
+            echo json_encode([
+                "status" => $status
+            ]);
         }
     }
 
@@ -471,7 +478,8 @@ class ControlsController extends Controller
                  SUM(importe) AS imp_mp # sumo el total final (saldo) de esa operacion
                  FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
                      
-                 WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep), 
+                 WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep)
+                 AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana 
                  GROUP BY ref_op # los agrupo por operacion
               ) as mp
         LEFT JOIN
@@ -509,7 +517,7 @@ class ControlsController extends Controller
                 LEFT JOIN 
                 (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
             ON ventas_cobro.ventas_id = vtas.ID 
-            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%'
+            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%' AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana
             GROUP BY ref_cobro) as db
         LEFT JOIN
             (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov,
@@ -542,7 +550,7 @@ class ControlsController extends Controller
                 LEFT JOIN 
                 (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
             ON ventas_cobro.ventas_id = vtas.ID 
-            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%'
+            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%' AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana
             GROUP BY ref_cobro) as db
         LEFT JOIN
             (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov,
@@ -585,7 +593,8 @@ class ControlsController extends Controller
                  SUM(importe) AS imp_mp # sumo el total final (saldo) de esa operacion
                  FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
                      
-                 WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep), 
+                 WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep)
+                 AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana 
                  GROUP BY ref_op # los agrupo por operacion
               ) as mp
         LEFT JOIN

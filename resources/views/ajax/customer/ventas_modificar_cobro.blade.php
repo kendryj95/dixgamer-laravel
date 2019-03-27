@@ -16,7 +16,7 @@
 	    	  <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
 	    	  <input value="{{ date('Y-m-d',strtotime($ventas_cobro->Day)) }}" class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Cobro">
 	    	  <input type="hidden" name="fecha_old" value="{{$ventas_cobro->Day}}">
-	    	  <span class="input-group-addon"><em class="text-muted">Fecha Cobro</em></span>
+	    	  <span class="input-group-addon"><em class="text-muted">Actual: {{ date('d/m/Y', strtotime($ventas_cobro->Day)) }}</em></span>
 	    	</div>
 
 	    	@endif
@@ -56,28 +56,32 @@
 				{{-- // si es admin permito modificar precio y comision --}}
 				@if (Helper::validateAdminAnalyst(session()->get('usuario')->Level))
 				<div class="col-md-5">
+					<label for="">&nbsp;</label>
 	            <div class="input-group form-group">
-	              <span class="input-group-addon">precio</span>
+	              <span class="input-group-addon">$</span>
 	              <input class="form-control" type="text" id="precio" name="precio" value="{{ $ventas_cobro->precio }}">
+	              <span class="input-group-addon">{{ $ventas_cobro->precio }}</span>
 				</div>
 	          	</div>
 	            
 	            <div class="col-md-3" style="opacity:0.7">
+	            	<label for="">&nbsp;</label>
 	            <div class="input-group form-group">
 	            <select id="porcentaje" class="form-control">
-	            	<option value="0.13">13 %</option>
-	                <option selected value="0.0538">6 %</option>
+	            	<option @if(strpos($ventas_cobro->medio_cobro, 'MP') !== false || strpos($ventas_cobro->medio_cobro, 'MercadoPago') !== false) selected @endif value="0.13">13 %</option>
+	                <option @if(strpos($ventas_cobro->medio_cobro, 'Banco') !== false) selected @endif value="0.0538">6 %</option>
 	                <option value="0.00">0 %</option>
 	            </select>  
 	            </div>
 	            </div>
 	            
 				<div class="col-md-4">
+					<input type="checkbox" id="calculo_automatico" checked> <label for="calculo_automatico" style="color: #000">Comisión Automatica</label>
 	            <div class="input-group form-group">
-	                <span class="input-group-addon">com</span>
 	                <input class="form-control" type="text" id="comision" name="comision" value="{{ $ventas_cobro->comision }}">
+	                <span class="input-group-addon">{{ $ventas_cobro->comision }}</span>
 	            </div>
-	            <input type="checkbox" id="calculo_automatico" checked> <span style="color: #000">Comisión Automatica</span>
+	            
 	            </div>
 				 {{-- Si no es Admin oculto los campos de precio y comision para que no se puedan modificar --}}
 				@else
@@ -111,7 +115,7 @@
       if (val == "Banco") {
         $("#porcentaje").html("<option value='0.00'>0%</option>");
       } else {
-        let html = '<option value="0.13">13 %</option><option selected value="0.0538">6 %</option><option value="0.00">0 %</option>';
+        let html = '<option value="0.13" selected>13 %</option><option value="0.0538">6 %</option><option value="0.00">0 %</option>';
         $("#porcentaje").html(html);
       } 
     });
