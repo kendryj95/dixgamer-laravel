@@ -29,6 +29,7 @@
 
 	            <div class="input-group form-group">
 	              <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
+	              <input type="hidden" id="medio_venta" value="{{ $ventas_cobro->medio_venta }}">
 	              <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
 	              		<option value="{{ $ventas_cobro->medio_cobro }}" selected="selected" data-content="<span class='label label-{{ $colorcons }}'>{{ $ventas_cobro->medio_cobro }}</span> - <span class='label label-success'>Actual</span>">{{ $ventas_cobro->medio_cobro }} - Actual</option>
 	              		@if ($ventas_cobro->medio_venta == 'Web' || $ventas_cobro->medio_venta == 'Mail')
@@ -110,14 +111,28 @@
 <script>
   $(document).ready(function() {
     $("form :input").change(function() {
-      var val = $('#medio_cobro').val();
+      /*var val = $('#medio_cobro').val();
       //alert(val2); 
       if (val == "Banco") {
         $("#porcentaje").html("<option value='0.00'>0%</option>");
       } else {
         let html = '<option value="0.13" selected>13 %</option><option value="0.0538">6 %</option><option value="0.00">0 %</option>';
         $("#porcentaje").html(html);
-      } 
+      } */
+      var val = $('#medio_venta').val();
+      var val2 = $('#medio_cobro').val();
+      //alert(val2);
+      if (val == "MercadoLibre") {
+          $("#porcentaje").html("<option value='0.13'>13 %</option>");
+      } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
+          $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+      } else if (val == "Mail" && val2 == "Banco") {
+          $("#porcentaje").html("<option value='0.00'>0 %</option>");
+      } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
+          $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+      } else if (val == "Web" && val2 == "Banco") {
+          $("#porcentaje").html("<option value='0.00'>0 %</option>");
+      }
     });
 
     $('#submiter').on('click', function(){

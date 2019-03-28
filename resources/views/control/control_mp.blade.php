@@ -85,10 +85,10 @@
                       <td><a href="{{ url('clientes', $value->clientes_id) }}" target="_blank">{{ $value->clientes_id }}</a></td>
                       <td>
                         <small>
+                          @php $array = explode(',', $value->ventas_id, 10); @endphp
                           @if(count($array) < 2)
                             <a href="{{ url('control_mp_actualizar_importes', $value->ref_op) }}" class="btn-xs"><i class="fa fa-refresh" aria-hidden="true"></i></a>
                           @endif
-                          @php $array = explode(',', $value->ventas_id, 10); @endphp
                           @foreach($array as $valor)
                             {{ $valor }} <a href="{{ url('sales/list') }}?column=ID&word={{$valor}}" class="btn btn-default btn-xs" target="_blank"><i class="fa fa-search"></i></a>
                           @endforeach

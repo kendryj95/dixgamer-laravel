@@ -1455,6 +1455,10 @@ class CustomerController extends Controller
             }
           }
 
+          if (!isset($data['comision'])) { // Por si no existe la comision en mercadopago, le coloco 0 (cero)
+            $data['comision'] = 0;
+          }
+
           DB::beginTransaction();
 
           try {
