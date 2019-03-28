@@ -157,7 +157,7 @@ Route::group(['middleware' => ['login']], function()
 
         Route::get('carga_gc/{carga?}', 'ControlsController@cargaGC');
         Route::post('carga_gc_store', 'ControlsController@cargaGC_store');
-        Route::get('control_mp', 'ControlsController@controlMP');
+        Route::get('control_mp/{version2?}', 'ControlsController@controlMP');
         Route::get('control_mp_baja/{nro_mov}', 'ControlsController@controlMPBaja');
         Route::get('control_mp_baja_envio/{dif}/{ref_cobro}', 'ControlsController@controlMPBajaEnvio');
         Route::get('control_mp_crear_venta_cero/{ref_cobro}/{importe}/{c_id}', 'ControlsController@controlMPCrearVentaCero');

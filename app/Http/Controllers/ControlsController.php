@@ -214,17 +214,17 @@ class ControlsController extends Controller
         }
     }
 
-    public function controlMP()
+    public function controlMP($version2 = null)
     {
         $conceptos = $this->getConceptos();
 
-        $cobros_mp_pareja = $this->getCobrosMPPareja();
+        $cobros_mp_pareja = $this->getCobrosMPPareja($version2);
 
-        $cobros_bd_pareja = $this->getCobrosBDPareja();
+        $cobros_bd_pareja = $this->getCobrosBDPareja($version2);
 
-        $cobros_bd_sin_pareja = $this->getCobrosBDSinPareja();
+        $cobros_bd_sin_pareja = $this->getCobrosBDSinPareja($version2);
 
-        $cobros_mp_sin_pareja = $this->getCobrosMPSinPareja();
+        $cobros_mp_sin_pareja = $this->getCobrosMPSinPareja($version2);
 
         return view('control.control_mp', compact('conceptos','cobros_mp_pareja','cobros_bd_pareja','cobros_bd_sin_pareja','cobros_mp_sin_pareja'));
 
@@ -417,6 +417,10 @@ class ControlsController extends Controller
         "Dinero retenido por contracargo",
                        "Dinero retenido",
                        "Ingreso de dinero",
+                       "Movimiento General",
+                                                "Anulación de movimiento General",
+                                                "Descuento recibido",
+                                                "Pago con descuento recibido",
         "Pago",
         "Pago adicional",
         "Percepción Ing. Brutos CAP. FED.",
@@ -452,9 +456,17 @@ class ControlsController extends Controller
 
     }
 
-    private function getCobrosMPPareja()
+    private function getCobrosMPPareja($version2 = null)
     {
-        /*** SI AGREGO CONCEPTO QUE NO ES VENTA O COBRO (serían percepciones, retiros, pagos de mis compras, etc) AGREGARLO TMB EN "WHERE NOT LIKE" variable $wherenotlike   */ 
+        /*** SI AGREGO CONCEPTO QUE NO ES VENTA O COBRO (serían percepciones, retiros, pagos de mis compras, etc) AGREGARLO TMB EN "WHERE NOT LIKE" variable $wherenotlike   */
+
+        $condicion = '';
+
+        if ($version2 != null) {
+             $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
+         } else {
+            $condicion .= "AND ref_op>=4629477059";
+         } 
 
         $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
         AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
@@ -479,7 +491,7 @@ class ControlsController extends Controller
                  FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
                      
                  WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep)
-                 AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana 
+                 $condicion 
                  GROUP BY ref_op # los agrupo por operacion
               ) as mp
         LEFT JOIN
@@ -503,8 +515,17 @@ class ControlsController extends Controller
         return $cobros_mp_pareja;
     }
 
-    private function getCobrosBDPareja()
+    private function getCobrosBDPareja($version2 = null)
     {
+
+        $condicion = '';
+
+        if ($version2 != null) {
+            $condicion = "AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
+        } else {
+            $condicion = "AND ref_cobro>=4629477059";
+        }
+
         $query_rsGRAL2 = "SELECT db.*, mp.*, (imp_mp - imp_db) as dif
         FROM 
         (SELECT ventas_cobro.Day,
@@ -517,7 +538,7 @@ class ControlsController extends Controller
                 LEFT JOIN 
                 (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
             ON ventas_cobro.ventas_id = vtas.ID 
-            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%' AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana
+            WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%' $condicion
             GROUP BY ref_cobro) as db
         LEFT JOIN
             (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov,
@@ -536,8 +557,18 @@ class ControlsController extends Controller
         return $cobros_bd_pareja;
     }
 
-    private function getCobrosBDSinPareja()
+    private function getCobrosBDSinPareja($version2 = null)
     {
+
+
+        $condicion = '';
+
+        if ($version2 != null) {
+            $condicion = "AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
+        } else {
+            $condicion = "AND ref_cobro>=4629477059";
+        }
+
         $query_rsGRAL2 = "SELECT db.*, mp.*, (imp_mp - imp_db) as dif
         FROM 
         (SELECT ventas_cobro.Day,
@@ -570,10 +601,18 @@ class ControlsController extends Controller
         return $cobros_bd_sin_pareja;
     }
 
-    private function getCobrosMPSinPareja()
+    private function getCobrosMPSinPareja($version2 = null)
     {
 
         /*** SI AGREGO CONCEPTO QUE NO ES VENTA O COBRO (serían percepciones, retiros, pagos de mis compras, etc) AGREGARLO TMB EN "WHERE NOT LIKE" variable $wherenotlike   */ 
+
+        $condicion = '';
+
+        if ($version2 != null) {
+             $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
+         } else {
+            $condicion .= "AND ref_op>=4629477059";
+         }
 
         $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
         AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
@@ -594,7 +633,7 @@ class ControlsController extends Controller
                  FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
                      
                  WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep)
-                 AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana 
+                 $condicion 
                  GROUP BY ref_op # los agrupo por operacion
               ) as mp
         LEFT JOIN
