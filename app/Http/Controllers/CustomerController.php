@@ -1437,12 +1437,14 @@ class CustomerController extends Controller
     {
 
       $ref_cobro_count = DB::table('ventas_cobro')->where('ref_cobro', $cobro)->count();
+      $cliente_id = DB::table('ventas_cobro')->select('v.clientes_id')->join('ventas AS v','v.ID','=','ventas_cobro.ventas_id')->where('ref_cobro', $cobro)->value('clientes_id');
 
       if ($ref_cobro_count > 1) {
         \Helper::messageFlash('Clientes',"Existe más de un registro con ésta ref. de cobro", "warning", 'alert_cliente');
-        return redirect()->back();
+        return redirect('clientes/'.$cliente_id);
       } else {
         $amounts = DB::table('mercadopago')->where('ref_op', $cobro)->get();
+        
 
         if (count($amounts) > 0) {
           $data = [];
@@ -1466,14 +1468,14 @@ class CustomerController extends Controller
             DB::commit();
 
             \Helper::messageFlash('Clientes','Importes de MP actualizados al cobro #'.$cobro, 'alert_cliente');
-            return redirect()->back();
+            return redirect('clientes/'.$cliente_id);
 
           } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
+            return redirect('clientes/'.$cliente_id)->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
           }
         } else {
-          return redirect()->back()->withErrors(["La referencia de cobro no existe en nuestra BD de mercado pago"]);
+          return redirect('clientes/'.$cliente_id)->withErrors(["La referencia de cobro no existe en nuestra BD de mercado pago"]);
         }
 
         

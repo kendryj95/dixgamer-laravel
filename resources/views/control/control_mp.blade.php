@@ -81,14 +81,21 @@
                         </span> <br>
                         <a href="{{ url('control_mp_baja_envio', [$value->dif, $value->ref_op]) }}" title="Anular ingreso por envío" class="btn-xs"><i class="fa fa-truck" aria-hidden="true"></i></a> <a href="{{ url('control_mp_crear_venta_cero', [$value->ref_op, $value->imp_mp, $value->clientes_id]) }}"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i></a>
                       </td>
-                      <td><a href="https://www.mercadopago.com.ar/activities?q={{ $value->ref_op }}" target="_blank">{{ $value->ref_op }}</a></td>
+                      <td>
+                          <a href="https://www.mercadopago.com.ar/activities?q={{ $value->ref_op }}" target="_blank">{{ $value->ref_op }}</a>
+                          @php $ventas = explode(',', $value->ventas_id, 10); @endphp
+                          @if(count($ventas) < 2)
+                            <br>
+                            <a href="{{ url('update_amounts', $value->ref_op) }}" title='Actualizar importes de MP' target="_blank" class="btn-xs"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                          @endif
+                      </td>
                       <td><a href="{{ url('clientes', $value->clientes_id) }}" target="_blank">{{ $value->clientes_id }}</a></td>
                       <td>
                         <small>
-                          @php $array = explode(',', $value->ventas_id, 10); @endphp
                           @if(count($array) < 2)
                             <a href="{{ url('control_mp_actualizar_importes', $value->ref_op) }}" class="btn-xs"><i class="fa fa-refresh" aria-hidden="true"></i></a>
                           @endif
+                          @php $array = explode(',', $value->ventas_id, 10); @endphp
                           @foreach($array as $valor)
                             {{ $valor }} <a href="{{ url('sales/list') }}?column=ID&word={{$valor}}" class="btn btn-default btn-xs" target="_blank"><i class="fa fa-search"></i></a>
                           @endforeach

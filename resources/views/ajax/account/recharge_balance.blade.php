@@ -109,8 +109,14 @@
 
       @endforeach
 
+      @php $array_temp = []; @endphp
+
       @foreach ($gifts_array as $gift)
 
+
+      @if(!in_array($gift['titulo'],$array_temp)) {{-- Evitar duplicaciones --}}
+
+      @php $array_temp[] = $gift['titulo'] @endphp
       
       <div class="col-xs-6 col-sm-2">
 
@@ -143,6 +149,7 @@
           </div>
 
       </div>
+      @endif
       @endforeach
     @else
       <h2 style="color:#000">No se encontraron datos</h2>

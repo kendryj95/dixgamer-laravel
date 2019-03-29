@@ -462,7 +462,7 @@ class ControlsController extends Controller
 
         $condicion = '';
 
-        if ($version2 != null) {
+        if ($version2 == null) {
              $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
          } else {
             $condicion .= "AND ref_op>=4629477059";
@@ -520,7 +520,7 @@ class ControlsController extends Controller
 
         $condicion = '';
 
-        if ($version2 != null) {
+        if ($version2 == null) {
             $condicion = "AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
         } else {
             $condicion = "AND ref_cobro>=4629477059";
@@ -563,7 +563,7 @@ class ControlsController extends Controller
 
         $condicion = '';
 
-        if ($version2 != null) {
+        if ($version2 == null) {
             $condicion = "AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
         } else {
             $condicion = "AND ref_cobro>=4629477059";
@@ -608,7 +608,7 @@ class ControlsController extends Controller
 
         $condicion = '';
 
-        if ($version2 != null) {
+        if ($version2 == null) {
              $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
          } else {
             $condicion .= "AND ref_op>=4629477059";
