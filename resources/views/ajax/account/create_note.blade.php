@@ -21,5 +21,9 @@
       $(this).prop('disabled', true);
       $('#form_create_note').submit();
     });
+
+    setTimeout(function(){
+      document.getElementById('Notas').focus();
+    },1000)
   });
 </script>

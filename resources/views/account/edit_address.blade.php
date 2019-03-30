@@ -14,7 +14,7 @@
 
         <div class="input-group form-group">
           <span class="input-group-addon"><i class="fa fa-globe fa-fw"></i></span>
-          <input class="form-control" value="{{$account->country}}" type="text" name="country">
+          <input class="form-control" value="{{$account->country}}" type="text" id="country" name="country">
         </div>
 
         <em class="text-muted">{{$account->state}}</em>
@@ -50,3 +50,11 @@
 
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    setTimeout(function(){
+      document.getElementById('country').focus();
+    }, 1000)
+  });
+</script>

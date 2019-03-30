@@ -10,7 +10,7 @@
 				<input type="hidden" name="id" value="{{ $id }}">
 				<div class="input-group form-group">
 					<span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-					<input class="form-control" type="date" name="Day" value="{{ $day }}" placeholder="Fecha">
+					<input class="form-control" type="date" name="Day" id="Day" value="{{ $day }}" placeholder="Fecha">
 				</div>
 
 				<button class="btn btn-primary" type="submit">Actualizar</button>
@@ -22,3 +22,11 @@
 	</div>
 
 </div>
+
+<script>
+	$(document).ready(function() {
+		setTimeout(function(){
+			document.getElementById('Day').focus();
+		},1000);
+	});
+</script>

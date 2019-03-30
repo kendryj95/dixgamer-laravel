@@ -117,6 +117,10 @@
       }
     });
 
+    setTimeout(function(){
+      document.getElementById('Day').focus();
+    }, 1000);
+
     $('#submiter').on('click', function(){
       var $btn = $(this);
       $btn.prop('disabled', true);

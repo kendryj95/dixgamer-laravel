@@ -34,8 +34,7 @@ foreach ($data as $value) {
             <input type="hidden" name="ID" value="{{ $clientes->ID }}">
             <input type="hidden" id="data_set" value="{{ json_encode($data_set) }}">
 
-            <button class="btn btn-primary" type="submit">Modificar</button>
-            <input type="reset" class="btn btn-secondary">
+            <button class="btn btn-primary btn-block" type="submit">Modificar</button>
 
           </form>
 
@@ -67,8 +66,7 @@ foreach ($data as $value) {
             <input type="hidden" name="ID" value="{{ $clientes->ID }}">
             <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
-            <button class="btn btn-primary" type="submit">Modificar</button>
-           <input type="reset" class="btn btn-secondary">
+            <button class="btn btn-primary btn-block" type="submit">Modificar</button>
           </form>
 
         @elseif ($opt == 3)
@@ -85,7 +83,7 @@ foreach ($data as $value) {
 
             <div class="input-group form-group">
               <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-              <input value="{{ date('Y-m-d',strtotime($clientes->Day)) }}" class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Venta">
+              <input value="{{ date('Y-m-d',strtotime($clientes->Day)) }}" autofocus class="form-control" type="date" id="Day" name="Day" placeholder="Fecha Venta">
               <input type="hidden" name="fecha_old" value="{{$clientes->Day}}">
               <span class="input-group-addon"><em class="text-muted">Fecha Venta</em></span>
             </div>
@@ -136,8 +134,7 @@ foreach ($data as $value) {
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
               <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
-              <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
-              <input type="reset" class="btn btn-secondary">
+              <button class="btn btn-primary btn-block" id="submiter" type="button">Modificar</button>
 
             @elseif ($clientes->medio_venta == 'Web')
 
@@ -166,8 +163,7 @@ foreach ($data as $value) {
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
               <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
-              <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
-              <input type="reset" class="btn btn-secondary">
+              <button class="btn btn-primary btn-block" id="submiter" type="button">Modificar</button>
 
             @elseif ($clientes->medio_venta == 'Mail')
 
@@ -196,8 +192,7 @@ foreach ($data as $value) {
               <input type="hidden" name="ID" value="{{ $clientes->ID }}">
               <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
-              <button class="btn btn-primary" id="submiter" type="button">Modificar</button>
-              <input type="reset" class="btn btn-secondary">
+              <button class="btn btn-primary btn-block" id="submiter" type="button">Modificar</button>
 
             @endif
 
@@ -278,7 +273,33 @@ foreach ($data as $value) {
 
 <script>
   var cliente;
+  var opt = "{{$opt}}";
   $(document).ready(function() {
+
+    switch(opt){
+      case "1":
+
+        setTimeout(function(){
+          document.getElementById('clientes').focus();
+        }, 1000);
+
+        break;
+      case "3":
+
+        setTimeout(function(){
+          document.getElementById('Day').focus();
+        }, 1000);
+
+        break;
+
+      case "4":
+
+        setTimeout(function(){
+          document.getElementById('Notas').focus();
+        }, 1000);
+
+        break;
+    }
 
     $('#addNote').on('click', function(){
       $(this).prop('disabled', true);
@@ -340,6 +361,8 @@ foreach ($data as $value) {
               }
            });
 
+            @if($opt == 1)
+
           window.setInterval(function() {
 
             cliente = $('#clientes').val();
@@ -347,6 +370,8 @@ foreach ($data as $value) {
               // document.getElementById("clientes_id").value = String;
               $('#clientes_id').val((String).trim());
             },500);
+
+          @endif
 
     @endif
 
@@ -433,7 +458,6 @@ foreach ($data as $value) {
                   }
               },
               error: function(error){
-                  console.log(error);
                   var html = `<p>Ha ocurrido un error inesperado al obtener el order_id_web.</p>`;
 
                   $('#alert').html(html).fadeIn();

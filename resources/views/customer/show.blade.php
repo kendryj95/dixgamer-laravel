@@ -45,7 +45,7 @@
               <i class="fa fa-user fa-fw" aria-hidden="true"></i>
               {{$customer->nombre}} {{$customer->apellido}}
 
-              <button title="Modificar Nombre" id="modificarNombre" class="btn btn-xs btn-default pull-right" type="button"
+              <button title="Modificar Nombre" id="modificarNombre" onclick="inputFocus('nombres_cliente')" class="btn btn-xs btn-default pull-right" type="button"
                       data-toggle="modal" data-target="#editarCliente" data-customer="{{ $customer->ID }}">
               <i aria-hidden="true" class="fa fa-pencil"></i>
               </button>
@@ -78,6 +78,7 @@
                 style="opacity: 0.5;"
                 type="button"
                 id="modificarEmailboton"
+                onclick="inputFocus('correo_cliente')"
                 data-toggle="modal"
                 data-target="#modificarEmailModal"  data-customer="{{ $customer->ID }}">
 
@@ -102,6 +103,7 @@
                   class="btn-xs text-muted"
                   style="opacity: 0.7;"
                   type="button"
+                  onclick="inputFocus('ML_cliente')"
                   data-toggle="modal"
                   id="modificarMLboton"
                   data-target="#modificarMLModal" data-customer="{{ $customer->ID }}">
@@ -124,6 +126,7 @@
                 class="btn-xs text-muted"
                 style="opacity: 0.7;"
                 type="button"
+                onclick="inputFocus('provincia')"
                 id="modificarOtrosboton"
                 data-toggle="modal"
                 data-target="#modificarOtrosModal" data-customer="{{ $customer->ID }}">
@@ -157,6 +160,7 @@
                   class="btn-xs text-muted"
                   style="opacity: 0.7;"
                   type="button"
+                  onclick="inputFocus('cuentafacebookmodify')"
                   id="ModificarFacebook"
                   data-toggle="modal"
                   data-target="#modificarfb"  data-customer="{{ $customer->ID }}">
@@ -173,6 +177,7 @@
               type="button"
               id="addNotes"
               data-toggle="modal"
+              onclick="inputFocus('notaCliente')"
               data-target="#agregarNotaModal"  data-customer="{{ $customer->ID }}">
                 <i class="fa fa-fw fa-comment"></i>
                 Agregar Nota
@@ -1077,7 +1082,7 @@
 
                                     <div>
                                         <label>Provincia</label>
-                                        <input type="text" class="form-control" id="provincia" value="">
+                                        <input type="text" class="form-control" id="provincia" autofocus value="">
                                         <input type="hidden" id="idcustomer" value="">
                                     </div>
                                     <div>
@@ -1124,7 +1129,7 @@
 
                             <div class="input-group form-group">
                               <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
-                              <textarea class="form-control" rows="4" name="notes" id="notaCliente" style="font-size: 22px;"></textarea>
+                              <textarea class="form-control" autofocus rows="4" name="notes" id="notaCliente" style="font-size: 22px;"></textarea>
 
                             </div>
                             <input type="hidden" id="idcustomer" value="">
@@ -1275,7 +1280,7 @@
                     </div>
                     <div class="modal-footer" style="margin-left: auto; margin-right: auto; width: 450px;">
 
-                        <button type="button" id="saveModifyFB" class="btn btn-primary">Salvar</button>
+                        <button type="button" id="saveModifyFB" class="btn btn-primary btn-block">Salvar</button>
                     </div>
                 </div>
             </div>
@@ -1649,6 +1654,13 @@
             window.location.assign("{{ url('enviar_email_venta') }}/"+ventas_id+"/"+tipo);
           }
           
+        }
+
+        function inputFocus(input)
+        {
+          setTimeout(function(){
+            document.getElementById(input).focus();
+          }, 1000);
         }
 
     </script>

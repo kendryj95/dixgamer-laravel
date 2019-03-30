@@ -65,6 +65,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 		<br>
 
 		<script type="text/javascript">
+			var opt = "{{ $opt }}";
 			jQuery(function($) {
 							$("form").on('change', function() {
 
@@ -90,6 +91,14 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 					});
 
 					@endif
+
+					switch(opt){
+						case "2":
+							setTimeout(function(){
+								document.getElementById('proporcion_usd').focus();
+							},1000)
+							break;
+					}
 
 					@if($opt == 1)
 
