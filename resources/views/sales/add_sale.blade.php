@@ -179,6 +179,10 @@
                 local: cars
             });
 
+            setTimeout(function(){
+                document.getElementById('clientes_id').focus();
+            }, 1000)
+
             // Initializing the typeahead
             $('.typeahead').typeahead({
                     hint: true,

@@ -1660,7 +1660,7 @@
         {
           setTimeout(function(){
             document.getElementById(input).focus();
-          }, 1000);
+          }, 600);
         }
 
     </script>

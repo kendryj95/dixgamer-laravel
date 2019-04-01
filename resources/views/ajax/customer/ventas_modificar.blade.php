@@ -281,14 +281,14 @@ foreach ($data as $value) {
 
         setTimeout(function(){
           document.getElementById('clientes').focus();
-        }, 1000);
+        }, 600);
 
         break;
       case "3":
 
         setTimeout(function(){
           document.getElementById('Day').focus();
-        }, 1000);
+        }, 600);
 
         break;
 
@@ -296,7 +296,7 @@ foreach ($data as $value) {
 
         setTimeout(function(){
           document.getElementById('Notas').focus();
-        }, 1000);
+        }, 600);
 
         break;
     }

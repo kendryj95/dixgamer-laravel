@@ -239,7 +239,9 @@
 
   <script>
     $(document).ready(function(){
-      $('[data-toggle="popover"]').popover();
+      if ($('[data-toggle="popover"]').length>0) {
+        $('[data-toggle="popover"]').popover();
+      }
 
 
       @if(Session::has('success'))

@@ -24,6 +24,6 @@
 
     setTimeout(function(){
       document.getElementById('Notas').focus();
-    },1000)
+    },600)
   });
 </script>

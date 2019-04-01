@@ -55,6 +55,6 @@
   $(document).ready(function() {
     setTimeout(function(){
       document.getElementById('country').focus();
-    }, 1000)
+    }, 600)
   });
 </script>

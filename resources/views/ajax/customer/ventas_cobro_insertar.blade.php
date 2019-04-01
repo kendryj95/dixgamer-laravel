@@ -119,7 +119,7 @@
 
     setTimeout(function(){
       document.getElementById('Day').focus();
-    }, 1000);
+    }, 600);
 
     $('#submiter').on('click', function(){
       var $btn = $(this);

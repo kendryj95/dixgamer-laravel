@@ -96,7 +96,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 						case "2":
 							setTimeout(function(){
 								document.getElementById('proporcion_usd').focus();
-							},1000)
+							},600)
 							break;
 					}
 

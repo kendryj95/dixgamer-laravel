@@ -27,6 +27,6 @@
 	$(document).ready(function() {
 		setTimeout(function(){
 			document.getElementById('Day').focus();
-		},1000);
+		},600);
 	});
 </script>
