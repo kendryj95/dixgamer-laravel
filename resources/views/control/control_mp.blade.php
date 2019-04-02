@@ -86,7 +86,7 @@
                           @php $ventas = explode(',', $value->ventas_id, 10); @endphp
                           @if(count($ventas) < 2)
                             <br>
-                            <a href="{{ url('update_amounts', $value->ref_op) }}" title='Actualizar importes de MP' target="_blank" class="btn-xs"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                            <a href="{{ url('update_amounts', [$value->ref_op, $value->clientes_id]) }}" title='Actualizar importes de MP' target="_blank" class="btn-xs"><i class="fa fa-refresh" aria-hidden="true"></i></a>
                           @endif
                       </td>
                       <td><a href="{{ url('clientes', $value->clientes_id) }}" target="_blank">{{ $value->clientes_id }}</a></td>

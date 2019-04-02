@@ -460,7 +460,7 @@
                             class='btn-xs'
                             title='Actualizar importes de MP'
                             type='button'
-                            href='{{ url("update_amounts", $valor) }}'>
+                            href='{{ url("update_amounts", [$valor, $customer->ID]) }}'>
                             <i class='fa fa-refresh' aria-hidden='true'></i>
                           </a>
                           @endif

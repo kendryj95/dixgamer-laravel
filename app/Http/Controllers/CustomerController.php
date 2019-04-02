@@ -1433,19 +1433,71 @@ class CustomerController extends Controller
       
     }
 
-    public function updateAmounts($cobro)
+    public function updateAmounts($cobro,$cliente_id)
     {
 
       $ref_cobro_count = DB::table('ventas_cobro')->where('ref_cobro', $cobro)->count();
-      $cliente_id = DB::table('ventas_cobro')->select('v.clientes_id')->join('ventas AS v','v.ID','=','ventas_cobro.ventas_id')->where('ref_cobro', $cobro)->value('clientes_id');
+      /*$cliente_id = DB::table('ventas_cobro')->select('v.clientes_id')->join('ventas AS v','v.ID','=','ventas_cobro.ventas_id')->where('ref_cobro', $cobro)->value('clientes_id');*/
+      $amounts = DB::table('mercadopago')->where('ref_op', $cobro)->get();
 
       if ($ref_cobro_count > 1) {
-        \Helper::messageFlash('Clientes',"Existe más de un registro con ésta ref. de cobro", "warning", 'alert_cliente');
-        return redirect('clientes/'.$cliente_id);
-      } else {
-        $amounts = DB::table('mercadopago')->where('ref_op', $cobro)->get();
-        
+        /*\Helper::messageFlash('Clientes',"Existe más de un registro con ésta ref. de cobro", "warning", 'alert_cliente');
+        return redirect('clientes/'.$cliente_id);*/
 
+        if (count($amounts) > 0) {
+          $data = [];
+          foreach ($amounts as $amount) {
+            if (strpos($amount->concepto, 'Costo') !== false || strpos($amount->concepto, 'Comisión') !== false) {
+              $comision = ((-1) * $amount->importe);
+            } elseif(strpos($amount->concepto, 'Cobro') !== false) {
+
+              $precio = $amount->importe;
+            }
+          }
+
+          if (!isset($comision)) { // Por si no existe la comision en mercadopago, le coloco 0 (cero)
+            $comision = 0;
+          }
+
+          $precio = $precio / $ref_cobro_count;
+          $comision = $comision / $ref_cobro_count;
+
+          DB::beginTransaction();
+
+          try {
+            $ventas = DB::table('ventas_cobro')->where('ref_cobro', $cobro)->get();
+
+            $ventas_ids = [];
+
+            foreach ($ventas as $venta) {
+              $ventas_ids[] = $venta->ventas_id;
+            }
+
+            $data['precio'] = $precio;
+            $data['comision'] = $comision;
+
+            DB::table('ventas_cobro')->whereIn('ventas_id', $ventas_ids)->update($data);
+            DB::commit();
+
+            $mensaje = 'Importes de MP actualizados y dividido en las ventas';
+
+            foreach ($ventas_ids as $value) {
+              $mensaje .= " #$value,";
+            }
+
+            \Helper::messageFlash('Clientes',trim($mensaje, ","), 'alert_cliente');
+            return redirect('clientes/'.$cliente_id);
+
+          } catch (Exception $e) {
+            DB::rollback();
+            return redirect('clientes/'.$cliente_id)->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
+          }
+        } else {
+          return redirect('clientes/'.$cliente_id)->withErrors(["La referencia de cobro no existe en nuestra BD de mercado pago"]);
+        }
+
+
+      } else {
         if (count($amounts) > 0) {
           $data = [];
           foreach ($amounts as $amount) {
