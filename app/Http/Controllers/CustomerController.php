@@ -909,7 +909,11 @@ class CustomerController extends Controller
         }
 
         $data = [];
-        $data['stock_id'] = 1;
+        if ($slot != '' || $consola != '') {
+          $data['stock_id'] = 2;
+        } else {
+          $data['stock_id'] = 1;
+        }
         $data['cons'] = 'ps';
         $data['slot'] = 'No';
 

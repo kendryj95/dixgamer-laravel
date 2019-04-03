@@ -797,7 +797,7 @@
             @if ($ventas_notas)
               @foreach ($ventas_notas as $venta_nota)
                 @if ($venta_nota->id_ventas == $dataCustomer->ID_ventas)
-                <div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.9;">
+                <div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.7;font-size: 0.9em">
                   <i class="fa fa-comment fa-fw"></i>
 
                   @if (strpos($venta_nota->Notas, "cliente") !== false)
@@ -830,7 +830,7 @@
                 </div>
                 <em
                   class="small text-muted pull-right"
-                  style="opacity: 0.7">
+                  style="opacity: 0.7;font-size: 0.9em">
                   {{ date("d M 'y", strtotime($venta_nota->Day)) }}
                   ({{ $venta_nota->usuario }})
                 </em>
