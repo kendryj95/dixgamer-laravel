@@ -90,6 +90,30 @@
 
             <div class="panel-body" style="background-color: #efefef;">
 
+            	@if(strpos($account->mail_fake, 'yopmail') !== false)
+
+            	<div class="dropdown">
+            		<button
+            		class="btn btn-secondary btn-xs dropdown-toggle"
+            		style="opacity: 0.5;"
+            		type="button"
+            		data-toggle="dropdown"
+            		aria-haspopup="true"
+            		aria-expanded="false">
+            			<b><i class="fa fa-fw fa-refresh"></i> Cambiar Email a DixGamer</b>
+            		</button>
+
+            		<ul style="top: -79px; left: 40px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+            			<li class="dropdown-header">¿Seguro deseas cambiar el email?</li>
+            			<li role="separator" class="divider"></li>
+            			<li>
+            				<a href="{{ url('change_email_dixgamer', $account->ID) }}">Sí, Cambiar</a>
+            			</li>
+            		</ul>
+            	</div><br>
+
+            	@endif
+
 		            <div class="dropdown pull-right">
 		              <button
 		                class="btn btn-default dropdown-toggle btn-xs"

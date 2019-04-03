@@ -1609,4 +1609,43 @@ class AccountController extends Controller
 
       return view('account.lista_yopmail', compact('datos'));
     }
+
+    public function changeEmailDixgamer($account_id)
+    {
+      $vendedor = strtolower(session()->get('usuario')->Nombre);
+      $emailcuenta1 = substr($vendedor, 0, 2);
+      $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 15658;
+      $emailcuenta = "y".$emailcuenta1 . "." . $emailcuenta2 . "@game24hs.com";
+
+      $email_anterior = DB::table('cuentas')->where('ID',$account_id)->value('mail_fake');
+
+      DB::beginTransaction();
+
+      try {
+        DB::table('cuentas')->where('ID',$account_id)->update(["mail_fake" => $emailcuenta]);
+
+        $nota = "E-mail actualizado, antes $email_anterior";
+        
+        $data = [];
+        $data['cuentas_id'] = $account_id;
+        $data['Notas'] = $nota;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('cuentas_notas')->insert($data);
+
+        DB::commit();
+
+
+        \Helper::messageFlash('Cuentas',"E-mail actualizado correctamente.",'alert_cuenta');
+
+
+        return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);
+      }
+
+      
+    }
 }
