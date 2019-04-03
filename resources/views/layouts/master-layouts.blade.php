@@ -73,6 +73,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-link fa-fw" aria-hidden="true"></i> Ctas<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('/cuentas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+                <li><a href="{{ url('/listaYopmail') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Yopmail</a></li>
                 <li><a href="{{ url('cuentas_reseteadas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Reseteadas</a></li>
                 <li><a href=" {{url('cuentas_con_saldo') }} "><i class="fa fa-list fa-fw" aria-hidden="true"></i> Saldo libre</a></li>
                 <li><a href="{{ url('cuentas_para_ps3') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Para Juego PS3</a></li>

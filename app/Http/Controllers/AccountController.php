@@ -1602,4 +1602,11 @@ class AccountController extends Controller
 
       return $saldos;
     }
+
+    public function listaYopmail()
+    {
+      $datos = Account::listaYopmail()->paginate(100);
+
+      return view('account.lista_yopmail', compact('datos'));
+    }
 }

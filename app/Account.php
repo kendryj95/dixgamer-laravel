@@ -206,5 +206,26 @@ class Account extends Model
 
     }
 
+    public function ScopeListaYopmail($query)
+    {
+      return DB::table('stock')
+      ->select(
+        'cuentas_id',
+        'mail_fake',
+        'titulo',
+        'consola',
+        DB::raw('GROUP_CONCAT(stock.ID) as STK'),
+        DB::raw('SUM(costo_usd) as Costo'),
+        DB::raw('(SUM(costo_usd)/30) as Costo2, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as Day'),
+        DB::raw('(SQRT(120/(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))))) as Day2'),
+        DB::raw('(SUM(costo_usd)/30) + (SQRT(120/(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))))) + IF(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))>360, -1, 0) + IF(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))>500, -2, 0) as FINAL')
+      )
+      ->leftjoin('cuentas','stock.cuentas_id','=','cuentas.ID')
+      ->whereNotNull('stock.cuentas_id')
+      ->where('cuentas.mail_fake','LIKE','%yopmail%')
+      ->groupBy('stock.cuentas_id')
+      ->orderBy('FINAL','DESC');
+    }
+
 
 }
