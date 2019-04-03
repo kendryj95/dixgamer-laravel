@@ -1614,7 +1614,7 @@ class AccountController extends Controller
     {
       $vendedor = strtolower(session()->get('usuario')->Nombre);
       $emailcuenta1 = substr($vendedor, 0, 2);
-      $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 15658;
+      $emailcuenta2 = $account_id;
       $emailcuenta = "y".$emailcuenta1 . "." . $emailcuenta2 . "@game24hs.com";
 
       $email_anterior = DB::table('cuentas')->where('ID',$account_id)->value('mail_fake');

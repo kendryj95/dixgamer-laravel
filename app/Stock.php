@@ -213,6 +213,8 @@ class Stock extends Model
               SELECT ID AS id, 'resetear' as concepto, Day, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, usuario FROM resetear WHERE cuentas_id = $id
               UNION ALL
               SELECT ID AS id, 'notas' as concepto, Day, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, Notas as new_pass, usuario FROM cuentas_notas WHERE cuentas_id = $id
+              UNION ALL
+              (SELECT NULL AS id, 'referencia' as concepto, '2018-03-31' AS Day, NULL as ID_stock, NULL as titulo, NULL as consola, NULL AS cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, NULL AS usuario)
               ) AS listado
               ORDER BY Day DESC
         "));

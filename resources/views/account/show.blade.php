@@ -733,7 +733,9 @@
 		  <tbody>
         @foreach($soldConcept as $sc)
 
-            <td><?php echo date("d M 'y", strtotime($sc->Day)); ?> 
+            <td><?php echo date("d M 'y", strtotime($sc->Day)); ?>
+
+            @if($sc->concepto != 'referencia') 
 
             	@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
 
@@ -762,6 +764,7 @@
 					</ul>
 				</div>
 				@endif
+			@endif
 			</td>
             <?php if ($sc->concepto == 'contra'):?>
             <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;"><i class="fa fa-key fa-fw"></i> Nueva contra: <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
@@ -769,8 +772,11 @@
 			<td colspan="4"><div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
 			<?php elseif ($sc->concepto == 'reset'):?>
             <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Reseteado por <?php echo $sc->usuario;?></em></td>
-					<?php elseif ($sc->concepto == 'resetear'):?>
+			<?php elseif ($sc->concepto == 'resetear'):?>
             <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Solicitud de Reseteo por <?php echo $sc->usuario;?></em></td>
+            <?php elseif ($sc->concepto == 'referencia'):?>
+            <td><em class="badge badge-success" style="font-weight:normal; opacity:0.8;"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA 31 de MARZO de 2018</em></td>
+      		<td colspan="3"></td>
             <?php else:?>
             <td><span class="text-muted small">#<?php echo $sc->clientes_id; ?></span> <span class="label label-info"><?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span>
             <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
@@ -797,14 +803,14 @@
 					</div>
 
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="avisosecu-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }} {{ $sc->apellido }}, necesitamos que nos confirme si está usando su juego {{ $sc->titulo }} y si puede acceder normalmente a la cuenta para jugar. Tuvimos un error de sistema y si no puede acceder queremos a ayudarlo a solucionar.<br /><br />
+					<span id="avisosecu-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede acceder normalmente a la cuenta para jugar. Tuvimos un error de sistema y si no puede acceder queremos ayudarlo a solucionar.<br /><br />
 
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					</div>
 
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="avisonewemail-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }} {{ $sc->apellido }}, por mantenimiento de los servidores actualizamos los datos de la cuenta.<br /><br />
+					<span id="avisonewemail-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }}, por mantenimiento de los servidores actualizamos los datos de la cuenta.<br /><br />
 
 						Nuevo e-mail: {{ $account->mail_fake }} <br>
 						Contraseña: {{ $account->pass }} <br><br>
@@ -830,8 +836,8 @@
 					<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
 					<?php else: ?>
 					<br><a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
-					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> AVISO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
-					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a> 
+					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
+					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a> 
 					<?php endif;?>
 				<?php endif;?>
 
@@ -842,11 +848,11 @@
             <?php endif;?>
           </tr>
       @endforeach
-      <tr>
+      <!-- <tr>
       	<td>31 Mar '18</td>
       	<td><em class="badge badge-success" style="font-weight:normal; opacity:0.8;"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA 31 de MARZO de 2018</em></td>
       	<td colspan="3"></td>
-      </tr>
+      </tr> -->
         </tbody>
         </table>
         </div>

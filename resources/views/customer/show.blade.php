@@ -830,7 +830,7 @@
                 </div>
                 <em
                   class="small text-muted pull-right"
-                  style="opacity: 0.7;font-size: 0.9em">
+                  style="opacity: 0.7;font-size: 0.8em">
                   {{ date("d M 'y", strtotime($venta_nota->Day)) }}
                   ({{ $venta_nota->usuario }})
                 </em>
