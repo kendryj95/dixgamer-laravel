@@ -771,6 +771,13 @@
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					</div>
+
+					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
+					<span id="avisosecu-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }} {{ $sc->apellido }}, necesitamos que nos confirme si está usando su juego {{ $sc->titulo }} y si puede acceder normalmente a la cuenta para jugar. Tuvimos un error de sistema y si no puede acceder queremos a ayudarlo a solucionar.<br /><br />
+
+						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
+					</span>
+					</div>
 					
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
 					<span id="reactivar-copy" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por favor ingresá a nuestra cuenta/usuario una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:<br /><br />
@@ -788,7 +795,8 @@
 					<?php if ($sc->slot == 'Primario'):?>
 					<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
 					<?php else: ?>
-					<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a>
+					<br><a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a>
+					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}" style="float:right"> AVISO SECU <i aria-hidden="true" class="fa fa-clone"></i></a>
 					<?php endif;?>
 				<?php endif;?>
 
