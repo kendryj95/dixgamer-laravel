@@ -334,7 +334,14 @@ class AccountController extends Controller
         $next = Account::Siguiente($id)->first();
         $back = Account::Previo($id)->first();
       //dd($soldConcept);
-        $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
+      $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
+
+      $operador_pass = false;
+      $vendedor = session()->get('usuario')->Nombre;
+
+      if (\Helper::operatorsRecoverSecu($vendedor)) {
+        $operador_pass = DB::table('cta_pass')->where('cuentas_id',$id)->where('usuario',$vendedor)->first();
+      }
 
       return view('account.show',compact(
                 'account',
@@ -351,7 +358,8 @@ class AccountController extends Controller
                 'lastAccountGames',
                 'next',
                 'back',
-                'oferta_fortnite'
+                'oferta_fortnite',
+                'operador_pass'
       ));
 
     }
@@ -1250,7 +1258,7 @@ class AccountController extends Controller
     }
 
 
-    public function updatePassword($id){
+    public function updatePassword($id, $param = null){
       try {
         $npass = \Helper::getRandomPass();
         $date = date('Y-m-d H:i:s', time());
@@ -1266,6 +1274,23 @@ class AccountController extends Controller
         $account = [];
         $account['pass'] = $npass;
         $this->acc->updateAccount($account,$id);
+
+        if ($param != null) {
+          $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$id)->groupBy('cuentas_id')->value('stocks_ids');
+          $stocks = explode(",", $stocks);
+
+          $venta = DB::table('ventas')->select('ID')->whereIn('stock_id',$stocks)->where('slot','Secundario')->value('ID');
+
+          if ($venta) {
+            $data = [];
+            $data['id_ventas'] = $venta;
+            $data['Notas'] = "Intento recuperar secu";
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('ventas_notas')->insert($data);
+          }
+        }
         // Mensaje de notificacion
         \Helper::messageFlash('Cuentas','Password editado','alert_cuenta');
         return redirect('cuentas/'.$id);
@@ -1641,6 +1666,52 @@ class AccountController extends Controller
 
 
         return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);
+      }
+
+      
+    }
+
+    public function sigueJugando($account_id)
+    {
+      $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+      $stocks = explode(",", $stocks);
+
+      $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')
+      ->join('clientes AS c','c.ID','=','ventas.clientes_id')
+      ->first();
+
+      DB::beginTransaction();
+
+      try {
+        if ($venta) {
+          $data = [];
+          $data['cuentas_id'] = $account_id;
+          $data['Notas'] = "Cliente secundario #$venta->clientes_id $venta->nombre $venta->apellido sigue jugando";
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('cuentas_notas')->insert($data);
+
+          $data = [];
+          $data['id_ventas'] = $venta->ID;
+          $data['Notas'] = "Cliente sigue jugando";
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('ventas_notas')->insert($data);
+
+          DB::commit();
+
+          \Helper::messageFlash('Cuentas',"Nota generada de sigue jugando.",'alert_cuenta');
+
+
+          return redirect()->back();
+        } else {
+          return redirect()->back()->withErrors(['Ha ocurrido un error al completar toda la información correspondiente para generar la nota.']);
+        }
       } catch (Exception $e) {
         DB::rollback();
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);

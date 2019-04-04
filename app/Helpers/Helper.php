@@ -266,4 +266,15 @@ class Helper
       return $meses[$mes-1];
     }
 
+    public static function operatorsRecoverSecu($usuario)
+    {
+      $operators = ['Victor','Kendry'];
+
+      if (in_array($usuario, $operators)) {
+        return true;
+      }
+
+      return false;
+    }
+
 }

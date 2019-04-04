@@ -90,6 +90,18 @@
 
             <div class="panel-body" style="background-color: #efefef;">
 
+            	@if($operador_pass)
+
+            	<a
+            	href="{{ url('nota_siguejugando', $account->ID) }}"
+            	class="btn btn-secondary btn-xs"
+            	style="opacity: 0.5;color:#000"
+            	>
+            		<b><i class="fa fa-fw fa-gamepad"></i> Sigue jugando</b>
+            	</a><br><br>
+
+            	@endif
+
             	@if(strpos($account->mail_fake, 'yopmail') !== false)
 
             	<div class="dropdown">
@@ -101,6 +113,7 @@
             		aria-haspopup="true"
             		aria-expanded="false">
             			<b><i class="fa fa-fw fa-refresh"></i> Cambiar Email a DixGamer</b>
+            			<span class="caret"></span>
             		</button>
 
             		<ul style="top: -79px; left: 40px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
@@ -114,6 +127,13 @@
 
             	@endif
 
+            	@php
+            		$vendedor = session()->get('usuario')->Nombre;
+            		$texto_pass = \Helper::operatorsRecoverSecu($vendedor) ? 'recuperar secu' : 'cambiar pass';
+            		$param = \Helper::operatorsRecoverSecu($vendedor) ? 'operator' : null;
+            	@endphp
+
+
 		            <div class="dropdown pull-right">
 		              <button
 		                class="btn btn-default dropdown-toggle btn-xs"
@@ -122,16 +142,16 @@
 		                aria-haspopup="true"
 		                aria-expanded="false">
 		                  <i class="fa fa-fw fa-refresh"></i>
-		                  cambiar pass
+		                  {{ $texto_pass }}
 		                  <span class="caret"></span>
 		              </button>
 
 		              <ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
 		                <li class="dropdown-header">¿Seguro deseas</li>
-		                <li class="dropdown-header">cambiar el pass?</li>
+		                <li class="dropdown-header">{{ $texto_pass }}?</li>
 		                <li role="separator" class="divider"></li>
 		                <li>
-											<form class=" text-center" id="form_cambiar_pass" action="{{url('actualizar_password_cuenta',[$account->ID])}}" method="post">
+											<form class=" text-center" id="form_cambiar_pass" action="{{url('actualizar_password_cuenta',[$account->ID, $param])}}" method="post">
 												{{ csrf_field() }}
 												<button
 													class="btn btn-danger"

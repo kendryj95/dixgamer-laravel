@@ -78,6 +78,7 @@ Route::group(['middleware' => ['login']], function()
   Route::resource('cuentas', 'AccountController');
   Route::get('listaYopmail', 'AccountController@listaYopmail');
   Route::get('change_email_dixgamer/{account_id}', 'AccountController@changeEmailDixgamer');
+  Route::get('nota_siguejugando/{account_id}', 'AccountController@sigueJugando');
   Route::get('cuentas_con_saldo', 'AccountController@accountAmount');
   Route::get('cuentas_para_ps3', 'AccountController@accountGamePs3');
   Route::get('cuentas_para_ps4', 'AccountController@accountGamePs4');
@@ -87,7 +88,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('crear_nota_cuenta/{account_id}', 'AccountController@createNote');
   Route::get('editar_direccion_cuenta/{account_id}', 'AccountController@editAddressAccount');
   Route::post('guardar_nota_cuenta/{account_id}', 'AccountController@storeNote');
-  Route::post('actualizar_password_cuenta/{account_id}', 'AccountController@updatePassword');
+  Route::post('actualizar_password_cuenta/{account_id}/{param?}', 'AccountController@updatePassword');
   Route::post('actualizar_direccion_cuenta/{account_id}', 'AccountController@updateAddressAccount');
   Route::post('devolver_saldo_cuentas', 'AccountController@rollbackBalance');
   Route::post('resetear_cuenta/{id}', 'AccountController@resetAccount');
