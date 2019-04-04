@@ -9,9 +9,12 @@
         $bandera1 = 0;
         $bandera2 = 0;
         $bandera3 = 0;
+        $mayor_60 = false;
         $gifts_array = [];
       @endphp
-      @foreach($gifts as $gift)
+      @foreach($gifts as $i => $gift)
+
+      @if($gift->titulo != '20-off-playstation')
 
         @if ($gift->titulo == 'gift-card-10-usd' || $gift->titulo == 'gift-card-50-usd' || $gift->titulo == 'gift-card-25-usd') <!-- Determinar si las dos gift card están disponibles -->
 
@@ -35,6 +38,8 @@
 
             $bandera3++;
           @endphp
+        @endif
+
         @endif
 
         @php
@@ -88,8 +93,16 @@
                   "consola" => $gift->consola,
                   "costo_usd" => 55
                 ];
+
+                $gifts_array[] = [
+                    "account_id" => $account_id,
+                    "titulo" => 'gift-card-60-usd-org',
+                    "consola" => $gift->consola,
+                    "costo_usd" => 60
+                ];
               }
             } else {
+              $mayor_60 = true;
               if ($bandera3 != 0) {
                 $gifts_array[] = [
                     "account_id" => $account_id,
@@ -109,14 +122,18 @@
 
       @endforeach
 
-      @php $array_temp = []; @endphp
+      @php
+
+      $array_temp = []; 
+
+      @endphp
 
       @foreach ($gifts_array as $gift)
 
+      @if ($gift['titulo'] != '20-off-playstation')
+        @if(!in_array($gift['titulo'],$array_temp)) {{-- Evitar duplicaciones --}}
 
-      @if(!in_array($gift['titulo'],$array_temp)) {{-- Evitar duplicaciones --}}
-
-      @php $array_temp[] = $gift['titulo'] @endphp
+         @php $array_temp[] = $gift['titulo'] @endphp
       
       <div class="col-xs-6 col-sm-2">
 
@@ -131,11 +148,13 @@
                 <div style="color: #000">
                     <br>
                     <br>
-                    @if ($gift['titulo'] == 'plus-12-meses')
-                      <h4>{{ $gift['titulo'] }}</h4>
-                    @else
-                      <h2>{{ $gift['costo_usd'] }}</h2>
-                    @endif
+                    
+                      @if ($gift['titulo'] == 'plus-12-meses')
+                        <h4>{{ $gift['titulo'] }}</h4>
+                      @else
+                        <h2>{{ $gift['costo_usd'] }}</h2>
+                      @endif
+                    
                     
                 </div> 
               
@@ -149,7 +168,8 @@
           </div>
 
       </div>
-      @endif
+          @endif
+        @endif
       @endforeach
     @else
       <h2 style="color:#000">No se encontraron datos</h2>

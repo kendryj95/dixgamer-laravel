@@ -268,7 +268,7 @@ class Helper
 
     public static function operatorsRecoverSecu($usuario)
     {
-      $operators = ['Victor','Kendry'];
+      $operators = ['Victor','Kendry','Javier','Marcelo','Enzo','Roman'];
 
       if (in_array($usuario, $operators)) {
         return true;

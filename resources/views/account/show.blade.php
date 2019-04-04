@@ -825,6 +825,8 @@
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
 					<span id="avisosecu-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede acceder normalmente a la cuenta para jugar. Tuvimos un error de sistema y si no puede acceder queremos ayudarlo a solucionar.<br /><br />
 
+						{!! html_entity_decode($oferta_fortnite) !!} <br>
+						
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					</div>
@@ -835,6 +837,7 @@
 						Nuevo e-mail: {{ $account->mail_fake }} <br>
 						Contraseña: {{ $account->pass }} <br><br>
 
+						{!! html_entity_decode($oferta_fortnite) !!} <br>
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					</div>
