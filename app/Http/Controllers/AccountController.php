@@ -343,6 +343,16 @@ class AccountController extends Controller
         $operador_pass = DB::table('cta_pass')->where('cuentas_id',$id)->where('usuario',$vendedor)->first();
       }
 
+      $lastGame = false;
+      
+      if ($lastAccountGames) {
+        $lastGame = $lastAccountGames[0];
+      }
+
+      $product_20_off = DB::table('saldo')->where('titulo','20-off-playstation')->where('cuentas_id',$id)->first(); // Consulta para verificar si se cargó este producto en saldo con este id de cuenta
+
+
+
       return view('account.show',compact(
                 'account',
                 'stocks',
@@ -356,10 +366,12 @@ class AccountController extends Controller
                 'hasBalance',
                 'paccount',
                 'lastAccountGames',
+                'lastGame',
                 'next',
                 'back',
                 'oferta_fortnite',
-                'operador_pass'
+                'operador_pass',
+                'product_20_off'
       ));
 
     }
@@ -1718,5 +1730,48 @@ class AccountController extends Controller
       }
 
       
+    }
+
+    public function product20off($account,$title,$console)
+    {
+      $stock_valido = \Helper::availableStock($account,$title,$console);
+
+      if ($stock_valido) {
+        $stock_valido_id = $stock_valido[0]->ID_stk;
+        $stock = Stock::stockDetail($stock_valido_id)->first();
+
+        $date = date('Y-m-d H:i:s', time());
+        $data = [
+          'cuentas_id'=>$account,
+          'ex_stock_id'=>$stock->ID,
+          'titulo'=>$title,
+          'consola'=>$console,
+          'medio_pago'=>$stock->medio_pago,
+          'costo_usd'=>$stock->costo_usd,
+          'costo'=>$stock->costo,
+          'code'=>$stock->code,
+          'code_prov'=>$stock->code_prov,
+          'n_order'=>$stock->n_order,
+          'Day'=>$date,
+          'ex_Day_stock'=>$stock->Day,
+          'Notas'=>$stock->Notas,
+          'usuario'=>session()->get('usuario')->Nombre,
+          'ex_usuario'=>$stock->usuario
+        ];
+
+        try {
+          $this->blc->storeBalanceAccount($data);
+
+          // Eliminando stock
+          $stock = Stock::where('ID',$stock->ID)->delete();
+          // Mensaje de notificacion
+          \Helper::messageFlash('Cuentas','Producto 20 off playstation agregado.','alert_cuenta');
+          return redirect('cuentas/'.$account);
+        } catch (\Exception $e) {
+          return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+        }
+      } else {
+        return redirect('/cuentas')->withErrors(['Ha ocurrido un error, no es un stock valido.']);
+      }
     }
 }

@@ -650,6 +650,14 @@
 			</p>
 		@endif
 
+		@if(!$product_20_off)
+
+		<p>
+		<a href="{{ url('agregar_20_off',[$account->ID,'20-off-playstation','ps']) }}" class="btn btn-normal btn-lg"><i class="fa fa-tag"></i> 20% OFF</a>
+		</p>
+
+		@endif
+
      <?php if ($saldo > 0.00):?>
 
 				<p>
@@ -718,15 +726,14 @@
 
 		<p>
 			<a href="{{ url('repetir_gift_juego', $account->ID) }}" class="btn btn-default btn-lg"><i class="fa fa-gamepad"></i> Repetir Juego</a>
-			{{--<form action="{{ url('repetirGiftAndJuego') }}" method="post">
-				{{ csrf_field() }}
-				<input type="hidden" name="saldo_usd" value="{{$saldo}}">
-				<input type="hidden" name="saldo_ars" value="{{$saldoARS}}">
-				<input type="hidden" name="account_id" value="{{$account->ID}}">
-
-				<button type="submit" class="btn btn-default btn-lg"><i class="fa fa-gamepad"></i> Repetir Juego</button>
-			</form>--}}
 		</p>
+
+		@if($lastGame)
+
+		<img class="img img-responsive img-rounded full-width pull-left" style="width:30%;margin:0;" alt="{{ $lastGame->titulo }}" src="{{asset('img/productos')}}/<?php echo $lastGame->consola."/".$lastGame->titulo.".jpg"; ?>">
+		<span class="badge badge-normal">{{ $lastGame->costo_usd }} usd</span>
+
+		@endif
 
 		@endif
 
