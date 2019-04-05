@@ -800,7 +800,7 @@
                 <div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.7;font-size: 0.9em">
                   <i class="fa fa-comment fa-fw"></i>
 
-                  @if (strpos($venta_nota->Notas, "cliente") !== false)
+                  @if (strpos($venta_nota->Notas, "Antes asignado a cliente") !== false)
                   
                   @php 
                   $cliente = substr($venta_nota->Notas, 26);
