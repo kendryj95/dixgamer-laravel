@@ -94,8 +94,7 @@
 
             	<a
             	href="{{ url('nota_siguejugando', $account->ID) }}"
-            	class="btn btn-secondary btn-xs"
-            	style="opacity: 0.5;color:#000"
+            	class="btn btn-danger btn-xs"
             	>
             		<b><i class="fa fa-fw fa-gamepad"></i> Sigue jugando</b>
             	</a><br><br>

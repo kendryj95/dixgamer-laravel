@@ -1695,6 +1695,8 @@ class AccountController extends Controller
       ->join('clientes AS c','c.ID','=','ventas.clientes_id')
       ->first();
 
+      $vendedor = session()->get('usuario')->Nombre;
+
       DB::beginTransaction();
 
       try {
@@ -1714,6 +1716,11 @@ class AccountController extends Controller
           $data['usuario'] = session()->get('usuario')->Nombre;
 
           DB::table('ventas_notas')->insert($data);
+
+          if (\Helper::operatorsRecoverSecu($vendedor)) { // Para confirmar que el vendedor pertenezca a la lista.
+
+            DB::table('cta_pass')->where('cuentas_id',$account_id)->where('usuario',$vendedor)->update(['usuario' => "ex-$vendedor"]);
+          }
 
           DB::commit();
 
