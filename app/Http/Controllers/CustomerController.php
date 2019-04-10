@@ -142,6 +142,11 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
+
+      if (!(\Helper::validateAdministrator(session()->get('usuario')->Level)) && $id == 371) { // Si no es administrador y el id del cliente es el 371, lo devuelvo a la pagina anterior.
+        return redirect()->back();
+      }
+
       $customer  = Customer::customerId($id)->first();
       $dataCustomers = Customer::dataCustomerId($id)->get();
       $salesByCustomer= Sale::salesByCustomerId($id)->first();

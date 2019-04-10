@@ -140,8 +140,17 @@ class Customer extends Model
 
           $query->where($obj->column,'like','%'.$obj->word.'%');
         }
+
+        if (!(\Helper::validateAdministrator(session()->get('usuario')->Level))) { 
+          $query->where('ID','!=',371);
+        }
       }else{
-        return $query;
+        if (!(\Helper::validateAdministrator(session()->get('usuario')->Level))) { 
+          $query->where('ID','!=',371);
+        } else {
+
+          return $query;
+        }
       }
     }
 

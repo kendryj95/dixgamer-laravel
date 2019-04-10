@@ -146,7 +146,6 @@ Route::group(['middleware' => ['login']], function()
         Route::get('stock_insertar_codigo_p3','StockController@createCodep3');
         Route::post('stock_insertar_codigo_p3','StockController@storeCodep3');
 
-
         // Gastos
         Route::resource('gastos', 'ExpensesController');
     });
