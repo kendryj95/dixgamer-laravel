@@ -226,7 +226,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="{{ asset('assets/js/docs.min.js') }}"></script>
   <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-  <script src="{{ asset('js/script.js') }}"></script>
+  <script src="{{ asset('js/script2.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
   <script src="{{ asset('js/typeahead.bundle.js') }}"></script>

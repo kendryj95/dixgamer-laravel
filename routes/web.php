@@ -10,8 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
+// borrar cache desde el navegador
+Route::get('clear-cache', function() {
+    Artisan::call('cache:clear');
+    return "Cache is cleared";
+});
 
 // Rutas login y logout
 Route::get('login', 'Auth\LoginController@index')->name('login');

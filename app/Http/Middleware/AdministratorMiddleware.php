@@ -15,7 +15,7 @@ class AdministratorMiddleware
      */
     public function handle($request, Closure $next)
     {
-      if (\Helper::validateAdminAnalyst(session()->get('usuario')->Level)) {
+      if (\Helper::validateAdminAnalyst(session()->get('usuario')->Level) || \Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift")) {
         return $next($request);
       }
 
