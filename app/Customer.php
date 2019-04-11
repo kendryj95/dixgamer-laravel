@@ -142,11 +142,11 @@ class Customer extends Model
         }
 
         if (!(\Helper::validateAdministrator(session()->get('usuario')->Level))) { 
-          $query->where('ID','!=',371);
+          $query->where('clientes.ID','!=',371);
         }
       }else{
         if (!(\Helper::validateAdministrator(session()->get('usuario')->Level))) { 
-          $query->where('ID','!=',371);
+          $query->where('clientes.ID','!=',371);
         } else {
 
           return $query;

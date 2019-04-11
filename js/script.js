@@ -148,13 +148,15 @@ function createColumn(selector,type = 'code'){
 	var str = selector.val();
 	if (str != '') {
 		var nstr = str.replace(/-/g, '');
-		try {
+		try { 
 			var arr = [];
 			if (type == 'code_g') {
 				arr = nstr.split("\n");
 			}else{
-				arr = nstr.match(/Voucher Code: \w+/g).map(function( m ){
-					return m.replace('Voucher Code: ','');
+				var regexr = /(Voucher Code: \w+)|(Promo Code: \w+)|(Product Code: \w+)|(Product Key: \w+)|(Online Game Code: \w+)|(Redemption Code: \w+)/g;
+				var regexr2 = /(Voucher Code: )|(Promo Code: )|(Product Code: )|(Product Key: )|(Online Game Code: )|(Redemption Code: )/g;
+				arr = nstr.match(regexr).map(function( m ){
+					return m.replace(regexr2,'');
 				});
 			}
 			let html;
