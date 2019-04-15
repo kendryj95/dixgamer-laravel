@@ -276,6 +276,7 @@
                         ({{ $note->usuario }})
                       </em>
                     @endif
+                    @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
                     <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
                       <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                         <i aria-hidden="true" class="fa fa-remove text-muted"></i>
@@ -286,6 +287,7 @@
                         <li><a href="{{ url('delete_notes',[$note->ID,'clientes']) }}">Sí, Eliminar</a></li>
                       </ul>
                     </div>
+                    @endif
                   </div>
                 @endforeach
               </li>
@@ -847,6 +849,7 @@
                     {{ date("d M 'y", strtotime($venta_nota->Day)) }}
                     ({{ $venta_nota->usuario }})
                   </em>
+                  @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
                   <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-remove text-muted"></i>
@@ -857,6 +860,7 @@
                       <li><a href="{{ url('delete_notes',[$venta_nota->ID,'ventas']) }}">Sí, Eliminar</a></li>
                     </ul>
                   </div>
+                  @endif
                 </div>
                 @endif
               @endforeach
