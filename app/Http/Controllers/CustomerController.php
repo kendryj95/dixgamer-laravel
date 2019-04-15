@@ -1573,4 +1573,16 @@ class CustomerController extends Controller
     {
       return $stock_id != 1 || false;
     }
+
+    public function deleteNotes($id,$tipo)
+    {
+      if ($id && $tipo) {
+        DB::table($tipo."_notas")->where('ID',$id)->delete();
+
+        \Helper::messageFlash('Clientes','Nota de '.ucwords($tipo).' eliminada exitosamente.', 'alert_cliente');
+        return redirect()->back();
+      } else {
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
+      }
+    }
 }

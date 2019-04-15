@@ -265,16 +265,28 @@
                     {{$note->Notas}}
                   </div>
 
-                  @if (($note->Day) > "2018-03-02")
+                  
+                  <div class="text-right">
+                    @if (($note->Day) > "2018-03-02")
 
-                    <em
-                      class="small text-muted pull-right"
-                      style="opacity: 0.7">
-                      <?php echo date("d M 'y", strtotime($note->Day)); ?>
-                      ({{ $note->usuario }})
-                    </em>
-                    <br>
-                  @endif
+                      <em
+                        class="small text-muted"
+                        style="opacity: 0.7">
+                        <?php echo date("d M 'y", strtotime($note->Day)); ?>
+                        ({{ $note->usuario }})
+                      </em>
+                    @endif
+                    <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
+                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
+                        <i aria-hidden="true" class="fa fa-remove text-muted"></i>
+                      </button>
+                      <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li class="dropdown-header">¿Eliminar nota del cliente?</li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url('delete_notes',[$note->ID,'clientes']) }}">Sí, Eliminar</a></li>
+                      </ul>
+                    </div>
+                  </div>
                 @endforeach
               </li>
             </ul>
@@ -828,13 +840,24 @@
                   {{ ($venta_nota->Notas) }}
                   @endif
                 </div>
-                <em
-                  class="small text-muted pull-right"
-                  style="opacity: 0.7;font-size: 0.8em">
-                  {{ date("d M 'y", strtotime($venta_nota->Day)) }}
-                  ({{ $venta_nota->usuario }})
-                </em>
-                <br>
+                <div class="text-right">
+                  <em
+                    class="small text-muted"
+                    style="opacity: 0.7;font-size: 0.8em">
+                    {{ date("d M 'y", strtotime($venta_nota->Day)) }}
+                    ({{ $venta_nota->usuario }})
+                  </em>
+                  <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
+                      <i aria-hidden="true" class="fa fa-remove text-muted"></i>
+                    </button>
+                    <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <li class="dropdown-header">¿Eliminar nota de venta?</li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="{{ url('delete_notes',[$venta_nota->ID,'ventas']) }}">Sí, Eliminar</a></li>
+                    </ul>
+                  </div>
+                </div>
                 @endif
               @endforeach
             @endif
