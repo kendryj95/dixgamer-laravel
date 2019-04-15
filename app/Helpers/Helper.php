@@ -277,4 +277,11 @@ class Helper
       return false;
     }
 
+    public static function getOperatorsEspecials()
+    {
+      $operators = ['Victor','Kendry','Javier','Marcelo','Enzo','Roman'];
+
+      return $operators;
+    }
+
 }

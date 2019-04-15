@@ -336,12 +336,9 @@ class AccountController extends Controller
       //dd($soldConcept);
       $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
 
-      $operador_pass = false;
+      $operador_pass = $this->showBtnSigueJugando($id);
+      
       $vendedor = session()->get('usuario')->Nombre;
-
-      if (\Helper::operatorsRecoverSecu($vendedor)) {
-        $operador_pass = DB::table('cta_pass')->where('cuentas_id',$id)->where('usuario',$vendedor)->first();
-      }
 
       $lastGame = false;
       
@@ -374,6 +371,35 @@ class AccountController extends Controller
                 'product_20_off'
       ));
 
+    }
+
+    private function showBtnSigueJugando($account_id)
+    {
+      $operadores_especiales = \Helper::getOperatorsEspecials();
+      $show = false;
+
+      ## CONSULTANDO SI ESTA CUENTA TIENE UNA VENTA SECUNDARIA
+
+      $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+      $stocks = explode(",", $stocks);
+
+      $venta = DB::table('ventas')->whereIn('stock_id',$stocks)->where('slot','Secundario')->first();
+
+      ## CONSULTANDO SI HUBO UN CAMBIO DE CONTRASEÑA PARA ESTA CUENTA CON ALGUNOS DE LOS OPERADORES ESPECIALES.
+      $cuenta_pass = DB::table('cta_pass')->where('cuentas_id',$account_id)->whereIn('usuario',$operadores_especiales)->orderBy('Day','DESC')->first();
+
+      if ($cuenta_pass && $venta) {
+
+        ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL CAMBIO DE CONTRASEÑA
+
+        if ($venta->Day < $cuenta_pass->Day) {
+          $show = true;
+        }
+        
+      }
+
+      return $show;
+      
     }
 
     public function getDataPaginaAnt(Request $request){
