@@ -1680,14 +1680,14 @@ class AccountController extends Controller
       $emailcuenta2 = $account_id;
       $emailcuenta = "y".$emailcuenta1 . "." . $emailcuenta2 . "@game24hs.com";
 
-      $email_anterior = DB::table('cuentas')->where('ID',$account_id)->value('mail_fake');
+      $cta = DB::table('cuentas')->where('ID',$account_id)->first();
 
       DB::beginTransaction();
 
       try {
         DB::table('cuentas')->where('ID',$account_id)->update(["mail_fake" => $emailcuenta]);
 
-        $nota = "E-mail actualizado, antes $email_anterior";
+        $nota = "E-mail actualizado, antes $cta->mail_fake";
         
         $data = [];
         $data['cuentas_id'] = $account_id;
@@ -1696,6 +1696,17 @@ class AccountController extends Controller
         $data['usuario'] = session()->get('usuario')->Nombre;
 
         DB::table('cuentas_notas')->insert($data);
+
+        $pass_actual = $cta->pass;
+        $vendedor = session()->get('usuario')->Nombre;
+
+        $data = [];
+        $data['cuentas_id'] = $account_id;
+        $data['new_pass'] = $pass_actual;
+        $data['Day'] = date('Y-m-d: H:i:s');
+        $data['usuario'] = $vendedor;
+
+        DB::table('cta_pass')->insert($data);
 
         DB::commit();
 
@@ -1806,5 +1817,27 @@ class AccountController extends Controller
       } else {
         return redirect('/cuentas')->withErrors(['Ha ocurrido un error, no es un stock valido.']);
       }
+    }
+
+    public function indexCuentasNotas(Request $request)
+    {
+      // Columnas de la base de datos
+      $columns = Schema::getColumnListing('cuentas');
+      // Traer la lista de cuentas
+
+      // cuentas con filtro
+      $obj = new \stdClass;
+      $obj->column = $request->column;
+      $obj->word = $request->word;
+
+
+      $accounts_notes = Account::cuentasNotas($obj)->paginate(50);
+
+
+      return view('account.index_account_notes',
+                  compact(
+                    'accounts_notes',
+                    'columns'
+                  ));
     }
 }

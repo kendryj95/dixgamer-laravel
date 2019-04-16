@@ -111,6 +111,7 @@ Route::group(['middleware' => ['login']], function()
   Route::post('modify_date_operations_store', 'AccountController@modifyDateOperationsStore');
   Route::get('delete_operations/{id}/{tipo}', 'AccountController@deleteOperation');
   Route::get('cuentas_reseteadas', 'AccountController@indexReseteados');
+  Route::get('cuentas_notas', 'AccountController@indexCuentasNotas');
 
   // Rutas para stock
   Route::resource('stock', 'StockController');

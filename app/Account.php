@@ -31,6 +31,17 @@ class Account extends Model
             ->orderBy('cuentas.id','DESC');
     }
 
+    public function ScopeCuentasNotas($query,$obj){
+      $query = DB::table('cuentas_notas')->join('cuentas','cuentas.ID','=','cuentas_notas.cuentas_id')
+      ->orderBy('cuentas_notas.ID', 'DESC');
+
+      if (!empty($obj->column) && !empty($obj->word)) {
+        $query->where("cuentas.$obj->column",'like',"%$obj->word%");
+      }
+
+      return $query;
+    }
+
     public function ScopeAccountStockId($query,$id){
       return DB::table('cuentas')
           ->select(
