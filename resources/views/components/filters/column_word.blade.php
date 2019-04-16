@@ -7,11 +7,11 @@
       <label for="column">Buscar en: </label> <br>
       <select name="column" class="form-control">
         @php $selected = ''; @endphp
-        @foreach($columns as $column)
+        @foreach($columns as $i => $column)
           @if(app('request')->input('column') == $column)
             <option selected value="{{ $column }}"> {{$column}} </option>
           @else
-              @if($path == 'cuentas' || $path == 'cuentas_notas')
+              @if($path == 'cuentas')
                 @if($column == 'mail_fake')
                   @php $selected = 'selected'; @endphp
                 @else
@@ -31,6 +31,10 @@
                 @endif
               @endif
               <option value="{{ $column }}" {{ $selected }}> {{$column}} </option>
+              {{-- option adicional para cuentas_notas --}}
+              @if($path == 'cuentas_notas' && $i == (count($columns)-1))
+              <option value="Notas" selected>Notas</option>
+              @endif
           @endif
         @endforeach
       </select>

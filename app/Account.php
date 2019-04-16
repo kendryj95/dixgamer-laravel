@@ -36,7 +36,12 @@ class Account extends Model
       ->orderBy('cuentas_notas.ID', 'DESC');
 
       if (!empty($obj->column) && !empty($obj->word)) {
-        $query->where("cuentas.$obj->column",'like',"%$obj->word%");
+        if ($obj->column == 'Notas') {
+          $query->where("cuentas_notas.$obj->column",'like',"%$obj->word%");
+        } else {
+
+          $query->where("cuentas.$obj->column",'like',"%$obj->word%");
+        }
       }
 
       return $query;
