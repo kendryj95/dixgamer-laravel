@@ -1708,6 +1708,21 @@ class AccountController extends Controller
 
         DB::table('cta_pass')->insert($data);
 
+        $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+        $stocks = explode(",", $stocks);
+
+        $venta = DB::table('ventas')->select('ID')->whereIn('stock_id',$stocks)->where('slot','Secundario')->value('ID');
+
+        if ($venta) {
+          $data = [];
+          $data['id_ventas'] = $venta;
+          $data['Notas'] = "Intento recuperar secu";
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('ventas_notas')->insert($data);
+        }
+
         DB::commit();
 
 
