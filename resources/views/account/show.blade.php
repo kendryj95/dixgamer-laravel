@@ -101,7 +101,7 @@
 
             	@endif
 
-            	@if(strpos($account->mail_fake, 'yopmail') !== false)
+            	@if(strpos($account->mail_fake, 'yopmail') !== false && \Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre))
 
             	<div class="dropdown">
             		<button

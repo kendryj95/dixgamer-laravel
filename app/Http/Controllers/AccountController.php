@@ -1754,9 +1754,16 @@ class AccountController extends Controller
 
           DB::table('ventas_notas')->insert($data);
 
-          if (\Helper::operatorsRecoverSecu($vendedor)) { // Para confirmar que el vendedor pertenezca a la lista.
+          $operators_especials = \Helper::getOperatorsEspecials();
 
-            DB::table('cta_pass')->where('cuentas_id',$account_id)->where('usuario',$vendedor)->update(['usuario' => "ex-$vendedor"]);
+          ## OBTENER EL ULTIMO REGISTRO DE CAMBIO DE CONTRASEÑA POR UN OPERADOR ESPECIAL
+          $cta_pass = DB::table('cta_pass')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
+
+          if ($cta_pass) { // Si existe el registro
+
+            foreach ($cta_pass as $cta) {
+              DB::table('cta_pass')->where('ID',$cta->ID)->update(['usuario' => "ex-$cta->usuario"]);
+            }
           }
 
           DB::commit();
