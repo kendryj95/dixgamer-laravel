@@ -649,7 +649,7 @@
 			</p>
 		@endif
 
-		@if(!$product_20_off)
+		@if(!$product_20_off && $cant_productos < 2)
 
 		<p>
 		<a href="{{ url('agregar_20_off',[$account->ID,'20-off-playstation','ps']) }}" class="btn btn-normal btn-lg"><i class="fa fa-tag"></i> 20% OFF</a>

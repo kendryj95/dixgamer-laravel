@@ -687,4 +687,67 @@ class ControlsController extends Controller
                 break;
         }
     }
+
+    public function indexEvolucion()
+    {
+        $titulos = $this->getTitulosEvolucion()->get();
+
+        return view('control.evolucion',compact('titulos'));
+    }
+
+    public function dataEvolucion(Request $request)
+    {
+        $filters['titulo'] = $request->titulo;
+        $filters['consola'] = $request->consola;
+        $filters['slot'] = $request->slot;
+
+        $datos = $this->getDatosEvolucion($filters)->get();
+
+        echo json_encode($datos);
+    }
+
+    private function getDatosEvolucion($filter)
+    {
+        $datos = DB::table('ventas_cobro')
+        ->select(
+            'ventas_cobro.ID',
+            DB::raw("Date_Format(ventas_cobro.Day,'%d-%m-%Y') as Day"),
+            DB::raw('AVG(precio) as precio'),
+            'ventas.slot',
+            'stock.titulo',
+            'stock.consola'
+        )
+        ->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
+        ->leftjoin('stock','ventas.stock_id','=','stock.ID');
+        
+
+        if ($filter['titulo'] != '') {
+            $datos->where('stock.titulo',$filter['titulo']);
+        }
+        if ($filter['consola'] != '') {
+            $datos->where('stock.consola',$filter['consola']);
+        }
+        if ($filter['slot'] != '' && $filter['consola'] == 'Ps4') {
+            $datos->where('ventas.slot',$filter['slot']);
+        }
+
+        $datos->groupBy('Day')
+        ->orderBy('Day','ASC');
+
+        return $datos;
+    }
+
+    private function getTitulosEvolucion()
+    {
+        $titulos = DB::table('ventas_cobro')
+        ->select(
+            'stock.titulo'
+        )
+        ->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
+        ->leftjoin('stock','ventas.stock_id','=','stock.ID')
+        ->groupBy('stock.titulo')
+        ->orderBy('stock.titulo','ASC');
+
+        return $titulos;
+    }
 }

@@ -177,6 +177,7 @@
             <li class="dropdown">
                 <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Control<span class="caret"></span></a>
                 <ul class="dropdown-menu">
+                  <li><a href="{{url('evolucion')}}"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Evolución</a></li>
                   <li><a href="{{url('horarios')}}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
                   <li class="divider" role="separator"></li>
                   <li><a href="{{ url('carga_gc') }}"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>

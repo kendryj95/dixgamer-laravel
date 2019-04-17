@@ -216,6 +216,8 @@ Route::group(['middleware' => ['login']], function()
 
   // Rutas de Control
 
+  Route::get('evolucion','ControlsController@indexEvolucion');
+  Route::get('data_evolucion','ControlsController@dataEvolucion');
   Route::get('control_ventas_bancos','ControlsController@ventasPerBancos');
   Route::get('verificar_venta_banco/{id}','ControlsController@verificarVentaPerBanco')->where(['id' => '[\d]+']);
 
