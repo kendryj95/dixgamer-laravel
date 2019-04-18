@@ -32,7 +32,7 @@ class Account extends Model
     }
 
     public function ScopeCuentasNotas($query,$obj){
-      $query = DB::table('cuentas_notas')->join('cuentas','cuentas.ID','=','cuentas_notas.cuentas_id')
+      $query = DB::table('cuentas_notas')->select('cuentas_notas.*')->join('cuentas','cuentas.ID','=','cuentas_notas.cuentas_id')
       ->orderBy('cuentas_notas.ID', 'DESC');
 
       if (!empty($obj->column) && !empty($obj->word)) {

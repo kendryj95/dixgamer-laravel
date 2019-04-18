@@ -20,7 +20,7 @@
 
               <td>
                 <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
-                  {{ $i+1 }}
+                  {{ $account->ID }}
                 </a>
               </td>
 
