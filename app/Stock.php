@@ -335,6 +335,7 @@ class Stock extends Model
             'titulo',
             'consola',
             DB::raw("GROUP_CONCAT(cuentas_id) AS cuentas"),
+            DB::raw("GROUP_CONCAT(ID) AS stocks_id"),
             'usuario'
         )
         ->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)

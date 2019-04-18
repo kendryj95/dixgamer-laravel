@@ -1651,7 +1651,7 @@ class AccountController extends Controller
       $saldo = 0.00;
       $saldoARS = 0.00;
 
-      $accountBalances = Balance::accountBalance($id);
+      $accountBalances = Balance::accountBalance($account_id);
 
       foreach ($accountBalances as $balance) {
         $saldo = $saldo + $balance->costo_usd;

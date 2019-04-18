@@ -66,9 +66,14 @@
                         </td>
                         <td style="vertical-align: middle;">
                             @php $array = explode(',', $value->cuentas); @endphp
-                            @foreach ($array as $i => $valor)
-                                <a href="{{ url('cuentas', $valor) }}" target="_blank">{{ $valor }}</a>@if($i != (count($array) - 1)),&nbsp;@endif
-                            @endforeach
+                            @if(count($array)>1)
+                                @foreach ($array as $i => $valor)
+                                    <a href="{{ url('cuentas', $valor) }}">{{ $valor }}</a>@if($i != (count($array) - 1)),&nbsp;@endif
+                                @endforeach
+                            @else
+                                @php $array = explode(',', $value->stocks_id); @endphp
+                                {{ implode(', ', $array) }}
+                            @endif
                         </td>
                         <td style="vertical-align: middle;">
                             <span class="label label-{{\Helper::userColor($value->usuario)}}" title="{{ $value->usuario }}"><strong>{{strtoupper(substr($value->usuario,0,1))}}</strong></span>
