@@ -7,12 +7,14 @@
     <div class="container">
 	<h1>Cargas de saldo para {{ $vendedor }}-GC</h1>
     <!-- InstanceBeginEditable name="body" -->
-		<p>@if (Helper::validateAdministrator(session()->get('usuario')->Level))
-			<a class="btn btn-info" href="{{ url('carga_gc', 'Francisco') }}">Ver Francisco</a>
-		@endif</p>
+		@if (Helper::validateAdministrator(session()->get('usuario')->Level))
+      @foreach($users as $user)
+			 <a class="btn @if($vendedor == $user->ex_usuario) btn-info @else btn-default @endif btn-sm" href="{{ url('carga_gc', $user->ex_usuario) }}">Ver {{ str_replace('-GC', '', $user->ex_usuario) }}</a>
+      @endforeach
+		@endif
 		@if (Helper::validateAdministrator(session()->get('usuario')->Level))
 		
-			<form method="post" name="form1" action="{{ url('carga_gc_store') }}">
+			<form style="margin-top: 20px" method="post" name="form1" action="{{ url('carga_gc_store') }}">
 
         {{ csrf_field() }}
 
@@ -44,103 +46,41 @@
 			</div>
             </div>
 
-				<button class="btn btn-success" type="submit">Carga a {{ $vendedor }}</button>
+				<button class="btn btn-success" type="submit">Carga a {{ str_replace('-GC', '', $vendedor) }}-GC</button>
 				<input type="hidden" name="MM_insert" value="form1">
-				<input type="hidden" name="usuario" value="{{ $vendedor }}">
+				<input type="hidden" name="usuario" value="{{ str_replace('-GC', '', $vendedor) }}-GC">
 			</form>
 		@endif
     <div class="row">
     <div class="col-md-4">
 	<h4>Saldo Proveedor <span class="label label-normal"><?php if ($row_SaldoP): ?><?php echo ($row_SaldoP[0]->carga_usd - $row_SaldoP[0]->carga_usd); ?><?php endif;?></span></h4>
 	</div>
+</div>
+<div class="row">
 		
-	<div class="col-md-4">
-    <?php if ($row_Diario): ?>
-	<h4>Listado del Día</h4>
-    <div class="table-responsive">
-    <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
-    <thead>
-              <tr>
-				<th>Q</th>
-				<th>Cover</th>
-				<th>Producto</th>
-                
-                <th>Costo USD</th>
-                <th>Total USD</th>
-              </tr>
-            </thead>
-		  <tbody>
-          <?php $q = 0; $ct = 0; ?>
-          @foreach ($row_Diario as $diario)
-          <tr>
-          	<td><?php echo $diario->Q; ?> x </td>
-            <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/<?php echo $diario->consola."/".$diario->titulo.".jpg";?>" alt="" /></td>
-            <td><?php echo str_replace('-', ' ', $diario->titulo);?></td>
-            
-			<td><?php echo $diario->costo_usd; ?></td>
-            <td><?php echo ($diario->costo_usd * $diario->Q); ?></td>
-          </tr>
-        <?php $q = $q + $diario->Q; $ct = $ct + ($diario->costo_usd * $diario->Q); ?>
-    	 @endforeach
-    	
-		<tr>
-			<th><?=$q?></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th><?=$ct?></th>
-      	</tr> 
-        </tbody>
-        </table>
-        </div>
-        <?php endif; ?> 
-		<?php if ($row_Mensual): ?>
-	<h4>Listado del Mes</h4>
-    <div class="table-responsive">
-        <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
-    <thead>
-              <tr>
-				<th>Q</th>
-				<th>Cover</th>
-				<th>Producto</th>
-                
-                <th>Costo USD</th>
-                <th>Total USD</th>
-              </tr>
-            </thead>
-		  <tbody>
-          <?php $q = 0; $ct = 0;  ?>
-          @foreach ($row_Mensual as $mensual)
-          <tr>
-          	<td><?php echo $mensual->Q; ?> x </td>
-            <td><img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/<?php echo $mensual->consola."/".$mensual->titulo.".jpg";?>" alt="" /></td>
-            <td><?php echo str_replace('-', ' ', $mensual->titulo);?></td>
-            
-			<td><?php echo $mensual->costo_usd; ?></td>
-            <td><?php echo ($mensual->costo_usd * $mensual['Q']); ?></td>
-          </tr>
-        <?php $q = $q + $mensual['Q']; $ct = $ct + ($mensual->costo_usd * $mensual->Q); ?> 
-        @endforeach
-		<tr>
-			<th><?=$q?></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th><?=$ct?></th>
-      	</tr> 
-        </tbody>
-        </table>
-        </div>
-        <?php endif; ?>
-    </div>
-	
-		
-	<div class="col-md-2">
-    </div>
-    <div class="col-md-4 pull-right">
+    <div class="col-md-5">
     
     <?php if ($row_Total): ?>
-	<h4>Listado Total</h4>
+    <h4>Listado Total</h4>
+    <div class="row">
+        <form action="{{ url('carga_gc',$vendedor) }}" method="get" class="form-inline">
+            <div class="form-group col-md-4">
+                <label for="fecha_ini">Fecha Inicio:</label>
+                <input type="date" name="fecha_ini" id="fecha_ini" value="{{ $fecha_ini}}" class="form-control input-sm">
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="fecha_fin">Fecha Fin:</label>
+                <input type="date" name="fecha_fin" id="fecha_fin" value="{{ $fecha_fin}}" class="form-control input-sm">
+            </div>
+
+            <div class="form-group">
+              <label for="palabra">&nbsp;</label> <br>
+              <button type="submit" class="btn btn-default btn-sm">Buscar</button>
+
+            </div>
+        </form>
+    </div>
     <div class="table-responsive">
         <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
     <thead>
@@ -178,11 +118,90 @@
         </div>
         <?php endif; ?> 
     </div>
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-5">
+
+      @if($row_saldo_prov)
+      <h4>Listado Saldo Prov</h4>
+
+      <div class="row">
+          <form action="{{ url('carga_gc',$vendedor) }}" method="get" class="form-inline">
+              <div class="form-group col-md-4">
+                  <label for="fecha_ini2">Fecha Inicio:</label>
+                  <input type="date" name="fecha_ini2" id="fecha_ini2" value="{{ $fecha_ini2}}" class="form-control input-sm">
+              </div>
+
+              <div class="form-group col-md-4">
+                  <label for="fecha_fin2">Fecha Fin:</label>
+                  <input type="date" name="fecha_fin2" id="fecha_fin2" value="{{ $fecha_fin2}}" class="form-control input-sm">
+              </div>
+
+              <div class="form-group">
+                <label for="palabra">&nbsp;</label> <br>
+                <button type="submit" class="btn btn-default btn-sm">Buscar</button>
+
+              </div>
+          </form>
+      </div>
+
+      <div class="table-responsive">
+        <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>USD</th>
+              <th>Cotiz</th>
+              <th>ARS</th>
+              <th>Fecha</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($row_saldo_prov as $value)
+            <tr>
+              <td>{{ $value->ID }}</td>
+              <td>{{ $value->usd }}</td>
+              <td>{{ $value->cotiz }}</td>
+              <td>{{ $value->ars }}</td>
+              @php
+                $dia = date('d', strtotime($value->Day));
+                $mes = date('n', strtotime($value->Day));
+                $mes = \Helper::getMonthLetter($mes);
+                $anio = date('Y', strtotime($value->Day));
+                $fecha = "$dia-$mes-$anio";
+                @endphp
+              <td>{{ $fecha }}</td>
+              <th style="vertical-align: middle;text-align: center;">
+                <a href="javascript:void(0)" data-toggle="modal" data-target=".modalSaldoProv" onclick="getPageAjax('{{url("getDatosSaldoProv", $value->ID)}}','#modalSaldoProv')"><i class="fa fa-pencil"></i></a>
+              </th>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+
+      @endif
+      
+    </div>
+
     </div>
     
      <!--/row-->
      <!-- InstanceEndEditable -->
     </div><!--/.container-->
+
+    <div class="modal fade modalSaldoProv" id="modalSaldoProv" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog modal-lg" style="top:40px;">
+        <div class="modal-content">
+          
+          <div class="modal-body" style="text-align:center;padding:10px;">
+          </div>
+          
+        </div>
+      </div>
+    </div>
 
 @endsection
 

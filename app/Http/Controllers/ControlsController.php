@@ -139,21 +139,41 @@ class ControlsController extends Controller
         return view('adwords.index', compact('adwords'));
     }
 
-    public function cargaGC($carga = null)
+    public function cargaGC(Request $request, $carga = null)
     {
+        $conFiltro = "No";
         if ($carga != null) {
             $vendedor = $carga;
+            $conFiltro = "Si";
         } else {
 
-            $vendedor = session()->get('usuario')->Nombre;
+            $vendedor = session()->get('usuario')->Nombre . '-GC';
         }
 
-        $query_Diario = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
-        (SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' and DATE_FORMAT(Day, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')
-        UNION ALL
-        SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' and DATE_FORMAT(ex_Day_stock, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')) AS resultado
-        GROUP BY consola, titulo
-        ORDER BY consola, titulo ASC";
+        $condicion1 = '';
+
+        $fecha_fin = isset($request->fecha_fin) ? $request->fecha_fin : date('Y-m-d');
+        $fecha_ini = isset($request->fecha_ini) ? $request->fecha_ini : $this->defaultFechaIni();
+
+        if (isset($request->fecha_ini) && isset($request->fecha_fin)) {
+            $condicion1 .= " and DATE(Day) between '$request->fecha_ini' and '$request->fecha_fin'";
+        }
+
+        $condicion2 = '';
+
+        $fecha_fin2 = isset($request->fecha_fin2) ? $request->fecha_fin2 : date('Y-m-d');
+        $fecha_ini2 = isset($request->fecha_ini2) ? $request->fecha_ini2 : $this->defaultFechaIni();
+
+        if (isset($request->fecha_ini2) && isset($request->fecha_fin2)) {
+            $condicion2 .= " and DATE(Day) between '$request->fecha_ini2' and '$request->fecha_fin2'";
+        }
+
+        /*$query_Diario = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
+(SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' and DATE_FORMAT(Day, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')
+UNION ALL
+SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' and DATE_FORMAT(ex_Day_stock, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')) AS resultado
+GROUP BY consola, titulo
+ORDER BY consola, titulo ASC";
 
         $row_Diario = DB::select($query_Diario);
 
@@ -164,12 +184,12 @@ class ControlsController extends Controller
         GROUP BY consola, titulo
         ORDER BY consola, titulo ASC";
 
-        $row_Mensual = DB::select($query_Mensual);
+        $row_Mensual = DB::select($query_Mensual);*/
 
         $query_Total = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
-        (SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor'
+        (SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' $condicion1
         UNION ALL
-        SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor') AS resultado
+        SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' $condicion1) AS resultado
         GROUP BY consola, titulo
         ORDER BY consola, titulo ASC";
 
@@ -186,7 +206,53 @@ class ControlsController extends Controller
 
         $row_SaldoP = DB::select($query_SaldoP);
 
-        return view('control.carga_gc', compact('row_Diario','row_Mensual','row_Total', 'row_SaldoP', 'vendedor'));
+        $query_saldo_prov = "SELECT * FROM saldo_prov where usuario = '$vendedor' $condicion2 ORDER BY 1 DESC";
+
+        $row_saldo_prov = DB::select($query_saldo_prov);
+
+        $users = $this->usersGC();
+
+        return view('control.carga_gc', compact('fecha_ini','fecha_fin','fecha_ini2','fecha_fin2','row_Total', 'row_SaldoP', 'vendedor','users','conFiltro','row_saldo_prov'));
+    }
+
+    public function getDatosSaldoProv($id)
+    {
+        $datos = DB::table('saldo_prov')->where('ID',$id)->first();
+
+        return view('control.edit_saldo_prov',compact('datos'));
+    }
+
+    public function editSaldoProv(Request $request)
+    {
+        $id = $request->ID;
+        $hora = date('H:i:s', strtotime($request->fecha_anterior));
+        $data = [];
+        $data['usd'] = $request->usd;
+        $data['cotiz'] = $request->cotiz;
+        $data['ars'] = $request->ars;
+        $data['Day'] = $request->Day;
+
+        DB::table('saldo_prov')->where('ID',$id)->update($data);
+
+        \Helper::messageFlash('Carga GC','Saldo prov editado correctamente.');
+
+        return redirect()->back();
+    }
+
+    private function defaultFechaIni()
+    {
+      $hoy = strtotime(date('Y-m-d'));
+      $fecha_ini = strtotime('-7 days', $hoy);
+      $fecha_ini = date('Y-m-d', $fecha_ini);
+
+      return $fecha_ini;
+    }
+
+    private function usersGC()
+    {
+        $users = DB::table('saldo')->select('ex_usuario')->where('ex_usuario','LIKE',"%-GC")->groupBy('ex_usuario')->get();
+
+        return $users;
     }
 
     public function cargaGC_store(Request $request)
