@@ -115,6 +115,7 @@ Route::group(['middleware' => ['login']], function()
 
   // Rutas para stock
   Route::resource('stock', 'StockController');
+  Route::get('falta_cargar', 'StockController@indexFaltaCargar');
   Route::get('catalogo_link_ps_store', 'StockController@indexLinkPsStore');
   Route::get('productos_catalogo', 'StockController@indexCatalogueProduct');
   Route::get('publicaciones_secundarias_ml', 'StockController@publicacionesSecundariasML');
@@ -129,6 +130,8 @@ Route::group(['middleware' => ['login']], function()
     // P1
     Route::get('stock_insertar_codigo','StockController@createCode');
     Route::post('stock_insertar_codigo','StockController@storeCode');
+    Route::get('stock_insertar_codigo_control','StockController@createCodeControl');
+    Route::post('stock_insertar_codigo_control','StockController@storeCodeControl');
     Route::get('validaCodigo','StockController@validaCodigo');
 
   });

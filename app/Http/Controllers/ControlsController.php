@@ -159,15 +159,6 @@ class ControlsController extends Controller
             $condicion1 .= " and DATE(Day) between '$request->fecha_ini' and '$request->fecha_fin'";
         }
 
-        $condicion2 = '';
-
-        $fecha_fin2 = isset($request->fecha_fin2) ? $request->fecha_fin2 : date('Y-m-d');
-        $fecha_ini2 = isset($request->fecha_ini2) ? $request->fecha_ini2 : $this->defaultFechaIni();
-
-        if (isset($request->fecha_ini2) && isset($request->fecha_fin2)) {
-            $condicion2 .= " and DATE(Day) between '$request->fecha_ini2' and '$request->fecha_fin2'";
-        }
-
         /*$query_Diario = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
 (SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' and DATE_FORMAT(Day, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')
 UNION ALL
@@ -206,13 +197,13 @@ ORDER BY consola, titulo ASC";
 
         $row_SaldoP = DB::select($query_SaldoP);
 
-        $query_saldo_prov = "SELECT * FROM saldo_prov where usuario = '$vendedor' $condicion2 ORDER BY 1 DESC";
+        $query_saldo_prov = "SELECT * FROM saldo_prov where usuario = '$vendedor' $condicion1 ORDER BY 1 DESC";
 
         $row_saldo_prov = DB::select($query_saldo_prov);
 
         $users = $this->usersGC();
 
-        return view('control.carga_gc', compact('fecha_ini','fecha_fin','fecha_ini2','fecha_fin2','row_Total', 'row_SaldoP', 'vendedor','users','conFiltro','row_saldo_prov'));
+        return view('control.carga_gc', compact('fecha_ini','fecha_fin','row_Total', 'row_SaldoP', 'vendedor','users','conFiltro','row_saldo_prov'));
     }
 
     public function getDatosSaldoProv($id)
@@ -774,17 +765,17 @@ ORDER BY consola, titulo ASC";
 
     private function getDatosEvolucion($filter)
     {
-        $datos = DB::table('ventas_cobro')
+        $datos = DB::table('ventas')
         ->select(
-            'ventas_cobro.ID',
-            DB::raw("Date_Format(ventas_cobro.Day,'%d-%m-%Y') as Day"),
-            DB::raw('AVG(precio) as precio'),
+            DB::raw("COUNT(*) AS Q"),
+            DB::raw("DATE(ventas.Day) as Day"),
+            DB::raw('(SUM(precio)/COUNT(*)) as precio'),
             'ventas.slot',
             'stock.titulo',
             'stock.consola'
         )
-        ->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
-        ->leftjoin('stock','ventas.stock_id','=','stock.ID');
+        ->leftjoin('stock','ventas.stock_id','=','stock.ID')
+        ->leftjoin(DB::raw("(SELECT ventas_id, SUM(precio) AS precio FROM ventas_cobro GROUP BY ventas_id) AS ventas_cob"),'ventas_cob.ventas_id','=','ventas.ID');
         
 
         if ($filter['titulo'] != '') {
@@ -793,7 +784,7 @@ ORDER BY consola, titulo ASC";
         if ($filter['consola'] != '') {
             $datos->where('stock.consola',$filter['consola']);
         }
-        if ($filter['slot'] != '' && $filter['consola'] == 'Ps4') {
+        if ($filter['slot'] != '') {
             $datos->where('ventas.slot',$filter['slot']);
         }
 
@@ -807,11 +798,12 @@ ORDER BY consola, titulo ASC";
     {
         $titulos = DB::table('ventas_cobro')
         ->select(
-            'stock.titulo'
+            DB::raw("CONCAT(stock.titulo,' (',stock.consola,')') AS titulo")
         )
         ->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
         ->leftjoin('stock','ventas.stock_id','=','stock.ID')
         ->groupBy('stock.titulo')
+        ->groupBy('stock.consola')
         ->orderBy('stock.titulo','ASC');
 
         return $titulos;

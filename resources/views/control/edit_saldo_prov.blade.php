@@ -9,40 +9,49 @@
 			<form action="{{ url('edit_saldo_prov') }}" method="post" id="form_saldo_prov">
 				{{ csrf_field() }}
 				<input type="hidden" name="ID" value="{{ $datos->ID }}">
-				<div class="form-group">
-					<label for="">USD</label>
-					<div class="input-group">
-						<input type="number" name="usd" value="{{ $datos->usd }}" id="usd" class="form-control">
-						<span class="input-group-addon">Antes: {{ $datos->usd }}</span>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="">USD</label>
+							<div class="input-group">
+								<input type="number" name="usd" value="{{ number_format($datos->usd,2,".","") }}" id="usd" class="form-control">
+								<span class="input-group-addon" style="font-size: 11px">Antes: {{ number_format($datos->usd,2,".","") }}</span>
+							</div>
+						</div>
 					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="">Cotiz</label>
-					<div class="input-group">
-						<input type="number" name="cotiz" value="{{ $datos->cotiz }}" id="cotiz" class="form-control">
-						<span class="input-group-addon">Antes: {{ $datos->cotiz }}</span>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="">Cotiz</label>
+							<div class="input-group">
+								<input type="number" name="cotiz" value="{{ number_format($datos->cotiz,2,".","") }}" id="cotiz" class="form-control">
+								<span class="input-group-addon" style="font-size: 11px">Antes: {{ number_format($datos->cotiz,2,".","") }}</span>
+							</div>
+						</div>
 					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="">ARS</label>
-					<div class="input-group">
-						<input type="number" name="ars" value="{{ $datos->ars }}" id="ars" class="form-control">
-						<span class="input-group-addon">Antes: {{ $datos->ars }}</span>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="">ARS</label>
+							<div class="input-group">
+								<input type="number" name="ars" value="{{ number_format($datos->ars,2,".","") }}" id="ars" class="form-control">
+								<span class="input-group-addon" style="font-size: 11px">Antes: {{ number_format($datos->ars,2,".","") }}</span>
+							</div>
+						</div>
 					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="">Fecha</label>
-					<div class="input-group">
-						<input type="date" name="Day" value="{{ date('Y-m-d',strtotime($datos->Day)) }}" id="Day" class="form-control">
-						<span class="input-group-addon">Antes: {{ date('Y-m-d',strtotime($datos->Day)) }}</span>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="">Fecha</label>
+							<div class="input-group">
+								<input type="date" name="Day" value="{{ date('Y-m-d',strtotime($datos->Day)) }}" id="Day" class="form-control">
+								<span class="input-group-addon">Antes: {{ date('d-m-Y',strtotime($datos->Day)) }}</span>
+							</div>
+							<input type="hidden" name="fecha_anterior" value="{{ $datos->Day }}">
+						</div>
 					</div>
-					<input type="hidden" name="fecha_anterior" value="{{ $datos->Day }}">
+
+					<button type="button" class="btn btn-primary btn-block" id="btnSubmit">Editar</button>
+
 				</div>
-				
-				<button type="button" class="btn btn-primary btn-block" id="btnSubmit">Editar</button>
 			</form>
 		</div>
 		<div class="col-md-3"></div>
@@ -67,5 +76,12 @@
 				$('#alert-saldo_prov').fadeIn();
 			}
 		});
+
+		$("#usd, #cotiz").keyup(function() {
+		    m1 = document.getElementById("usd").value;
+		    m2 = document.getElementById("cotiz").value;
+		    r = m1*m2;
+		    document.getElementById("ars").value = r;
+		  });
 	});
 </script>

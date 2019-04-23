@@ -91,6 +91,23 @@ class StockController extends Controller
       ));
     }
 
+    public function createCodeControl(){
+
+      $giftCards = $this->wp_p->stockGiftCard();
+
+      $rowsAA = array();
+
+      foreach ($giftCards as $gifts) {
+        $rowsAA[]=$gifts->nombre;
+      }
+
+      $giftCards=$rowsAA;
+      $giftCards = json_encode($giftCards);
+      return view('stock.store_code_control',compact(
+        'giftCards'
+      ));
+    }
+
     public function createCodeG(){
       $cotiz = 25;
 
@@ -215,6 +232,77 @@ class StockController extends Controller
           array_push($stocks,$stockArr);
         }
         $saving = $this->st->storeCodes($stocks);
+
+        // Mensaje de notificacion
+        \Helper::messageFlash('Stock','Código guardado');
+        return redirect('stock');
+
+      } catch (\Exception $e) {
+
+        return redirect()->back()->withInput()->withErrors(['Intentelo nuevamente']);
+      }
+
+    }
+
+    public function storeCodeControl(Request $request)
+    {
+
+
+      // Mensajes de alerta
+      $msgs = [
+        'clientes_id1.required' => 'Intentelo nuevamente 1',
+        'clientes_id2.required' => 'Intentelo nuevamente 2 ',
+        'medio_pago.required' => 'Medio de pago requerido',
+        'costo_usd.required' => 'Costo en USD requerido',
+        'codes.required' => 'Codigos requeridos',
+        'codes.array' => 'Ingrese codigos validos'
+      ];
+      // Validamos
+      $v = Validator::make($request->all(), [
+          'clientes_id1' => 'required',
+          'clientes_id2' => 'required',
+          'medio_pago' => 'required',
+          'costo_usd' => 'required',
+          'codes' => 'required|array'
+      ], $msgs);
+
+      // Si hay errores retornamos a la pantalla anterior con los mensajes
+      if ($v->fails())
+      {
+          return redirect()->back()->withInput()->withErrors($v->errors());
+      }
+
+      foreach ($request->codes as $codes){
+
+          $locate = DB::table('stock_gc_codes_control')->where('code',$codes)->first();
+
+
+          if(!empty($locate)){
+              return redirect()->back()->withInput()->withErrors('El código '. $codes . ' Esta duplicado o ya se encuentra en la Base de datos, por favor verifique e intente de nuevo.');
+          } else {
+
+          }
+      }
+
+
+
+      try {
+
+        $stocks = [];
+
+
+        $stockArr['titulo'] = $request->clientes_id1;
+        $stockArr['consola'] = $request->clientes_id2;
+        $stockArr['medio_pago'] = $request->medio_pago;
+        $stockArr['costo_usd'] = $request->costo_usd;
+        $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
+        $stockArr['code_prov'] = 'P1';
+
+        foreach ($request->codes as $code) {
+          $stockArr['code'] = $code;
+          array_push($stocks,$stockArr);
+        }
+        $saving = $this->st->storeCodesControl($stocks);
 
         // Mensaje de notificacion
         \Helper::messageFlash('Stock','Código guardado');
@@ -501,5 +589,17 @@ ORDER BY libre DESC";
       $fecha_ini = date('Y-m-d', $fecha_ini);
 
       return $fecha_ini;
+    }
+
+    public function indexFaltaCargar(Request $request)
+    {
+      $dia = isset($request->dia) ? $request->dia : 30;
+      $params = [];
+
+      array_push($params, $dia,$dia);
+
+      $datos = Stock::getDatosFaltaCargar($params);
+
+      return view('stock.index_falta_cargar', compact('datos','dia'));
     }
 }

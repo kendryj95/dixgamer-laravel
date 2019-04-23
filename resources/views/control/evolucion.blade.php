@@ -11,22 +11,15 @@
          <form action="{{ url('evolucion') }}" method="get" class="form-inline">
              <div class="form-group col-md-3">
                  <label for="titulo">Titulo:</label>
-                 <select name="titulo" class="selectpicker form-control" onchange="getData()" data-live-search="true" data-size="5" id="titulo">
+                 <select name="titulo" class="selectpicker form-control" onchange="formatTitleAndGetData()" data-live-search="true" data-size="5" id="titulo">
                    <option value="">Seleccione Titulo</option>
                    @foreach($titulos as $t)
-                    <option value="{{ $t->titulo }}">{{ str_replace('-', ' ', $t->titulo) }}</option>
+                    <option value="{{ explode(" (",$t->titulo)[0] }}">{{ str_replace('-', ' ', $t->titulo) }}</option>
                    @endforeach
                  </select>
              </div>
 
-             <div class="form-group col-md-3">
-                 <label for="consola">Consola:</label>
-                 <select name="consola" class="form-control" onchange="showSlot(this.value);getData()" id="consola">
-                   <option value="">Seleccione Consola</option>
-                   <option value="Ps3">Ps3</option>
-                   <option value="Ps4">Ps4</option>
-                 </select>
-             </div>
+             <input type="hidden" name="consola" id="consola">
 
              <div style="display: none" id="div-slot" class="form-group col-md-3">
                  <label for="slot">Slot:</label>
@@ -68,7 +61,7 @@
     getData();
   });*/
 
-  function generarChart(elem, data, labels)
+  function generarChart(elem, data, data2, labels)
   {
     var myChart = new Chart(elem, {
         type: 'line',
@@ -77,17 +70,21 @@
             datasets: [{
                 fill: false,
                 label: 'Precio',
+                yAxisID: 'A',
                 data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                pointBackgroundColor:[
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 2
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                // pointBackgroundColor:'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            },{
+                fill: false,
+                label: 'Cantidad',
+                yAxisID: 'B',
+                data: data2,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                // pointBackgroundColor:'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
             }]
         },
         options: {
@@ -95,6 +92,34 @@
               filler: {
                   propagate: true
               }
+            },
+            scales: {
+                yAxes: [
+                  {
+                    id: 'A',
+                    type: 'linear',
+                    position: 'left',
+                    ticks: {
+                        max: 5000,
+                        min: 0,
+                        stepSize: 500
+                    }
+                  },{
+                    id: 'B',
+                    type: 'linear',
+                    position: 'right'
+                  }
+                ],
+                xAxes: [{
+                    ticks: {
+                        min: '2017-07-01',
+                        max: '2020-07-31'
+                    },
+                    time: {
+                        unit: 'month',
+                        unitStepSize: 4
+                    },
+                }]
             }
         }
     });
@@ -119,18 +144,18 @@
         var datos = response;
         var labels = [];
         var data = [];
+        var data2 = [];
 
         datos.forEach(function(value){
           let l = value.Day;
-          console.log("precio:",value.precio,"day:",l,"titulo:",value.titulo);
           labels.push(l);
           data.push(value.precio);
+          data2.push(value.Q);
         });
 
         setTimeout(function(){
-          console.log(data, labels);
           resetCanvas();
-          generarChart(ctx,data,labels)
+          generarChart(ctx,data,data2,labels)
         }, 1000);
       },
       error: function (error) {
@@ -142,12 +167,26 @@
 
   function showSlot(consola)
   {
-    if (consola == 'Ps4') {
+    if (consola.indexOf('ps4') >= 0) {
       $('#div-slot').show();
     } else {
       $('#slot').val('');
       $('#div-slot').hide();
     }
+  }
+
+  function formatTitleAndGetData()
+  {
+    var select = document.getElementById('titulo');
+
+    var consola = (select.options[select.selectedIndex].text.substr(-4)).replace(")","");
+
+    document.getElementById('consola').value = consola.trim();
+
+    setTimeout(function(){
+      getData();
+      showSlot(consola.trim());
+    },200);
   }
 </script>
 

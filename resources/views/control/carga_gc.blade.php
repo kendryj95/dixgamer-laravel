@@ -1,11 +1,11 @@
 @extends('layouts.master-layouts')
 
-@section('title', 'Cargas de saldo para '. $vendedor . '-GC')
+@section('title', 'Cargas de saldo para '. str_replace('-GC', '', $vendedor) . '-GC')
 
 @section('container')
 
     <div class="container">
-	<h1>Cargas de saldo para {{ $vendedor }}-GC</h1>
+	<h1>Cargas de saldo para {{ str_replace('-GC', '', $vendedor) }}-GC</h1>
     <!-- InstanceBeginEditable name="body" -->
 		@if (Helper::validateAdministrator(session()->get('usuario')->Level))
       @foreach($users as $user)
@@ -126,46 +126,29 @@
       @if($row_saldo_prov)
       <h4>Listado Saldo Prov</h4>
 
-      <div class="row">
-          <form action="{{ url('carga_gc',$vendedor) }}" method="get" class="form-inline">
-              <div class="form-group col-md-4">
-                  <label for="fecha_ini2">Fecha Inicio:</label>
-                  <input type="date" name="fecha_ini2" id="fecha_ini2" value="{{ $fecha_ini2}}" class="form-control input-sm">
-              </div>
-
-              <div class="form-group col-md-4">
-                  <label for="fecha_fin2">Fecha Fin:</label>
-                  <input type="date" name="fecha_fin2" id="fecha_fin2" value="{{ $fecha_fin2}}" class="form-control input-sm">
-              </div>
-
-              <div class="form-group">
-                <label for="palabra">&nbsp;</label> <br>
-                <button type="submit" class="btn btn-default btn-sm">Buscar</button>
-
-              </div>
-          </form>
-      </div>
-
       <div class="table-responsive">
         <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
           <thead>
             <tr>
               <th>#</th>
+              <th>Fecha</th>
               <th>USD</th>
               <th>Cotiz</th>
               <th>ARS</th>
-              <th>Fecha</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
+            @php
+            $total_usd = 0;
+            $total_ars = 0;
+            @endphp
             @foreach($row_saldo_prov as $value)
             <tr>
               <td>{{ $value->ID }}</td>
-              <td>{{ $value->usd }}</td>
-              <td>{{ $value->cotiz }}</td>
-              <td>{{ $value->ars }}</td>
               @php
+                $total_usd += $value->usd;
+                $total_ars += $value->ars;
                 $dia = date('d', strtotime($value->Day));
                 $mes = date('n', strtotime($value->Day));
                 $mes = \Helper::getMonthLetter($mes);
@@ -173,11 +156,22 @@
                 $fecha = "$dia-$mes-$anio";
                 @endphp
               <td>{{ $fecha }}</td>
+              <td>{{ $value->usd }}</td>
+              <td>{{ $value->cotiz }}</td>
+              <td>{{ $value->ars }}</td>
               <th style="vertical-align: middle;text-align: center;">
                 <a href="javascript:void(0)" data-toggle="modal" data-target=".modalSaldoProv" onclick="getPageAjax('{{url("getDatosSaldoProv", $value->ID)}}','#modalSaldoProv')"><i class="fa fa-pencil"></i></a>
               </th>
             </tr>
             @endforeach
+            <tr>
+              <td></td>
+              <td></td>
+              <td><b>{{ $total_usd }}</b></td>
+              <td></td>
+              <td><b>{{ $total_ars }}</b></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>

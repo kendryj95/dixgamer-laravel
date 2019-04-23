@@ -388,6 +388,10 @@ class Stock extends Model
         return DB::table('stock')->insert($data);
     }
 
+    public function storeCodesControl($data){
+        return DB::table('stock_gc_codes_control')->insert($data);
+    }
+
 
     public function lastStockUser($user){
         return DB::select(DB::raw("
@@ -482,6 +486,52 @@ class Stock extends Model
             return $row_rsSTK;
 
         }
+    }
+
+    public function ScopeGetDatosFaltaCargar($query, $params)
+    {
+        $query = "SELECT 
+        vendidos.titulo, 
+        vendidos.consola, 
+        IFNULL(Q_Vta,0) Q_Vta, 
+        IFNULL(Q_Stock,0) Q_Stock, 
+        (IFNULL(Q_Vta,0) - IFNULL(Q_Stock,0)) AS Comprar 
+        FROM
+        (
+        SELECT 
+        titulo, 
+        consola, 
+        IFNULL(SUM(Q),0) as Q_Vta 
+        FROM
+        (SELECT 
+        * 
+        FROM 
+        (SELECT titulo, consola, COUNT(*) as Q from ventas left join stock on ventas.stock_id=stock.ID where ventas.stock_id IS NOT NULL and stock.code IS NOT NULL and ventas.Day >= DATE(NOW() - INTERVAL ? DAY) GROUP BY titulo, consola) as vtas
+        UNION ALL
+        SELECT 
+        * 
+        FROM 
+        (SELECT titulo, consola, COUNT(*) as Q FROM saldo where code IS NOT NULL and saldo.Day >= DATE(NOW() - INTERVAL ? DAY) GROUP BY titulo, consola) as saldo) as unidos
+        GROUP BY titulo, consola
+        ORDER BY consola DESC, titulo) as vendidos
+
+        LEFT JOIN
+
+        (SELECT titulo, consola, IFNULL(COUNT(*),0) AS Q_Stock
+        FROM stock
+        LEFT JOIN
+        (SELECT stock_id, COUNT(*) AS Q_vta
+        FROM ventas
+        GROUP BY stock_id
+        ORDER BY ID DESC) AS vendido
+        ON ID = stock_id
+        WHERE (consola != 'ps4') AND (consola != 'ps3')  AND (consola != 'xps') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot')
+        GROUP BY consola, titulo
+        ORDER BY consola DESC, titulo) as stk
+
+        ON vendidos.titulo=stk.titulo and vendidos.consola=stk.consola";
+
+        return DB::select($query, $params);
     }
 
 
