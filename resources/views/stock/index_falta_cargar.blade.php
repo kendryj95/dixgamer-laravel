@@ -9,6 +9,15 @@
 	<h1>Falta Cargar</h1>
 <div class="row">
     <form action="{{ url('falta_cargar') }}" method="get" class="form-inline">
+        <!-- <div class="form-group col-md-3">
+            <label for="dia">Titulo:</label>
+            <select name="" id="titulo-select" class="form-control select2-multiple" multiple>
+                <option value="s1">select 1</option>
+                <option value="s2">select 2</option>
+                <option value="s3">select 3</option>
+            </select>
+        </div> -->
+
         <div class="form-group col-md-1">
             <label for="dia">Días:</label>
             <input type="number" name="dia" id="dia" value="{{ $dia}}" class="form-control">
@@ -71,4 +80,12 @@
 
 
 
+
 @endsection
+<!-- <script>
+    $(document).ready(function() {
+        $( "#titulo-select" ).select2({
+            theme: "bootstrap"
+        });
+    });
+</script> -->

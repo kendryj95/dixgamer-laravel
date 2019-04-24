@@ -757,6 +757,7 @@ ORDER BY consola, titulo ASC";
         $filters['titulo'] = $request->titulo;
         $filters['consola'] = $request->consola;
         $filters['slot'] = $request->slot;
+        $filters['agrupar'] = $request->agrupar;
 
         $datos = $this->getDatosEvolucion($filters)->get();
 
@@ -776,6 +777,8 @@ ORDER BY consola, titulo ASC";
         )
         ->leftjoin('stock','ventas.stock_id','=','stock.ID')
         ->leftjoin(DB::raw("(SELECT ventas_id, SUM(precio) AS precio FROM ventas_cobro GROUP BY ventas_id) AS ventas_cob"),'ventas_cob.ventas_id','=','ventas.ID');
+
+        $groupBy = '';
         
 
         if ($filter['titulo'] != '') {
@@ -788,8 +791,16 @@ ORDER BY consola, titulo ASC";
             $datos->where('ventas.slot',$filter['slot']);
         }
 
-        $datos->groupBy('Day')
-        ->orderBy('Day','ASC');
+        if ($filter['agrupar'] == 'dia') {
+            $groupBy = "DATE(ventas.Day)";
+        } elseif ($filter['agrupar'] == 'semana') {
+            $groupBy = "WEEK(ventas.Day)";
+        } elseif ($filter['agrupar'] == 'mes') {
+            $groupBy = "MONTH(ventas.Day)";
+        }
+
+        $datos->groupBy(DB::raw($groupBy))
+        ->orderBy(DB::raw($groupBy),'ASC');
 
         return $datos;
     }

@@ -29,6 +29,15 @@
                      <option value="Secundario">Secundario</option>
                  </select>
              </div>
+
+             <div class="form-group col-md-3">
+                 <label for="agrupar">Agrupar por:</label>
+                 <select name="agrupar" id="agrupar" onchange="getData()" class="form-control">
+                     <option value="dia" selected>Día</option>
+                     <option value="semana">Semana</option>
+                     <option value="mes">Mes</option>
+                 </select>
+             </div>
          </form>
      </div>
 
@@ -130,6 +139,7 @@
     var titulo = $('#titulo').val();
     var consola = $('#consola').val();
     var slot = $('#slot').val();
+    var agrupar = $('#agrupar').val();
 
     $.ajax({
       url: '{{ url('data_evolucion') }}',
@@ -138,7 +148,8 @@
       data: {
         titulo: titulo,
         consola: consola,
-        slot: slot
+        slot: slot,
+        agrupar: agrupar
       },
       success: function (response){
         var datos = response;
@@ -179,7 +190,13 @@
   {
     var select = document.getElementById('titulo');
 
-    var consola = (select.options[select.selectedIndex].text.substr(-4)).replace(")","");
+    var consola = select.options[select.selectedIndex].text;
+
+    var index = consola.indexOf("(");
+
+    consola = consola.substring(index+1);
+
+    consola = (consola.replace(")","")).replace(" ","-");
 
     document.getElementById('consola').value = consola.trim();
 

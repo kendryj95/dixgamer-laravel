@@ -33,6 +33,7 @@
   <link href="{{ asset('css/personalizado.css') }}" rel="stylesheet">
   <link href="{{ asset('css/style.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('js/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
 
   <!-- <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=i7mex8wkvz9vr56kpy7j8liybj29rqaiqzj4cvwsznajz481"></script> -->
 
