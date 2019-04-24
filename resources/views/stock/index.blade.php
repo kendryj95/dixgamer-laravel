@@ -103,7 +103,12 @@
             </table>
             <div>
                 <div class="col-md-12">
-                    {{ $stocks->render() }}
+                    {{ $stocks->appends(
+                    [
+                      'column' => app('request')->input('column'),
+                      'word' => app('request')->input('word'),
+                    ]
+                    )->render() }}
                 </div>
             </div>
         </div>
