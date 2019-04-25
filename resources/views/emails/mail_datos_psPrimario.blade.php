@@ -223,7 +223,13 @@
                             <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
                           <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu juego para siempre.</strong></p>
                           <p>&gt; &#191;Puedo activar m&#225;s de una cuenta principal en mi consola? Si podes tener hasta 16 cuentas principales al mismo tiempo.</p>
-                          <p>&gt; &#191;Que significa activar como "Primario"? Que las descargas realizadas desde esta cuenta se van a poder utilizar desde todos los usuarios en tu PS4.</p></td>
+                          <p>&gt; &#191;Que significa activar como "Primario"? Que las descargas realizadas desde esta cuenta se van a poder utilizar desde todos los usuarios en tu PS4.</p>
+                          <br />
+                          <span style="font-size:22px; font-family: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #e74c3c;">Atenci&oacute;n!</span><br />
+                          <br />
+
+                          <span style="color: #e74c3c;">No modificar ningún dato de nuestra cuenta, si MODIFICAS la vamos a bloquear y vas a perder el acceso para siempre.</span>
+                      </td>
 					  </tr>
                            
                     </table>

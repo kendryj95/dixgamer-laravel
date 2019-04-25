@@ -209,7 +209,10 @@
                   <br />
                   <span style="font-size:22px; font-family: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #e74c3c;">Atenci&oacute;n!</span><br />
                   <br />
-                  <span style="color: #e74c3c;">No activar esta cuenta como primaria / principal nunca, si la ACTIVAS la vamos a bloquear y vas a perder el plus para siempre.</span></td>
+                  <span style="color: #e74c3c;">No activar esta cuenta como primaria / principal nunca, si la ACTIVAS la vamos a bloquear y vas a perder el plus para siempre.</span><br />
+
+                  <span style="color: #e74c3c;">No modificar ningún dato de nuestra cuenta, si MODIFICAS la vamos a bloquear y vas a perder el acceso para siempre.</span>
+              </td>
             </tr>
             <!-- 1 Column Text : BEGIN -->
             <tr>
