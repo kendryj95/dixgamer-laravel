@@ -490,6 +490,13 @@ class Stock extends Model
 
     public function ScopeGetDatosFaltaCargar($query, $params)
     {
+
+        $condicion_titulo = '';
+
+        if ($params[2] != "") { // Si el parametro de titulos es distinto a vacio para la condicion
+            $condicion_titulo .= "AND (titulo IN (?))";
+        }
+
         $query = "SELECT 
         vendidos.titulo, 
         vendidos.consola, 
@@ -525,7 +532,7 @@ class Stock extends Model
         GROUP BY stock_id
         ORDER BY ID DESC) AS vendido
         ON ID = stock_id
-        WHERE (consola != 'ps4') AND (consola != 'ps3')  AND (consola != 'xps') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot')
+        WHERE (consola != 'ps4') AND (consola != 'ps3')  AND (consola != 'xps') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot') $condicion_titulo
         GROUP BY consola, titulo
         ORDER BY consola DESC, titulo) as stk
 

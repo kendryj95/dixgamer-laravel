@@ -33,6 +33,7 @@
   <link href="{{ asset('css/personalizado.css') }}" rel="stylesheet">
   <link href="{{ asset('css/style.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('js/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
 
   <!-- <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=i7mex8wkvz9vr56kpy7j8liybj29rqaiqzj4cvwsznajz481"></script> -->
@@ -241,6 +242,7 @@
   <script type="text/javascript" src="{{asset('js/tinymce/tinymce.min.js')}}"></script>
   <script type="text/javascript" src="{{asset('js/tinymce/skins/custom/jquery.tinymce.min.js')}}"></script> 
   <script src="{{ asset('js/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
 
   <script>new Clipboard('.btn-copiador');</script>
 

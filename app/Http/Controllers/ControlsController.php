@@ -794,13 +794,13 @@ ORDER BY consola, titulo ASC";
         if ($filter['agrupar'] == 'dia') {
             $groupBy = "DATE(ventas.Day)";
         } elseif ($filter['agrupar'] == 'semana') {
-            $groupBy = "WEEK(ventas.Day)";
+            $groupBy = "YEAR(ventas.Day),WEEK(ventas.Day)";
         } elseif ($filter['agrupar'] == 'mes') {
-            $groupBy = "MONTH(ventas.Day)";
+            $groupBy = "YEAR(ventas.Day),MONTH(ventas.Day)";
         }
 
         $datos->groupBy(DB::raw($groupBy))
-        ->orderBy(DB::raw($groupBy),'ASC');
+        ->orderBy(DB::raw($groupBy));
 
         return $datos;
     }

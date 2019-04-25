@@ -107,7 +107,6 @@ class StockController extends Controller
         'giftCards'
       ));
     }
-
     public function createCodeG(){
       $cotiz = 25;
 
@@ -594,12 +593,30 @@ ORDER BY libre DESC";
     public function indexFaltaCargar(Request $request)
     {
       $dia = isset($request->dia) ? $request->dia : 30;
+      $titulos = isset($request->titulos) && count($request->titulos) > 0 ? $request->titulos : [];
       $params = [];
 
-      array_push($params, $dia,$dia);
+      $titles = [];
+
+      if (count($titulos) > 0) {
+        foreach ($titulos as $titulo) {
+          $titles[] = "'".$titulo."'";
+        }
+      }
+
+      $titles = implode(",", $titles);
+
+      array_push($params, $dia,$dia,$titles);
 
       $datos = Stock::getDatosFaltaCargar($params);
+      $titulos = [];
 
-      return view('stock.index_falta_cargar', compact('datos','dia'));
+      foreach ($datos as $value) {
+        if (!in_array($value->titulo, $titulos)) {
+          $titulos[] = $value->titulo;
+        }
+      }
+
+      return view('stock.index_falta_cargar', compact('datos','dia','titulos'));
     }
 }
