@@ -593,18 +593,20 @@ ORDER BY libre DESC";
     public function indexFaltaCargar(Request $request)
     {
       $dia = isset($request->dia) ? $request->dia : 30;
-      $titulos = isset($request->titulos) && count($request->titulos) > 0 ? $request->titulos : [];
+      $titulos_params = isset($request->titulos) && count($request->titulos) > 0 ? $request->titulos : [];
       $params = [];
 
       $titles = [];
 
-      if (count($titulos) > 0) {
-        foreach ($titulos as $titulo) {
-          $titles[] = "'".$titulo."'";
+      if (count($titulos_params) > 0) {
+        foreach ($titulos_params as $titulo) {
+          $titles[] = '"'.$titulo.'"';
         }
       }
 
       $titles = implode(",", $titles);
+
+      // dd($titles);
 
       array_push($params, $dia,$dia,$titles);
 
@@ -617,6 +619,6 @@ ORDER BY libre DESC";
         }
       }
 
-      return view('stock.index_falta_cargar', compact('datos','dia','titulos'));
+      return view('stock.index_falta_cargar', compact('datos','dia','titulos','titulos_params'));
     }
 }

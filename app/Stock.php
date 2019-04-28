@@ -494,7 +494,7 @@ class Stock extends Model
         $condicion_titulo = '';
 
         if ($params[2] != "") { // Si el parametro de titulos es distinto a vacio para la condicion
-            $condicion_titulo .= "AND (titulo IN (?))";
+            $condicion_titulo .= "WHERE vendidos.titulo IN ($params[2])";
         }
 
         $query = "SELECT 
@@ -532,11 +532,11 @@ class Stock extends Model
         GROUP BY stock_id
         ORDER BY ID DESC) AS vendido
         ON ID = stock_id
-        WHERE (consola != 'ps4') AND (consola != 'ps3')  AND (consola != 'xps') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot') $condicion_titulo
+        WHERE (consola != 'ps4') AND (consola != 'ps3')  AND (consola != 'xps') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot')
         GROUP BY consola, titulo
         ORDER BY consola DESC, titulo) as stk
 
-        ON vendidos.titulo=stk.titulo and vendidos.consola=stk.consola";
+        ON vendidos.titulo=stk.titulo and vendidos.consola=stk.consola $condicion_titulo";
 
         return DB::select($query, $params);
     }

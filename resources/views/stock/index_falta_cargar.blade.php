@@ -11,9 +11,15 @@
     <form action="{{ url('falta_cargar') }}" method="get" class="form-inline">
         <div class="form-group col-md-3">
             <label for="dia">Titulo:</label>
-            <select name="titulos[]" id="titulo-select" class="form-control select2-multiple" multiple>
+            <select name="titulos[]" id="titulo-select" value="" class="form-control select2-multiple" multiple>
                 @foreach($titulos as $titulo)
-                <option value="{{ $titulo }}">{{ str_replace("-", " ", $titulo) }}</option>
+                @php
+                $selected = '';
+                if (in_array($titulo, $titulos_params)) {
+                    $selected = 'selected';
+                }
+                @endphp
+                <option value="{{ $titulo }}" {{ $selected }}>{{ str_replace("-", " ", $titulo) }}</option>
                 @endforeach
             </select>
         </div>
@@ -85,10 +91,13 @@
 
 @section('scripts')
 <script>
+    {{--var titulos = JSON.parse('{!!$titulos_params!!}');--}}
     $(document).ready(function() {
         $( "#titulo-select" ).select2({
             theme: "bootstrap"
         });
+
+        // $( "#titulo-select" ).val(titulos).trigger('change');
     });
 </script>
 @stop
