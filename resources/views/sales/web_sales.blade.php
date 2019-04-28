@@ -48,8 +48,12 @@
                         <td title="{{ str_replace('-', ' ', $ventasweb->producto)  }}({{ $ventasweb->consola }})">{{ str_replace('-', ' ', $ventasweb->producto)  }} ({{ $ventasweb->consola }})
 
                             @if($ventasweb->cliente_email)
+
+                            @php
+                            $params_gift = strpos($ventasweb->producto, 'gift-card') !== false ? '?gift=si' : ''; // Se utilizará si el producto es una gift card.
+                            @endphp
                             
-                            <a title="Asignar" class="btn btn-info btn-xs" type="button" href="{{ url('salesInsertWeb', [$ventasweb->order_item_id, $ventasweb->producto, $ventasweb->consola, ucwords($ventasweb->slot)]) }}"><i class="fa fa-plus" aria-hidden="true"></i> asignar</a>
+                            <a title="Asignar" class="btn btn-info btn-xs" type="button" href="{{ url('salesInsertWeb', [$ventasweb->order_item_id, $ventasweb->producto, $ventasweb->consola, ucwords($ventasweb->slot)]) . $params_gift }}"><i class="fa fa-plus" aria-hidden="true"></i> asignar</a>
                             @endif
                             @if($ventasweb->slot == 'secundario')
                             <span class="label label-danger" style="opacity:0.7">2°</span>

@@ -161,9 +161,11 @@ class SalesController extends Controller
         return $data;
     }
 
-    public function salesInsertWeb($oii, $titulo, $consola, $slot = '')
+    public function salesInsertWeb(Request $request,$oii, $titulo, $consola, $slot = '')
     {
         $link_PS = '';
+        $giftConStock = false;
+        $data_gifts = [];
 
         $existe_OII = DB::table('ventas')
                         ->select(
@@ -181,6 +183,7 @@ class SalesController extends Controller
         }
 
         $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+
 
         $venta = DB::table('cbgw_woocommerce_order_items AS wco')
                             ->select(
@@ -214,25 +217,35 @@ class SalesController extends Controller
                             ->first();
 
         if (!is_array($row_rsSTK)) {
-            $producto_catalogo = $venta->_product_id;
 
-            $rsLink_PS = DB::table('cbgw_postmeta')
-                            ->select(
-                                DB::raw("GROUP_CONCAT(meta_value) as meta_value")
-                            )
-                            ->where('post_id', $producto_catalogo)
-                            ->where('meta_key', 'link_ps')
-                            ->groupBy('post_id')
-                            ->first();
+            if (isset($request->gift) && $request->gift == 'si') { // Validaré si el producto es una gift
+                $valor_gift = explode("-", $titulo)[2];
 
-            $link_PS = '';
-            
-            if ($rsLink_PS) {
+                $data_gifts = $this->giftCardOrder($valor_gift);
                 
-                $link_PS = $rsLink_PS->meta_value;
             }
 
+            if (count($data_gifts) > 0) {
+                $giftConStock = true;
+            } else {
+                $producto_catalogo = $venta->_product_id;
 
+                $rsLink_PS = DB::table('cbgw_postmeta')
+                                ->select(
+                                    DB::raw("GROUP_CONCAT(meta_value) as meta_value")
+                                )
+                                ->where('post_id', $producto_catalogo)
+                                ->where('meta_key', 'link_ps')
+                                ->groupBy('post_id')
+                                ->first();
+
+                $link_PS = '';
+                
+                if ($rsLink_PS) {
+                    
+                    $link_PS = $rsLink_PS->meta_value;
+                }
+            }
         }
 
         $email_pedido = $venta->email;
@@ -253,7 +266,7 @@ class SalesController extends Controller
         }
 
 
-        if (!is_array($row_rsSTK)) {
+        if (!is_array($row_rsSTK) && !$giftConStock) {
             return view('sales.salesInsertWeb', [
                 "row_rsSTK" => $row_rsSTK,
                 "venta" => $venta,
@@ -264,32 +277,13 @@ class SalesController extends Controller
                 "linkPS" => $link_PS
             ]);
         } else {
-            $date = date('Y-m-d H:i:s');
-            $order_id_ml = '';
-            $slot_def = '';
+            
+            $clientes_id = $existEmailCliente->ID;
             $medio_cobro = '';
             $ref_cobro = '';
-            $medio_venta = '';
             $multiplo = '';
 
             if ($venta) {
-                $clientes_id = $existEmailCliente->ID;
-                $stock_id = $row_rsSTK[0]->ID_stk;
-                $order_item_id = $venta->order_item_id;
-
-                $cons = $row_rsSTK[0]->consola;
-
-                //Si es una vta de ps4 o plus slot por ML asigno el slot desde el parametro GET
-                //if ((($row_rsClient['user_id_ml']) && ($row_rsClient['user_id_ml'] != "")) && (($cons === "ps4") or ($row_rsClient['producto'] === "plus-12-meses-slot"))): $slot = ucwords($colname_rsSlot);
-                //Si es una vta de ps4 o plus slot que NO ES de ML asigno el slot desde la consulta SQL
-                //elseif --> antes de escapar el IF anterior que iba primero
-
-                if (($cons === "ps4") or ($row_rsSTK[0]->titulo === "plus-12-meses-slot")): $slot_def = ucwords($slot); $estado = "pendiente";
-                elseif ($cons === "ps3"): $slot_def = "Primario"; $estado = "pendiente";
-
-                //Si no cumple con ninguno de los parametros anteriores seguramente se trata de una venta de Gift Card y el slot se define en "No"
-                else: $slot_def = "No"; $estado = "listo";
-                endif;
 
                 // Defino el multiplo de la comisión por defecto de MP que es 5,38 %
                 $multiplo = "0.0538";
@@ -305,64 +299,76 @@ class SalesController extends Controller
                 // si es por banco cambio multiplo de comisión a 0%
                 elseif (strpos($venta->_payment_method, 'bacs') !== false): $medio_cobro = "Banco"; $multiplo = "0.00";
                 elseif (strpos($venta->_payment_method, 'yith') !== false): $medio_cobro = "Fondos"; $multiplo = "0.00";
+                // si es paypal va 7%
+                elseif (strpos($venta->_payment_method, 'paypal') !== false): $medio_cobro = "PayPal"; $multiplo = "0.07";
                 else: $medio_cobro = "No encontrado";
                 endif;
                 
 
                 // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
                 if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
-                $medio_venta = "MercadoLibre";
-                $order_id_ml = $venta->order_id_ml;
                 $ref_cobro = $venta->ref_cobro_3;
-                $multiplo = "0.13";
                 } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
                 //2017-08 Paso el ref_cobro_2 como primer alternativa para ver si se reducen los errores de REF DE COBRO WEB
-                $medio_venta = "Web";
                     if (($venta->ref_cobro_2) && ($venta->ref_cobro_2 != "")): $ref_cobro = $venta->ref_cobro_2;
                     elseif (($venta->ref_cobro) && ($venta->ref_cobro != "")): $ref_cobro = $venta->ref_cobro;
+                    elseif (($venta->ref_cobro_3) && ($venta->ref_cobro_3 != "")): $ref_cobro = $venta->ref_cobro_3;
                     endif;
                     
                 }
-
-                $order_id_web = $venta->order_id;
+                
                 $precio = $venta->precio;
                 $comision = ($multiplo * $venta->precio);
-
-                $data = [];
-                $data['clientes_id'] = $clientes_id;
-                $data['stock_id'] = $stock_id;
-                $data['order_item_id'] = $order_item_id;
-                $data['cons'] = $cons;
-                $data['slot'] = $slot_def;
-                $data['medio_venta'] = $medio_venta;
-                
-                if(($order_id_ml) && ($order_id_ml != "")){
-
-                    $data['order_id_ml'] = $order_id_ml;
-                }
-                $data['order_id_web'] = $order_id_web;
-                $data['estado'] = $estado;
-                $data['Day'] = $date;
-                $data['usuario'] = session()->get('usuario')->Nombre;
+                $precio_original = $precio;
+                $comision_original = $comision;
 
                 DB::beginTransaction();
 
                 try {
-                    DB::table('ventas')->insert($data);
-                    $ventaid = DB::getPdo()->lastInsertId();
 
-                    $data = [];
-                    $data['ventas_id'] = $ventaid;
-                    $data['medio_cobro'] = $medio_cobro;
-                    if ("" !== trim($ref_cobro)) {
-                        $data['ref_cobro'] = $ref_cobro;
+                    if (!$giftConStock) { // Si el producto no es una gift quiere decir esa variable.
+                        $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente, $slot);
+                        DB::table('ventas')->insert($data);
+                        $ventaid = DB::getPdo()->lastInsertId();
+
+                        $data = [];
+                        $data['ventas_id'] = $ventaid;
+                        $data['medio_cobro'] = $medio_cobro;
+                        if ("" !== trim($ref_cobro)) {
+                            $data['ref_cobro'] = $ref_cobro;
+                        }
+                        $data['precio'] = $precio;
+                        $data['comision'] = $comision;
+                        $data['Day'] = date('Y-m-d H:i:s');
+                        $data['usuario'] = session()->get('usuario')->Nombre;
+
+                        DB::table('ventas_cobro')->insert($data);
+                    } else {
+                        foreach ($data_gifts as $value) { // Varias gifts se van a registrar
+
+                            $row_rsSTK = Stock::StockDisponible($value->consola,$value->titulo, '');
+                            $partes = count($data_gifts);
+                            $precio = $precio_original / $partes;
+                            $comision = $comision_original / $partes;
+
+                            $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente);
+                            DB::table('ventas')->insert($data);
+                            $ventaid = DB::getPdo()->lastInsertId();
+
+                            $data = [];
+                            $data['ventas_id'] = $ventaid;
+                            $data['medio_cobro'] = $medio_cobro;
+                            if ("" !== trim($ref_cobro)) {
+                                $data['ref_cobro'] = $ref_cobro;
+                            }
+                            $data['precio'] = $precio;
+                            $data['comision'] = $comision;
+                            $data['Day'] = date('Y-m-d H:i:s');
+                            $data['usuario'] = session()->get('usuario')->Nombre;
+
+                            DB::table('ventas_cobro')->insert($data);
+                        }
                     }
-                    $data['precio'] = $precio;
-                    $data['comision'] = $comision;
-                    $data['Day'] = $date;
-                    $data['usuario'] = session()->get('usuario')->Nombre;
-
-                    DB::table('ventas_cobro')->insert($data);
 
                     DB::commit();
 
@@ -377,6 +383,155 @@ class SalesController extends Controller
             }
         }
 
+    }
+
+    private function dataSale($venta, $row_rsSTK, $existEmailCliente, $slot = '')
+    {
+        $date = date('Y-m-d H:i:s');
+        $clientes_id = $existEmailCliente->ID;
+        $stock_id = $row_rsSTK[0]->ID_stk;
+        $order_item_id = $venta->order_item_id;
+        $order_id_ml = '';
+        $slot_def = '';
+        $medio_venta = '';
+
+        $cons = $row_rsSTK[0]->consola;
+
+        //Si es una vta de ps4 o plus slot por ML asigno el slot desde el parametro GET
+        //if ((($row_rsClient['user_id_ml']) && ($row_rsClient['user_id_ml'] != "")) && (($cons === "ps4") or ($row_rsClient['producto'] === "plus-12-meses-slot"))): $slot = ucwords($colname_rsSlot);
+        //Si es una vta de ps4 o plus slot que NO ES de ML asigno el slot desde la consulta SQL
+        //elseif --> antes de escapar el IF anterior que iba primero
+
+        if (($cons === "ps4") or ($row_rsSTK[0]->titulo === "plus-12-meses-slot")): $slot_def = ucwords($slot); $estado = "pendiente";
+        elseif ($cons === "ps3"): $slot_def = "Primario"; $estado = "pendiente";
+
+        //Si no cumple con ninguno de los parametros anteriores seguramente se trata de una venta de Gift Card y el slot se define en "No"
+        else: $slot_def = "No"; $estado = "listo";
+        endif;
+
+        // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
+        if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
+        $medio_venta = "MercadoLibre";
+        $order_id_ml = $venta->order_id_ml;
+        } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
+        $medio_venta = "Web";
+        }
+
+        $order_id_web = $venta->order_id;
+
+        $data = [];
+        $data['clientes_id'] = $clientes_id;
+        $data['stock_id'] = $stock_id;
+        $data['order_item_id'] = $order_item_id;
+        $data['cons'] = $cons;
+        $data['slot'] = $slot_def;
+        $data['medio_venta'] = $medio_venta;
+        
+        if(($order_id_ml) && ($order_id_ml != "")){
+
+            $data['order_id_ml'] = $order_id_ml;
+        }
+        $data['order_id_web'] = $order_id_web;
+        $data['estado'] = $estado;
+        $data['Day'] = $date;
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        return $data;
+    }
+
+    private function giftCardOrder($gift)
+    {
+        $data_gifts = [];
+        switch ($gift) {
+            case '30':
+                $gifts = [
+                    "g_10" => $this->giftStockAvalaible(10),
+                    "g_20" => $this->giftStockAvalaible(20)
+                ];
+                if ($gifts["g_10"]->Q > 0 && $gifts["g_20"]->Q > 0) { // Si hay gift de 10 y de 20 hay cantidad en stock.
+                    $data_gifts = [
+                        $gifts["g_10"],
+                        $gifts["g_20"]
+                    ];
+                } elseif ($gifts["g_10"] > 2) { // Si hay más de 2 gift de 10 usd
+                    ## Se registrará 3 veces para 30 usd.
+                    for ($i=0; $i <= 2 ; $i++) { 
+                        $data_gifts[] = $gifts["g_10"];
+                    }
+                }
+                break;
+            
+            case '35':
+                $gifts = [
+                    "g_10" => $this->giftStockAvalaible(10),
+                    "g_25" => $this->giftStockAvalaible(25)
+                ];
+                if ($gifts["g_10"]->Q > 0 && $gifts["g_25"]->Q > 0) { // Si hay gift de 10 y de 25 hay cantidad en stock.
+                    $data_gifts = [
+                        $gifts["g_10"],
+                        $gifts["g_25"]
+                    ];
+                } 
+                break;
+
+            case '40':
+                $gifts = [
+                    "g_20" => $this->giftStockAvalaible(20),
+                    "g_10" => $this->giftStockAvalaible(10)
+                ];
+                if ($gifts["g_20"]->Q > 1) { // Si hay más de 1 gift de 20 en stock.
+                    for ($i=0; $i <= 1 ; $i++) { 
+                        $data_gifts[] = $gifts["g_20"];
+                    }
+                } elseif ($gifts["g_10"]->Q > 3) { // Si hay más de 3 gift de 10 en stock.
+                    for ($i=0; $i <= 3 ; $i++) { 
+                        $data_gifts[] = $gifts["g_10"];
+                    }
+                } 
+                break;
+            case '45':
+                $gifts = [
+                    "g_20" => $this->giftStockAvalaible(20),
+                    "g_25" => $this->giftStockAvalaible(25)
+                ];
+                if ($gifts["g_20"]->Q > 0 && $gifts["g_25"]->Q > 0) { // Si hay gift de 20 y de 25 hay cantidad en stock.
+                    $data_gifts = [
+                        $gifts["g_20"],
+                        $gifts["g_25"]
+                    ];
+                } 
+                break;
+
+            case '55':
+                $gifts = [
+                    "g_10" => $this->giftStockAvalaible(10),
+                    "g_20" => $this->giftStockAvalaible(20),
+                    "g_25" => $this->giftStockAvalaible(25)
+                ];
+                if ($gifts["g_10"]->Q > 0 && $gifts["g_20"]->Q > 0 && $gifts["g_25"]->Q > 0) { // Si gift de 10 y de 20 y de 25 hay cantidad en stock.
+                    $data_gifts = [
+                        $gifts["g_10"],
+                        $gifts["g_20"],
+                        $gifts["g_25"]
+                    ];
+                } 
+                break;
+        }
+
+        return $data_gifts;
+    }
+
+    private function giftStockAvalaible($costo)
+    {
+        return DB::table('stock')->select(
+            'titulo',
+            'costo_usd',
+            'consola',
+            DB::raw("COUNT(titulo) AS Q")
+        )
+        ->where('titulo','LIKE','gift%')
+        ->where('costo_usd',$costo)
+        ->groupBy('titulo')->first();
     }
 
     public function verificarOrderItemId($oii, $clientes_id)
