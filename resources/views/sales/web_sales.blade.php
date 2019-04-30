@@ -91,6 +91,12 @@
                             @elseif(strpos($ventasweb->_payment_method, 'yith_funds') !== false)
                                 <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
                                 <?php $text = 'Fdos'; ?>
+                            @elseif(strpos($ventasweb->_payment_method, 'paypal') !== false)
+                                <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
+                                <?php $text = 'PayPal'; ?>
+                            @elseif(strpos($ventasweb->_payment_method, 'payulatam') !== false)
+                                <?php $color = \Helper::medioCobroColor($ventasweb->_payment_method) ?>
+                                <?php $text = 'PayU'; ?>
                             @endif
                             <span class="label label-{{ $color }}" style="font-weight:400; opacity:0.7;">{{ $text }}</span>
                             @if ($ventasweb->_qty > 1)

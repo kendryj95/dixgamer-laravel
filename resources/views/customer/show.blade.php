@@ -323,6 +323,7 @@
               if (strpos($dataCustomer->medio_cobro,'Banco') !== false): $text2 = 'Bco'; $color2 = 'default';
               elseif (strpos($dataCustomer->medio_cobro,'Ticket') !== false): $text2 = 'Cash'; $color2 = 'success';
               elseif (strpos($dataCustomer->medio_cobro,'MP') !== false): $text2 = 'MP'; $color2 = 'primary';
+              elseif (strpos($dataCustomer->medio_cobro,'PayPal') !== false): $text2 = 'PP'; $color2 = 'primary';
               elseif (strpos($dataCustomer->medio_cobro,'Fondo') !== false): $text2 = 'F'; $color2 = 'normal';
               endif;
             ?>
@@ -459,20 +460,31 @@
                         style='color:#CFCFCF; font-size:0.7em;'
                         class='caption text-center'>
                           {{$valor}}
+                          @php
+                          $link_ref_cobro = "";
+                          $text_ref_cobro = "";
+                          if (strpos($dataCustomer->medio_cobro, "MP") !== false) {
+                            $link_ref_cobro = "https://www.mercadopago.com.ar/activities?q=$valor";
+                            $text_ref_cobro = "MP";
+                          } else {
+                            $link_ref_cobro = "https://www.paypal.com/activity/payment/$valor";
+                            $text_ref_cobro = "PP";
+                          }
+                          @endphp
                           <a
                           style='padding: 0'
-                          title='ver cobro en MP'
+                          title='ver cobro en {{$text_ref_cobro}}'
                           target='_blank'
                           class='btn-xs'
                           type='button'
-                          href='https://www.mercadopago.com.ar/activities?q={{$valor}}'>
+                          href='{{$link_ref_cobro}}'>
                             <i aria-hidden='true' class='fa fa-external-link'></i>
                           </a>
                           @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
                           <a
                           style='padding: 0'
                             class='btn-xs'
-                            title='Actualizar importes de MP'
+                            title='Actualizar importes de {{$text_ref_cobro}}'
                             type='button'
                             href='{{ url("update_amounts", [$valor, $customer->ID]) }}'>
                             <i class='fa fa-refresh' aria-hidden='true'></i>

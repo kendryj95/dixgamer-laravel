@@ -184,6 +184,8 @@ class Helper
       elseif (strpos($medio, 'atm') !== false): $color = "success";
       elseif (strpos($medio, 'bacs') !== false): $color = "default";
       elseif (strpos($medio, 'yith_funds') !== false): $color = "normal";
+      elseif (strpos($medio, 'paypal') !== false): $color = "primary";
+      elseif (strpos($medio, 'payulatam') !== false): $color = "warning";
       else: $color = "danger";
       endif;
 
