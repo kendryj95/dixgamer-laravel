@@ -80,6 +80,7 @@ Route::group(['middleware' => ['login']], function()
   // Rutas para cuentas
 
   Route::resource('cuentas', 'AccountController');
+  Route::post('notas_predefinidas', 'AccountController@notasPredefinidas');
   Route::get('listaYopmail', 'AccountController@listaYopmail');
   Route::get('change_email_dixgamer/{account_id}', 'AccountController@changeEmailDixgamer');
   Route::get('nota_siguejugando/{account_id}', 'AccountController@sigueJugando');

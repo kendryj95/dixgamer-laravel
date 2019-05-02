@@ -243,5 +243,17 @@ class Account extends Model
       ->orderBy('FINAL','DESC');
     }
 
+    public function getClientsSales($account_id)
+    {
+      return DB::table('ventas AS v')
+      ->select(
+        DB::raw("CONCAT('#',v.clientes_id,' ', CONCAT_WS(' ',c.nombre,c.apellido), ' ', s.titulo,' (',s.consola,')',IF(v.slot='Secundario',CONCAT(' (',v.slot,')'),'')) AS cliente"),
+        'v.clientes_id'
+      )
+      ->join('stock AS s','v.stock_id','=','s.ID')
+      ->join('clientes AS c','v.clientes_id','=','c.ID')
+      ->where('s.cuentas_id', $account_id);
+    }
+
 
 }

@@ -795,7 +795,7 @@
             <?php if ($sc->concepto == 'contra'):?>
             <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;"><i class="fa fa-key fa-fw"></i> Nueva contra: <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
 			<?php elseif ($sc->concepto == 'notas'):?>
-			<td colspan="4"><div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
+			<td colspan="4"><div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! html_entity_decode($sc->new_pass) !!} (<?php echo $sc->usuario;?>)</em></td>
 			<?php elseif ($sc->concepto == 'reset'):?>
             <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Reseteado por <?php echo $sc->usuario;?></em></td>
 			<?php elseif ($sc->concepto == 'resetear'):?>

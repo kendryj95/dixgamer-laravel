@@ -1340,7 +1340,10 @@ class AccountController extends Controller
 
     public function createNote($id){
       $account = $id;
-      return view('ajax.account.create_note',compact('account'));
+
+      $clientes_sales = $this->acc->getClientsSales($id)->get();
+
+      return view('ajax.account.create_note',compact('account','clientes_sales'));
     }
 
     // Guardar nota
@@ -1861,5 +1864,65 @@ class AccountController extends Controller
                     'accounts_notes',
                     'columns'
                   ));
+    }
+
+    public function notasPredefinidas(Request $request)
+    {
+      $opt = $request->opt; // Tipo de nota predefinida
+
+      switch ($opt) {
+        case 1: // Nota (cambiaron id)
+          $clientes = $request->clientes;
+          $account_id = $request->id;
+
+          if ($clientes === null) {
+            return redirect()->back()->withErrors(['No puedes generar la nota sin seleccionar algún cliente.']);
+          }
+
+          DB::beginTransaction();
+
+          try {
+
+            $nros_clientes = [];
+
+            ## INSERTAR EN CLIENTES NOTAS
+
+            foreach ($clientes as $cliente) {
+
+              $nros_clientes[] = '<a href="'.url('clientes',$cliente).'" class="alert-link" target="_blank">#'.$cliente.'</a>';
+
+              $data = [];
+              $data['clientes_id'] = $cliente;
+              $data['Notas'] = 'Posiblemente cambió el ID de la cuenta <a href="'.url('cuentas',$account_id).'" class="alert-link" target="_blank">#'.$account_id.'</a>';
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
+
+              DB::table('clientes_notas')->insert($data);
+            }
+
+            $data = [];
+            $data['cuentas_id'] = $account_id;
+            $data['Notas'] = 'Cambiaron el ID de la cuenta. Cliente(s): ' . implode(", ", $nros_clientes);
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('cuentas_notas')->insert($data);
+
+            DB::commit();
+
+            \Helper::messageFlash('Cuentas',"Nota generada predefinida",'alert_cuenta');
+
+
+            return redirect()->back();
+          } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);
+          }
+          break;
+        
+        default:
+          # code...
+          break;
+      }
     }
 }

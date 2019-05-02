@@ -262,7 +262,7 @@
                   <div
                     class="alert alert-warning"
                     style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; margin:0px; opacity: 0.9;">
-                    {{$note->Notas}}
+                    {!! html_entity_decode($note->Notas) !!}
                   </div>
 
                   
