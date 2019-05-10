@@ -252,7 +252,8 @@ class Account extends Model
       )
       ->join('stock AS s','v.stock_id','=','s.ID')
       ->join('clientes AS c','v.clientes_id','=','c.ID')
-      ->where('s.cuentas_id', $account_id);
+      ->where('s.cuentas_id', $account_id)
+      ->orderBy('v.ID', 'DESC');
     }
 
 
