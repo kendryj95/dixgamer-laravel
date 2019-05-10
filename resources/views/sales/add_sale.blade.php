@@ -43,11 +43,11 @@
                     <div class="input-group form-group">
                         <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
                         <select id="medio_venta" name="medio_venta" class="selectpicker form-control">
-                            <option selected value="MercadoLibre"
-                                    data-content="<span class='label label-warning'>MercadoLibre</span>">MercadoLibre
-                            </option>
-                            <option value="Web" data-content="<span class='label label-info'>Web</span>">Web</option>
+                            <option selected value="Web" data-content="<span class='label label-info'>Web</span>">Web</option>
                             <option value="Mail" data-content="<span class='label label-danger'>Mail</span>">Mail
+                            </option>
+                            <option value="MercadoLibre"
+                                    data-content="<span class='label label-warning'>MercadoLibre</span>">MercadoLibre
                             </option>
                         </select>
                     </div>
@@ -55,7 +55,7 @@
                     <div class="input-group form-group">
                         <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
                         <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
-                            <option selected value="MP"
+                            <option  value="MP"
                                     data-content="<span class='label label-primary'>MP</span>">MP
                             </option>
                             <option value="MP - Tarjeta"
@@ -64,7 +64,7 @@
                             <option value="MP - Ticket"
                                     data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket
                             </option>
-                            <option value="Banco"
+                            <option selected value="Banco"
                                     data-content="<span class='label label-info'>Banco</span>">
                                 Banco
                             </option>

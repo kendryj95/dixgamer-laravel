@@ -245,6 +245,29 @@ class Account extends Model
 
     public function getClientsSales($account_id)
     {
+
+      $query1 = DB::table('ventas AS v')
+      ->select(
+        DB::raw("CONCAT('#',v.clientes_id,' ', CONCAT_WS(' ',c.nombre,c.apellido), ' ', s.titulo,' (',s.consola,')',IF(v.slot='Secundario',CONCAT(' (',v.slot,')'),'')) AS cliente"),
+        'v.clientes_id'
+      )
+      ->join('stock AS s','v.stock_id','=','s.ID')
+      ->join('clientes AS c','v.clientes_id','=','c.ID')
+      ->where('s.cuentas_id', $account_id)
+      ->where('s.consola','ps4')
+      ->orderBy('v.ID','DESC');
+
+      $query2 = DB::table('ventas AS v')
+      ->select(
+        DB::raw("CONCAT('#',v.clientes_id,' ', CONCAT_WS(' ',c.nombre,c.apellido), ' ', s.titulo,' (',s.consola,')',IF(v.slot='Secundario',CONCAT(' (',v.slot,')'),'')) AS cliente"),
+        'v.clientes_id'
+      )
+      ->join('stock AS s','v.stock_id','=','s.ID')
+      ->join('clientes AS c','v.clientes_id','=','c.ID')
+      ->where('s.cuentas_id', $account_id)
+      ->whereNotIn('s.consola',['ps3','ps4'])
+      ->orderBy('v.ID','DESC');
+
       return DB::table('ventas AS v')
       ->select(
         DB::raw("CONCAT('#',v.clientes_id,' ', CONCAT_WS(' ',c.nombre,c.apellido), ' ', s.titulo,' (',s.consola,')',IF(v.slot='Secundario',CONCAT(' (',v.slot,')'),'')) AS cliente"),
@@ -253,7 +276,13 @@ class Account extends Model
       ->join('stock AS s','v.stock_id','=','s.ID')
       ->join('clientes AS c','v.clientes_id','=','c.ID')
       ->where('s.cuentas_id', $account_id)
-      ->orderBy('v.ID', 'DESC');
+      ->where('s.consola','ps3')
+      ->limit(4)
+      ->orderBy('v.ID','DESC')
+      ->union($query1)
+      ->union($query2);
+
+
     }
 
 

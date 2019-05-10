@@ -124,7 +124,7 @@ class SalesController extends Controller
             'ref_cobro'     => $request->ref_cobro,
             'precio'        => $request->precio,
             'comision'      => $request->comision,
-            'Day'           => \Carbon\Carbon::now('America/New_York'),
+            'Day'           => date('Y-m-d H:i:s'),
             'Notas'         => $request->Notas,
             'usuario'       => session()->get('usuario')->Nombre
         ]);

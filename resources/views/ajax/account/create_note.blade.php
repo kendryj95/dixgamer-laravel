@@ -1,8 +1,14 @@
+<style>
+  .select2-results__option[aria-selected=true] {
+    background: #cccccc !important;
+  }
+</style>
 <div class="container">
   <div class="row">
 
-    <div class="col-lg-5 col-md-5">
-        <h3 style="color:#000">Agregar Nota - Cuenta #{{$account}}</h3>
+    <div class="col-md-1 col-lg-1"></div>
+    <div class="col-lg-6 col-md-6">
+        <h3 style="color:#000;text-align: left">Agregar Nota - Cuenta #{{$account}}</h3>
 
       <form method="post" id="form_create_note" action="{{ url('guardar_nota_cuenta',[$account]) }}">
         {{ csrf_field() }}
@@ -14,9 +20,9 @@
         <button class="btn btn-warning btn-block" id="create_note" type="button">Guardar</button>
       </form>
     </div>
-    <div class="col-lg-2 col-md-2"></div>
-    <div class="col-lg-5 col-md-5">
-      <h3 style="color:#000">Notas Predefinidas</h3>
+    <div class="col-md-1 col-lg-1"></div>
+    <div class="col-lg-4 col-md-4">
+      <h3 style="color:#000;text-align: left">Notas Predefinidas</h3>
 
       <div class="form-group">
         
@@ -42,6 +48,7 @@
 
       </div>
     </div>
+    
 
   </div>
 </div>
