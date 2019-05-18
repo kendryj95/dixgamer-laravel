@@ -100,6 +100,11 @@
             plugins: {
               filler: {
                   propagate: true
+              },
+              datalabels: {
+                 display: function(context) {
+                    return context.dataset.data[context.dataIndex] >= 1; // or >= 1 or ...
+                 }
               }
             },
             scales: {

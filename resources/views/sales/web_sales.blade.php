@@ -20,11 +20,11 @@
         @if (isset($_GET['r']) && isset($_GET['c']) && isset($_GET['u']))
             <div class="alert alert-danger text-center">
                 <ul>
-                    <li>Este pedido ya fue asignado por {{ $_GET['u'] }} <a href="{{ url('clientes', $_GET['c']) }}" class="alert-link" target="_blank">Ver venta</a></li>
+                    <li>Este pedido ya fue asignado por {{ $_GET['u'] }} <a href="{{ url('clientes', $_GET['c']) }}" class="alert-link">Ver venta</a></li>
                 </ul>
             </div>
         @elseif (count($cliente) > 0)
-            <p>El pedido <strong>{{ $cliente[0]->order_id_web }}</strong> ya fue asignado al cliente <a href="{{ url('clientes', $cliente[0]->clientes_id) }}" target="_blank"><strong>{{ $cliente[0]->nombre }} {{ $cliente[0]->apellido }}</strong></a></p>
+            <p>El pedido <strong>{{ $cliente[0]->order_id_web }}</strong> ya fue asignado al cliente <a href="{{ url('clientes', $cliente[0]->clientes_id) }}"><strong>{{ $cliente[0]->nombre }} {{ $cliente[0]->apellido }}</strong></a></p>
         @endif
 
         <br />
