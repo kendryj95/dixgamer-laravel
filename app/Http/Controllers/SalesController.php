@@ -197,7 +197,7 @@ class SalesController extends Controller
                                 meta_value 
                                 FROM cbgw_postmeta 
                                 WHERE meta_key='_payment_method' AND post_id=p.ID) AS _payment_method"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_Mercado_Pago_Payment_IDs' AND post_id=p.ID) AS ref_cobro"),
+                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_Mercado_Pago_Payment_IDs' AND post_id=p.ID LIMIT 1) AS ref_cobro"),
                               DB::raw("(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(meta_value, 'payment_id=', -1),'&',1) FROM cbgw_postmeta WHERE meta_key='_transaction_details_ticket' AND post_id=p.ID) AS ref_cobro_2"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id=p.ID) AS ref_cobro_3"),
                               DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=wco.order_item_id) AS _qty"),
@@ -216,171 +216,175 @@ class SalesController extends Controller
                             ->orderBy('wco.order_item_id','DESC')
                             ->first();
 
-        if (!is_array($row_rsSTK)) {
+        if ($venta) { // Si obtiene el registro de las tablas de woocommerce, de lo contrario se mostrará una alerta de error.
+           if (!is_array($row_rsSTK)) {
 
-            if (isset($request->gift) && $request->gift == 'si') { // Validaré si el producto es una gift
-                $valor_gift = explode("-", $titulo)[2];
+               if (isset($request->gift) && $request->gift == 'si') { // Validaré si el producto es una gift
+                   $valor_gift = explode("-", $titulo)[2];
 
-                $data_gifts = $this->giftCardOrder($valor_gift);
-                
-            }
+                   $data_gifts = $this->giftCardOrder($valor_gift);
+                   
+               }
 
-            if (count($data_gifts) > 0) {
-                $giftConStock = true;
-            } else {
-                $producto_catalogo = $venta->_product_id;
+               if (count($data_gifts) > 0) {
+                   $giftConStock = true;
+               } else {
+                   $producto_catalogo = $venta->_product_id;
 
-                $rsLink_PS = DB::table('cbgw_postmeta')
-                                ->select(
-                                    DB::raw("GROUP_CONCAT(meta_value) as meta_value")
-                                )
-                                ->where('post_id', $producto_catalogo)
-                                ->where('meta_key', 'link_ps')
-                                ->groupBy('post_id')
-                                ->first();
+                   $rsLink_PS = DB::table('cbgw_postmeta')
+                                   ->select(
+                                       DB::raw("GROUP_CONCAT(meta_value) as meta_value")
+                                   )
+                                   ->where('post_id', $producto_catalogo)
+                                   ->where('meta_key', 'link_ps')
+                                   ->groupBy('post_id')
+                                   ->first();
 
-                $link_PS = '';
-                
-                if ($rsLink_PS) {
-                    
-                    $link_PS = $rsLink_PS->meta_value;
-                }
-            }
-        }
+                   $link_PS = '';
+                   
+                   if ($rsLink_PS) {
+                       
+                       $link_PS = $rsLink_PS->meta_value;
+                   }
+               }
+           }
 
-        $email_pedido = $venta->email;
+           $email_pedido = $venta->email;
 
-        $existEmailCliente = DB::table('clientes')
-                                ->select(
-                                    'ID',
-                                    'nombre',
-                                    'apellido',
-                                    'email',
-                                    'auto'
-                                )
-                                ->where('email', $email_pedido)
-                                ->first();
+           $existEmailCliente = DB::table('clientes')
+                                   ->select(
+                                       'ID',
+                                       'nombre',
+                                       'apellido',
+                                       'email',
+                                       'auto'
+                                   )
+                                   ->where('email', $email_pedido)
+                                   ->first();
 
-        if (!$existEmailCliente) {
-            return redirect()->back()->withErrors(["Este email no corresponde a ningún cliente de la base de datos: $email_pedido"]);
-        }
+           if (!$existEmailCliente) {
+               return redirect()->back()->withErrors(["Este email no corresponde a ningún cliente de la base de datos: $email_pedido"]);
+           }
 
 
-        if (!is_array($row_rsSTK) && !$giftConStock) {
-            return view('sales.salesInsertWeb', [
-                "row_rsSTK" => $row_rsSTK,
-                "venta" => $venta,
-                "consola" => $consola,
-                "titulo" => $titulo,
-                "slot" => $slot,
-                "clientes" => $existEmailCliente,
-                "linkPS" => $link_PS
-            ]);
+           if (!is_array($row_rsSTK) && !$giftConStock) {
+               return view('sales.salesInsertWeb', [
+                   "row_rsSTK" => $row_rsSTK,
+                   "venta" => $venta,
+                   "consola" => $consola,
+                   "titulo" => $titulo,
+                   "slot" => $slot,
+                   "clientes" => $existEmailCliente,
+                   "linkPS" => $link_PS
+               ]);
+           } else {
+               
+               $clientes_id = $existEmailCliente->ID;
+               $medio_cobro = '';
+               $ref_cobro = '';
+               $multiplo = '';
+
+               if ($venta) {
+
+                   // Defino el multiplo de la comisión por defecto de MP que es 5,38 %
+                   $multiplo = "0.0538";
+                   
+                   // DEFINO EL MEDIO DE COBRO CON LAS OPCIONES PREDEFINIDAS 14/12/2018
+                   if (strpos($venta->_payment_method, 'card') !== false): $medio_cobro = "MP - Tarjeta";
+                   elseif (strpos($venta->_payment_method, 'account') !== false): $medio_cobro = "MP - Saldo";
+                   elseif (strpos($venta->_payment_method, 'basic') !== false): $medio_cobro = "MP";
+                   elseif (strpos($venta->_payment_method, 'ticket') !== false): $medio_cobro = "MP - Ticket";
+                   elseif (strpos($venta->_payment_method, 'atm') !== false): $medio_cobro = "MP - Ticket";
+                   elseif (strpos($venta->_payment_method, 'digital') !== false): $medio_cobro = "MP"; // mercado credito
+                       
+                   // si es por banco cambio multiplo de comisión a 0%
+                   elseif (strpos($venta->_payment_method, 'bacs') !== false): $medio_cobro = "Banco"; $multiplo = "0.00";
+                   elseif (strpos($venta->_payment_method, 'yith') !== false): $medio_cobro = "Fondos"; $multiplo = "0.00";
+                   // si es paypal va 7%
+                   elseif (strpos($venta->_payment_method, 'paypal') !== false): $medio_cobro = "PayPal"; $multiplo = "0.07";
+                   else: $medio_cobro = "No encontrado";
+                   endif;
+                   
+
+                   // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
+                   if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
+                   $ref_cobro = $venta->ref_cobro_3;
+                   } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
+                   //2017-08 Paso el ref_cobro_2 como primer alternativa para ver si se reducen los errores de REF DE COBRO WEB
+                       if (($venta->ref_cobro_2) && ($venta->ref_cobro_2 != "")): $ref_cobro = $venta->ref_cobro_2;
+                       elseif (($venta->ref_cobro) && ($venta->ref_cobro != "")): $ref_cobro = $venta->ref_cobro;
+                       elseif (($venta->ref_cobro_3) && ($venta->ref_cobro_3 != "")): $ref_cobro = $venta->ref_cobro_3;
+                       endif;
+                       
+                   }
+                   
+                   $precio = $venta->precio;
+                   $comision = ($multiplo * $venta->precio);
+                   $precio_original = $precio;
+                   $comision_original = $comision;
+
+                   DB::beginTransaction();
+
+                   try {
+
+                       if (!$giftConStock) { // Si el producto no es una gift quiere decir esa variable.
+                           $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente, $slot);
+                           DB::table('ventas')->insert($data);
+                           $ventaid = DB::getPdo()->lastInsertId();
+
+                           $data = [];
+                           $data['ventas_id'] = $ventaid;
+                           $data['medio_cobro'] = $medio_cobro;
+                           if ("" !== trim($ref_cobro)) {
+                               $data['ref_cobro'] = $ref_cobro;
+                           }
+                           $data['precio'] = $precio;
+                           $data['comision'] = $comision;
+                           $data['Day'] = date('Y-m-d H:i:s');
+                           $data['usuario'] = session()->get('usuario')->Nombre;
+
+                           DB::table('ventas_cobro')->insert($data);
+                       } else {
+                           foreach ($data_gifts as $value) { // Varias gifts se van a registrar
+
+                               $row_rsSTK = Stock::StockDisponible($value->consola,$value->titulo, '');
+                               $partes = count($data_gifts);
+                               $precio = $precio_original / $partes;
+                               $comision = $comision_original / $partes;
+
+                               $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente);
+                               DB::table('ventas')->insert($data);
+                               $ventaid = DB::getPdo()->lastInsertId();
+
+                               $data = [];
+                               $data['ventas_id'] = $ventaid;
+                               $data['medio_cobro'] = $medio_cobro;
+                               if ("" !== trim($ref_cobro)) {
+                                   $data['ref_cobro'] = $ref_cobro;
+                               }
+                               $data['precio'] = $precio;
+                               $data['comision'] = $comision;
+                               $data['Day'] = date('Y-m-d H:i:s');
+                               $data['usuario'] = session()->get('usuario')->Nombre;
+
+                               DB::table('ventas_cobro')->insert($data);
+                           }
+                       }
+
+                       DB::commit();
+
+                       echo "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
+
+
+                   } catch (Exception $e) {
+                       DB::rollback();
+                       return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor vuelva a intentarlo.']);
+                   }
+
+               }
+           } 
         } else {
-            
-            $clientes_id = $existEmailCliente->ID;
-            $medio_cobro = '';
-            $ref_cobro = '';
-            $multiplo = '';
-
-            if ($venta) {
-
-                // Defino el multiplo de la comisión por defecto de MP que es 5,38 %
-                $multiplo = "0.0538";
-                
-                // DEFINO EL MEDIO DE COBRO CON LAS OPCIONES PREDEFINIDAS 14/12/2018
-                if (strpos($venta->_payment_method, 'card') !== false): $medio_cobro = "MP - Tarjeta";
-                elseif (strpos($venta->_payment_method, 'account') !== false): $medio_cobro = "MP - Saldo";
-                elseif (strpos($venta->_payment_method, 'basic') !== false): $medio_cobro = "MP";
-                elseif (strpos($venta->_payment_method, 'ticket') !== false): $medio_cobro = "MP - Ticket";
-                elseif (strpos($venta->_payment_method, 'atm') !== false): $medio_cobro = "MP - Ticket";
-                elseif (strpos($venta->_payment_method, 'digital') !== false): $medio_cobro = "MP"; // mercado credito
-                    
-                // si es por banco cambio multiplo de comisión a 0%
-                elseif (strpos($venta->_payment_method, 'bacs') !== false): $medio_cobro = "Banco"; $multiplo = "0.00";
-                elseif (strpos($venta->_payment_method, 'yith') !== false): $medio_cobro = "Fondos"; $multiplo = "0.00";
-                // si es paypal va 7%
-                elseif (strpos($venta->_payment_method, 'paypal') !== false): $medio_cobro = "PayPal"; $multiplo = "0.07";
-                else: $medio_cobro = "No encontrado";
-                endif;
-                
-
-                // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
-                if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
-                $ref_cobro = $venta->ref_cobro_3;
-                } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
-                //2017-08 Paso el ref_cobro_2 como primer alternativa para ver si se reducen los errores de REF DE COBRO WEB
-                    if (($venta->ref_cobro_2) && ($venta->ref_cobro_2 != "")): $ref_cobro = $venta->ref_cobro_2;
-                    elseif (($venta->ref_cobro) && ($venta->ref_cobro != "")): $ref_cobro = $venta->ref_cobro;
-                    elseif (($venta->ref_cobro_3) && ($venta->ref_cobro_3 != "")): $ref_cobro = $venta->ref_cobro_3;
-                    endif;
-                    
-                }
-                
-                $precio = $venta->precio;
-                $comision = ($multiplo * $venta->precio);
-                $precio_original = $precio;
-                $comision_original = $comision;
-
-                DB::beginTransaction();
-
-                try {
-
-                    if (!$giftConStock) { // Si el producto no es una gift quiere decir esa variable.
-                        $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente, $slot);
-                        DB::table('ventas')->insert($data);
-                        $ventaid = DB::getPdo()->lastInsertId();
-
-                        $data = [];
-                        $data['ventas_id'] = $ventaid;
-                        $data['medio_cobro'] = $medio_cobro;
-                        if ("" !== trim($ref_cobro)) {
-                            $data['ref_cobro'] = $ref_cobro;
-                        }
-                        $data['precio'] = $precio;
-                        $data['comision'] = $comision;
-                        $data['Day'] = date('Y-m-d H:i:s');
-                        $data['usuario'] = session()->get('usuario')->Nombre;
-
-                        DB::table('ventas_cobro')->insert($data);
-                    } else {
-                        foreach ($data_gifts as $value) { // Varias gifts se van a registrar
-
-                            $row_rsSTK = Stock::StockDisponible($value->consola,$value->titulo, '');
-                            $partes = count($data_gifts);
-                            $precio = $precio_original / $partes;
-                            $comision = $comision_original / $partes;
-
-                            $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente);
-                            DB::table('ventas')->insert($data);
-                            $ventaid = DB::getPdo()->lastInsertId();
-
-                            $data = [];
-                            $data['ventas_id'] = $ventaid;
-                            $data['medio_cobro'] = $medio_cobro;
-                            if ("" !== trim($ref_cobro)) {
-                                $data['ref_cobro'] = $ref_cobro;
-                            }
-                            $data['precio'] = $precio;
-                            $data['comision'] = $comision;
-                            $data['Day'] = date('Y-m-d H:i:s');
-                            $data['usuario'] = session()->get('usuario')->Nombre;
-
-                            DB::table('ventas_cobro')->insert($data);
-                        }
-                    }
-
-                    DB::commit();
-
-                    echo "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
-
-
-                } catch (Exception $e) {
-                    DB::rollback();
-                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor vuelva a intentarlo.']);
-                }
-
-            }
+            return redirect()->back()->withErrors(['Ha ocurrido un error al intentar obtener los datos de la compra.']);
         }
 
     }
