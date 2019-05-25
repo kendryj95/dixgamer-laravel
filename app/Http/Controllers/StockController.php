@@ -621,4 +621,86 @@ ORDER BY libre DESC";
 
       return view('stock.index_falta_cargar', compact('datos','dia','titulos','titulos_params'));
     }
+
+    public function asignarStock($id = null)
+    {
+      $titles = $this->wp_p->lastGameStockTitles();
+      $users = DB::table('usuarios')->get();
+      if ($id === null) {
+        return view('stock.asignar_stock', compact('titles','users'));
+      }
+    }
+
+    public function asignarStockStore(Request $request)
+    {
+      // Mensajes de alerta
+      $msgs = [
+        'cantidad.numeric' => 'La cantidad debe ser un valor numerico',
+        'cantidad.required' => 'La cantidad es un campo obligatorio ',
+        'titulo.required' => 'El titulo es un campo obligatorio',
+        'consola.required' => 'No has seleccionado un titulo correcto.',
+        'usuarios.required' => 'Debes seleccionar al menos un usuario.',
+      ];
+      // Validamos
+      $v = Validator::make($request->all(), [
+          'cantidad' => 'required|numeric',
+          'titulo' => 'required',
+          'consola' => 'required',
+          'usuarios' => 'required',
+      ], $msgs);
+
+      // Si hay errores retornamos a la pantalla anterior con los mensajes
+      if ($v->fails())
+      {
+          return redirect()->back()->withInput()->withErrors($v->errors());
+      }
+
+      try {
+        foreach ($request->usuarios as $usuario) {
+          $data = [];
+          $data['cantidad'] = $request->cantidad;
+          $data['titulo'] = $request->titulo;
+          $data['consola'] = $request->consola;
+          $data['usuario'] = $usuario;
+
+          DB::table('stock_cargar')->insert($data);
+        }
+
+        \Helper::messageFlash('Stock','Pedido cargado satisfactoriamente');
+        return redirect('pedidos_carga/admin');
+      } catch (Exception $e) {
+        return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso de insercion. Por favor vuelve a intentarlo']);
+      }
+    }
+
+    public function pedCargaAdmin()
+    {
+      $pedidos = $this->st->listPedidosCargados()->get();
+      return view('stock.pedidos_carga_admin', compact('pedidos'));
+    }
+
+    public function confirmPedCarga($id)
+    {
+      $ids = explode(",", $id);
+      DB::table('stock_cargar')->whereIn('ID',$ids)->update(["estado" => "listo"]);
+
+      \Helper::messageFlash('Stock','Pedido confirmado satisfactoriamente.');
+      return redirect()->back();
+    }
+
+    public function pedidosCargar()
+    {
+      $pedidos = $this->st->listPedidosPorCargar()->get();
+
+      foreach ($pedidos as $i => $value) {
+        $stock = WpPost::linkStoreByCondition($value->titulo,$value->consola)->first();
+        $cantidad_cargada = Stock::getCantidadStockPorCargar(date('Y-m-d',strtotime($value->Day)), $value->titulo, $value->consola)->value('Q_stk') == '' ? 0 : Stock::getCantidadStockPorCargar(date('Y-m-d',strtotime($value->Day)), $value->titulo, $value->consola)->value('Q_stk'); 
+        $cantidad_por_cargar = $value->cantidad - $cantidad_cargada;
+
+        $pedidos[$i]->cantidad_cargar = $cantidad_por_cargar;
+        $pedidos[$i]->link_ps = isset($stock->link_ps) ? $stock->link_ps : '';
+      }
+
+      return view('stock.pedidos_cargar_operador', compact('pedidos'));
+    }
 }

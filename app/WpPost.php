@@ -25,6 +25,25 @@ class WpPost extends Model
                 ->orderBy('titulo','ASC');
     }
 
+    public function ScopeLinkStoreByCondition($query,$titulo,$consola){
+      return $query->select(
+                  DB::raw("
+                    cbgw_posts.ID,
+                    REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(cbgw_posts.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') AS titulo,
+                    max( CASE WHEN pm.meta_key = 'consola' and  cbgw_posts.ID = pm.post_id THEN pm.meta_value END ) as consola,
+                    GROUP_CONCAT( CASE WHEN pm.meta_key = 'link_ps' and cbgw_posts.ID = pm.post_id THEN pm.meta_value END ) as link_ps,
+                    post_status
+                  ")
+                )->leftjoin('cbgw_postmeta as pm','cbgw_posts.ID','pm.post_id')
+                ->where('post_type','product')
+                ->where('post_status','publish')
+                ->groupBy('cbgw_posts.ID')
+                ->having('titulo',$titulo)
+                ->having('consola',$consola)
+                ->orderBy('consola','DESC')
+                ->orderBy('titulo','ASC');
+    }
+
     public function linkCatelogueProduct(){
       return DB::select(DB::raw("
       SELECT ID, titulo, consola, max(slot) as slot, idioma, peso, max(precio) as precio, ml_url FROM (select
