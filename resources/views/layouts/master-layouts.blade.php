@@ -91,12 +91,12 @@
               <ul class="dropdown-menu">
                 <li><a href="{{ url('stock') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
                 <li><a href="{{ url('stocks_cargados') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Cargados</a></li>
-                <li><a href="{{ url('catalogo_link_ps_store') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Link PS Store</a></li>
-                <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
                 @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
                 <li><a href="{{ url('pedidos_carga/admin') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos de carga - Admin</a></li>
                 @endif
                 <li><a href="{{ url('pedidos_cargar') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos por Cargar</a></li>
+                <li><a href="{{ url('catalogo_link_ps_store') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Link PS Store</a></li>
+                <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
 
                 @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
                     <li class="divider" role="separator"></li>

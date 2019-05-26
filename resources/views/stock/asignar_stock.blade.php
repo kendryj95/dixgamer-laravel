@@ -42,7 +42,7 @@
             <span class="input-group-addon"><i class="fa fa-users fa-fw"></i></span>
               <select name="usuarios[]" id="users-select" value="" class="form-control select2-multiple" multiple>
                   @foreach($users as $user)
-                  <option value="{{ $user->ID }}">{{ $user->Nombre }}</option>
+                  <option value="{{ $user->Nombre }}">{{ $user->Nombre }}</option>
                   @endforeach
               </select>
           </div>

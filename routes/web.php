@@ -121,7 +121,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('productos_catalogo', 'StockController@indexCatalogueProduct');
   Route::get('publicaciones_secundarias_ml', 'StockController@publicacionesSecundariasML');
   Route::get('stocks_cargados', 'StockController@indexCargados');
-
+  Route::get('pedidos_cargar','StockController@pedidosCargar');
 
   // Rutas donde solo podran acceder analistas y administradores
   Route::group(['middleware' => ['analyst']], function()
@@ -132,7 +132,6 @@ Route::group(['middleware' => ['login']], function()
     Route::get('stock_insertar_codigo_control','StockController@createCodeControl');
     Route::post('stock_insertar_codigo_control','StockController@storeCodeControl');
     Route::get('validaCodigo','StockController@validaCodigo');
-    Route::get('pedidos_cargar','StockController@pedidosCargar');
 
   });
 
