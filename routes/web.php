@@ -142,10 +142,10 @@ Route::group(['middleware' => ['login']], function()
     Route::get('stock_insertar_codigo_g','StockController@createCodeG');
     Route::post('stock_insertar_codigo_g','StockController@storeCodeG');
 
-    Route::get('asignar_stock/{id?}','StockController@asignarStock');
     Route::post('asignar_stock','StockController@asignarStockStore');
     Route::get('pedidos_carga/admin', 'StockController@pedCargaAdmin');
     Route::get('confirmar_pedido/{id}', 'StockController@confirmPedCarga');
+    Route::get('get_pedidos_edit/{id}', 'StockController@getPedidosEdit');
 
 
     // Gastos

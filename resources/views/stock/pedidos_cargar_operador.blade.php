@@ -19,6 +19,7 @@
                         <th>Titulo</th>
                         <th>Cantidad</th>
                         <th>Link/s</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,8 +55,15 @@
                                 <span class="label label-danger">NO HAY LINK</span>
                               @endif
                             </td>
+                            <td style="text-align: center;">
+                                <button class="btn btn-default btn-sm notas" data-container="body" data-toggle="popover" data-placement="top" data-content="{!! $pedido->Notas !!}"><i class="fa fa-comment"></i> Ver Nota</button>
+                            </td>
                         </tr>
                         @endforeach
+                    @else
+                    <tr>
+                        <td colspan="5">No hay registros para mostrar.</td>
+                    </tr>
                     @endif
                     </tbody>
                 </table>

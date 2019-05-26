@@ -541,12 +541,12 @@ class Stock extends Model
         return DB::select($query, $params);
     }
 
-    public function listPedidosCargados($user = null)
+    public function listPedidosCargados($id = null)
     {
-        if ($user === null) {
-           return DB::table('stock_cargar')->select('*', DB::raw('GROUP_CONCAT(usuario) AS usuarios_pedido'),DB::raw('GROUP_CONCAT(ID) AS ids'))->where('estado','pendiente')->groupBy(DB::raw("titulo, consola, DATE(Day)"));
+        if ($id === null) {
+           return DB::table('stock_cargar')->select('*', DB::raw('GROUP_CONCAT(usuario) AS usuarios_pedido'),DB::raw('GROUP_CONCAT(ID) AS ids'))->where('estado','pendiente')->groupBy(DB::raw("cantidad,titulo, consola, DATE(Day)"));
         } else {
-            return DB::table('stock_cargar')->where('usuario', $user)->where('estado','pendiente');
+            return DB::table('stock_cargar')->select('*', DB::raw('GROUP_CONCAT(usuario) AS usuarios_pedido'),DB::raw('GROUP_CONCAT(ID) AS ids'))->whereIn('ID', $id)->where('estado','pendiente')->groupBy(DB::raw("cantidad,titulo, consola, DATE(Day)"));
         }
     }
 

@@ -622,15 +622,6 @@ ORDER BY libre DESC";
       return view('stock.index_falta_cargar', compact('datos','dia','titulos','titulos_params'));
     }
 
-    public function asignarStock($id = null)
-    {
-      $titles = $this->wp_p->lastGameStockTitles();
-      $users = DB::table('usuarios')->get();
-      if ($id === null) {
-        return view('stock.asignar_stock', compact('titles','users'));
-      }
-    }
-
     public function asignarStockStore(Request $request)
     {
       // Mensajes de alerta
@@ -655,28 +646,43 @@ ORDER BY libre DESC";
           return redirect()->back()->withInput()->withErrors($v->errors());
       }
 
+      DB::beginTransaction();
+
       try {
+
+        if (isset($request->ids) && $request->ids != '') {
+          $ids = explode(',', $request->ids);
+
+          DB::table('stock_cargar')->whereIn('ID', $ids)->delete();
+        }
+
         foreach ($request->usuarios as $usuario) {
           $data = [];
           $data['cantidad'] = $request->cantidad;
           $data['titulo'] = $request->titulo;
           $data['consola'] = $request->consola;
           $data['usuario'] = $usuario;
+          $data['Notas'] = $request->Notas;
 
           DB::table('stock_cargar')->insert($data);
         }
 
+        DB::commit();
+
         \Helper::messageFlash('Stock','Pedido cargado satisfactoriamente');
         return redirect('pedidos_carga/admin');
       } catch (Exception $e) {
+        DB::rollback();
         return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso de insercion. Por favor vuelve a intentarlo']);
       }
     }
 
     public function pedCargaAdmin()
     {
+      $titles = $this->wp_p->lastGameStockTitles();
+      $users = DB::table('usuarios')->get();
       $pedidos = $this->st->listPedidosCargados()->get();
-      return view('stock.pedidos_carga_admin', compact('pedidos'));
+      return view('stock.pedidos_carga_admin', compact('pedidos','titles','users'));
     }
 
     public function confirmPedCarga($id)
@@ -702,5 +708,13 @@ ORDER BY libre DESC";
       }
 
       return view('stock.pedidos_cargar_operador', compact('pedidos'));
+    }
+
+    public function getPedidosEdit($id)
+    {
+      $ids = explode(",", $id);
+      $pedidos = $this->st->listPedidosCargados($ids)->get();
+
+      echo json_encode($pedidos);
     }
 }
