@@ -161,7 +161,7 @@ class AccountController extends Controller
         $emailcuenta1 = substr($vendedor, 0, 2);
         $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 15658;
         $idcuenta = "dix" . $emailcuenta1 . $emailcuenta2;
-        $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@game24hs.com"; // cambio de abcdix.com a game24hs.com 2019-02-25
+        $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@dixabc.com"; // cambio de abcdix.com a game24hs.com 2019-02-25
 
 
         return view('account.create', compact('idcuenta', 'emailcuenta'));

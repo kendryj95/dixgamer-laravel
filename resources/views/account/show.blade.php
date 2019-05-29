@@ -799,7 +799,7 @@
 			<?php elseif ($sc->concepto == 'reset'):?>
             <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Reseteado por <?php echo $sc->usuario;?></em></td>
 			<?php elseif ($sc->concepto == 'resetear'):?>
-            <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Solicitud de Reseteo por <?php echo $sc->usuario;?></em></td>
+            <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;color:red"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Solicitud de Reseteo por <?php echo $sc->usuario;?></em></td>
             <?php elseif ($sc->concepto == 'referencia'):?>
             <td><em class="badge badge-success" style="font-weight:normal; opacity:0.8;"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA 31 de MARZO de 2018</em></td>
       		<td colspan="3"></td>
