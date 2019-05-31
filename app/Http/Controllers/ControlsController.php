@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ControlsController extends Controller
 {
@@ -758,6 +759,8 @@ ORDER BY consola, titulo ASC";
         $filters['consola'] = $request->consola;
         $filters['slot'] = $request->slot;
         $filters['agrupar'] = $request->agrupar;
+        $filters['fecha_inicio'] = $request->fecha_inicio;
+        $filters['fecha_fin'] = $request->fecha_fin;
 
         $datos = $this->getDatosEvolucion($filters)->get();
 
@@ -790,6 +793,9 @@ ORDER BY consola, titulo ASC";
         if ($filter['slot'] != '') {
             $datos->where('ventas.slot',$filter['slot']);
         }
+        if ($filter['fecha_inicio'] != "" && $filter['fecha_fin'] != "") {
+            $datos->whereBetween(DB::raw("DATE(ventas.Day)"), [$filter['fecha_inicio'], $filter['fecha_fin']]);
+        }
 
         if ($filter['agrupar'] == 'dia') {
             $groupBy = "DATE(ventas.Day)";
@@ -818,5 +824,46 @@ ORDER BY consola, titulo ASC";
         ->orderBy('stock.titulo','ASC');
 
         return $titulos;
+    }
+
+    public function excel()
+    {
+        $result = DB::table('ventas AS v')
+        ->select(
+            'v.ID AS vta_id',
+            'c.ID AS cte_id',
+            's.titulo',
+            's.consola',
+            'c.apellido',
+            'c.nombre',
+            'c.email'
+        ) 
+        ->leftjoin('stock AS s','v.stock_id','=','s.ID')
+        ->leftjoin('clientes AS c','v.clientes_id','=','c.ID')
+        ->where('titulo','gta-v')
+        ->where('consola','ps4')
+        ->get();
+
+        $array = [];
+
+        foreach ($result as $i => $value) {
+            $array[$i] = [];
+            foreach ($value as $key => $value) {
+                 $array[$i][] = $value;
+            }
+        }
+
+        $file = Excel::create("test",
+                    function ($excel) use ($array) {
+                        $excel->sheet('bookings', function ($sheet) use ($array) {
+                            $sheet->fromArray($array);
+                        });
+                    });
+
+        Mail::send('emails.excel', [], function($message) use ($file)
+        {
+            $message->to("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reporte en Excel");
+            $message->attach($file->store("xls",false,true)['full']);
+        });
     }
 }
