@@ -456,7 +456,7 @@ class SalesController extends Controller
                     $data_gifts = [
                         $gifts["g_10"],
                         $gifts["g_20"]
-                    ];
+                    ];  
                 } elseif ($gifts["g_10"] > 2) { // Si hay más de 2 gift de 10 usd
                     ## Se registrará 3 veces para 30 usd.
                     for ($i=0; $i <= 2 ; $i++) { 
@@ -520,6 +520,25 @@ class SalesController extends Controller
                     ];
                 } 
                 break;
+            case '60':
+
+              $gifts = [
+                  "g_20" => $this->giftStockAvalaible(20),
+                  "g_50" => $this->giftStockAvalaible(20),
+                  "g_10" => $this->giftStockAvalaible(10)
+              ];
+              if ($gifts["g_50"]->Q > 0 && $gifts["g_10"]->Q > 0) { // Si hay más de 1 gift de 50 y de 10 en stock.
+                  $data_gifts = [
+                      $gifts["g_10"],
+                      $gifts["g_50"]
+                  ];
+              } elseif ($gifts["g_20"]->Q > 2) { // Si hay más de 2 gift de 20 en stock.
+                  for ($i=0; $i <= 2 ; $i++) { 
+                      $data_gifts[] = $gifts["g_20"];
+                  }
+              } 
+
+              break;
         }
 
         return $data_gifts;
