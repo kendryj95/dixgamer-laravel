@@ -559,7 +559,7 @@ class Stock extends Model
     {
         $query->select(DB::raw("COUNT(*) AS Q_stk"))
         ->where('usuario',session()->get('usuario')->Nombre)
-        ->where(DB::raw("DATE(Day)"), $fecha)
+        ->where(DB::raw("DATE(Day)"),'>=', $fecha)
         ->where('titulo', $titulo)
         ->where('consola', $consola)
         ->groupBy('titulo')

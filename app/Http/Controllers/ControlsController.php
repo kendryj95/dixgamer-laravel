@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Mail;
 
 class ControlsController extends Controller
 {
@@ -855,15 +856,19 @@ ORDER BY consola, titulo ASC";
 
         $file = Excel::create("test",
                     function ($excel) use ($array) {
-                        $excel->sheet('bookings', function ($sheet) use ($array) {
+                        $excel->sheet('Reporte', function ($sheet) use ($array) {
                             $sheet->fromArray($array);
                         });
                     });
 
-        Mail::send('emails.excel', [], function($message) use ($file)
-        {
-            $message->to("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reporte en Excel");
-            $message->attach($file->store("xls",false,true)['full']);
-        });
+        try {
+            Mail::send('emails.excel', [], function($message) use ($file)
+            {
+                $message->to("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reporte en Excel");
+                $message->attach($file->store("xls",false,true)['full']);
+            });
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['Ha ocurrido un error al intentar enviar el correo']);
+        }
     }
 }

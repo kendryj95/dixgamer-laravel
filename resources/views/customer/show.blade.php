@@ -495,7 +495,7 @@
                   @endif
 
                   <?php  // si hay un solo cobro ID y mas de 1 ref de cobro para ese ID (caso de array importado con varias ref de cobros desde MP) habilito la modif ?>
-                  @if(($dataCustomer->ref_cobro != "") && ((count(explode(',', $dataCustomer->ID_cobro, 10))) != (count(explode(',', $dataCustomer->ref_cobro, 10)))))
+                  @if((($dataCustomer->ref_cobro != "") && ((count(explode(',', $dataCustomer->ID_cobro, 10))) != (count(explode(',', $dataCustomer->ref_cobro, 10))))) || (strpos($dataCustomer->medio_cobro, 'Banco') !== false && $dataCustomer->ref_cobro == ""))
                     <a
                       data-toggle="modal"
                       data-target="#modalVentas"

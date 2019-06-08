@@ -16,6 +16,11 @@ Route::get('clear-cache', function() {
     return "Cache is cleared";
 });
 
+Route::get('clear-config', function() {
+    Artisan::call('config:clear');
+    return "Config is cleared";
+});
+
 // Rutas login y logout
 Route::get('login', 'Auth\LoginController@index')->name('login');
 Route::post('login', 'Auth\LoginController@auth');
@@ -180,6 +185,7 @@ Route::group(['middleware' => ['login']], function()
         Route::get('control_mp_baja_slot_libre/{dif}/{ref_cobro}', 'ControlsController@controlMPBajaSlotLibre');
         Route::get('config/general', 'ControlsController@configGeneral');
         Route::post('config/general', 'ControlsController@configGeneralStore');
+        Route::get('excel', 'ControlsController@excel');
     });
 
 
