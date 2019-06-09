@@ -829,7 +829,11 @@ ORDER BY consola, titulo ASC";
 
     public function excel()
     {
-        $result = DB::table('ventas AS v')
+        $files = glob(storage_path('exports/*'));
+
+        dd($files);
+        
+        /*$result = DB::table('ventas AS v')
         ->select(
             'v.ID AS vta_id',
             'c.ID AS cte_id',
@@ -869,6 +873,6 @@ ORDER BY consola, titulo ASC";
             });
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['Ha ocurrido un error al intentar enviar el correo']);
-        }
+        }*/
     }
 }

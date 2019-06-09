@@ -682,7 +682,9 @@ ORDER BY libre DESC";
       $titles = $this->wp_p->lastGameStockTitles();
       $users = DB::table('usuarios')->get();
       $pedidos = $this->st->listPedidosCargados()->get();
-      return view('stock.pedidos_carga_admin', compact('pedidos','titles','users'));
+      $pedidos_finalizados = $this->st->listPedidosFinalizados()->get();
+
+      return view('stock.pedidos_carga_admin', compact('pedidos','pedidos_finalizados','titles','users'));
     }
 
     public function confirmPedCarga($id)

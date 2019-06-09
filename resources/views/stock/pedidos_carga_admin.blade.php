@@ -140,6 +140,52 @@
                         @endforeach
                     @else
                     <tr>
+                        <td colspan = '5' class="text-center">No se encontraron datos</td>
+                    </tr>
+                    @endif
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-lg-12">
+            <h1>Pedidos Finalizados</h1>
+            <div class="table-responsive">
+                <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Cantidad</th>
+                        <th>Titulo</th>
+                        <th>Usuarios</th>
+                        <th>Notas</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        
+                    @if(count($pedidos_finalizados) > 0)
+                        @foreach($pedidos_finalizados as $i => $pedido)
+                        <tr>
+                            <td>{{ $pedido->cantidad }}</td>
+                            <td>
+                                {{ $pedido->titulo }}
+                                <span class="label label-default {{$pedido->consola}}">
+                                    {{$pedido->consola}}
+                                </span>
+                            </td>
+                            <td>
+                                {{ $pedido->usuarios_pedido }}
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $pedido->Notas !!} </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @else
+                    <tr>
                         <td colspan = '4' class="text-center">No se encontraron datos</td>
                     </tr>
                     @endif

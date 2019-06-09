@@ -447,95 +447,190 @@ class SalesController extends Controller
     {
         $data_gifts = [];
         switch ($gift) {
-            case '30':
+            case '20':
                 $gifts = [
-                    "g_10" => $this->giftStockAvalaible(10),
-                    "g_20" => $this->giftStockAvalaible(20)
+                    "g_10" => Stock::StockDisponible('ps','gift-card-10-usd', ''),
+                    "g_20" => Stock::StockDisponible('ps','gift-card-20-usd', '')
                 ];
-                if ($gifts["g_10"]->Q > 0 && $gifts["g_20"]->Q > 0) { // Si hay gift de 10 y de 20 hay cantidad en stock.
-                    $data_gifts = [
-                        $gifts["g_10"],
-                        $gifts["g_20"]
-                    ];  
-                } elseif ($gifts["g_10"] > 2) { // Si hay más de 2 gift de 10 usd
-                    ## Se registrará 3 veces para 30 usd.
-                    for ($i=0; $i <= 2 ; $i++) { 
-                        $data_gifts[] = $gifts["g_10"];
+                if (is_array($gifts["g_20"])) { // Si hay gift de 20 hay cantidad en stock.
+                    if ($gifts["g_20"][0]->Q_Stock > 0) { // Si hay gift de 20 hay cantidad en stock.
+                        $data_gifts = [
+                            $gifts["g_10"][0],
+                            $gifts["g_20"][0]
+                        ];  
+                    }  
+                } elseif (is_array($gifts["g_10"])) { // Si hay más de 1 gift de 10 usd
+                    if ($gifts["g_10"] > 1) { // Si hay más de 1 gift de 10 usd
+                        ## Se registrará 2 veces para 20 usd.
+                        for ($i=0; $i <= 1 ; $i++) { 
+                            $data_gifts[] = $gifts["g_10"];
+                        }
                     }
+                }
+                break;
+              case '30':
+                $gifts = [
+                    "g_10" => Stock::StockDisponible('ps','gift-card-10-usd', ''),
+                    "g_20" => Stock::StockDisponible('ps','gift-card-20-usd', '')
+                ];
+                if (is_array($gifts["g_10"]) && is_array($gifts["g_20"])) { // Si hay gift de 10 y de 20 hay cantidad en stock.
+                    if ($gifts["g_10"][0]->Q_Stock > 0 && $gifts["g_20"][0]->Q_Stock > 0) { // Si hay gift de 10 y de 20 hay cantidad en stock.
+                        $data_gifts = [
+                            $gifts["g_10"][0],
+                            $gifts["g_20"][0]
+                        ];  
+                    } 
+                } elseif (is_array($gifts["g_10"])) { // Si hay más de 2 gift de 10 usd
+                    if ($gifts["g_10"] > 2) { // Si hay más de 2 gift de 10 usd
+                         ## Se registrará 3 veces para 30 usd.
+                         for ($i=0; $i <= 2 ; $i++) { 
+                             $data_gifts[] = $gifts["g_10"];
+                         }
+                     }
                 }
                 break;
             
             case '35':
                 $gifts = [
-                    "g_10" => $this->giftStockAvalaible(10),
-                    "g_25" => $this->giftStockAvalaible(25)
+                    "g_10" => Stock::StockDisponible('ps','gift-card-10-usd', ''),
+                    "g_25" => Stock::StockDisponible('ps','gift-card-25-usd', '')
                 ];
-                if ($gifts["g_10"]->Q > 0 && $gifts["g_25"]->Q > 0) { // Si hay gift de 10 y de 25 hay cantidad en stock.
-                    $data_gifts = [
-                        $gifts["g_10"],
-                        $gifts["g_25"]
-                    ];
+                if (is_array($gifts["g_10"]) && is_array($gifts["g_25"])) { // Si hay gift de 10 y de 25 hay cantidad en stock.
+                    if ($gifts["g_10"][0]->Q_Stock > 0 && $gifts["g_25"][0]->Q_Stock > 0) { // Si hay gift de 10 y de 25 hay cantidad en stock.
+                        $data_gifts = [
+                            $gifts["g_10"][0],
+                            $gifts["g_25"][0]
+                        ];
+                    }
                 } 
                 break;
 
             case '40':
                 $gifts = [
-                    "g_20" => $this->giftStockAvalaible(20),
-                    "g_10" => $this->giftStockAvalaible(10)
+                    "g_20" => Stock::StockDisponible('ps','gift-card-20-usd', ''),
+                    "g_40" => Stock::StockDisponible('ps','gift-card-40-usd', ''),
+                    "g_10" => Stock::StockDisponible('ps','gift-card-10-usd', '')
                 ];
-                if ($gifts["g_20"]->Q > 1) { // Si hay más de 1 gift de 20 en stock.
-                    for ($i=0; $i <= 1 ; $i++) { 
-                        $data_gifts[] = $gifts["g_20"];
+                if (is_array($gifts["g_40"])) { // Si hay más de 1 gift de 40 en stock.
+                    if ($gifts["g_40"][0]->Q_Stock > 0) { // Si hay más de 1 gift de 40 en stock.
+                        $data_gifts = [
+                            $gifts["g_40"][0]
+                        ];
                     }
-                } elseif ($gifts["g_10"]->Q > 3) { // Si hay más de 3 gift de 10 en stock.
-                    for ($i=0; $i <= 3 ; $i++) { 
-                        $data_gifts[] = $gifts["g_10"];
+                }elseif (is_array($gifts["g_20"])) { // Si hay más de 1 gift de 20 en stock.
+                    if ($gifts["g_20"][0]->Q_Stock > 1) { // Si hay más de 1 gift de 20 en stock.
+                      for ($i=0; $i <= 1 ; $i++) { 
+                          $data_gifts[] = $gifts["g_20"][0];
+                      }
+                    }
+                } elseif (is_array($gifts["g_10"])) { // Si hay más de 3 gift de 10 en stock.
+                    if ($gifts["g_10"][0]->Q_Stock > 3) { // Si hay más de 3 gift de 10 en stock.
+                        for ($i=0; $i <= 3 ; $i++) { 
+                            $data_gifts[] = $gifts["g_10"][0];
+                        }
                     }
                 } 
                 break;
             case '45':
                 $gifts = [
-                    "g_20" => $this->giftStockAvalaible(20),
-                    "g_25" => $this->giftStockAvalaible(25)
+                    "g_20" => Stock::StockDisponible('ps','gift-card-20-usd', ''),
+                    "g_25" => Stock::StockDisponible('ps','gift-card-25-usd', '')
                 ];
-                if ($gifts["g_20"]->Q > 0 && $gifts["g_25"]->Q > 0) { // Si hay gift de 20 y de 25 hay cantidad en stock.
-                    $data_gifts = [
-                        $gifts["g_20"],
-                        $gifts["g_25"]
-                    ];
+                if ( is_array($gifts["g_20"]) && is_array($gifts["g_25"])) { // Si hay gift de 20 y de 25 hay cantidad en stock.
+                    if ($gifts["g_20"][0]->Q_Stock > 0 && $gifts["g_25"][0]->Q_Stock > 0) { // Si hay gift de 20 y de 25 hay cantidad en stock.
+                        $data_gifts = [
+                            $gifts["g_20"][0],
+                            $gifts["g_25"][0]
+                        ];
+                    } 
                 } 
                 break;
 
             case '55':
                 $gifts = [
-                    "g_10" => $this->giftStockAvalaible(10),
-                    "g_20" => $this->giftStockAvalaible(20),
-                    "g_25" => $this->giftStockAvalaible(25)
+                    "g_10" => Stock::StockDisponible('ps','gift-card-10-usd', ''),
+                    "g_20" => Stock::StockDisponible('ps','gift-card-20-usd', ''),
+                    "g_25" => Stock::StockDisponible('ps','gift-card-25-usd', '')
                 ];
-                if ($gifts["g_10"]->Q > 0 && $gifts["g_20"]->Q > 0 && $gifts["g_25"]->Q > 0) { // Si gift de 10 y de 20 y de 25 hay cantidad en stock.
-                    $data_gifts = [
-                        $gifts["g_10"],
-                        $gifts["g_20"],
-                        $gifts["g_25"]
-                    ];
+                if (is_array($gifts["g_10"]) && is_array($gifts["g_20"]) && is_array($gifts["g_25"])) { // Si gift de 10 y de 20 y de 25 hay cantidad en stock.
+                    if ($gifts["g_10"][0]->Q_Stock > 0 && $gifts["g_20"][0]->Q_Stock > 0 && $gifts["g_25"][0]->Q_Stock > 0) { // Si gift de 10 y de 20 y de 25 hay cantidad en stock.
+                        $data_gifts = [
+                            $gifts["g_10"][0],
+                            $gifts["g_20"][0],
+                            $gifts["g_25"][0]
+                        ];
+                    }
                 } 
                 break;
             case '60':
 
               $gifts = [
-                  "g_20" => $this->giftStockAvalaible(20),
-                  "g_50" => $this->giftStockAvalaible(20),
-                  "g_10" => $this->giftStockAvalaible(10)
+                  "g_20" => Stock::StockDisponible('ps','gift-card-20-usd', ''),
+                  "g_50" => Stock::StockDisponible('ps','gift-card-50-usd', ''),
+                  "g_10" => Stock::StockDisponible('ps','gift-card-10-usd', '')
               ];
-              if ($gifts["g_50"]->Q > 0 && $gifts["g_10"]->Q > 0) { // Si hay más de 1 gift de 50 y de 10 en stock.
-                  $data_gifts = [
-                      $gifts["g_10"],
-                      $gifts["g_50"]
-                  ];
-              } elseif ($gifts["g_20"]->Q > 2) { // Si hay más de 2 gift de 20 en stock.
-                  for ($i=0; $i <= 2 ; $i++) { 
-                      $data_gifts[] = $gifts["g_20"];
+              if (is_array($gifts["g_50"]) && is_array($gifts["g_10"])) { // Si hay más de 1 gift de 50 y de 10 en stock.
+                  if ($gifts["g_50"][0]->Q_Stock > 0 && $gifts["g_10"][0]->Q_Stock > 0) { // Si hay más de 1 gift de 50 y de 10 en stock.
+                      $data_gifts = [
+                          $gifts["g_10"][0],
+                          $gifts["g_50"][0]
+                      ];
                   }
+              } elseif (is_array($gifts["g_20"])) { // Si hay más de 2 gift de 20 en stock.
+                  if ($gifts["g_20"][0]->Q_Stock > 2) { // Si hay más de 2 gift de 20 en stock.
+                      for ($i=0; $i <= 2 ; $i++) { 
+                          $data_gifts[] = $gifts["g_20"][0];
+                      }
+                  }
+              }
+              break;
+            case '70':
+
+              $gifts = [
+                  "g_20" => Stock::StockDisponible('ps','gift-card-20-usd', ''),
+                  "g_50" => Stock::StockDisponible('ps','gift-card-50-usd', '')
+              ];
+              if (is_array($gifts["g_50"]) && is_array($gifts["g_20"])) { // Si hay más de 1 gift de 50 y de 10 en stock.
+                  if ($gifts["g_50"][0]->Q_Stock > 0 && $gifts["g_20"][0]->Q_Stock > 0) { // Si hay más de 1 gift de 50 y de 10 en stock.
+                      $data_gifts = [
+                          $gifts["g_20"][0],
+                          $gifts["g_50"][0]
+                      ];
+                  }
+              } 
+
+              break;
+            case '75':
+
+              $gifts = [
+                  "g_50" => Stock::StockDisponible('ps','gift-card-50-usd', ''),
+                  "g_25" => Stock::StockDisponible('ps','gift-card-25-usd', '')
+              ];
+              if (is_array($gifts["g_50"]) && is_array($gifts["g_25"])) { // Si hay más de 1 gift de 50 y de 25 en stock.
+                  if ($gifts["g_50"][0]->Q_Stock > 0 && $gifts["g_25"][0]->Q_Stock > 0) { // Si hay más de 1 gift de 50 y de 25 en stock.
+                      $data_gifts = [
+                          $gifts["g_50"][0],
+                          $gifts["g_25"][0]
+                      ];
+                  }
+              } 
+
+              break;
+            case '85':
+
+              $gifts = [
+                  "g_50" => Stock::StockDisponible('ps','gift-card-50-usd', ''),
+                  "g_25" => Stock::StockDisponible('ps','gift-card-25-usd', ''),
+                  "g_10" => Stock::StockDisponible('ps','gift-card-10-usd', '')
+              ];
+              if (is_array($gifts["g_50"]) && is_array($gifts["g_25"]) && is_array($gifts["g_10"])) { // Si hay más de 1 gift de 50, de 25 y de 10 en stock.
+                  if ($gifts["g_50"][0]->Q_Stock > 0 && $gifts["g_25"][0]->Q_Stock > 0 && $gifts["g_10"][0]->Q_Stock > 0) { // Si hay más de 1 gift de 50, de 25 y de 10 en stock.
+                      $data_gifts = [
+                          $gifts["g_50"][0],
+                          $gifts["g_25"][0],
+                          $gifts["g_10"][0]
+                      ];
+                  } 
               } 
 
               break;
