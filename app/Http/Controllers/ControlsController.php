@@ -878,19 +878,21 @@ ORDER BY consola, titulo ASC";
 
         Zipper::make($path_zip)->add($path_files_excel)->close();
 
-        return response()->download($path_zip);
-
-        /*try {
+        try {
             Mail::send('emails.excel', [], function($message) use ($path_zip)
             {
-                $message->to("victor.ross.04@gmail.com", "Victor Ross")->cc("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reportes");
+                $message->to("victor.ross.04@gmail.com", "Victor Ross")->subject("Reportes");
+                // $message->to("victor.ross.04@gmail.com", "Victor Ross")->cc("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reportes");
                 $message->attach($path_zip);
             });
 
-            return "Reporte generado correctamente.";
+            \Helper::messageFlash('Configuraciones','Se ha generado el reporte y ha sido enviado a su correo satisfactoriamente.');
+
+            return redirect()->back();
+            
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['Ha ocurrido un error al intentar enviar el correo']);
-        }*/
+        }
     }
     private function getVentaStock($titulo, $consola)
     {
