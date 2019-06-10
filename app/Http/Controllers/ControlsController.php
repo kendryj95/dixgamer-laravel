@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Mail;
+use Zipper;
 
 class ControlsController extends Controller
 {
@@ -721,7 +722,17 @@ ORDER BY consola, titulo ASC";
     {
         $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
         $cuentas_excluidas = DB::table('configuraciones')->where('ID',1)->value('cuentas_excluidas');
-        return view('config.general', compact('oferta_fortnite','cuentas_excluidas'));
+        $cantidadStock = DB::table('stock')->select(
+            'titulo',
+            'consola'
+        )
+        ->groupBy(DB::raw("titulo, consola"))
+        ->orderBy(DB::raw("consola, titulo"))
+        ->get();
+
+        $cantidadStock = count($cantidadStock);
+
+        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock'));
     }
 
     public function configGeneralStore(Request $request)
@@ -829,11 +840,61 @@ ORDER BY consola, titulo ASC";
 
     public function excel()
     {
-        $files = glob(storage_path('exports/*'));
+        $path_files_excel = [];
 
-        dd($files);
-        
-        /*$result = DB::table('ventas AS v')
+        $stocks = DB::table('stock')->select(
+            'titulo',
+            'consola'
+        )
+        ->groupBy(DB::raw("titulo, consola"))
+        ->orderBy(DB::raw("consola, titulo"))
+        ->get();
+
+        foreach ($stocks as $stock) {
+            $data_excel = $this->getVentaStock($stock->titulo, $stock->consola);
+
+            if (count($data_excel) > 0) { // Se arma el excel siempre y cuando haya datos.
+
+                $cabecera = ["Vta_id","Cte_id","Titulo","Consola","Apellido","Nombre","Email"];
+
+                array_unshift($data_excel, $cabecera); // Agregar elemento a la primera posicion del array.
+
+                $excel_title = "DB-$stock->titulo-$stock->consola-" . date('Y-m');
+
+                $file = Excel::create($excel_title,
+                        function ($excel) use ($data_excel) {
+                            $excel->sheet("Reporte", function ($sheet) use ($data_excel) {
+                                $sheet->fromArray($data_excel, null, 'A1', false, false);
+                            });
+                        });
+
+                $path_files_excel[] = $file->store("csv",false,true)['full'];
+            }
+
+        }
+
+        $zipTitle = 'Reports-' . date('Y-m') . '.zip';
+        $path_zip = storage_path('app/public/'.$zipTitle);
+
+        Zipper::make($path_zip)->add($path_files_excel)->close();
+
+        return response()->download($path_zip);
+
+        /*try {
+            Mail::send('emails.excel', [], function($message) use ($path_zip)
+            {
+                $message->to("victor.ross.04@gmail.com", "Victor Ross")->cc("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reportes");
+                $message->attach($path_zip);
+            });
+
+            return "Reporte generado correctamente.";
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['Ha ocurrido un error al intentar enviar el correo']);
+        }*/
+    }
+    private function getVentaStock($titulo, $consola)
+    {
+        $result = DB::table('ventas AS v')
         ->select(
             'v.ID AS vta_id',
             'c.ID AS cte_id',
@@ -845,34 +906,19 @@ ORDER BY consola, titulo ASC";
         ) 
         ->leftjoin('stock AS s','v.stock_id','=','s.ID')
         ->leftjoin('clientes AS c','v.clientes_id','=','c.ID')
-        ->where('titulo','gta-v')
-        ->where('consola','ps4')
+        ->where('titulo',$titulo)
+        ->where('consola',$consola)
         ->get();
 
-        $array = [];
+        $data_excel = [];
 
         foreach ($result as $i => $value) {
-            $array[$i] = [];
+            $data_excel[$i] = [];
             foreach ($value as $key => $value) {
-                 $array[$i][] = $value;
+                 $data_excel[$i][] = $value;
             }
         }
 
-        $file = Excel::create("test",
-                    function ($excel) use ($array) {
-                        $excel->sheet('Reporte', function ($sheet) use ($array) {
-                            $sheet->fromArray($array);
-                        });
-                    });
-
-        try {
-            Mail::send('emails.excel', [], function($message) use ($file)
-            {
-                $message->to("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reporte en Excel");
-                $message->attach($file->store("xls",false,true)['full']);
-            });
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors(['Ha ocurrido un error al intentar enviar el correo']);
-        }*/
+        return $data_excel;
     }
 }

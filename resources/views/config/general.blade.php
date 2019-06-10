@@ -19,6 +19,7 @@
 	    <ul class="nav nav-pills nav-stacked">
 	      <li role="presentation" class="active"><a  data-toggle="tab" href="#menu1">Mensaje extra email</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu2">Cuentas Excluidas - PS3 Resetear</a></li>
+	        <li role="presentation"><a  data-toggle="tab" href="#menu3">Reporte de Ventas</a></li>
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
@@ -50,6 +51,16 @@
 	      				</div>
 	      				<button type="submit" class="btn btn-primary btn-block">Actualizar</button>
 	      			</form>
+	      		</div>
+	      	</div>
+	      </div>
+	      <div class="tab-pane fade" id="menu3" role="tabpanel">
+	      	<div class="row">
+	      		<div class="col-md-12">
+	      			<div class="alert alert-info" role="alert" style="background: #D9EDF7 !important">
+	      				<p>Si genera la exportación del reporte, se descargará un <b>.zip</b> de <b>{{ $cantidadStock }}</b> archivos CSV que contiene información de las ventas del stock.</p>
+	      			</div>
+	      			<a href="{{ url('excel') }}" class="btn btn-primary btn-block">Generar reporte</a>
 	      		</div>
 	      	</div>
 	      </div>
