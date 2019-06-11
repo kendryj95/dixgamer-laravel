@@ -696,9 +696,11 @@ ORDER BY libre DESC";
       return redirect()->back();
     }
 
-    public function pedidosCargar()
+    public function pedidosCargar($user = null)
     {
-      $pedidos = $this->st->listPedidosPorCargar()->get();
+      $pedidos = $this->st->listPedidosPorCargar($user)->get();
+      $users = $this->st->usersPedidoPorCargar()->get();
+      $user = $user;
 
       foreach ($pedidos as $i => $value) {
         $stock = WpPost::linkStoreByCondition($value->titulo,$value->consola)->first();
@@ -709,7 +711,7 @@ ORDER BY libre DESC";
         $pedidos[$i]->link_ps = isset($stock->link_ps) ? $stock->link_ps : '';
       }
 
-      return view('stock.pedidos_cargar_operador', compact('pedidos'));
+      return view('stock.pedidos_cargar_operador', compact('pedidos','users','user'));
     }
 
     public function getPedidosEdit($id)

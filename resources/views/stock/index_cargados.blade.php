@@ -6,7 +6,7 @@
 
 
 <div class="container">
-	<h1>Listar Stocks Cargados</h1>
+    <h1>Listar Stocks Cargados</h1>
 <div class="row">
     <form action="{{ url('stocks_cargados') }}" method="get" class="form-inline">
         <div class="form-group col-md-3">
@@ -36,7 +36,7 @@
         </div>
     </form>
 </div>
-	<div class="row">
+    <div class="row">
         <div class="table-responsive">
             <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
                 <thead>
@@ -50,7 +50,9 @@
                 </thead>
                 <tbody>
                 @if(count($cargados) > 0)
+                @php $total_Q = 0 @endphp
                     @foreach($cargados as $value)
+                    @php $total_Q += $value->Q @endphp
                     <tr>
                         <td style="vertical-align: middle;">
                             {{ $value->Q }}
@@ -66,9 +68,14 @@
                         </td>
                         <td style="vertical-align: middle;">
                             @php $array = explode(',', $value->cuentas); @endphp
-                            @if(count($array)>1)
+                            @if(count($array)>0)
                                 @foreach ($array as $i => $valor)
+                                    @if($valor != "")
                                     <a href="{{ url('cuentas', $valor) }}">{{ $valor }}</a>@if($i != (count($array) - 1)),&nbsp;@endif
+                                    @else
+                                        @php $array = explode(',', $value->stocks_id); @endphp
+                                        {{ implode(', ', $array) }}
+                                    @endif
                                 @endforeach
                             @else
                                 @php $array = explode(',', $value->stocks_id); @endphp
@@ -80,6 +87,10 @@
                         </td>
                     </tr>
                     @endforeach
+                    <tr>
+                        <td><b>{{ $total_Q }}</b></td>
+                        <td colspan="4"></td>
+                    </tr>
                 @else
                     <td colspan = '5' class="text-center">No se encontraron datos</td>
                 @endif

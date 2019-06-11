@@ -126,7 +126,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('productos_catalogo', 'StockController@indexCatalogueProduct');
   Route::get('publicaciones_secundarias_ml', 'StockController@publicacionesSecundariasML');
   Route::get('stocks_cargados', 'StockController@indexCargados');
-  Route::get('pedidos_cargar','StockController@pedidosCargar');
+  Route::get('pedidos_cargar/{user?}','StockController@pedidosCargar');
 
   // Rutas donde solo podran acceder analistas y administradores
   Route::group(['middleware' => ['analyst']], function()

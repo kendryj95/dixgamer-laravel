@@ -6,7 +6,30 @@
 
 
 <div class="container">
-	<h1>Pedidos por Cargar - {{ session()->get('usuario')->Nombre }}</h1>
+	<h1>Pedidos por Cargar - {{ $user != '' ? $user : session()->get('usuario')->Nombre }}</h1>
+
+    @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+
+    <div class="row" style="margin-bottom: 20px">
+        <div class="col-md-12">
+
+            @foreach($users as $value)
+
+              <a
+                class="btn @if($user == $value->usuario) btn-success @else btn-default @endif btn-sm"
+                href="{{ url('pedidos_cargar', $value->usuario) }}"
+                title="Filtrar {{$value->usuario}}"
+                style="margin:5px 0 0 0;">
+
+                {{$value->usuario}}
+
+              </a>
+
+            @endforeach
+        </div>
+    </div>
+
+    @endif
 
 	<div class="row">
         

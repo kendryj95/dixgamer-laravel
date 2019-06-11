@@ -555,9 +555,18 @@ class Stock extends Model
         return DB::table('stock_cargar')->select('*', DB::raw('GROUP_CONCAT(usuario) AS usuarios_pedido'),DB::raw('GROUP_CONCAT(ID) AS ids'))->where('estado','listo')->groupBy(DB::raw("cantidad,titulo, consola, DATE(Day)"))->orderBy('Day','DESC');
     }
 
-    public function listPedidosPorCargar()
+    public function listPedidosPorCargar($user)
     {
-        return DB::table('stock_cargar')->where('estado','pendiente')->where('usuario',session()->get('usuario')->Nombre)->orderBy('Day','DESC');
+        if ($user != '') {
+            return DB::table('stock_cargar')->where('estado','pendiente')->where('usuario',$user)->orderBy('Day','DESC');
+        } else {
+            return DB::table('stock_cargar')->where('estado','pendiente')->where('usuario',session()->get('usuario')->Nombre)->orderBy('Day','DESC');
+        }
+    }
+
+    public function usersPedidoPorCargar()
+    {
+        return DB::table('stock_cargar')->select('usuario')->where('estado','pendiente')->groupBy('usuario');
     }
 
     public function ScopeGetCantidadStockPorCargar($query, $fecha, $titulo, $consola)
