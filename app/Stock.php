@@ -569,10 +569,12 @@ class Stock extends Model
         return DB::table('stock_cargar')->select('usuario')->where('estado','pendiente')->groupBy('usuario');
     }
 
-    public function ScopeGetCantidadStockPorCargar($query, $fecha, $titulo, $consola)
+    public function ScopeGetCantidadStockPorCargar($query, $fecha, $titulo, $consola, $user)
     {
+        $user = $user != '' ? $user : session()->get('usuario')->Nombre;
+
         $query->select(DB::raw("COUNT(*) AS Q_stk"))
-        ->where('usuario',session()->get('usuario')->Nombre)
+        ->where('usuario',$user)
         ->where(DB::raw("DATE(Day)"),'>=', $fecha)
         ->where('titulo', $titulo)
         ->where('consola', $consola)

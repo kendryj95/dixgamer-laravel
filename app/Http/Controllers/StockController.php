@@ -704,7 +704,7 @@ ORDER BY libre DESC";
 
       foreach ($pedidos as $i => $value) {
         $stock = WpPost::linkStoreByCondition($value->titulo,$value->consola)->first();
-        $cantidad_cargada = Stock::getCantidadStockPorCargar(date('Y-m-d',strtotime($value->Day)), $value->titulo, $value->consola)->value('Q_stk') == '' ? 0 : Stock::getCantidadStockPorCargar(date('Y-m-d',strtotime($value->Day)), $value->titulo, $value->consola)->value('Q_stk'); 
+        $cantidad_cargada = Stock::getCantidadStockPorCargar(date('Y-m-d',strtotime($value->Day)), $value->titulo, $value->consola, $user)->value('Q_stk') == '' ? 0 : Stock::getCantidadStockPorCargar(date('Y-m-d',strtotime($value->Day)), $value->titulo, $value->consola, $user)->value('Q_stk'); 
         $cantidad_por_cargar = $value->cantidad - $cantidad_cargada;
 
         $pedidos[$i]->cantidad_cargar = $cantidad_por_cargar;

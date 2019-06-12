@@ -38,17 +38,20 @@
                 <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
                     <thead>
                     <tr>
+                        <th>Cantidad</th>
                         <th>Cover</th>
                         <th>Titulo</th>
-                        <th>Cantidad</th>
                         <th>Link/s</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     @if(count($pedidos) > 0)
+                        @php $total_cantidad = 0 @endphp
                         @foreach($pedidos as $pedido)
+                        @php $total_cantidad += $pedido->cantidad_cargar  @endphp
                         <tr>
+                            <td>{{ $pedido->cantidad_cargar }}</td>
                             <td>
                                 <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />
                             </td>
@@ -58,7 +61,6 @@
                                     {{$pedido->consola}}
                                 </span>
                             </td>
-                            <td>{{ $pedido->cantidad_cargar }}</td>
                             <td title="{{ $pedido->link_ps }}">
                               @if(($pedido->link_ps) && $pedido->link_ps !== "")
                                 <?php $array = (explode(',', $pedido->link_ps, 10)); ?>
@@ -83,6 +85,10 @@
                             </td>
                         </tr>
                         @endforeach
+                        <tr>
+                            <td><b>{{ $total_cantidad }}</b></td>
+                            <td colspan="4"></td>
+                        </tr>
                     @else
                     <tr>
                         <td colspan="5">No hay registros para mostrar.</td>

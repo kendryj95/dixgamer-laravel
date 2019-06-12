@@ -35,6 +35,7 @@
                     <thead>
                     <tr>
                         <th>Cantidad</th>
+                        <th>Cover</th>
                         <th>Titulo</th>
                         <th>Usuarios</th>
                         <th>Notas</th>
@@ -48,7 +49,7 @@
                             <td>
                                 <input class="form-control input-sm" type="number" name="cantidad" id="cantidad" autocomplete="off" spellcheck="false" placeholder="Cantidad" autofocus>
                             </td>
-                            <td>
+                            <td colspan="2">
                                 <select name="titulo-select" class="selectpicker form-control input-sm" onchange="formatTitleAndGetData()" data-live-search="true" data-size="5" id="titulo-select">
                                   <option value="">Seleccione Titulo</option>
                                   @foreach($titles as $t)
@@ -74,9 +75,14 @@
                             </form>
                         </tr>
                     @if(count($pedidos) > 0)
+                        @php $total_cantidad = 0 @endphp
                         @foreach($pedidos as $i => $pedido)
+                        @php $total_cantidad += $pedido->cantidad @endphp
                         <tr id="datos-{{$i}}">
                             <td>{{ $pedido->cantidad }}</td>
+                            <td>
+                                <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />
+                            </td>
                             <td>
                                 {{ $pedido->titulo }}
                                 <span class="label label-default {{$pedido->consola}}">
@@ -102,7 +108,7 @@
                                 
                                 <small>Antes: {{ $pedido->cantidad }}</small>
                             </td>
-                            <td>
+                            <td colspan="2">
                                 <select name="titulo-select" class="selectpicker form-control input-sm" onchange="formatTitleAndGetData('edit', '{{$i}}')" data-live-search="true" data-size="5" id="titulo-select{{$i}}">
                                   <option value="">Seleccione Titulo</option>
                                   @foreach($titles as $t)
@@ -138,9 +144,13 @@
                             </form>
                         </tr>
                         @endforeach
+                        <tr>
+                            <td><b>{{ $total_cantidad }}</b></td>
+                            <td colspan="5"></td>
+                        </tr>
                     @else
                     <tr>
-                        <td colspan = '5' class="text-center">No se encontraron datos</td>
+                        <td colspan = '6' class="text-center">No se encontraron datos</td>
                     </tr>
                     @endif
                     </tbody>
@@ -159,6 +169,7 @@
                     <thead>
                     <tr>
                         <th>Cantidad</th>
+                        <th>Cover</th>
                         <th>Titulo</th>
                         <th>Usuarios</th>
                         <th>Notas</th>
@@ -167,9 +178,14 @@
                     <tbody>
                         
                     @if(count($pedidos_finalizados) > 0)
+                        @php $total_cantidad = 0 @endphp
                         @foreach($pedidos_finalizados as $i => $pedido)
+                        @php $total_cantidad += $pedido->cantidad @endphp
                         <tr>
                             <td>{{ $pedido->cantidad }}</td>
+                            <td>
+                                <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />
+                            </td>
                             <td>
                                 {{ $pedido->titulo }}
                                 <span class="label label-default {{$pedido->consola}}">
@@ -184,9 +200,13 @@
                             </td>
                         </tr>
                         @endforeach
+                        <tr>
+                            <td><b>{{ $total_cantidad }}</b></td>
+                            <td colspan="4"></td>
+                        </tr>
                     @else
                     <tr>
-                        <td colspan = '4' class="text-center">No se encontraron datos</td>
+                        <td colspan = '5' class="text-center">No se encontraron datos</td>
                     </tr>
                     @endif
                     </tbody>
