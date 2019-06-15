@@ -481,7 +481,7 @@ class SalesController extends Controller
                         ];  
                     } 
                 } elseif (is_array($gifts["g_10"])) { // Si hay más de 2 gift de 10 usd
-                    if ($gifts["g_10"] > 2) { // Si hay más de 2 gift de 10 usd
+                    if ($gifts["g_10"][0]->Q_Stock > 2) { // Si hay más de 2 gift de 10 usd
                          ## Se registrará 3 veces para 30 usd.
                          for ($i=0; $i <= 2 ; $i++) { 
                              $data_gifts[] = $gifts["g_10"];
@@ -522,6 +522,12 @@ class SalesController extends Controller
                       for ($i=0; $i <= 1 ; $i++) { 
                           $data_gifts[] = $gifts["g_20"][0];
                       }
+                    } elseif (is_array($gifts["g_10"])) { // Si hay más de 3 gift de 10 en stock.
+                        if ($gifts["g_10"][0]->Q_Stock > 3) { // Si hay más de 3 gift de 10 en stock.
+                            for ($i=0; $i <= 3 ; $i++) { 
+                                $data_gifts[] = $gifts["g_10"][0];
+                            }
+                        }
                     }
                 } elseif (is_array($gifts["g_10"])) { // Si hay más de 3 gift de 10 en stock.
                     if ($gifts["g_10"][0]->Q_Stock > 3) { // Si hay más de 3 gift de 10 en stock.

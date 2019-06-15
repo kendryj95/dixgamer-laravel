@@ -590,7 +590,7 @@
               @if(($dataCustomer->code) && ($dataCustomer->slot == "No"))
                 <p>
                   <small class="">
-                    <?php echo $dataCustomer->code; ?>
+                    <?php echo str_replace('-','',$dataCustomer->code); ?>
                   </small>
 
                   @if(Helper::validateAdministrator(session()->get('usuario')->Level))
