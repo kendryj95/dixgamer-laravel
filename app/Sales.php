@@ -94,4 +94,32 @@ class Sales extends Model
         ->orderBy('vc.ID','DESC');
     }
 
+    public function ScopeGetDatosControlVentas($query)
+    {
+        $query->select(
+            'ventas.ID AS ID_ventas',
+            'clientes_id',
+            'stock_id',
+            'slot',
+            'medio_venta',
+            'medio_cobro',
+            'precio',
+            'comision',
+            'ventas.Notas AS ventas_Notas',
+            'ventas.Day as ventas_Day',
+            'ventas.usuario as ventas_usuario',
+            'apellido',
+            'nombre',
+            'titulo',
+            'consola',
+            'cuentas_id',
+            'costo',
+            'q_vta'
+        )
+        ->leftJoin(DB::raw("(select ventas_id, medio_cobro, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro"),'ventas.ID','=','ventas_cobro.ventas_id')
+        ->leftJoin('clientes','ventas.clientes_id','=','clientes.ID')
+        ->leftJoin(DB::raw("(select ID, titulo, consola, cuentas_id, costo, q_vta FROM stock LEFT JOIN (select count(*) as q_vta, stock_id from ventas group by stock_id) as vendido ON stock.ID = vendido.stock_id) as stock"),'ventas.stock_id','=','stock.ID')
+        ->orderBy('ventas.ID','DESC');
+    }
+
 }

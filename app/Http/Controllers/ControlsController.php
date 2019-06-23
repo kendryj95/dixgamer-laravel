@@ -7,9 +7,18 @@ use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Mail;
 use Zipper;
+use App\Sales;
+use App\Expenses;
 
 class ControlsController extends Controller
 {
+    private $expenses;
+
+    public function __construct()
+    {
+        $this->expenses = new Expenses();
+    }
+
     public function ventasPerBancos()
     {
         $ventas = DB::table('ventas_cobro')
@@ -922,5 +931,14 @@ ORDER BY consola, titulo ASC";
         }
 
         return $data_excel;
+    }
+
+    public function controlVentas()
+    {
+        $ventas = Sales::getDatosControlVentas()->paginate(100);
+        $gasto = $this->expenses->gastosControlVentas()->first();
+        $gto_x_ing = $gasto->gasto / $gasto->ingreso;
+
+        return view('control.control_ventas', compact('ventas','gto_x_ing'));
     }
 }

@@ -45,4 +45,9 @@ class Expenses extends Model
 
   }
 
+  public function gastosControlVentas()
+  {
+    return DB::table(DB::raw("(SELECT (SELECT SUM(importe) as Gto_Tot FROM gastos WHERE concepto NOT LIKE '%IIBB%') as gasto, (SELECT SUM(precio) as Ing_Tot FROM ventas_cobro) as ingreso) as resultado"));
+  }
+
 }

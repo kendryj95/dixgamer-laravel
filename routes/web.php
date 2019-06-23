@@ -186,6 +186,7 @@ Route::group(['middleware' => ['login']], function()
         Route::get('config/general', 'ControlsController@configGeneral');
         Route::post('config/general', 'ControlsController@configGeneralStore');
         Route::get('excel', 'ControlsController@excel');
+        Route::get('control_ventas', 'ControlsController@controlVentas');
     });
 
 
