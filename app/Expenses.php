@@ -50,4 +50,13 @@ class Expenses extends Model
     return DB::table(DB::raw("(SELECT (SELECT SUM(importe) as Gto_Tot FROM gastos WHERE concepto NOT LIKE '%IIBB%') as gasto, (SELECT SUM(precio) as Ing_Tot FROM ventas_cobro) as ingreso) as resultado"));
   }
 
+  public function ScopeTotalGastos($query)
+  {
+    $query->select(
+      DB::raw("COUNT(*) AS TotalC"),
+      DB::raw("SUM(importe) AS gastos")
+    )
+    ->where('importe','>',0);
+  }
+
 }

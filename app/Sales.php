@@ -122,4 +122,48 @@ class Sales extends Model
         ->orderBy('ventas.ID','DESC');
     }
 
+    public function totalVentas()
+    {
+        return DB::table('ventas_cobro')
+        ->select(
+            DB::raw("SUM(precio) AS Ingresos"),
+            DB::raw("SUM(comision) AS Comisiones"),
+            DB::raw("COUNT(*) AS Cantidad")
+        )
+        ->where('precio','>',0);
+    }
+
+    public function stockVendido()
+    {
+        return DB::select("SELECT stock.ID, SUM(costo) as costo FROM (SELECT stock_id FROM `ventas` GROUP BY stock_id) as vendido LEFT JOIN stock ON vendido.stock_id = stock.ID")[0];
+    }
+
+    public function datosVentasBalance($tipo = '')
+    {
+        $query_rsCicloVtaGRAL = "SELECT AVG(diasfromcompra) as diasfromcompra FROM
+        (SELECT t1.*, stock.Day, titulo, consola, cuentas_id, TIMESTAMPDIFF(DAY, stock.Day, prom_dia_venta) as diasfromcompra FROM
+        (Select ID, from_unixtime(AVG(unix_timestamp(Day))) AS prom_dia_venta, stock_id
+        FROM ventas 
+        GROUP BY stock_id) as t1
+        LEFT JOIN
+        stock
+        ON t1.stock_id=stock.ID  
+        ORDER BY `diasfromcompra` DESC) as t2
+        ";
+
+        $condicion = '';
+
+        if ($tipo == 'ciclo_vta') {
+            $condicion .= " WHERE diasfromcompra > 0";
+        } elseif ($tipo == 'vta_ps4') {
+            $condicion .= " WHERE diasfromcompra >= 0 AND consola ='ps4'";
+        } elseif ($tipo == 'vta_ps3') {
+            $condicion .= " WHERE diasfromcompra >= 0 AND consola ='ps3'";
+        } elseif ($tipo == 'vta_ps') {
+            $condicion .= " WHERE diasfromcompra >= 0 AND consola ='ps'";
+        }
+
+        return DB::select($query_rsCicloVtaGRAL . $condicion)[0];
+    }
+
 }

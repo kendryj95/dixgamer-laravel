@@ -9,14 +9,22 @@ use Mail;
 use Zipper;
 use App\Sales;
 use App\Expenses;
+use App\Stock;
+use App\Balance;
 
 class ControlsController extends Controller
 {
     private $expenses;
+    private $sales;
+    private $stock;
+    private $balance;
 
     public function __construct()
     {
         $this->expenses = new Expenses();
+        $this->sales = new Sales();
+        $this->stock = new Stock();
+        $this->balance = new Balance();
     }
 
     public function ventasPerBancos()
@@ -940,5 +948,21 @@ ORDER BY consola, titulo ASC";
         $gto_x_ing = $gasto->gasto / $gasto->ingreso;
 
         return view('control.control_ventas', compact('ventas','gto_x_ing'));
+    }
+
+    public function balance()
+    {
+        $row_rsVentas = $this->sales->totalVentas()->first();
+        $row_rsGastos = Expenses::totalGastos()->first();
+        $row_rsStock = Stock::totalesStock()->first();
+        $row_rsStockVendido = $this->sales->stockVendido();
+        $balance_mensual = $this->balance->balanceMensual();
+        $row_rsCicloVtaGRAL = $this->sales->datosVentasBalance();
+        $row_rsCicloVta = $this->sales->datosVentasBalance('ciclo_vta');
+        $row_rsCicloVtaPS4 = $this->sales->datosVentasBalance('vta_ps4');
+        $row_rsCicloVtaPS3 = $this->sales->datosVentasBalance('vta_ps3');
+        $row_rsCicloVtaPS = $this->sales->datosVentasBalance('vta_ps');
+
+        return view('control.balance', compact('row_rsVentas','row_rsGastos','row_rsStock','row_rsStockVendido','balance_mensual','row_rsCicloVtaGRAL','row_rsCicloVta','row_rsCicloVtaPS4','row_rsCicloVtaPS3','row_rsCicloVtaPS'));
     }
 }

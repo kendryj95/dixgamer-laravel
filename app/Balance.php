@@ -92,6 +92,22 @@ class Balance extends Model
       ->limit(3);
     }
 
+    public function balanceMensual()
+    {
+      return DB::select("SELECT M_S, qty, precio, comision, costo, IFNULL(gasto,0) as gasto, (precio - comision - costo - IFNULL(gasto,0)) as ganancia FROM
+      (SELECT DATE_FORMAT(Day,'%Y-%m') AS M_S, round(SUM(costo)) AS costo FROM stock GROUP BY M_S) as costos
+      LEFT JOIN
+      (SELECT DATE_FORMAT(Day,'%Y-%m') AS M_V, COUNT(ID) AS qty FROM ventas GROUP BY M_V) as ventas
+      ON M_S = M_V
+      LEFT JOIN
+      (SELECT DATE_FORMAT(Day,'%Y-%m') AS M_C, round(SUM(precio)) AS precio, round(SUM(comision)) AS comision FROM ventas_cobro GROUP BY M_C) as cobros
+      ON M_S = M_C
+      LEFT JOIN
+      (SELECT DATE_FORMAT(Day,'%Y-%m') AS M_G, round(SUM(importe)) AS gasto FROM gastos GROUP BY M_G) as gastos
+      ON M_S = M_G
+      ORDER BY M_S ASC");
+    }
+
 
 
 

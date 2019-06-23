@@ -583,5 +583,14 @@ class Stock extends Model
         ->groupBy('usuario');
     }
 
+    public function ScopeTotalesStock($query)
+    {
+        $query->select(
+            DB::raw("COUNT(*) AS TotalC"),
+            DB::raw("SUM(costo) AS TotalP")
+        )
+        ->where('costo','>',0);
+    }
+
 
 }
