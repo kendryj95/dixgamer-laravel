@@ -138,7 +138,19 @@
                 -->
               </ul>
             </li>
-            <li><a href="{{ url('web/sales') }}"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>
+            <li class="dropdown"><a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados<span class="caret"></span></a>
+
+              <ul class="dropdown-menu">
+
+                <li><a href="{{ url('web/sales_nofifa') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin Fifa</a></li>
+
+                <li><a href="{{ url('web/sales') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Con Fifa</a></li>
+
+                <li><a href="{{ url('web/sales_fifa') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sólo Fifa</a></li>
+                
+              </ul>
+
+            </li>
 
             @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <li class="dropdown">
