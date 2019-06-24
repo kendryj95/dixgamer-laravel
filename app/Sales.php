@@ -114,7 +114,8 @@ class Sales extends Model
             'consola',
             'cuentas_id',
             'costo',
-            'q_vta'
+            'q_vta',
+            DB::raw("(SELECT IFNULL(color, 'secondary') FROM usuarios WHERE Nombre = ventas.usuario) AS color_user")
         )
         ->leftJoin(DB::raw("(select ventas_id, medio_cobro, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro"),'ventas.ID','=','ventas_cobro.ventas_id')
         ->leftJoin('clientes','ventas.clientes_id','=','clientes.ID')
