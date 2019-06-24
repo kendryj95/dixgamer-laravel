@@ -168,7 +168,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('balance') }}"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Balance</a></li>
-                <li><a href="https://dixgamer.com/db/_control/balance_productos.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
+                <li><a href="{{ url('balance_productos') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
                 <li><a href="https://dixgamer.com/db/_control/balance_productos_dias.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>

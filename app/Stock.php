@@ -592,5 +592,31 @@ class Stock extends Model
         ->where('costo','>',0);
     }
 
+    public function ScopeGetDatosBalanceProductos($query)
+    {
+        $query->select(
+            'ID',
+            'titulo',
+            'consola',
+            DB::raw("COUNT(*) AS q_stock"),
+            DB::raw('(COUNT(*) - SUM(slotprimario)) as s_pri'),
+            DB::raw('(COUNT(*) - SUM(slotsecundario)) as s_sec'),
+            DB::raw('round(AVG(costo),0) AS costoprom'),
+            DB::raw('SUM(costo) AS costototal'),
+            DB::raw('Min(costo) AS costomin'),
+            DB::raw('Max(costo) AS costomax'),
+            DB::raw('SUM(cantidadventa) AS q_venta'),
+            DB::raw('SUM(ingresototal) AS ing_total'),
+            DB::raw('SUM(comisiontotal) AS com_total')
+        )
+        ->leftjoin(DB::raw("(SELECT stock_id, COUNT(case when slot = 'Primario' then 1 else null end) AS slotprimario, COUNT(case when slot = 'Secundario' then 1 else null end) AS slotsecundario, COUNT(*) AS cantidadventa, SUM(precio) AS ingresototal, SUM(comision) AS comisiontotal 
+        FROM ventas
+        LEFT JOIN (select ventas_id, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro ON ventas.ID = ventas_cobro.ventas_id
+        GROUP BY stock_id) AS vtas"),'stock.ID','=','vtas.stock_id')
+        ->groupBy('consola')
+        ->groupBy('titulo')
+        ->orderBy('q_venta','DESC');
+    }
+
 
 }

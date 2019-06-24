@@ -188,6 +188,7 @@ Route::group(['middleware' => ['login']], function()
         Route::get('excel', 'ControlsController@excel');
         Route::get('control_ventas', 'ControlsController@controlVentas');
         Route::get('balance', 'ControlsController@balance');
+        Route::get('balance_productos', 'ControlsController@balanceProductos');
     });
 
 

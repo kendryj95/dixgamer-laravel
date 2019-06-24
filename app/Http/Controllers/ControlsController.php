@@ -965,4 +965,11 @@ ORDER BY consola, titulo ASC";
 
         return view('control.balance', compact('row_rsVentas','row_rsGastos','row_rsStock','row_rsStockVendido','balance_mensual','row_rsCicloVtaGRAL','row_rsCicloVta','row_rsCicloVtaPS4','row_rsCicloVtaPS3','row_rsCicloVtaPS'));
     }
+
+    public function balanceProductos()
+    {
+        $rsCXP = Stock::getDatosBalanceProductos()->get();
+
+        return view('control.balance_productos', compact('rsCXP'));
+    }
 }
