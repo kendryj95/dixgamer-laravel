@@ -98,7 +98,7 @@
         	</td>
             <td><span class="@if ($ganancia < 0) badge badge-danger @endif">{{ $ganancia }}</span></td>
             <td>
-            	<span class="badge badge-{{ \Helper::userColor($persona) }} pull-right" style="opacity:0.7; font-weight:400;">{{ substr($row_rsClientes->ventas_usuario,0 , 1) }}</span>
+            	<span class="badge badge-{{ $row_rsClientes->color_user }} pull-right" style="opacity:0.7; font-weight:400;" title="{{$persona}}">{{ substr($row_rsClientes->ventas_usuario,0 , 1) }}</span>
         	</td>
             
      </tr>
