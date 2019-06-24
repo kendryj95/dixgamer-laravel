@@ -105,7 +105,8 @@
     var min_precio = parseInt($('#min_precio').val()),
         max_precio = parseInt($('#max_precio').val()),
         min_cant = parseInt($('#min_cant').val()),
-        max_cant = parseInt($('#max_cant').val())
+        max_cant = parseInt($('#max_cant').val()),
+        stepSizeCant = Math.round(max_cant/10);
 
     var limits = {
       min_precio: min_precio,
@@ -157,7 +158,7 @@
                     ticks: {
                         max: limits.max_cant,
                         min: limits.min_cant,
-                        stepSize: 10
+                        stepSize: stepSizeCant
                     }
                   }
                 ],
