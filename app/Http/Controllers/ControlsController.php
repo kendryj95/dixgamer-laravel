@@ -972,4 +972,15 @@ ORDER BY consola, titulo ASC";
 
         return view('control.balance_productos', compact('rsCXP'));
     }
+
+    public function balanceProductosDias(Request $request)
+    {
+        $dias = isset($request->dias) ? $request->dias : 7;
+
+        $rsCXP = Stock::getDatosBalanceProductosDias($dias);
+
+        $filtro_dias = [3,7,14,28,60,90,180,360]; // Array que se utiliza para filtrar por días.
+
+        return view('control.balance_productos_dias', compact('dias','rsCXP','filtro_dias'));
+    }
 }

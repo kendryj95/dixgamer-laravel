@@ -169,7 +169,7 @@
               <ul class="dropdown-menu">
                 <li><a href="{{ url('balance') }}"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Balance</a></li>
                 <li><a href="{{ url('balance_productos') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
-                <li><a href="https://dixgamer.com/db/_control/balance_productos_dias.php"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
+                <li><a href="{{ url('balance_productos_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>
                 <li><a href="https://dixgamer.com/db/publicaciones_detalles.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Publicaciones</a></li>

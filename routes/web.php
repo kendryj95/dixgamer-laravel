@@ -189,6 +189,7 @@ Route::group(['middleware' => ['login']], function()
         Route::get('control_ventas', 'ControlsController@controlVentas');
         Route::get('balance', 'ControlsController@balance');
         Route::get('balance_productos', 'ControlsController@balanceProductos');
+        Route::get('balance_productos_dias', 'ControlsController@balanceProductosDias');
     });
 
 
