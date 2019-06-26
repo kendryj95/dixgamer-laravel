@@ -1801,6 +1801,56 @@ class AccountController extends Controller
       
     }
 
+    public function intentoRecuperar($account_id)
+    {
+      $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+      $stocks = explode(",", $stocks);
+
+      $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')
+      ->join('clientes AS c','c.ID','=','ventas.clientes_id')
+      ->first();
+
+      $vendedor = session()->get('usuario')->Nombre;
+
+      $account_pass_act = DB::table('cuentas')->where('ID',$account_id)->value('pass');
+
+      DB::beginTransaction();
+
+      try {
+        if ($venta) {
+          $data = [];
+          $data['cuentas_id'] = $account_id;
+          $data['new_pass'] = $account_pass_act;
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('cta_pass')->insert($data);
+
+          $data = [];
+          $data['id_ventas'] = $venta->ID;
+          $data['Notas'] = "Intento recuperar";
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('ventas_notas')->insert($data);
+
+          DB::commit();
+
+          \Helper::messageFlash('Cuentas',"Nota generada de intento recuperar.",'alert_cuenta');
+
+
+          return redirect()->back();
+        } else {
+          return redirect()->back()->withErrors(['Ha ocurrido un error al completar toda la información correspondiente para generar la nota.']);
+        }
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);
+      }
+
+      
+    }
+
     public function product20off($account,$title,$console)
     {
       $stock_valido = \Helper::availableStock($account,$title,$console);

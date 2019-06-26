@@ -89,6 +89,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('listaYopmail', 'AccountController@listaYopmail');
   Route::get('change_email_dixgamer/{account_id}', 'AccountController@changeEmailDixgamer');
   Route::get('nota_siguejugando/{account_id}', 'AccountController@sigueJugando');
+  Route::get('nota_intentorecuperar/{account_id}', 'AccountController@intentoRecuperar');
   Route::get('agregar_20_off/{account}/{title}/{console}', 'AccountController@product20off');
   Route::get('cuentas_con_saldo', 'AccountController@accountAmount');
   Route::get('cuentas_para_ps3', 'AccountController@accountGamePs3');

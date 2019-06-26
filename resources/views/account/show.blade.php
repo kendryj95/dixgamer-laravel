@@ -99,6 +99,19 @@
             		<b><i class="fa fa-fw fa-gamepad"></i> Sigue jugando</b>
             	</a><br><br>
 
+            	@else
+
+            		@if(\Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre))
+
+            		<a
+            		href="{{ url('nota_intentorecuperar', $account->ID) }}"
+            		class="btn btn-success btn-xs"
+            		>
+            			<b><i class="fa fa-fw fa-gamepad"></i> Intento recuperar</b>
+            		</a><br><br>
+
+            		@endif
+
             	@endif
 
             	@if(strpos($account->mail_fake, 'yopmail') !== false && \Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre))
