@@ -1828,7 +1828,7 @@ class AccountController extends Controller
 
           $data = [];
           $data['id_ventas'] = $venta->ID;
-          $data['Notas'] = "Intento recuperar";
+          $data['Notas'] = "Intento recuperar secu";
           $data['Day'] = date('Y-m-d H:i:s');
           $data['usuario'] = session()->get('usuario')->Nombre;
 

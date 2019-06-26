@@ -101,13 +101,13 @@
 
             	@else
 
-            		@if(\Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre))
+            		@if(\Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre) && strpos($account->mail_fake, 'yopmail') === false)
 
             		<a
             		href="{{ url('nota_intentorecuperar', $account->ID) }}"
             		class="btn btn-success btn-xs"
             		>
-            			<b><i class="fa fa-fw fa-gamepad"></i> Intento recuperar</b>
+            			<b><i class="fa fa-fw fa-gamepad"></i> Intento recuperar secu</b>
             		</a><br><br>
 
             		@endif
