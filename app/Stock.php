@@ -552,7 +552,7 @@ class Stock extends Model
 
     public function listPedidosFinalizados()
     {
-        return DB::table('stock_cargar')->select('*', DB::raw('GROUP_CONCAT(usuario) AS usuarios_pedido'),DB::raw('GROUP_CONCAT(ID) AS ids'))->where('estado','listo')->groupBy(DB::raw("cantidad,titulo, consola, DATE(Day)"))->orderBy('Day','DESC');
+        return DB::table('stock_cargar')->where('estado','listo')->orderBy('Day','DESC');
     }
 
     public function listPedidosPorCargar($user)
