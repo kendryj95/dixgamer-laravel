@@ -101,7 +101,7 @@
 
             	@else
 
-            		@if(\Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre) && strpos($account->mail_fake, 'yopmail') === false)
+            		@if(\Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre))
 
             		<a
             		href="{{ url('nota_intentorecuperar', $account->ID) }}"
