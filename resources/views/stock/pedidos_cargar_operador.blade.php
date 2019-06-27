@@ -8,7 +8,6 @@
 <div class="container">
 	<h1>Pedidos por Cargar - {{ $user != '' ? $user : session()->get('usuario')->Nombre }}</h1>
 
-    @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
 
     <div class="row" style="margin-bottom: 20px">
         <div class="col-md-12">
@@ -29,7 +28,6 @@
         </div>
     </div>
 
-    @endif
 
 	<div class="row">
         
