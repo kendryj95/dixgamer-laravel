@@ -186,6 +186,7 @@ Route::group(['middleware' => ['login']], function()
         Route::get('control_mp_baja_slot_libre/{dif}/{ref_cobro}', 'ControlsController@controlMPBajaSlotLibre');
         Route::get('config/general', 'ControlsController@configGeneral');
         Route::post('config/general', 'ControlsController@configGeneralStore');
+        Route::get('config/proceso/{tipo}', 'ControlsController@procesosAutomaticos');
         Route::get('excel', 'ControlsController@excel');
         Route::get('control_ventas', 'ControlsController@controlVentas');
         Route::get('balance', 'ControlsController@balance');

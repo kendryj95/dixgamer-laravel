@@ -983,4 +983,691 @@ ORDER BY consola, titulo ASC";
 
         return view('control.balance_productos_dias', compact('dias','rsCXP','filtro_dias'));
     }
+
+    public function procesosAutomaticos($tipo)
+    {
+        switch ($tipo) {
+            case 'automatizar_clientes':
+                
+                DB::table('clientes as a')
+                ->leftjoin(DB::raw("(SELECT 
+                clientes_id,
+                COUNT(*) as q_vtas,
+                DATEDIFF(NOW(), min( Day )) as dias_de_primer_venta
+                FROM ventas GROUP BY clientes_id) as b"),'a.ID','=','b.clientes_id')
+                ->where('a.auto','no')
+                ->where(DB::raw("(dias_de_primer_venta > 180) or ((dias_de_primer_venta > 120) and (q_vtas > 1))"))
+                ->update(['auto' => 'si']);
+
+                \Helper::messageFlash('Configuraciones','Clientes automatizados correctamente.');
+
+                return redirect()->back();
+
+                break;
+            
+            case 'actualizar_estado_wc':
+                
+                $datos = DB::select("SELECT db.*, web.*, cbgw_posts.ID, cbgw_posts.post_status
+                FROM (SELECT COUNT(*) as q_db, order_id_web FROM (SELECT order_id_web FROM ventas GROUP BY order_item_id) as result GROUP BY order_id_web) as db
+                #primero agrupo por oii para evitar que cuente duplicado dos ventas de la base de datos correspondientes a un solo producto del pedido web ej(2 GC de 50usd por un producto GC 100usd)
+                LEFT JOIN (SELECT COUNT(*) as q_web, order_id FROM cbgw_woocommerce_order_items WHERE order_item_type='line_item' GROUP BY order_id) as web
+                #solo cuento los productos dentro de un pedido, para evitar contar cupones o descuentos que sean un item dentro del pedido
+                ON db.order_id_web = web.order_id
+                LEFT JOIN cbgw_posts 
+                on db.order_id_web = cbgw_posts.ID
+                WHERE cbgw_posts.post_status = 'wc-processing' AND q_db >= q_web");
+
+                DB::beginTransaction();
+
+                try {
+                    $pedidos = [];
+                    foreach ($datos as $value) {
+                       if ($value->order_id) {
+                           DB::table('cbgw_posts')->where('ID', $value->order_id)->update(['post_status' => 'wc-completed']);
+
+                           $post_id = $row_rsEstado_>order_id;
+                           $meta_key = "_completed_date";
+                           $date = date('Y-m-d H:i:s');
+
+                           $data['post_id'] = $post_id;
+                           $data['meta_key'] = $meta_key;
+                           $data['meta_value'] = $date;
+
+                           DB::table('cbgw_postmeta')->insert($data);
+
+                           $pedidos[] = $post_id;
+                       }
+                    }
+
+                    DB::commit();
+
+                    \Helper::messageFlash('Configuraciones',"Pedido(s) (".implode(",",$pedidos).") marcado(s) como entregado.");
+
+                    return redirect()->back();
+                } catch (Exception $e) {
+                    DB::rollback();
+                    return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso.']);
+                }
+
+                break;
+            case 'actualizar_ids_ventas':
+
+                DB::table('ventas AS a')
+                ->leftjoin(DB::raw("(SELECT 
+                order_item_id,
+                order_id,
+                max( CASE WHEN cbgw_postmeta.meta_key='order_id_ml' and cbgw_woocommerce_order_items.order_id=cbgw_postmeta.post_id THEN cbgw_postmeta.meta_value END ) as order_id_ml
+                FROM cbgw_woocommerce_order_items
+                LEFT JOIN cbgw_postmeta 
+                ON order_id = cbgw_postmeta.post_id
+                GROUP BY order_item_id) as b"),'a.order_item_id','=','b.order_item_id')
+                ->whereNotNull('a.order_item_id')
+                ->whereNull('a.order_id_ml')
+                ->whereNotNull('b.order_id_ml')
+                ->update([
+                    'a.order_id_web' => 'b.order_id',
+                    'a.order_id_ml' => 'b.order_id_ml'
+                ]);
+
+                \Helper::messageFlash('Configuraciones',"IDS de ventas actualizadas correctamente.");
+
+                return redirect()->back();
+
+                break;
+            case 'actualizar_costo_ps4':
+
+                $datos = DB::table(DB::raw("(SELECT cuentas_id as sa_cta_id, SUM(costo_usd) as sa_costo_usd, SUM(costo) as sa_costo FROM saldo GROUP BY cuentas_id) as saldo"))
+                ->select(
+                    'sa_cta_id as cuentas_id',
+                    DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0)) as libre_usd"),
+                    DB::raw("(sa_costo - COALESCE(st_costo,0)) as libre_ars"),
+                    'consola',
+                    'stock_id'
+                )
+                ->leftjoin(DB::raw("(SELECT cuentas_id as st_cta_id, SUM(costo_usd) as st_costo_usd, SUM(costo) as st_costo, GROUP_CONCAT(consola) as consola, GROUP_CONCAT(ID) as stock_id FROM stock GROUP BY cuentas_id) as stock"),'saldo.sa_cta_id','=','stock.st_cta_id')
+                ->where(DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0))"),'!=',0)
+                ->where('consola','ps4')
+                ->where('st_cta_id','>=',3786)
+                ->orderBy('stock.consola','DESC')
+                ->get();
+
+                DB::beginTransaction();
+
+                try {
+                    foreach ($datos as $value) {
+                        if ($value->cuentas_id) {
+                            $stock_id = $value->stock_id;
+                            $cuentas_id = $value->cuentas_id;
+                            $libre_usd = $value->libre_usd;
+                            $libre_ars = $value->libre_ars;
+
+                            if(($libre_ars > 0.00) and ($libre_ars < 300.00)) {
+
+                                DB::table('stock')->where('ID',$stock_id)
+                                ->update([
+
+                                    'costo' => "(costo + $libre_ars)"
+
+                                ]);
+
+                                DB::table('cuentas_notas')
+                                ->insert([
+
+                                    'cuentas_id' => $cuentas_id,
+                                    'Notas' => 'nota atuomatica: actualizo costo en pesos',
+                                    'usuario' => 'Sistema'
+
+                                ]);
+
+                            }
+
+                            if($libre_usd < 0.22) {
+
+                                DB::table('stock')->where('ID',$stock_id)
+                                ->update([
+
+                                    'costo_usd' => "(costo_usd + $libre_usd)"
+
+                                ]);
+
+                                DB::table('cuentas_notas')
+                                ->insert([
+
+                                    'cuentas_id' => $cuentas_id,
+                                    'Notas' => 'nota atuomatica: actualizo costo en dolares',
+                                    'usuario' => 'Sistema'
+
+                                ]);
+
+                            }
+                        }
+                    }
+
+                    DB::commit();
+
+                    \Helper::messageFlash('Configuraciones',"Costos de stocks PS4 actualizados correctamente.");
+
+                    return redirect()->back();
+                } catch (Exception $e) {
+                    DB::rollback();
+                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                }
+
+                break;
+            case 'automatizar_stock_web':
+
+                $datos = DB::select("SELECT web.*, vtas.*, IFNULL((Q_vta_pri - Q_vta_sec),0) as libre
+                        FROM
+                        (select
+                            p.ID,
+                            p.post_title,
+                            REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(p_p.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') as producto,
+                            max( CASE WHEN pm.meta_key = 'consola' and  p.post_parent = pm.post_id THEN pm.meta_value END ) as consola,
+                            max( CASE WHEN pm2.meta_key = '_regular_price' and p.ID = pm2.post_id THEN pm2.meta_value END ) as _regular_price,
+                            max( CASE WHEN pm2.meta_key = '_precio_base' and p.ID = pm2.post_id THEN pm2.meta_value END ) as _precio_base,
+                            max( CASE WHEN pm2.meta_key = 'attribute_pa_slot' and p.ID = pm2.post_id THEN pm2.meta_value END ) as slot,
+                            max( CASE WHEN pm2.meta_key = '_stock_status' and p.ID = pm2.post_id THEN pm2.meta_value END ) as stock_status,
+                            max( CASE WHEN pm2.meta_key = '_stock' and p.ID = pm2.post_id THEN pm2.meta_value END ) as stock,
+                            p_p.post_status
+                        from
+                         cbgw_posts as p
+                         left join cbgw_posts as p_p ON p.post_parent = p_p.ID
+                         left join cbgw_postmeta as pm ON p.post_parent = pm.post_id
+                         left join cbgw_postmeta as pm2 ON p.ID = pm2.post_id 
+                        where
+                            p.post_type = 'product_variation' and
+                            p_p.post_status = 'publish'
+                        group by
+                            p.ID
+                            order by p.post_title) as web
+                            
+                        LEFT JOIN
+                        (SELECT 
+                            titulo, 
+                            SUM(case when slot = 'Primario' then 1 else 0 end) AS Q_vta_pri, 
+                            SUM(case when slot = 'Secundario' then 1 else 0 end) AS Q_vta_sec,
+                            DATEDIFF(NOW(), MIN(stock.Day)) as antiguedad_juego
+                        FROM 
+                            ventas 
+                        LEFT JOIN 
+                            stock 
+                        ON 
+                            ventas.stock_id = stock.ID
+                        WHERE 
+                            (consola = 'ps4' or titulo = 'plus-12-meses-slot')
+                        GROUP BY 
+                            titulo  ) as vtas
+                        ON
+                        web.producto = vtas.titulo");
+
+                DB::beginTransaction();
+
+                try {
+                    foreach ($datos as $value) {
+                        if ($value->producto) {
+                            $ID = $value->ID;
+                            $producto = $value->producto;
+                            $slot = $value->slot;
+                            $stock = $value->stock_status;
+                            $precio_regular = $value->_regular_price;
+                            $precio_base = $value->_precio_base;
+                            $antiguedad_juego = $value->antiguedad_juego;
+
+                            if($value->Q_vta_pri === "NULL"): $qvp = 0; else: $qvp = $value->Q_vta_pri; endif;
+                            if($value->Q_vta_sec === "NULL"): $qvs = 0; else: $qvs = $value->Q_vta_sec; endif;
+                            if($value->stock === "NULL"): $stock_Q = 0; else: $stock_Q = $value->stock; endif;
+                            if(($value->libre === "NULL") or ($value->libre < 0)): $libre = 0; else: $libre = $value->libre; endif;
+
+                            if(strpos($value->producto, 'fifa-18') !== false): $margen = 0;
+                            elseif(strpos($value->producto, 'call-of-duty-black-ops-4') !== false): $margen = 20;
+                            elseif(strpos($value->producto, 'mortal-kombat-11') !== false): $margen = 40;
+                            elseif(strpos($value->producto, 'red-dead-redemption-2') !== false): $margen = 40;
+                            elseif(strpos($value->producto, 'fifa-19') !== false): $margen = 150;
+                            elseif(strpos($value->producto, 'marvel-spider-man') !== false): $margen = 20;
+                            elseif(strpos($value->producto, 'pes-2019') !== false): $margen = 20;
+                            elseif(strpos($value->producto, 'god-of-war') !== false): $margen = 25;
+                            elseif(strpos($value->producto, 'gta-v') !== false): $margen = 40;
+                            elseif(strpos($value->producto, 'plus-12-meses-slot') !== false): $margen = 0;
+                            else: $margen = 5;
+                            endif;
+
+                            if(($qvs * 0.1) > 10): $multi = 10; else: $multi = ($qvs * 0.1); endif;
+
+                            if($slot == "primario"){
+                                $factorA = 0; $factorB = 0; $factorC = 0;           
+                                if ($libre > 0 && $qvp > 0){
+                                $factorA = ($libre / 500);
+                                    if ($antiguedad_juego > 30){ 
+                                        $factorB = (($libre / $qvp)*($libre / $qvp));
+                                    }   
+                                }
+                                
+                                if($antiguedad_juego > 0){
+                                    $factorC = ($antiguedad_juego / 2000);
+                                    if($factorC > 0.08) {$factorC = 0.08;} 
+                                }
+                                
+                                $multiplier = 1 + ($factorA + $factorB + $factorC); 
+                                if($multiplier > 1.30) {$multiplier = 1.30;}
+                                $new_price = ($precio_base * $multiplier); 
+                                $new_price = (round($new_price, 0)/25);
+                                $new_price = (ceil($new_price)*25);
+                                    
+                                    
+                                if((($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))) and $new_price > 100){  
+                                    DB::table('cbgw_postmeta')
+                                    ->where('post_id',$ID)
+                                    ->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                    ->update([
+                                        'meta_value' => $new_price
+                                    ]);
+                                }
+                                
+                                
+                                if(($qvp <= ($qvs + $multi + $margen)) && ($stock == "outofstock")){
+                                    DB::table('cbgw_postmeta')
+                                    ->where('post_id',$ID)
+                                    ->where('meta_key','_stock_status')
+                                    ->update([
+                                        'meta_value' => 'instock'
+                                    ]);
+
+                                    DB::table('cbgw_postmeta')
+                                    ->where('post_id',$ID)
+                                    ->where('meta_key','_stock')
+                                    ->update([
+                                        'meta_value' => '999'
+                                    ]);
+                                }
+                            }
+
+                            if($slot == "secundario"){
+                                
+                                if($qvs >= $qvp){
+                                    if($stock == "instock"){
+                                        
+                                          DB::table('cbgw_postmeta')
+                                          ->where('post_id',$ID)
+                                          ->where('meta_key','_stock_status')
+                                          ->update([
+                                              'meta_value' => 'outofstock'
+                                          ]);
+                                    }}
+                                if(($qvs < $qvp) && ($stock == "outofstock")){
+                                    DB::table('cbgw_postmeta')
+                                    ->where('post_id',$ID)
+                                    ->where('meta_key','_stock_status')
+                                    ->update([
+                                        'meta_value' => 'instock'
+                                    ]);
+                                }
+                                if( ($libre > $stock_Q) or ($libre < $stock_Q) ) {
+                                    DB::table('cbgw_postmeta')
+                                    ->where('post_id',$ID)
+                                    ->where('meta_key','_stock')
+                                    ->update([
+                                        'meta_value' => $libre
+                                    ]);
+                                      
+                                }
+                            }
+
+                        }
+                    }
+
+                    DB::commit();
+
+                    \Helper::messageFlash('Configuraciones',"Stock web automatizados correctamente.");
+
+                    return redirect()->back();
+                } catch (Exception $e) {
+                    DB::rollback();
+                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                }
+
+                break;
+            case 'automatizar_web_ps3':
+
+                $datos = DB::select("SELECT ID, REPLACE(producto,'-',' ') as producto, rdo_web_2.consola, _regular_price, _precio_base, IFNULL(costoxU, 0) as costoxU, IFNULL(Q_Stock, 0) as Q_Stock, IFNULL(Q_Vta, 0) as Q_Vta FROM (SELECT ID, producto, consola, _regular_price, _precio_base FROM (select
+                        p.ID,
+                        p.post_title,
+                        REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(p.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') as producto,
+                        max( CASE WHEN pm.meta_key = 'consola' and  p.ID = pm.post_id THEN pm.meta_value END ) as consola,
+                        max( CASE WHEN pm.meta_key = '_regular_price' and p.ID = pm.post_id THEN pm.meta_value END ) as _regular_price,
+                        max( CASE WHEN pm.meta_key = '_precio_base' and p.ID = pm.post_id THEN pm.meta_value END ) as _precio_base
+                    from
+                     cbgw_posts as p
+                     left join cbgw_postmeta as pm ON p.ID = pm.post_id
+                    where
+                        p.post_type = 'product' and
+                        p.post_status = 'publish'
+                    group by
+                        p.ID  
+                    ORDER BY `consola`  ASC) as rdo_web
+                    Where consola = 'ps3') AS rdo_web_2
+
+
+                    LEFT JOIN
+
+
+                    (SELECT ID_stk, stk.titulo, stk.consola, (costo / Q_Stock) as costoxU, Q_Stock, IFNULL(q_venta,0) as Q_Vta
+                    FROM
+                    (SELECT ID_stk, titulo, consola, stk_ctas_id, dayreset, Q_reset, days_from_reset, Q_vta, round(AVG(costo),0) as costo, SUM(Q_Stock) AS Q_Stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo),0) as costo, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS Q_Stock
+                    FROM stock 
+                    LEFT JOIN
+                    (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo
+                    FROM reseteo
+                    GROUP BY cuentas_id
+                    ORDER BY ID DESC) AS reset
+                    ON cuentas_id = r_cuentas_id
+                    LEFT JOIN
+                    (SELECT ventas.ID as ID_vta, stock_id, COUNT(*) AS Q_vta, Day AS dayvta
+                    FROM ventas
+                    GROUP BY stock_id) AS vendido
+                    ON ID = stock_id
+                    WHERE consola = 'ps3' AND (((Q_vta IS NULL) OR (Q_vta < '2')) OR (((Q_vta >= '2') AND (Q_reseteado = FLOOR(Q_vta/2)))))
+                    GROUP BY ID
+                    ORDER BY Q_reset, consola, titulo, ID DESC) AS consulta
+                    GROUP BY consola, titulo
+                    ORDER BY consola, titulo, ID_stk) as stk
+
+                    LEFT JOIN
+
+                    (SELECT ID, titulo, consola, IFNULL(SUM(cantidadventa),0) AS q_venta
+                    FROM stock
+                    RIGHT JOIN
+                    (SELECT stock_id, COUNT(*) AS cantidadventa
+                    FROM ventas
+                    WHERE ventas.Day >= DATE(NOW() - INTERVAL 45 DAY)
+                    GROUP BY stock_id) AS vtas
+                    ON stock.ID = vtas.stock_id
+                    WHERE consola='ps3'
+                    GROUP BY consola, titulo
+                    ORDER BY q_venta DESC, consola ASC, titulo ASC) as vta
+
+                    ON stk.titulo = vta.titulo) as rdo_db
+
+
+                    ON rdo_web_2.producto = rdo_db.titulo
+                    ORDER BY `rdo_web_2`.`producto` ASC");
+
+                DB::beginTransaction();
+
+                try {
+                    foreach ($datos as $value) {
+                        if ($value->producto) {
+                            $ID = $value->ID;
+                            $producto = $value->producto;
+                            $precio_regular = $value->_regular_price;
+                            $precio_base = $value->_precio_base;
+                            $Q_Stock = $value->Q_Stock;
+                            $Q_Vta = $value->Q_Vta;
+                            $costoxU = $value->costoxU;
+                            
+                            $multiplier = 1;
+                            if($Q_Vta > 0) { 
+                                $multiplier = ($Q_Stock / ($Q_Vta * 0.66)); 
+                                if($multiplier > 4){$multiplier = 4;}
+                                if($multiplier < 0.6){$multiplier = 0.6;}
+                            }
+                            
+                            $new_price = ($precio_base / $multiplier); 
+                            
+                            if($new_price < ($costoxU * 1.25)) { 
+                                $new_price = $costoxU * 1.25;
+                            }
+                            if($new_price < 100) { $new_price = 100;}
+                            
+                            if($new_price > ($precio_base * 1.1)) { $new_price = ($precio_base * 1.1);} 
+                            
+                            $new_price = (round($new_price, 0)/5); //redondeo resultado
+                            $new_price = (ceil($new_price)*5);
+                            
+                            if(($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))){  
+                                DB::table('cbgw_postmeta')
+                                ->where('post_id',$ID)
+                                ->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                ->update([
+                                    'meta_value' => $new_price
+                                ]);
+                            }
+                            
+                        }
+                    }
+
+                    DB::commit();
+
+                    \Helper::messageFlash('Configuraciones',"Stock web PS3 automatizados correctamente.");
+
+                    return redirect()->back();
+                } catch (Exception $e) {
+                    DB::rollback();
+                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                }
+
+                break;
+            case 'automatizar_web_ps4':
+
+                $datos = DB::select("SELECT web.*, IFNULL(Qvp,0) as Qvp, IFNULL(Qvs,0) as Qvs, IFNULL((Qvp - Qvs),0) as libre, IFNULL(antiguedad,0) as antiguedad, IFNULL(Qvp_45d,0) as Qvp_45d, IFNULL(Qvs_45d,0) as Qvs_45d, IFNULL(costo,0) as costo, IFNULL(Q_stk,0) as Q_stk
+                    FROM
+                    (select
+                        p.ID,
+                        REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(p_p.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') as producto,
+                        max( CASE WHEN pm.meta_key = 'consola' and  p.post_parent = pm.post_id THEN pm.meta_value END ) as consola,
+                        max( CASE WHEN pm2.meta_key = 'attribute_pa_slot' and p.ID = pm2.post_id THEN pm2.meta_value END ) as slot,
+                        max( CASE WHEN pm2.meta_key = '_regular_price' and p.ID = pm2.post_id THEN pm2.meta_value END ) as _regular_price,
+                        max( CASE WHEN pm2.meta_key = '_precio_base' and p.ID = pm2.post_id THEN pm2.meta_value END ) as _precio_base,
+                        max( CASE WHEN pm2.meta_key = '_sale_price' and p.ID = pm2.post_id THEN pm2.meta_value END ) as _sale_price
+                    from
+                     cbgw_posts as p
+                     left join cbgw_posts as p_p ON p.post_parent = p_p.ID
+                     left join cbgw_postmeta as pm ON p.post_parent = pm.post_id
+                     left join cbgw_postmeta as pm2 ON p.ID = pm2.post_id 
+                    where
+                        p.post_type = 'product_variation' and
+                        p_p.post_status = 'publish'
+                    group by
+                        p.ID
+                        order by p.post_title ASC) as web
+                        
+                    LEFT JOIN
+                    (SELECT 
+                        titulo, 
+                        SUM(case when slot = 'Primario' then 1 else 0 end) AS Qvp, 
+                        SUM(case when slot = 'Secundario' then 1 else 0 end) AS Qvs
+                    FROM ventas LEFT JOIN stock 
+                    ON ventas.stock_id = stock.ID
+                    WHERE consola = 'ps4'
+                    GROUP BY titulo) as vtas
+                    ON web.producto = vtas.titulo
+
+                    LEFT JOIN
+                    (SELECT 
+                        titulo, 
+                        SUM(case when slot = 'Primario' then 1 else 0 end) AS Qvp_45d, 
+                        SUM(case when slot = 'Secundario' then 1 else 0 end) AS Qvs_45d
+                    FROM ventas LEFT JOIN stock 
+                    ON ventas.stock_id = stock.ID
+                    WHERE consola = 'ps4' AND DATEDIFF(NOW(), ventas.Day) < 45
+                    GROUP BY titulo) as vtas_45d
+                    ON web.producto = vtas_45d.titulo
+
+                    LEFT JOIN
+
+                    (SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo),0)*0.61) as costo, 'primario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+                    FROM stock
+                    LEFT JOIN
+                    (SELECT stock_id, SUM(case when slot = 'Primario' then 1 else null end) AS Q_vta_pri_1
+                    FROM ventas
+                    GROUP BY stock_id) AS vendido
+                    ON ID = stock_id
+                    WHERE consola = 'ps4' AND Q_vta_pri_1 IS NULL
+                    GROUP BY consola, titulo
+
+                    UNION ALL
+
+                    SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo),0)*0.39) as costo, 'secundario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+                    FROM stock
+                    LEFT JOIN
+                    (SELECT stock_id, SUM(case when slot = 'Secundario' then 1 else null end) AS Q_vta_sec_1
+                    FROM ventas
+                    GROUP BY stock_id) AS vendido
+                    ON ID = stock_id
+                    WHERE consola = 'ps4' AND Q_vta_sec_1 IS NULL
+                    GROUP BY consola, titulo
+                    ) as stk
+
+                    ON
+                    web.producto = stk.titulo and web.slot = stk.Stk_slot
+                    WHERE producto!='plus-12-meses-slot'
+                    ORDER BY producto ASC");
+
+                DB::beginTransaction();
+
+                try {
+                    foreach ($datos as $value) {
+                        if ($value->producto) {
+                            $ID = $value->ID;
+                            $producto = $value->producto;
+                            $slot = $value->slot;
+                            $precio_regular = $value->_regular_price;
+                            $precio_base = $value->_precio_base;
+                            $sale_price = $value->_sale_price;
+                            $qvp = $value->Qvp;
+                            $qvs = $value->Qvs;
+                            $libre = $value->libre;
+                            $qvp_45d = $value->Qvp_45d;
+                            $qvs_45d = $value->Qvs_45d;
+                            $costo = $value->costo;
+                            $antiguedad = $value->antiguedad;
+                            $Q_stk = $value->Q_stk;
+                            $qv = null;
+                            $qv_45d = null;
+                            
+                            // arreglo la variable qv y qv_45d
+                            if($slot == "primario"){
+                                $qv = $qvp; $qv_45d=$qvp_45d;
+                            }
+                            if($slot == "secundario"){
+                                $qv = $qvs; $qv_45d=$qvs_45d;
+                            }
+                            
+                            //Si la cantidad de venta es 0 las paso a 1
+                            if($qv<=1) {$qv=1;} if($qv_45d<=1){$qv_45d=1;} 
+                                
+                            // nueva formula para aplicar baja de precio a mayor antiguedad del stock, 
+                            // todo lo que está entre 60d y 1000d el exponente va a ser antiguedad dividido 50, mayor antiguedad -> mayor exponente
+                            if($antiguedad <= 60) {$elevado=0.001;} elseif($antiguedad >= 1000){$elevado=20;} else{$elevado=($antiguedad/50);}
+                            //pow es la formula de exponente para PHP, no existe el ^
+                            $costo = $costo *( pow(0.95,$elevado));
+                            
+                            // el precio de oferta sugerido tiene que ser 40% mayor al costo para asegurar ganancia
+                            $oferta_sugerida = $costo * 1.65;
+                            
+                            
+                            // si hay muchas ventas y poco stock voy subiendo el precio de oferta
+                            if($Q_stk > 3){
+                                $divi = ($qv_45d/$Q_stk);
+                                $divi = round(pow($divi,0.8),2); // elevo a la 0,8 para suavizar el resultado a menos
+                                if($divi >= 3) {$oferta_sugerida = $oferta_sugerida * 3;}
+                                elseif($divi <= 0.9) {$oferta_sugerida = $oferta_sugerida * 0.9;}
+                                else{$oferta_sugerida = $oferta_sugerida * $divi;}
+                            }
+                            
+                            
+                            // limito la oferta si queda poco stock
+                            if($Q_stk == 5){$limite_Stk = $precio_base * 0.800;} 
+                            elseif($Q_stk == 4){$limite_Stk = $precio_base * 0.850;}
+                            elseif($Q_stk == 3){$limite_Stk = $precio_base * 0.870;}
+                            elseif($Q_stk == 2){$limite_Stk = $precio_base * 0.900;} 
+                            elseif($Q_stk == 1){$limite_Stk = $precio_base * 0.920;} 
+                            else{$limite_Stk = $oferta_sugerida;} 
+                            
+                            if($oferta_sugerida < $limite_Stk){$oferta_sugerida = $limite_Stk;} 
+                            
+                            if($qv_45d == 3){$estimulo_Vta45 = 0.95;} 
+                            elseif($qv_45d == 2){$estimulo_Vta45 = 0.92;} 
+                            elseif($qv_45d == 1){$estimulo_Vta45 = 0.89;}
+                            elseif($qv_45d == 0){$estimulo_Vta45 = 0.86;}
+                            else{$estimulo_Vta45 = 1;}
+                            
+                            if(($Q_stk/$qv) > 0.30){$estimulo_Relacion = 0.925;} 
+                            elseif(($Q_stk/$qv) > 0.20){$estimulo_Relacion = 0.950;} 
+                            elseif(($Q_stk/$qv) > 0.10){$estimulo_Relacion = 0.975;} 
+                            else{$estimulo_Relacion = 1;} 
+                            
+                            $oferta_sugerida = $oferta_sugerida * $estimulo_Vta45 * $estimulo_Relacion;
+
+                            
+                            // límite inferior máximo: la oferta no puede ser menor al 30% del valor "precio base"
+                            if($oferta_sugerida < ($precio_base * 0.3))  {$oferta_sugerida = ($precio_base * 0.3);}
+                            
+                            
+                            // si no queda stock secundario quito oferta
+                            if(($slot == "secundario") and ($libre <= 0)) {$oferta_sugerida = 0;}
+                            
+                            // si la cantidad de venta histórica es menor o igual a 2 y además es igual a lo vendido en 45 días posiblemente es juego nuevo y no quiero bajar precio
+                            if(($qv <= 2) and ($qv = $qv_45d)) {$oferta_sugerida = 0;}
+                            
+                            // si hay mucho (secundario) -> libre en relación a las ventas de primario voy aumentando el precio
+                            if(($slot == "primario") and ($libre > 5)) {$oferta_sugerida = $oferta_sugerida * (1+(($libre/$qv)*($libre/$qv)));}
+                            
+                            // si hay mas de 10 secundarios libres voy aumentando el precio al primario exponencialmente
+                            if($libre <= 10){$elev2=1;} else{$elev2=($libre/10);}
+                            if($libre > 10){
+                                if($slot == "primario") {$oferta_sugerida = $oferta_sugerida * (pow(1.05,$elev2));}
+                                }                                               
+                            
+                            // redondeo la oferta
+                            $oferta_sugerida = (round($oferta_sugerida, 0)/25);
+                            $oferta_sugerida = (ceil($oferta_sugerida)*25);
+                            
+                            
+                            if(($Q_stk < 1) or (($Q_stk/$qv_45d) < 0.10)) {$oferta_sugerida = 0;}
+                            
+
+                            if($oferta_sugerida >= ($precio_base * 0.963)) {$oferta_sugerida = 0;}
+                                
+                            
+                            if($oferta_sugerida == 0) {
+                                if($sale_price !== ""){ 
+                                        DB::table('cbgw_postmeta')
+                                        ->where('post_id',$ID)
+                                        ->where('meta_key','_sale_price')
+                                        ->update([
+                                            'meta_value' => ''
+                                        ]);
+                                    }
+                                
+                                } else {
+
+                                if(($oferta_sugerida <= ($precio_base * 0.963)) and ($Q_stk >= 1)) {
+                                    if($sale_price == "") { $sale_price = 1; }
+                                    if((($oferta_sugerida >= ($sale_price * 1.05)) or ($oferta_sugerida <= ($sale_price * 0.95))) and $oferta_sugerida > 125){
+                                            DB::table('cbgw_postmeta')
+                                            ->where('post_id',$ID)
+                                            ->where('meta_key','_sale_price')
+                                            ->update([
+                                                'meta_value' => $oferta_sugerida
+                                            ]);
+
+                                        }
+                                    }
+                                }
+                            }
+                    }
+
+                    DB::commit();
+
+                    \Helper::messageFlash('Configuraciones',"Stock web PS4 automatizados correctamente.");
+
+                    return redirect()->back();
+                } catch (Exception $e) {
+                    DB::rollback();
+                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                }
+
+                break;
+        }
+    }
 }

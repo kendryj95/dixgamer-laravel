@@ -20,6 +20,7 @@
 	      <li role="presentation" class="active"><a  data-toggle="tab" href="#menu1">Mensaje extra email</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu2">Cuentas Excluidas - PS3 Resetear</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu3">Reporte de Ventas</a></li>
+	        <li role="presentation"><a  data-toggle="tab" href="#menu4">Procesos Automaticos</a></li>
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
@@ -61,6 +62,37 @@
 	      				<p>Si genera la exportación del reporte, se descargará un <b>.zip</b> de <b>{{ $cantidadStock }}</b> archivos CSV que contiene información de las ventas del stock.</p>
 	      			</div>
 	      			<a href="{{ url('excel') }}" class="btn btn-primary btn-block">Generar reporte</a>
+	      		</div>
+	      	</div>
+	      </div>
+	      <div class="tab-pane fade" id="menu4" role="tabpanel">
+	      	<div class="row">
+	      		<div class="col-md-4">
+	      			<a href="{{ url('config/proceso', 'automatizar_clientes') }}" class="btn btn-primary btn-lg">Automatizar Clientes</a>
+	      		</div>
+	      		<div class="col-md-4">
+	      			<a href="{{ url('config/proceso', 'actualizar_estado_wc') }}" class="btn btn-primary btn-lg">Actualizar estados WC</a>
+	      		</div>
+	      		<div class="col-md-4">
+	      			<a href="{{ url('config/proceso', 'actualizar_ids_ventas') }}" class="btn btn-primary btn-lg">Actualizar IDS Ventas</a>
+	      		</div>
+	      	</div>
+
+	      	<div style="margin-top: 20px" class="row">
+	      		<div class="col-md-4">
+	      			<a href="{{ url('config/proceso', 'actualizar_costo_ps4') }}" class="btn btn-primary btn-lg">Actualizar Costo PS4</a>
+	      		</div>
+	      		<div class="col-md-4">
+	      			<a href="{{ url('config/proceso', 'automatizar_stock_web') }}" class="btn btn-primary btn-lg">Automatizar Stock Web</a>
+	      		</div>
+	      		<div class="col-md-4">
+	      			<a href="{{ url('config/proceso', 'automatizar_web_ps3') }}" class="btn btn-primary btn-lg">Automatizar Stock Web PS3</a>
+	      		</div>
+	      	</div>
+
+	      	<div style="margin-top: 20px" class="row">
+	      		<div class="col-md-4">
+	      			<a href="{{ url('config/proceso', 'automatizar_web_ps4') }}" class="btn btn-primary btn-lg">Automatizar Stock Web PS4</a>
 	      		</div>
 	      	</div>
 	      </div>
