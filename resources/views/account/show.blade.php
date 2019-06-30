@@ -94,7 +94,7 @@
 
             	<a
             	href="{{ url('nota_siguejugando', $account->ID) }}"
-            	class="btn btn-danger btn-xs"
+            	class="btn btn-danger btn-xs pull-right"
             	>
             		<b><i class="fa fa-fw fa-gamepad"></i> Sigue jugando</b>
             	</a><br><br>
@@ -105,7 +105,7 @@
 
             		<a
             		href="{{ url('nota_intentorecuperar', $account->ID) }}"
-            		class="btn btn-success btn-xs"
+            		class="btn btn-success btn-xs pull-right"
             		>
             			<b><i class="fa fa-fw fa-gamepad"></i> Intento recuperar secu</b>
             		</a><br><br>
