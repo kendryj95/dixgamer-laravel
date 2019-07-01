@@ -989,6 +989,9 @@ ORDER BY consola, titulo ASC";
         $dias = 15;
 
         switch ($page) {
+            case 'ventas_7_dias':
+                $dias = 7;
+                break;
             case 'ventas_15_dias':
                 $dias = 15;
                 break;

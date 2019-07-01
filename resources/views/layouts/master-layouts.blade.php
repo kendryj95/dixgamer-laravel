@@ -220,6 +220,7 @@
           <li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Balances<span class="caret"></span></a>
               <ul class="dropdown-menu">
+                <li><a href="{{ url('balance','ventas_7_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 7 Dias</a></li>
                 <li><a href="{{ url('balance','ventas_15_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 15 Dias</a></li>
                 <li><a href="{{ url('balance','ventas_30_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 30 Dias</a></li>
                 <li><a href="{{ url('balance','ventas_45_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 45 Dias</a></li>
