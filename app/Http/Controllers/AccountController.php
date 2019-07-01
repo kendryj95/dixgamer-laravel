@@ -251,6 +251,8 @@ class AccountController extends Controller
           'saldo_ars' => 'required'
       ], $msgs);
 
+      $guardar = false;
+
 
       // Si hay errores retornamos a la pantalla anterior con los mensajes
       if ($v->fails())
@@ -276,17 +278,27 @@ class AccountController extends Controller
           'Day' => $this->dte,
           'usuario' => session()->get('usuario')->Nombre,
         ];
+
+        if ($costo == 0) {
+          $guardar = false;
+          break;
+        }
       }
 
       try {
-        // mandamos a guardar el arreglo de juegos
-        $this->tks->storeCodes($data);
 
-        // Mensaje de notificacion
-        \Helper::messageFlash('Cuentas','Cuenta copiada','alert_cuenta');
+        if ($guardar) {
+          // mandamos a guardar el arreglo de juegos
+          $this->tks->storeCodes($data);
+
+          // Mensaje de notificacion
+          \Helper::messageFlash('Cuentas','Cuenta copiada','alert_cuenta');
 
 
-        return redirect('cuentas/'.$account_id);
+          return redirect('cuentas/'.$account_id);
+        } else {
+          return redirect()->back()->withErrors(['Oops! Se ha detectado que hubo un calculo del stock con costo cero (0). Por favor revisar.']);
+        }
       } catch (\Exception $e) {
         dd($e->getMessage());
         return redirect()->back()->withErrors(['Intentelo nuevamente']);
@@ -1525,6 +1537,8 @@ class AccountController extends Controller
     {
       $giftsCharged = $this->getLastGiftsCharged();
 
+      $guardar = true;
+
       if (count($giftsCharged) > 0) {
         
         foreach ($giftsCharged as $gift) {
@@ -1584,6 +1598,7 @@ class AccountController extends Controller
 
               foreach ($lastGames as $key => $game) {
                 $costo = ($game->costo_usd / $saldos['saldo']) * $saldos['saldoARS'];
+
                 // Arreglo que se guarda en $data para guardar multiples juegos de una sola ves
                 $data[$key] = [
                   'cuentas_id' => $account_id,
@@ -1595,17 +1610,29 @@ class AccountController extends Controller
                   'Day' => $this->dte,
                   'usuario' => session()->get('usuario')->Nombre,
                 ];
+
+                if ($costo == 0) {
+                  $guardar = false;
+                  break;
+                }
               }
 
               try {
                 // mandamos a guardar el arreglo de juegos
-                $this->tks->storeCodes($data);
 
-                // Mensaje de notificacion
-                \Helper::messageFlash('Cuentas','Gift y Juego Cargado','alert_cuenta');
+                if ($guardar) { // Validación que solo guarde cuando no haya ningun costo 0.
+                  $this->tks->storeCodes($data);
+
+                  // Mensaje de notificacion
+                  \Helper::messageFlash('Cuentas','Gift y Juego Cargado','alert_cuenta');
 
 
-                return redirect('cuentas/'.$account_id);
+                  return redirect('cuentas/'.$account_id);
+                } else {
+                  return redirect()->back()->withErrors(['Oops! Se ha detectado que hubo un calculo del stock con costo cero (0). Por favor revisar.']);
+                }
+
+
               } catch (\Exception $e) {
                 dd($e->getMessage());
                 return redirect()->back()->withErrors(['Intentelo nuevamente. Ocurrió un error en el proceso.']);
