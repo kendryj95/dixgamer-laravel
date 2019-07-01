@@ -347,6 +347,7 @@ class AccountController extends Controller
       }
 
       $product_20_off = DB::table('saldo')->where('titulo','20-off-playstation')->where('cuentas_id',$id)->first(); // Consulta para verificar si se cargó este producto en saldo con este id de cuenta
+      $existeStock_product_20_off = DB::table('stock')->where('titulo','20-off-playstation')->where('consola','ps')->count(); // Consulta para verificar si existe stock de este producto.
 
 
 
@@ -368,7 +369,8 @@ class AccountController extends Controller
                 'back',
                 'oferta_fortnite',
                 'operador_pass',
-                'product_20_off'
+                'product_20_off',
+                'existeStock_product_20_off'
       ));
 
     }
