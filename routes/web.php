@@ -120,6 +120,9 @@ Route::group(['middleware' => ['login']], function()
   Route::get('cuentas_reseteadas', 'AccountController@indexReseteados');
   Route::get('cuentas_notas', 'AccountController@indexCuentasNotas');
 
+  Route::get('balance/{page}', 'ControlsController@balanceProductosDiasCondicionado'); // Acceso solo para BETINA
+
+
   // Rutas para stock
   Route::resource('stock', 'StockController');
   Route::get('falta_cargar', 'StockController@indexFaltaCargar');

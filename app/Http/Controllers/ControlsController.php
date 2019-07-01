@@ -984,6 +984,30 @@ ORDER BY consola, titulo ASC";
         return view('control.balance_productos_dias', compact('dias','rsCXP','filtro_dias'));
     }
 
+    public function balanceProductosDiasCondicionado($page)
+    {
+        $dias = 15;
+
+        switch ($page) {
+            case 'ventas_15_dias':
+                $dias = 15;
+                break;
+            
+            case 'ventas_30_dias':
+                $dias = 30;
+                break;
+            case 'ventas_45_dias':
+                $dias = 45;
+                break;
+        }
+
+        $rsCXP = Stock::getDatosBalanceProductosDias($dias);
+
+        $acceso = 'usuario';
+
+        return view('control.balance_productos_dias', compact('dias','rsCXP','acceso'));
+    }
+
     public function procesosAutomaticos($tipo)
     {
         switch ($tipo) {
@@ -1025,7 +1049,7 @@ ORDER BY consola, titulo ASC";
                        if ($value->order_id) {
                            DB::table('cbgw_posts')->where('ID', $value->order_id)->update(['post_status' => 'wc-completed']);
 
-                           $post_id = $row_rsEstado_>order_id;
+                           $post_id = $value->order_id;
                            $meta_key = "_completed_date";
                            $date = date('Y-m-d H:i:s');
 
@@ -1091,6 +1115,8 @@ ORDER BY consola, titulo ASC";
                 ->orderBy('stock.consola','DESC')
                 ->get();
 
+                $mensajes = '';
+
                 DB::beginTransaction();
 
                 try {
@@ -1119,6 +1145,9 @@ ORDER BY consola, titulo ASC";
 
                                 ]);
 
+                                $mensajes .= "[" . $cuentas_id . "] " . $stock_id . " actualizado en " . $libre_ars . " ARS<br>";
+                                $mensajes .= "[" . $cuentas_id . "] nota añadida<br>";
+
                             }
 
                             if($libre_usd < 0.22) {
@@ -1139,18 +1168,23 @@ ORDER BY consola, titulo ASC";
 
                                 ]);
 
+                                $mensajes .= "[" . $cuentas_id . "] " . $stock_id . " actualizado en " . $libre_usd . " USD<br>";
+                                $mensajes .= "[" . $cuentas_id . "] nota añadida<br>";
+
                             }
                         }
                     }
 
                     DB::commit();
 
-                    \Helper::messageFlash('Configuraciones',"Costos de stocks PS4 actualizados correctamente.");
+                    // \Helper::messageFlash('Configuraciones',"Costos de stocks PS4 actualizados correctamente.");
 
-                    return redirect()->back();
+                    // return redirect()->back();
+                    return $mensajes;
                 } catch (Exception $e) {
                     DB::rollback();
-                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    // return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    return 'Ha ocurrido un error inesperado en el proceso.';
                 }
 
                 break;
@@ -1199,6 +1233,8 @@ ORDER BY consola, titulo ASC";
                             titulo  ) as vtas
                         ON
                         web.producto = vtas.titulo");
+
+                $mensajes = '';
 
                 DB::beginTransaction();
 
@@ -1261,6 +1297,8 @@ ORDER BY consola, titulo ASC";
                                     ->update([
                                         'meta_value' => $new_price
                                     ]);
+
+                                    $mensajes .= " -multi:". round($multiplier,2) . "-qvp:" . $qvp . " -qvs:" . $qvs . " -lib:". $libre ." -ant:" . $antiguedad_juego . " //// " . $producto.  " " . $slot . " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ")<br>";
                                 }
                                 
                                 
@@ -1278,6 +1316,8 @@ ORDER BY consola, titulo ASC";
                                     ->update([
                                         'meta_value' => '999'
                                     ]);
+
+                                    $mensajes .= $producto.  " " .$slot. " agregado a stock<br>";
                                 }
                             }
 
@@ -1292,6 +1332,8 @@ ORDER BY consola, titulo ASC";
                                           ->update([
                                               'meta_value' => 'outofstock'
                                           ]);
+
+                                          $mensajes .= $producto.  " " .$slot. " quitado de stock<br>";
                                     }}
                                 if(($qvs < $qvp) && ($stock == "outofstock")){
                                     DB::table('cbgw_postmeta')
@@ -1300,6 +1342,8 @@ ORDER BY consola, titulo ASC";
                                     ->update([
                                         'meta_value' => 'instock'
                                     ]);
+
+                                    $mensajes .= $producto.  " " .$slot. " agregado a stock<br>";
                                 }
                                 if( ($libre > $stock_Q) or ($libre < $stock_Q) ) {
                                     DB::table('cbgw_postmeta')
@@ -1308,6 +1352,8 @@ ORDER BY consola, titulo ASC";
                                     ->update([
                                         'meta_value' => $libre
                                     ]);
+
+                                    $mensajes .= '[' . $ID . '] ' . $producto .  " " .$slot. " cambiado a " . $libre . " stock<br>";
                                       
                                 }
                             }
@@ -1317,12 +1363,15 @@ ORDER BY consola, titulo ASC";
 
                     DB::commit();
 
-                    \Helper::messageFlash('Configuraciones',"Stock web automatizados correctamente.");
+                    /*\Helper::messageFlash('Configuraciones',"Stock web automatizados correctamente.");
 
-                    return redirect()->back();
+                    return redirect()->back();*/
+
+                    return $mensajes;
                 } catch (Exception $e) {
                     DB::rollback();
-                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    // return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    return 'Ha ocurrido un error inesperado en el proceso.';
                 }
 
                 break;
@@ -1391,6 +1440,8 @@ ORDER BY consola, titulo ASC";
                     ON rdo_web_2.producto = rdo_db.titulo
                     ORDER BY `rdo_web_2`.`producto` ASC");
 
+                $mensajes = '';
+
                 DB::beginTransaction();
 
                 try {
@@ -1430,6 +1481,8 @@ ORDER BY consola, titulo ASC";
                                 ->update([
                                     'meta_value' => $new_price
                                 ]);
+
+                                $mensajes .= " -s:". $Q_Stock . " -v:". $Q_Vta . " -divis:". round($multiplier,2) . " -costoxU:" . $costoxU . " //// " . $producto.  " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ")<br>";
                             }
                             
                         }
@@ -1437,12 +1490,15 @@ ORDER BY consola, titulo ASC";
 
                     DB::commit();
 
-                    \Helper::messageFlash('Configuraciones',"Stock web PS3 automatizados correctamente.");
+                    /*\Helper::messageFlash('Configuraciones',"Stock web PS3 automatizados correctamente.");
 
-                    return redirect()->back();
+                    return redirect()->back();*/
+
+                    return $mensajes;
                 } catch (Exception $e) {
                     DB::rollback();
-                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    // return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    return 'Ha ocurrido un error inesperado en el proceso.';
                 }
 
                 break;
@@ -1522,9 +1578,12 @@ ORDER BY consola, titulo ASC";
                     WHERE producto!='plus-12-meses-slot'
                     ORDER BY producto ASC");
 
+                $mensajes = '';
+
                 DB::beginTransaction();
 
                 try {
+                    $mensajes .= "<table>";
                     foreach ($datos as $value) {
                         if ($value->producto) {
                             $ID = $value->ID;
@@ -1543,6 +1602,7 @@ ORDER BY consola, titulo ASC";
                             $Q_stk = $value->Q_stk;
                             $qv = null;
                             $qv_45d = null;
+                            $divi = null;
                             
                             // arreglo la variable qv y qv_45d
                             if($slot == "primario"){
@@ -1621,6 +1681,8 @@ ORDER BY consola, titulo ASC";
                             // redondeo la oferta
                             $oferta_sugerida = (round($oferta_sugerida, 0)/25);
                             $oferta_sugerida = (ceil($oferta_sugerida)*25);
+
+                            $mensajes .= "<tr><td>[" . $ID . " exp: " . pow(0.95,$elevado) . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sale: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>Qvp:" . $qvp . "</td><td>Qvs:" . $qvs ."</td><td>Qvp_45d:" . $qvp_45d . "</td><td>Qvs_45d:" . $qvs_45d . "</td><td>Qs:" . $Q_stk . "</td><td>V_45d/Qs: " . $divi . "</td><td>C_mod:". $costo ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
                             
                             
                             if(($Q_stk < 1) or (($Q_stk/$qv_45d) < 0.10)) {$oferta_sugerida = 0;}
@@ -1637,6 +1699,8 @@ ORDER BY consola, titulo ASC";
                                         ->update([
                                             'meta_value' => ''
                                         ]);
+
+                                        $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " REMOVIDA<br><br>";
                                     }
                                 
                                 } else {
@@ -1651,20 +1715,26 @@ ORDER BY consola, titulo ASC";
                                                 'meta_value' => $oferta_sugerida
                                             ]);
 
+                                            $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <br><br>";
+
                                         }
                                     }
                                 }
                             }
                     }
 
+                    $mensajes .= "</table>";
+
                     DB::commit();
 
-                    \Helper::messageFlash('Configuraciones',"Stock web PS4 automatizados correctamente.");
+                    /*\Helper::messageFlash('Configuraciones',"Stock web PS4 automatizados correctamente.");
 
-                    return redirect()->back();
+                    return redirect()->back();*/
+                    return $mensajes;
                 } catch (Exception $e) {
                     DB::rollback();
-                    return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    // return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
+                    return 'Ha ocurrido un error inesperado en el proceso.';
                 }
 
                 break;
