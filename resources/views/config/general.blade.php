@@ -67,6 +67,11 @@
 	      </div>
 	      <div class="tab-pane fade" id="menu4" role="tabpanel">
 	      	<div class="row">
+	      		<div class="col-md-12">
+	      			<a class="btn btn-info btn-sm pull-right" href="https://dixgamer.com/db/crontabs/download_log.php"><i class="fa fa-download"></i> Descargar Logs</a>
+	      		</div>
+	      	</div>
+	      	<div style="margin-top: 20px" class="row">
 	      		<div class="col-md-4">
 	      			<a href="{{ url('config/proceso', 'automatizar_clientes') }}" class="btn btn-primary btn-lg">Automatizar Clientes</a>
 	      		</div>
