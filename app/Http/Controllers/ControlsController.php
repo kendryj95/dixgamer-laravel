@@ -748,8 +748,10 @@ ORDER BY consola, titulo ASC";
         ->get();
 
         $cantidadStock = count($cantidadStock);
+        $configuraciones = DB::table('configuraciones')->where('ID',1)->first();
 
-        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock'));
+
+        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones'));
     }
 
     public function configGeneralStore(Request $request)
@@ -770,6 +772,21 @@ ORDER BY consola, titulo ASC";
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
                 \Helper::messageFlash('Configuraciones','Cuentas excluidas en PS3 Resetear actualizada.');
+                return redirect()->back();
+                break;
+            case 3: // Parametros
+                $inputs = $request->all();
+
+                $data = [];
+                
+                foreach ($inputs as $index => $value) {
+                    if ($index != '_token' && $index != 'opt') {
+                        $data[$index] = $value;
+                    }
+                }
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Parametros actualizados correctamente.');
                 return redirect()->back();
                 break;
         }
@@ -1589,6 +1606,7 @@ ORDER BY consola, titulo ASC";
                     $mensajes .= "<table>";
                     foreach ($datos as $value) {
                         if ($value->producto) {
+                            $configuraciones = $this->getConfiguraciones();
                             $ID = $value->ID;
                             $producto = $value->producto;
                             $slot = $value->slot;
@@ -1600,12 +1618,13 @@ ORDER BY consola, titulo ASC";
                             $libre = $value->libre;
                             $qvp_45d = $value->Qvp_45d;
                             $qvs_45d = $value->Qvs_45d;
-                            $costo = $value->costo;
+                            $costo = $value->costo * $configuraciones->costo_automatizar_web_ps4;
                             $antiguedad = $value->antiguedad;
                             $Q_stk = $value->Q_stk;
                             $qv = null;
                             $qv_45d = null;
                             $divi = null;
+                            $valor_configuracion = $configuraciones->valor_oferta_sugerida;
                             
                             // arreglo la variable qv y qv_45d
                             if($slot == "primario"){
@@ -1625,7 +1644,7 @@ ORDER BY consola, titulo ASC";
                             $costo = $costo *( pow(0.95,$elevado));
                             
                             // el precio de oferta sugerido tiene que ser 40% mayor al costo para asegurar ganancia
-                            $oferta_sugerida = $costo * 1.65;
+                            $oferta_sugerida = $costo * $valor_configuracion;
                             
                             
                             // si hay muchas ventas y poco stock voy subiendo el precio de oferta
@@ -1742,5 +1761,9 @@ ORDER BY consola, titulo ASC";
 
                 break;
         }
+    }
+
+    private function getConfiguraciones() {
+        return DB::table('configuraciones')->where('ID',1)->first();
     }
 }

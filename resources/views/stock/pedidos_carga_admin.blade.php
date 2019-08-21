@@ -90,7 +90,12 @@
                                 </span>
                             </td>
                             <td>
-                                {{ $pedido->usuarios_pedido }}
+                                @php
+                                $usuarios = explode(",", $pedido->usuarios_pedido);
+                                @endphp
+                                @foreach($usuarios as $usuario)
+                                    <a href="{{ url('pedidos_cargar', $usuario) }}">{{ $usuario }}</a><br>
+                                @endforeach
                             </td>
                             <td style="text-align: center;">
                                 <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $pedido->Notas !!} </div>

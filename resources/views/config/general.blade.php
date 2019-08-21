@@ -21,6 +21,7 @@
 	        <li role="presentation"><a  data-toggle="tab" href="#menu2">Cuentas Excluidas - PS3 Resetear</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu3">Reporte de Ventas</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu4">Procesos Automaticos</a></li>
+	        <li role="presentation"><a  data-toggle="tab" href="#menu5">Parametros</a></li>
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
@@ -101,6 +102,30 @@
 	      		</div>
 	      	</div>
 	      </div>
+	      <div class="tab-pane fade" id="menu5" role="tabpanel">
+	      	<form action="{{ url('config/general') }}" method="post">
+				{{ csrf_field() }}
+				<input type="hidden" name="opt" value="3">
+
+	      		<div class="row">
+	      			<div class="col-md-3">
+	      				<div class="form-group">
+	      					<label for="valor_oferta_sugerida">Valor Oferta Sugerida - Automatizar Web ps4</label>
+	      					<input style="text-align: right" type="number" name="valor_oferta_sugerida" id="valor_oferta_sugerida" class="form-control" value="{{ number_format($configuraciones->valor_oferta_sugerida,2,".","") }}" step="0.01">
+	      				</div>
+	      			</div>
+	      			<div class="col-md-3">
+	      				<div class="form-group">
+	      					<label for="costo_automatizar_web_ps4">Valor Costo - Automatizar Web ps4</label>
+	      					<input style="text-align: right" type="number" name="costo_automatizar_web_ps4" id="costo_automatizar_web_ps4" class="form-control" value="{{ number_format($configuraciones->costo_automatizar_web_ps4,2,".","") }}" step="0.01">
+	      				</div>
+	      			</div>
+	      			<div class="col-md-12">
+	      				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i> Guardar</button>
+	      			</div>
+	      		</div>
+	      	</form>
+	      </div> <!-- TERMINA -->
 	    </div>
 	  </div>
 	</div>
