@@ -17,9 +17,10 @@
 							<form action="#" method="post">
 								<div style="filter: brightness(50%); opacity:0.5;">
 						@endif
-									<img
+									{{-- <img
 										src="{{asset('img/productos')}}/{{$stock->consola}}/{{$stock->titulo}}.jpg "
-										alt="{{$stock->consola}} - {{$stock->titulo}}.jpg" class="img img-responsive full-width" />
+										alt="{{$stock->consola}} - {{$stock->titulo}}.jpg" class="img img-responsive full-width" /> --}}
+									<input type="image" src="{{asset('img/productos')}}/{{$stock->consola}}/{{$stock->titulo}}.jpg " alt="{{$stock->consola}} - {{$stock->titulo}}.jpg" class="img img-responsive full-width">
 								</div>
 
 							<div class="caption text-center">
