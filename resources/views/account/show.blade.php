@@ -7,6 +7,7 @@
 	$color = Helper::userColor($account->usuario);
 	$saldo_ultima_cta = 0;
 	$almaceno_ultima_cta_id  = 0;
+	$mostrar_carga_minim = true;
 @endphp
 
 @section('container')
@@ -352,6 +353,9 @@
 			                <small
 												class="pull-right text-muted">
 													{{$balance->costo_usd}}
+													@if($balance->costo_usd > 0 && $balance->costo_usd < 10)
+														@php $mostrar_carga_minim = false @endphp
+													@endif
 													@if(Helper::validateAdministrator(session()->get('usuario')->Level))
 														<span style="font-size:0.8em;">
 															({{$balance->costo}})
@@ -660,6 +664,22 @@
 						Cargar Saldo
 				</button>
 			</p>
+		@endif
+
+		@if($mostrar_carga_minim)
+
+			<p>
+				<button
+					class="btn btn-info btn-lg"
+					type="button"
+					data-toggle="modal"
+					data-target=".bs-example-modal-lg"
+					onClick='getPageAjax("{{url('recharge_minim_account')}}","#modal-container",{{$account->ID}});'>
+						<i class="fa fa-fw fa-dollar"></i>
+						Cargar Minim
+				</button>
+			</p>
+
 		@endif
 
 		@if(!$product_20_off && $cant_productos < 2 && $existeStock_product_20_off > 0)

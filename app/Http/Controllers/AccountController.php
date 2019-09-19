@@ -678,6 +678,16 @@ class AccountController extends Controller
       ));
     }
 
+    public function rechargeBalanceMinim($id){
+      $gifts = $this->blc->reChargeGifCards();
+      $account_id = $id ;
+      // dd($gifts);
+      return view('ajax.account.recharge_balance_minim',compact(
+        'gifts',
+        'account_id'
+      ));
+    }
+
     public function storeBalanceAccount($account,$title,$console){
       if (!empty($account) && !empty($title) && !empty($console)) {
         // cargo el stock disponible en este mismo segundo y busco el producto que quiero asignar

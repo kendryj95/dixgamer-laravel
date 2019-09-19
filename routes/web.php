@@ -96,6 +96,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('cuentas_para_ps4', 'AccountController@accountGamePs4');
   Route::post('account_ctrl_column', 'AccountController@accountCtrlColumn');
   Route::get('recharge_account/{id}', 'AccountController@rechargeBalance');
+  Route::get('recharge_minim_account/{id}', 'AccountController@rechargeBalanceMinim');
   Route::get('crear_saldo_cuenta/{account_id}/{title}/{console}', 'AccountController@storeBalanceAccount');
   Route::get('crear_nota_cuenta/{account_id}', 'AccountController@createNote');
   Route::get('editar_direccion_cuenta/{account_id}', 'AccountController@editAddressAccount');
