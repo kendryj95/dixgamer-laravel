@@ -90,6 +90,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> Stk<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('stock') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+                <li><a href="{{ url('saldos') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Saldo</a></li>
                 <li><a href="{{ url('stocks_cargados') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Cargados</a></li>
                 @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
                 <li><a href="{{ url('pedidos_carga/admin') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos de carga - Admin</a></li>

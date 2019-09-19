@@ -132,6 +132,8 @@ Route::group(['middleware' => ['login']], function()
   Route::get('stocks_cargados', 'StockController@indexCargados');
   Route::get('pedidos_cargar/{user?}','StockController@pedidosCargar');
 
+  Route::get('saldos','BalanceController@listarSaldos');
+
   // Rutas donde solo podran acceder analistas y administradores
   Route::group(['middleware' => ['analyst']], function()
   {

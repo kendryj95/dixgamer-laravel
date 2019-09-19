@@ -108,6 +108,19 @@ class Balance extends Model
       ORDER BY M_S ASC");
     }
 
+    public function scopeListaSaldos($query, $obj)
+    {
+      $query = DB::table('saldo')->select('*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = saldo.usuario) AS color_user"));
+
+      if ($obj->column && $obj->word) {
+        $query->where($obj->column,'LIKE',"%$obj->word%");
+      }
+
+      $query->orderBy('ID','DESC');
+
+      return $query;
+    }
+
 
 
 
