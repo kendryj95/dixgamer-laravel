@@ -73,7 +73,7 @@ class StockController extends Controller
 
 
     public function createCode(){
-      $cotiz = 25;
+      $cotiz = Stock::calcularCotizCode()->value('cotiz');
 
       $giftCards = $this->wp_p->stockGiftCard();
 
@@ -108,7 +108,7 @@ class StockController extends Controller
       ));
     }
     public function createCodeG(){
-      $cotiz = 25;
+      $cotiz = Stock::calcularCotizCode()->value('cotiz');
 
       $giftCards = $this->wp_p->stockGiftCard();
       $rowsAA = array();
@@ -126,7 +126,7 @@ class StockController extends Controller
     }
 
     public function createCodep3(){
-        $cotiz = 25;
+        $cotiz = Stock::calcularCotizCode()->value('cotiz');
 
         $giftCards = $this->wp_p->stockGiftCard();
         $rowsAA = array();

@@ -719,5 +719,9 @@ class Stock extends Model
         ON vtas.titulo = stk.titulo and vtas.consola = stk.consola");
     }
 
+    public function scopeCalcularCotizCode($query) {
+        $query->select(DB::raw("ROUND(AVG(costo/costo_usd)) AS cotiz"))->where('titulo','gift-card-10-usd')->orderBy('ID','DESC')->limit(100);
+    }
+
 
 }
