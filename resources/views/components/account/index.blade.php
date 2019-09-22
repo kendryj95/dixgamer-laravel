@@ -6,6 +6,7 @@
         <th>#</th>
         <th>Cuenta</th>
         <th>Juegos</th>
+        <th>Usuario</th>
       </tr>
     </thead>
     <tbody>
@@ -31,6 +32,9 @@
                 <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->id] ) }}">
                   {{ $account->juego }}
                 </a>
+              </td>
+              <td class="text-center">
+                <span class="badge badge-{{ $account->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$account->usuario}}">{{ substr($account->usuario,0 , 1) }}</span>
               </td>
 
 

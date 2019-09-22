@@ -20,6 +20,7 @@
               <th>Libre en Pesos</th>
             @endif
           <th>Para Consola</th>
+          <th>Usuario</th>
         </tr>
       </thead>
       <tbody>
@@ -63,13 +64,17 @@
                     {{ $consol }}
                   </a>
                 </td>
+
+                <td class="text-center">
+                  <span class="badge badge-{{ $account->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$account->usuario}}">{{ substr($account->usuario,0 , 1) }}</span>
+                </td>
               </tr>
 
             @endforeach
 
           @else
             <tr>
-              <td colspan = '5' class="text-center">No se encontraron datos</td>
+              <td colspan = '6' class="text-center">No se encontraron datos</td>
             </tr>
           @endif
 

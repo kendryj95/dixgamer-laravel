@@ -14,7 +14,9 @@ class Account extends Model
             'ID AS id',
             'mail_fake',
             'stk.juego',
-            'stk.cuentas_id'
+            'stk.cuentas_id',
+            'cuentas.usuario',
+            DB::raw("(SELECT color FROM usuarios WHERE Nombre = cuentas.usuario) AS color_user")
             )->leftjoin(DB::raw("
               (SELECT cuentas_id, group_concat(concat(titulo, ':', consola)) AS juego
               FROM stock WHERE cuentas_id IS NOT NULL GROUP BY cuentas_id)
@@ -94,6 +96,8 @@ class Account extends Model
                 ->select(
                   'sa_cta_id AS cuentas_id',
                   'consola',
+                  't_cuentas.usuario',
+                  't_cuentas.color_user',
                   DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0)) libre_usd"),
                   DB::raw("(sa_costo - COALESCE(st_costo,0)) libre_ars")
                   )->leftjoin(DB::raw("
@@ -105,6 +109,9 @@ class Account extends Model
                   ), function($join)
                   {
                     $join->on('saldo.sa_cta_id', '=', 'stock.st_cta_id');
+                  })
+                  ->leftjoin(DB::raw("(SELECT c.ID AS cuentas_id, c.usuario, u.color AS color_user FROM cuentas c LEFT JOIN usuarios u ON c.usuario = u.Nombre) AS t_cuentas"), function($join){
+                    $join->on('t_cuentas.cuentas_id','=','saldo.sa_cta_id');
                   })
                   ->whereRaw("(sa_costo_usd - COALESCE(st_costo_usd,0)) != 0.00")
                   ->where(function ($query) use ($console) {

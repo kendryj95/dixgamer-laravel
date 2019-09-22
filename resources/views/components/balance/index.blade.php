@@ -8,14 +8,14 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th {{$mostrar}}>ex_stock_id</th>
-        <th>titulo</th>
-        <th>consola </th>
-        <th {{$mostrar}}>code_prov</th>
-        <th {{$mostrar}}>n_order</th>
-        <th>costo USD</th>
-        <th {{$mostrar}}>costo</th>
-        <th>usuario</th>
+        <th {!!$mostrar!!}>Ex Stk</th>
+        <th>Titulo</th>
+        <th>Code </th>
+        <th {!!$mostrar!!}>Code_prov</th>
+        <th {!!$mostrar!!}>N_order</th>
+        <th>Costo USD</th>
+        <th {!!$mostrar!!}>Costo</th>
+        <th>Usuario</th>
       </tr>
     </thead>
     <tbody>
@@ -27,13 +27,13 @@
             <tr>
 
               <td>{{ $saldo->ID }}</td>
-              <td {{$mostrar}}>{{ $saldo->ex_stock_id }}</td>
-              <td>{{ $saldo->titulo }}</td>
-              <td>{{ $saldo->consola }}</td>
-              <td {{$mostrar}}>{{ $saldo->code_prov }}</td>
-              <td {{$mostrar}}>{{ $saldo->n_order }}</td>
+              <td {!!$mostrar!!}>{{ $saldo->ex_stock_id }}</td>
+              <td>{{ $saldo->titulo }} ({{ $saldo->consola }})</td>
+              <td>{{ $saldo->code }}</td>
+              <td {!!$mostrar!!}>{{ $saldo->code_prov }}</td>
+              <td {!!$mostrar!!}>{{ $saldo->n_order }}</td>
               <td>{{ $saldo->costo_usd }}</td>
-              <td {{$mostrar}}>{{ $saldo->costo }}</td>
+              <td {!!$mostrar!!}>{{ $saldo->costo }}</td>
               <td class="text-center">
                 <span class="badge badge-{{ $saldo->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$saldo->usuario}}">{{ substr($saldo->usuario,0 , 1) }}</span>
               </td>
