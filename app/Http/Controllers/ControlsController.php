@@ -1695,10 +1695,12 @@ ORDER BY consola, titulo ASC";
                             if(($slot == "primario") and ($libre > 5)) {$oferta_sugerida = $oferta_sugerida * (1+(($libre/$qv)*($libre/$qv)));}
                             
                             // si hay mas de 10 secundarios libres voy aumentando el precio al primario exponencialmente
-                            if($libre <= 10){$elev2=1;} else{$elev2=($libre/10);}
-                            if($libre > 10){
-                                if($slot == "primario") {$oferta_sugerida = $oferta_sugerida * (pow(1.05,$elev2));}
-                                }                                               
+                            if ($antiguedad <= 365) {
+                                if($libre <= 10){$elev2=1;} else{$elev2=($libre/10);}
+                                if($libre > 10){
+                                    if($slot == "primario") {$oferta_sugerida = $oferta_sugerida * (pow(1.05,$elev2));}
+                                }               
+                            }                                             
                             
                             // redondeo la oferta
                             $oferta_sugerida = (round($oferta_sugerida, 0)/25);
