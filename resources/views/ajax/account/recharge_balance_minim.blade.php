@@ -18,6 +18,7 @@
             <div class="thumbnail">
 
               <div style="height: 185px; border: 1px solid #ccc">
+                <label class="badge badge-danger pull-right" style="margin: 2px;">{{ $gift->Q_Stock }}</label>
                 <a
                   title="cargar saldo"
                   onclick="request(event)"

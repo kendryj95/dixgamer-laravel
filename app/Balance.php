@@ -39,8 +39,27 @@ class Balance extends Model
       return $query->select("*")->where('ex_stock_id',$id);
     }
 
-    public function reChargeGifCards(){
-      return DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola,
+    public function reChargeGifCards($minim = false){
+      if (!$minim) {
+        return DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola,
+                cuentas_id AS stk_ctas_id, medio_pago, FORMAT(costo_usd,2) AS costo_usd,
+                costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
+                FROM stock
+                LEFT JOIN
+                (SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
+                FROM ventas
+                GROUP BY stock_id
+                ORDER BY ID DESC) AS vendido
+                ON ID = stock_id
+                WHERE (consola = 'ps')
+                AND costo_usd >= 10
+                AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot')
+                AND (titulo != 'plus-1-mes') AND (titulo != 'plus-3-meses') AND (titulo != 'gift-card-75-usd')
+                AND (titulo != 'gift-card-100-usd') AND (titulo NOT LIKE '%points-fifa%')
+                GROUP BY consola, titulo
+                ORDER BY consola DESC, titulo ASC, ID ASC"));
+      } else {
+        return DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola,
               cuentas_id AS stk_ctas_id, medio_pago, FORMAT(costo_usd,2) AS costo_usd,
               costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
               FROM stock
@@ -51,11 +70,13 @@ class Balance extends Model
               ORDER BY ID DESC) AS vendido
               ON ID = stock_id
               WHERE (consola = 'ps')
+              AND costo_usd < 10
               AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot')
               AND (titulo != 'plus-1-mes') AND (titulo != 'plus-3-meses') AND (titulo != 'gift-card-75-usd')
-              AND (titulo != 'gift-card-100-usd') AND (titulo NOT LIKE '%points-fifa%')
+              AND (titulo != 'gift-card-100-usd') AND (titulo NOT LIKE '%points-fifa%') AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND DATE(Day) = CURDATE() HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))
               GROUP BY consola, titulo
               ORDER BY consola DESC, titulo ASC, ID ASC"));
+      }
     }
     public function storeBalanceAccount($data){
 

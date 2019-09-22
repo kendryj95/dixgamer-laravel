@@ -679,7 +679,7 @@ class AccountController extends Controller
     }
 
     public function rechargeBalanceMinim($id){
-      $gifts = $this->blc->reChargeGifCards();
+      $gifts = $this->blc->reChargeGifCards(true);
       $account_id = $id ;
       // dd($gifts);
       return view('ajax.account.recharge_balance_minim',compact(
