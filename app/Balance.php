@@ -60,14 +60,14 @@ class Balance extends Model
                 ORDER BY consola DESC, titulo ASC, ID ASC"));
       } else {
         return DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, COUNT(*) AS Q_Stock
-              FROM stock
-              WHERE (consola = 'ps')
+            FROM (SELECT * FROM stock
+              WHERE ID > 100000 
+              AND consola='ps'
               AND costo_usd < 10
-              AND titulo LIKE '%gift-card%'
-                AND ID > 100000
-              AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND DATE(Day) = CURDATE() HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))
-            GROUP BY consola, titulo
-            ORDER BY consola DESC, titulo ASC, ID ASC"));
+              GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))) as agrupado
+            WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND DATE(Day) = CURDATE() HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
+          GROUP BY titulo
+          ORDER BY titulo ASC, ID ASC"));
       }
     }
     public function storeBalanceAccount($data){

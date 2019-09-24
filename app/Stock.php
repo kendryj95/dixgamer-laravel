@@ -306,19 +306,39 @@ class Stock extends Model
     }
 
     public function ScopeGift($query,$title){
-        return DB::select(DB::raw("
-          SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
-      		FROM stock
-      		LEFT JOIN
-      		(SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
-      		FROM ventas
-      		GROUP BY stock_id
-      		ORDER BY ID DESC) AS vendido
-      		ON ID = stock_id
-      		WHERE (consola != 'ps4') AND (consola != 'ps3') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot') AND titulo=?
-      		GROUP BY consola, titulo
-      		ORDER BY consola, titulo DESC
-      "),[$title]);
+        $gift_card_costo = explode("-", $title)[2];
+
+        if ($gift_card_costo >= 10) {
+              return DB::select(DB::raw("
+                SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
+                    FROM stock
+                    LEFT JOIN
+                    (SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
+                    FROM ventas
+                    GROUP BY stock_id
+                    ORDER BY ID DESC) AS vendido
+                    ON ID = stock_id
+                    WHERE (consola != 'ps4') AND (consola != 'ps3') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot') AND titulo=?
+                    GROUP BY consola, titulo
+                    ORDER BY consola, titulo DESC
+            "),[$title]);
+        } else {
+              return DB::select(DB::raw("
+                SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
+                    FROM stock
+                    LEFT JOIN
+                    (SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
+                    FROM ventas
+                    GROUP BY stock_id
+                    ORDER BY ID DESC) AS vendido
+                    ON ID = stock_id
+                    WHERE (consola != 'ps4') AND (consola != 'ps3') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot') AND titulo=? AND stock.costo_usd < 10 AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND DATE(Day) = CURDATE() HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))
+                    GROUP BY consola, titulo
+                    ORDER BY consola, titulo DESC
+            "),[$title]);
+        }
+
+        
 
     }
 
