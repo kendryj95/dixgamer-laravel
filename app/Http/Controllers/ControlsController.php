@@ -11,6 +11,7 @@ use App\Sales;
 use App\Expenses;
 use App\Stock;
 use App\Balance;
+use App\WpPost;
 
 class ControlsController extends Controller
 {
@@ -25,6 +26,7 @@ class ControlsController extends Controller
         $this->sales = new Sales();
         $this->stock = new Stock();
         $this->balance = new Balance();
+        $this->wp_p = new WpPost();
     }
 
     public function ventasPerBancos()
@@ -749,9 +751,19 @@ ORDER BY consola, titulo ASC";
 
         $cantidadStock = count($cantidadStock);
         $configuraciones = DB::table('configuraciones')->where('ID',1)->first();
+        $titles = $this->wp_p->lastGameStockTitles();
+        $titulos = [];
+
+        $productos_excluidos = explode(",", $configuraciones->productos_excluidos);
+
+        if ($productos_excluidos) {
+            foreach ($productos_excluidos as $value) {
+                $titulos[] = str_replace('"', '', $value);
+            }
+        }
 
 
-        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones'));
+        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos'));
     }
 
     public function configGeneralStore(Request $request)
@@ -787,6 +799,21 @@ ORDER BY consola, titulo ASC";
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
                 \Helper::messageFlash('Configuraciones','Parametros actualizados correctamente.');
+                return redirect()->back();
+                break;
+            case 4:
+                $titulos = $request->productos_excluidos;
+                $titles = [];
+                foreach ($titulos as $value) {
+                    $titles[] = '"'.$value.'"';
+                }
+
+                $titulos = implode(",", $titles);
+
+                $data['productos_excluidos'] = $titulos;
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Productos excluidos registrados.');
                 return redirect()->back();
                 break;
         }
@@ -1210,6 +1237,10 @@ ORDER BY consola, titulo ASC";
                 break;
             case 'automatizar_stock_web':
 
+                $configuraciones = $this->getConfiguraciones();
+
+                $condicion_prod_excl = $configuraciones->productos_excluidos ? "AND titulo NOT IN ($configuraciones->productos_excluidos)" : "";
+
                 $datos = DB::select("SELECT web.*, vtas.*, IFNULL((Q_vta_pri - Q_vta_sec),0) as libre
                         FROM
                         (select
@@ -1248,7 +1279,7 @@ ORDER BY consola, titulo ASC";
                         ON 
                             ventas.stock_id = stock.ID
                         WHERE 
-                            (consola = 'ps4' or titulo = 'plus-12-meses-slot')
+                            (consola = 'ps4' or titulo = 'plus-12-meses-slot') $condicion_prod_excl
                         GROUP BY 
                             titulo  ) as vtas
                         ON
@@ -1524,6 +1555,10 @@ ORDER BY consola, titulo ASC";
                 break;
             case 'automatizar_web_ps4':
 
+                $configuraciones = $this->getConfiguraciones();
+
+                $condicion_prod_excl = $configuraciones->productos_excluidos ? "AND producto NOT IN ($configuraciones->productos_excluidos)" : "";
+
                 $datos = DB::select("SELECT web.*, IFNULL(Qvp,0) as Qvp, IFNULL(Qvs,0) as Qvs, IFNULL((Qvp - Qvs),0) as libre, IFNULL(antiguedad,0) as antiguedad, IFNULL(Qvp_45d,0) as Qvp_45d, IFNULL(Qvs_45d,0) as Qvs_45d, IFNULL(costo,0) as costo, IFNULL(Q_stk,0) as Q_stk
                     FROM
                     (select
@@ -1595,7 +1630,7 @@ ORDER BY consola, titulo ASC";
 
                     ON
                     web.producto = stk.titulo and web.slot = stk.Stk_slot
-                    WHERE producto!='plus-12-meses-slot'
+                    WHERE producto!='plus-12-meses-slot' $condicion_prod_excl
                     ORDER BY producto ASC");
 
                 $mensajes = '';
@@ -1606,7 +1641,6 @@ ORDER BY consola, titulo ASC";
                     $mensajes .= "<table>";
                     foreach ($datos as $value) {
                         if ($value->producto) {
-                            $configuraciones = $this->getConfiguraciones();
                             $ID = $value->ID;
                             $producto = $value->producto;
                             $slot = $value->slot;

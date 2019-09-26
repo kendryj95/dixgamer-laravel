@@ -22,6 +22,7 @@
 	        <li role="presentation"><a  data-toggle="tab" href="#menu3">Reporte de Ventas</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu4">Procesos Automaticos</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu5">Parametros</a></li>
+	        <li role="presentation"><a  data-toggle="tab" href="#menu6">Productos Excluidos</a></li>
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
@@ -126,6 +127,32 @@
 	      		</div>
 	      	</form>
 	      </div> <!-- TERMINA -->
+	      <div class="tab-pane fade" id="menu6" role="tabpanel">
+	      	<div class="row">
+	      		<div class="col-md-12">
+	      			<form action="{{ url('config/general') }}" id="cuentas_excluidas" method="post">
+	      				{{ csrf_field() }}
+	      				<input type="hidden" name="opt" value="4">
+	      				<div class="form-group">
+	      					<label for="">Productos Excluidos:</label><br>
+	      					<select name="productos_excluidos[]" id="titulo-select" value="" class="form-control select2-multiple" multiple>
+				                @foreach($titles as $t)
+				                @php
+				                $selected = '';
+				                $titulo = explode(" (",$t->nombre_web)[0];
+				                if (in_array($titulo, $titulos)) {
+				                    $selected = 'selected';
+				                }
+				                @endphp
+				                <option value="{{ $titulo }}" {{$selected}}>{{ str_replace('-', ' ', $titulo) }}</option>
+				                @endforeach
+				            </select>
+	      				</div>
+	      				<button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+	      			</form>
+	      		</div>
+	      	</div>
+	      </div>
 	    </div>
 	  </div>
 	</div>
@@ -153,6 +180,14 @@
 		            return false;
 		        }
 		});
+
+		$( "#titulo-select" ).select2({
+            theme: "bootstrap"
+        });
+
+        setTimeout(function(){
+        	$('.select2-container').css('width', '100%');
+        },300)
 	});
 </script>
 
