@@ -65,7 +65,7 @@ class Balance extends Model
               AND consola='ps'
               AND costo_usd < 10
               GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))) as agrupado
-            WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND DATE(Day) = CURDATE() HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
+            WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
           GROUP BY titulo
           ORDER BY titulo ASC, ID ASC"));
       }
@@ -138,7 +138,7 @@ class Balance extends Model
       return DB::table('saldo')
       ->select(DB::raw("TRIM(SUBSTRING(code,1,19)) AS code_subs"))
       ->where('costo_usd','<',10)
-      ->where(DB::raw("DATE(Day)"),date('Y-m-d'))
+      ->where(DB::raw("NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR)"))
       ->having('code_subs',$code_gift);
     }
 
