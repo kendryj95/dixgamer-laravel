@@ -308,7 +308,7 @@ class Stock extends Model
     public function ScopeGift($query,$title){
         $gift_card_costo = explode("-", $title)[2];
 
-        if ($gift_card_costo >= 10) {
+        if ($gift_card_costo >= 10 || $title == 'plus-12-meses') {
               return DB::select(DB::raw("
                 SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
                     FROM stock
