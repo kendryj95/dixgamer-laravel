@@ -5,6 +5,7 @@
       <tr>
         <th>#</th>
         <th>Cuenta</th>
+        <th style="width: 400px">Notas</th>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +26,11 @@
                 <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                   {{ $account->mail_fake }}
                 </a>
+              </td>
+              <td style="text-align: center;">
+                @if ($account->Notas != '')
+                  <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $account->Notas !!} </div>
+                @endif
               </td>
 
             </tr>

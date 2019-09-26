@@ -233,7 +233,7 @@ class Account extends Model
     {
       return DB::table('stock')
       ->select(
-        'cuentas_id',
+        'stock.cuentas_id',
         'mail_fake',
         'titulo',
         'consola',
@@ -241,9 +241,11 @@ class Account extends Model
         DB::raw('SUM(costo_usd) as Costo'),
         DB::raw('(SUM(costo_usd)/30) as Costo2, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as Day'),
         DB::raw('(SQRT(120/(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))))) as Day2'),
-        DB::raw('(SUM(costo_usd)/30) + (SQRT(120/(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))))) + IF(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))>360, -1, 0) + IF(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))>500, -2, 0) as FINAL')
+        DB::raw('(SUM(costo_usd)/30) + (SQRT(120/(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))))) + IF(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))>360, -1, 0) + IF(DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day))))>500, -2, 0) as FINAL'),
+        'cn.Notas'
       )
       ->leftjoin('cuentas','stock.cuentas_id','=','cuentas.ID')
+      ->leftjoin(DB::raw("(SELECT cn1.cuentas_id, cn1.Notas FROM cuentas_notas cn1 INNER JOIN (SELECT cuentas_id, MAX(ID) AS ID FROM cuentas_notas GROUP BY cuentas_id) cn2 ON cn1.ID = cn2.ID) AS cn"),'cn.cuentas_id','=','cuentas.ID')
       ->whereNotNull('stock.cuentas_id')
       ->where('cuentas.mail_fake','LIKE','%yopmail%')
       ->groupBy('stock.cuentas_id')
