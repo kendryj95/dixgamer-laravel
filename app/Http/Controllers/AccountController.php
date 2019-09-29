@@ -1634,69 +1634,69 @@ class AccountController extends Controller
               $band = false;
             }
 
-            #---------
-
-            $lastAccountGames = $this->tks->lastAccountUserGames(session()->get('usuario')->Nombre); // Ultimo juego cargado por este usuario.
-
-            if (count($lastAccountGames) > 0) {
-              $ultimo_juego = $lastAccountGames[0]->ID;
-              $lastGames = $this->tks->lastAccountByIdAndUser(session()->get('usuario')->Nombre,$ultimo_juego);
-              if (!$lastGames)
-                return redirect()->back()->withErrors(['Intentelo nuevamente. Ha ocurrido un error inesperado.']);
-
-              $data = [];
-
-              $saldos = $this->getSaldosCuenta($account_id);
-
-              foreach ($lastGames as $key => $game) {
-                $costo = ($game->costo_usd / $saldos['saldo']) * $saldos['saldoARS'];
-
-                // Arreglo que se guarda en $data para guardar multiples juegos de una sola ves
-                $data[$key] = [
-                  'cuentas_id' => $account_id,
-                  'consola' => $game->consola,
-                  'titulo' => $game->titulo,
-                  'medio_pago' => 'Saldo',
-                  'costo_usd' => $game->costo_usd,
-                  'costo' => $costo,
-                  'Day' => $this->dte,
-                  'usuario' => session()->get('usuario')->Nombre,
-                ];
-
-                if ($costo == 0) {
-                  $guardar = false;
-                  break;
-                }
-              }
-
-              try {
-                // mandamos a guardar el arreglo de juegos
-
-                if ($guardar) { // Validación que solo guarde cuando no haya ningun costo 0.
-                  $this->tks->storeCodes($data);
-
-                  // Mensaje de notificacion
-                  \Helper::messageFlash('Cuentas','Gift y Juego Cargado','alert_cuenta');
-
-
-                  return redirect('cuentas/'.$account_id);
-                } else {
-                  return redirect()->back()->withErrors(['Oops! Se ha detectado que hubo un calculo del stock con costo cero (0). Por favor revisar.']);
-                }
-
-
-              } catch (\Exception $e) {
-                dd($e->getMessage());
-                return redirect()->back()->withErrors(['Intentelo nuevamente. Ocurrió un error en el proceso.']);
-
-              }
-            } else {
-              return redirect()->back()->withErrors(['No hay stock para repetir el ultimo juego cargado con este usuario.']);
-            }
-            
           } else {
-            return redirect()->back()->withErrors(['No hay gift en stock para repetir la ultima(s) gift cargada con este usuario.']);
+            return redirect()->back()->withErrors(['No hay gift "'.$gift.'" en stock para repetir la ultima(s) gift cargada con este usuario.']);
           }
+        }
+
+        #---------
+
+        $lastAccountGames = $this->tks->lastAccountUserGames(session()->get('usuario')->Nombre); // Ultimo juego cargado por este usuario.
+
+        if (count($lastAccountGames) > 0) {
+          $ultimo_juego = $lastAccountGames[0]->ID;
+          $lastGames = $this->tks->lastAccountByIdAndUser(session()->get('usuario')->Nombre,$ultimo_juego);
+          if (!$lastGames)
+            return redirect()->back()->withErrors(['Intentelo nuevamente. Ha ocurrido un error inesperado.']);
+
+          $data = [];
+
+          $saldos = $this->getSaldosCuenta($account_id);
+
+          foreach ($lastGames as $key => $game) {
+            $costo = ($game->costo_usd / $saldos['saldo']) * $saldos['saldoARS'];
+
+            // Arreglo que se guarda en $data para guardar multiples juegos de una sola vez
+            $data[$key] = [
+              'cuentas_id' => $account_id,
+              'consola' => $game->consola,
+              'titulo' => $game->titulo,
+              'medio_pago' => 'Saldo',
+              'costo_usd' => $game->costo_usd,
+              'costo' => $costo,
+              'Day' => $this->dte,
+              'usuario' => session()->get('usuario')->Nombre,
+            ];
+
+            if ($costo == 0) {
+              $guardar = false;
+              break;
+            }
+          }
+
+          try {
+            // mandamos a guardar el arreglo de juegos
+
+            if ($guardar) { // Validación que solo guarde cuando no haya ningun costo 0.
+              $this->tks->storeCodes($data);
+
+              // Mensaje de notificacion
+              \Helper::messageFlash('Cuentas','Gift y Juego Cargado','alert_cuenta');
+
+
+              return redirect('cuentas/'.$account_id);
+            } else {
+              return redirect()->back()->withErrors(['Oops! Se ha detectado que hubo un calculo del stock con costo cero (0). Por favor revisar.']);
+            }
+
+
+          } catch (\Exception $e) {
+            dd($e->getMessage());
+            return redirect()->back()->withErrors(['Intentelo nuevamente. Ocurrió un error en el proceso.']);
+
+          }
+        } else {
+          return redirect()->back()->withErrors(['No hay stock para repetir el ultimo juego cargado con este usuario.']);
         }
 
       } else {
