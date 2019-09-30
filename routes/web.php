@@ -120,6 +120,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('delete_operations/{id}/{tipo}', 'AccountController@deleteOperation');
   Route::get('cuentas_reseteadas', 'AccountController@indexReseteados');
   Route::get('cuentas_notas', 'AccountController@indexCuentasNotas');
+  Route::get('modo_continuo', 'AccountController@modoContinuo');
 
   Route::get('balance/{page}', 'ControlsController@balanceProductosDiasCondicionado'); // Acceso solo para BETINA
 

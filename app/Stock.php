@@ -323,6 +323,7 @@ class Stock extends Model
                     ORDER BY consola, titulo DESC
             "),[$title]);
         } else {
+            $condRestrictGift = session()->get('usuario')->modo_continuo == 0 ? " AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))" : "";
               return DB::select(DB::raw("
                 SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
                     FROM stock
@@ -332,7 +333,7 @@ class Stock extends Model
                     GROUP BY stock_id
                     ORDER BY ID DESC) AS vendido
                     ON ID = stock_id
-                    WHERE (consola != 'ps4') AND (consola != 'ps3') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot') AND titulo=? AND stock.costo_usd < 10 AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))
+                    WHERE (consola != 'ps4') AND (consola != 'ps3') AND (Q_vta IS NULL) AND (titulo != 'plus-12-meses-slot') AND titulo=? AND stock.costo_usd < 10 $condRestrictGift
                     GROUP BY consola, titulo
                     ORDER BY consola, titulo DESC
             "),[$title]);

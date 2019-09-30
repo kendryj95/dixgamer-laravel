@@ -251,7 +251,7 @@ class AccountController extends Controller
           'saldo_ars' => 'required'
       ], $msgs);
 
-      $guardar = false;
+      $guardar = true;
 
 
       // Si hay errores retornamos a la pantalla anterior con los mensajes
@@ -2061,13 +2061,30 @@ class AccountController extends Controller
       if ($stock->costo_usd >= 10) {
         return true;
       } else {
-        $code = substr($stock->code, 0, 19);
-        $giftDisponible = Balance::giftMinimAvailable($code)->first();
-        if (!$giftDisponible) {
+        if (session()->get('usuario')->modo_continuo == 0) {
           return true;
         } else {
-          return false;
+          $code = substr($stock->code, 0, 19);
+          $giftDisponible = Balance::giftMinimAvailable($code)->first();
+          if (!$giftDisponible) {
+            return true;
+          } else {
+            return false;
+          }
         }
       }
+    }
+
+    public function modoContinuo(Request $request) {
+      $modo_continuo = $request->modo_continuo;
+      $user = session()->get('usuario')->ID;
+
+      DB::table('usuarios')->where('ID',$user)->update(['modo_continuo' => $modo_continuo]);
+
+      $infoUser = DB::table('usuarios')->where('ID',$user)->first();
+
+      $request->session()->put('usuario', $infoUser);
+
+      echo json_encode(['status' => 202]);
     }
 }

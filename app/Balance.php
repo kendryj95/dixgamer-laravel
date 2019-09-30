@@ -59,15 +59,31 @@ class Balance extends Model
                 GROUP BY consola, titulo
                 ORDER BY consola DESC, titulo ASC, ID ASC"));
       } else {
-        return DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, COUNT(*) AS Q_Stock
+
+        $query = "";
+
+        if (session()->get('usuario')->modo_continuo == 0) {
+          $query = "SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, COUNT(*) AS Q_Stock
             FROM (SELECT * FROM stock
               WHERE ID > 100000 
               AND consola='ps'
               AND costo_usd < 10
               GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))) as agrupado
-            WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
+              WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
           GROUP BY titulo
-          ORDER BY titulo ASC, ID ASC"));
+          ORDER BY titulo ASC, ID ASC";
+        } else {
+          $query = "SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, SUM(sum) AS Q_Stock
+                  FROM (SELECT *, Count(ID) as sum FROM stock
+                  WHERE ID > 100000
+                  AND consola='ps'
+                  AND costo_usd < 10
+                  GROUP BY titulo) as agrupado
+                  GROUP BY titulo
+                  ORDER BY titulo ASC, ID ASC";
+        }
+
+        return DB::select(DB::raw($query));
       }
     }
     public function storeBalanceAccount($data){
