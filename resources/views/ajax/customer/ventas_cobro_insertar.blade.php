@@ -27,11 +27,13 @@
              <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
               @if ($venta_stock->medio_venta == 'Web' || $venta_stock->medio_venta == 'Mail')
                 <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
+                <option value="MP - Banco" data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco</option>
                 <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
                 <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
                 <option value="Banco" data-content="<span class='label label-info'>Banco</span>">Banco</option>
               @else
                 <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
+                <option value="MP - Banco" data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco</option>
                 <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
                 <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
               @endif
@@ -106,11 +108,11 @@
       //alert(val2);
       if (val == "MercadoLibre") {
           $("#porcentaje").html("<option value='0.13'>13 %</option>");
-      } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
+      } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
           $("#porcentaje").html("<option value='0.0538'>6 %</option>");
       } else if (val == "Mail" && val2 == "Banco") {
           $("#porcentaje").html("<option value='0.00'>0 %</option>");
-      } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
+      } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
           $("#porcentaje").html("<option value='0.0538'>6 %</option>");
       } else if (val == "Web" && val2 == "Banco") {
           $("#porcentaje").html("<option value='0.00'>0 %</option>");

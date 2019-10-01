@@ -58,6 +58,9 @@
                             <option  value="MP"
                                     data-content="<span class='label label-primary'>MP</span>">MP
                             </option>
+                            <option  value="MP - Banco"
+                                    data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco
+                            </option>
                             <option value="MP - Tarjeta"
                                     data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta
                             </option>
@@ -264,7 +267,7 @@
                     $('#order_ml').show();
                     $('#order_item').hide().val('');
                     $('#order_web').hide().val('');
-                } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
+                } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
                     $("#porcentaje").html("<option value='0.0538'>6 %</option>");
                     $('#order_ml').hide().val('');
                     $('#order_item').hide().val('');
@@ -274,7 +277,7 @@
                     $('#order_ml').hide().val('');
                     $('#order_item').hide().val('');
                     $('#order_web').hide().val('');
-                } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket")) {
+                } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
                     $("#porcentaje").html("<option value='0.0538'>6 %</option>");
                     $('#order_ml').hide().val('');
                     $('#order_item').show();

@@ -1048,8 +1048,16 @@ class AccountController extends Controller
         }
 
         if ($band) {
-          \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-            return redirect('cuentas/'.$account);
+
+          if ($title == 'plus-12-meses') {
+            $this->insertStockPlus12Meses($account);
+            \Helper::messageFlash('Cuentas','Saldo y Stock Plus 12 Meses agregados.','alert_cuenta');
+          } else {
+            \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+          }
+
+          return redirect('cuentas/'.$account);
+
         } else {
           return redirect('/cuentas')->withErrors('Intentelo nuevamente');
         }
@@ -2087,4 +2095,55 @@ class AccountController extends Controller
 
       echo json_encode(['status' => 202]);
     }
+
+    private function insertStockPlus12Meses($id_account){
+      
+      $expense = Stock::stockExpensesByAccountId($id_account)->first();
+      $accountBalance = Balance::totalBalanceAccount($id_account)->first();
+
+      if (empty($expense)) {
+        $expense = new \stdClass;
+        $expense->costo_usd = 0;
+        $expense->costo = 0;
+      }
+      /// SI EL COSTO EN USD ES 9.99, 19.99, etc... LE SUMO UN CENTAVO
+      $costo_usd = round(($accountBalance->costo_usd - $expense->costo_usd), 1);
+
+      //// CALCULO EL SALDO LIBRE DE LA CUENTA EN USD Y EN ARS
+      $saldo_libre_usd = ($accountBalance->costo_usd - $expense->costo_usd);
+      $saldo_libre_ars = ($accountBalance->costo - $expense->costo);
+
+      /// SI EL SALDO A QUEDAR LUEGO DE INSERTAR UN PRODUCTO ES MAYOR O IGUAL A 9.99, CARGO COSTO ARS PROPORCIONAL
+      if (($saldo_libre_usd - $costo_usd) >= 9.99) {
+        $costo_ars = ($saldo_libre_ars * ($costo_usd/$saldo_libre_usd));
+      } else {
+      /// SI EL SALDO A QUEDAR ES MENOR A 9.99 LE ASIGNO EL TOTAL EN PESOS LIBRES > ABSORBO TODO EL COSTO EN PESOS
+        $costo_ars = $saldo_libre_ars;
+      }
+
+      $titulo = 'plus-12-meses-slot';
+      $consola = 'ps';
+
+      if ($this->validarStock($id_account, $titulo, $consola)) {
+        return redirect('cuentas/'.$id_account)->withErrors("Ya existe el juego $titulo ($consola) en esta cuenta.");
+      } 
+
+      $data = [];
+      $data['titulo'] = $titulo;
+      $data['consola'] = $consola;
+      $data['cuentas_id'] = $id_account;
+      $data['costo_usd'] = $costo_usd;
+      $data['medio_pago'] = 'Saldo';
+      $data['costo'] = $costo_ars;
+      $data['Day'] = $this->dte;
+      $data['Notas'] = '';
+      $data['usuario'] = session()->get('usuario')->Nombre;
+
+      $this->tks->storeStockAccount($data);
+
+
+      return;
+
+    }
+
 }
