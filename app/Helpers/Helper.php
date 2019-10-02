@@ -286,4 +286,18 @@ class Helper
       return $operators;
     }
 
+    public static function formatFechaReferencia($fecha)
+    {
+      $meses = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
+
+      $dia = date('d', strtotime($fecha));
+      $mes = date('n', strtotime($fecha));
+      $mes = $meses[$mes-1];
+      $anio = date('Y', strtotime($fecha));
+
+      $strFecha = "$dia de $mes de $anio";
+
+      return $strFecha;
+    }
+
 }

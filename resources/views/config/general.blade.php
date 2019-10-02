@@ -121,6 +121,12 @@
 	      					<input style="text-align: right" type="number" name="costo_automatizar_web_ps4" id="costo_automatizar_web_ps4" class="form-control" value="{{ number_format($configuraciones->costo_automatizar_web_ps4,2,".","") }}" step="0.01">
 	      				</div>
 	      			</div>
+	      			<div class="col-md-3">
+	      				<div class="form-group">
+	      					<label style="margin-bottom: 25px" for="fecha_referencia">Fecha Referencia</label>
+	      					<input type="date" name="fecha_referencia" id="fecha_referencia" class="form-control" value="{{ $configuraciones->fecha_referencia }}" >
+	      				</div>
+	      			</div>
 	      			<div class="col-md-12">
 	      				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i> Guardar</button>
 	      			</div>
