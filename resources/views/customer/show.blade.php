@@ -847,7 +847,7 @@
 
                 @endif
 
-            @else
+            @elseif ($dataCustomer->consola == 'ps4')
 
               @if ($customer->ID != 1)
 
