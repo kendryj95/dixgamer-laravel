@@ -1591,4 +1591,62 @@ class CustomerController extends Controller
         return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
       }
     }
+
+    public function saleToClient($titulo, $consola, $slot) {
+      $cliente_id = $consola == 'ps3' ? 2 : 1;
+
+      $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+
+      if(!is_array($row_rsSTK)) {
+          return redirect()->back()->withErrors(["No hay stock del Juego: $titulo ($consola)"]);
+      } else {
+        $stk_ID = $row_rsSTK[0]->ID_stk;
+      }
+
+      DB::beginTransaction();
+
+      try {
+        # DATA PARA TABLA VENTAS.
+        $data['clientes_id'] = $cliente_id;
+        $data['stock_id'] = $stk_ID;
+        $data['cons'] = $consola;
+        $data['slot'] = $slot;
+        $data['medio_venta'] = 'Mail';
+        $data['estado'] = 'listo';
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        $venta_ID = DB::table('ventas')->insertGetId($data);
+
+        #DATA PARA TABLA VENTAS COBRO.
+        $data = [
+          'ventas_id'     => $venta_ID,
+          'medio_cobro'   => 'Banco',
+          'precio'        => '0',
+          'comision'      => '0',
+          'Day'           => date('Y-m-d H:i:s'),
+          'usuario'       => session()->get('usuario')->Nombre
+        ];
+
+        DB::table('ventas_cobro')->insert($data);
+
+        $data = [
+          "id_ventas" => $venta_ID,
+          "Notas" => "Venta generada por sistema.",
+          "Day" => date('Y-m-d H:i:s'),
+          "usuario" => session()->get('usuario')->Nombre
+        ];
+
+        DB::table('ventas_notas')->insert($data);
+
+        DB::commit();
+
+        \Helper::messageFlash('Clientes','Venta agregada a Cliente #'.$cliente_id, 'alert_cliente');
+        return redirect('clientes/'.$cliente_id);
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
+      }
+
+    }
 }

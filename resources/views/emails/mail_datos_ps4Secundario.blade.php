@@ -190,7 +190,7 @@
                   <p></p>
                   <p><em style="color:#e74c3c;">Compraste SECUNDARIO, abr&iacute;s el juego desde nuestra cuenta, necesitas estar conectado a internet cuando quieras jugar.</em><br />
                     <em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
-                  <p>Mira el <a href="https://facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
+                  <p>Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
                   <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
                     2) <strong>Aceptar las condiciones</strong> de Sony e inscribirse con estos datos:<br />
   <br />
@@ -204,7 +204,7 @@
                     5) A veces pide vincular con Facebook, seleccionar <strong>"Do this later"</strong> o <strong>"Skip"</strong><br />
                     6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong>
                     
-                    <p>&iquest;Problemas? Mira el <a href="https://facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
+                    <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
   <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br />
   <br />
   <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br />

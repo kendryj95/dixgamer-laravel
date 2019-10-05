@@ -193,7 +193,7 @@
                 <p style="font-size:18px">Hola {{ $row_rsClient->nombre }} {{ $row_rsClient->apellido }}, gracias por tu nueva compra.</p>
                 <p><em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
                 <br />
-                <p>Mira el <a href="https://business.facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
+                <p>Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
                 <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
                   2) <strong>Aceptar las condiciones</strong> de Sony e inscribirse con estos datos:<br />
   <br />
@@ -207,7 +207,7 @@
                   5) <strong>Activar primario:</strong> Ir a Ajustes &gt; PlayStation Network/ Admin de cuentas &gt; Activar como tu PS4 principal &gt; Activar<br />
                   6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong><br />
                   7) Reiniciar la PS4 una vez que inicia la descarga. <strong>SI</strong>, cuando inicia la descarga reiniciamos la consola. <strong>Luego directamente ingresar con tu usuario. </strong>
-                    <p>&iquest;Problemas? Mira el <a href="https://business.facebook.com/dixgamer.arg/videos/929117640624686/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
+                    <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
                     
   <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br /><br/>
   <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br />

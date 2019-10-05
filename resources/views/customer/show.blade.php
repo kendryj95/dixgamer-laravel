@@ -820,6 +820,82 @@
               </a>
             </div>
 
+            @if ($dataCustomer->consola == 'ps3')
+
+                @if ($customer->ID != 2)
+
+                <div class="dropdown text-left">
+                  <button
+                    class="btn btn-link dropdown-toggle btn-xs"
+                    type="button" id="vender_cli2"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                      Vender a Cliente #2
+                      {{-- <span class="caret"></span> --}}
+                  </button>
+
+                  <ul class="dropdown-menu bg-info" aria-labelledby="vender_cli2">
+                    <li class="dropdown-header">¿Estas seguro?</li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                      <a href="{{ url('saleToClient', [$dataCustomer->titulo, $dataCustomer->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+                    </li>
+                  </ul>
+
+                </div>
+
+                @endif
+
+            @else
+
+              @if ($customer->ID != 1)
+
+              <div class="dropdown text-left">
+                <button
+                  class="btn btn-link dropdown-toggle btn-xs"
+                  type="button" id="vender_pri_cli1"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+                    Vender Primario a Cliente #1
+                    {{-- <span class="caret"></span> --}}
+                </button>
+
+                <ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli1">
+                  <li class="dropdown-header">¿Estas seguro?</li>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <a href="{{ url('saleToClient', [$dataCustomer->titulo, $dataCustomer->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="dropdown text-left">
+                <button
+                  class="btn btn-link dropdown-toggle btn-xs"
+                  type="button" id="vender_secu_cli2"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+                    Vender Secundario a Cliente #1
+                    {{-- <span class="caret"></span> --}}
+                </button>
+
+                <ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+                  <li class="dropdown-header">¿Estas seguro?</li>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <a href="{{ url('saleToClient', [$dataCustomer->titulo, $dataCustomer->consola, 'Secundario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+                  </li>
+                </ul>
+
+              </div>
+
+              @endif
+
+            @endif
+
             @if ($ventas_notas)
               @foreach ($ventas_notas as $venta_nota)
                 @if ($venta_nota->id_ventas == $dataCustomer->ID_ventas)

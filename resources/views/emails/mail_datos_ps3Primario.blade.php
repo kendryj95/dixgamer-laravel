@@ -195,7 +195,7 @@
                 <p><em style="color:#e74c3c;">Ten&eacute;s 3 d&iacute;as para iniciar la descarga.</em><br />
 					<em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
 
-				<p>Ver <a href="https://facebook.com/dixgamer.arg/videos/954394201430363/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p> 
+				<p>Ver <a href="https://www.facebook.com/watch/?v=2534001146657963" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p> 
                 <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
                   2) Le colocamos de nombre <strong>"{{ substr($row_rsClient->titulo,0,6) }} NO Tocar"</strong><br />
                   3) <strong>Abrimos el usuario creado</strong> y vamos a <strong>PSN</strong> <em>(PlayStation Network)</em> &gt; <strong>Inscribirse</strong> > Opción "Usar una <strong>cuenta existente</strong>"<br /><br />
@@ -210,7 +210,7 @@
 				6) Volvemos al <strong>menú principal del usuario creado > PSN</strong> > Iniciar Sesi&oacute;n > Administraci&oacute;n de Cuentas > Transaction Management > <strong>Download List</strong><br/>
 7) Iniciamos la descarga de <strong>todos los items</strong> poniendo en <strong>segundo plano.</strong><br />
                   8) <strong>Salimos del usuario creado</strong> abriendo tu usuario personal (el que usas siempre).
-                <p>&iquest;Problemas? Mira el <a href="https://facebook.com/dixgamer.arg/videos/954394201430363/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
+                <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=2534001146657963" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
   <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br /><br/>
   <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br /><br />
                 </p></td>

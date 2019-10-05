@@ -18,6 +18,7 @@
 			<h1>
 				Cuenta #{{$account->ID}}
 
+				@if (isset($back->ID))
 				<a
 					title="Cuenta anterior"
 					style="color:#ccc;"
@@ -26,6 +27,7 @@
 					target="_self">
 						<
 				</a>
+				@endif
 				@if(!empty($next))
 				<a
 					title="Cuenta siguiente"

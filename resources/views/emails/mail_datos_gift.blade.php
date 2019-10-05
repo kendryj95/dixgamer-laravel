@@ -192,12 +192,12 @@
                 
                 <p style="font-size:18px">Hola {{ $row_rsClient->nombre }} {{ $row_rsClient->apellido }}, gracias por tu nueva compra.</p>
 
-                <p>Para canjear tu c&#243;digo <strong>necesitas una cuenta de Estados Unidos</strong>, si no tienes, crearla es gratis y f&aacute;cil. Mira el <a href="https://facebook.com/dixgamer.arg/videos/919641484905635/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> desde minuto 1:20.</p>
+                <p>Para canjear tu c&#243;digo <strong>necesitas una cuenta de Estados Unidos</strong>, si no tienes, crearla es gratis y f&aacute;cil. Mira el <a href="https://www.facebook.com/watch/?v=443546699601440" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> desde minuto 1:20.</p>
                 <p>1) <strong>Prender</strong> la consola &gt; Ingresar a tu <strong>Cuenta de Estados Unidos</strong><br />
                   2) Ingresar a la PlayStation Store (Tienda de PlayStation)<br />
                   3) Ir la opci&#243;n Redeem Code (Canjear C&#243;digo)<br />
                   4) Ingresar el c&#243;digo: <strong>{{ $row_rsClient->code }} </strong> <em style="color:#999;">(sin los guiones)</em> </p>
-					<p>¿Problemas? Mira el <a href="https://facebook.com/dixgamer.arg/videos/919641484905635/" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> completo.</p>
+					<p>¿Problemas? Mira el <a href="https://www.facebook.com/watch/?v=443546699601440" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> completo.</p>
                 <p><font  color="#999999"><em>Con este codigo puedes cargar saldo en tu cuenta americana y con ese saldo comprar lo que deseas (juegos, extras, pases de temporada, etc.)</em></font>
 					<p>En PS4 para utilizar los juegos desde otros usuarios de tu consola debes activar tu cuenta americana como Primaria.</p>
 					<p><font  color="#999999"><em>Pasos para Activar como Primaria:<br />
