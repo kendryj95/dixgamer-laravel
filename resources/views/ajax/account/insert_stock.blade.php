@@ -146,7 +146,7 @@
 									var titulo = document.getElementById('titulo-selec').value;
 					var select = document.getElementById('titulo-selec');
 
-					var consola = (select.options[select.selectedIndex].text.substr(-4)).replace(")","");
+					var consola = (select.options[select.selectedIndex].text.substr(-4)).replace(/\(|\)/g,"");
 
 					document.getElementById('consola').value = consola;
 

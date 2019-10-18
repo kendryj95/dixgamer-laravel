@@ -5,9 +5,34 @@
 @section('container')
 <div class="container">
   <h1>Listar cuentas</h1>
-  <a class="btn btn-default btn-sm" href="cuentas_con_saldo" title="Todos" style="margin:5px 0 0 0;">Todos</a>
-  <a class="btn btn-default btn-sm" href="cuentas_con_saldo?console=ps3" title="Libres para PS4" style="margin:5px 0 0 0;">Libres para PS4</a>
-  <a class="btn btn-default btn-sm" href="cuentas_con_saldo?console=ps4" title="Libres para PS3" style="margin:5px 0 0 0;">Libres para PS3</a>
+
+  @php
+
+  $queryParams = "";
+
+  if (isset($_GET['order'])) {
+    $queryParams .= "&order=" . $_GET['order'];
+  }
+
+  @endphp
+  
+  <div class="row">
+    <div class="col-md-3">
+      <a class="btn btn-default btn-sm" href="cuentas_con_saldo" title="Todos" style="margin:5px 0 0 0;">Todos</a>
+      <a class="btn btn-default btn-sm" href="cuentas_con_saldo?console=ps3{{$queryParams}}" title="Libres para PS4" style="margin:5px 0 0 0;">Libres para PS4</a>
+      <a class="btn btn-default btn-sm" href="cuentas_con_saldo?console=ps4{{$queryParams}}" title="Libres para PS3" style="margin:5px 0 0 0;">Libres para PS3</a>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <select style="margin-top: 5px" onchange="filtrar(this.value)" class="form-control input-sm">
+          <option value="monto" @if(isset($_GET['order']) && $_GET['order'] == 'monto') selected @endif>Ordenar Monto Libre</option>
+          <option value="cuenta" @if(isset($_GET['order']) && $_GET['order'] == 'cuenta') selected @endif>Ordenar ID Cuenta</option>
+          <option value="monto-cuenta" @if(isset($_GET['order']) && $_GET['order'] == 'monto-cuenta') selected @endif>Ordenar Monto-Cuenta</option>
+          <option value="cuenta-monto" @if(isset($_GET['order']) && $_GET['order'] == 'cuenta-monto') selected @endif>Ordenar Cuenta-Monto</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
   <div class="table-responsive">
     <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
@@ -90,5 +115,23 @@
 
   </div>
 </div><!--/.container-->
+
+@section('scripts')
+@parent
+
+<script>
+  function filtrar(orderBy) {
+    var queryParams = '';
+    @if(isset($_GET['console']))
+      queryParams += "?consola={{ $_GET['console'] }}";
+    @endif
+
+    queryParams += queryParams != '' ? "&order="+orderBy : "?order="+orderBy;
+
+    window.location.href = "{{  url('cuentas_con_saldo') }}"+queryParams;
+  }
+</script>
+
+@endsection
 
 @endsection

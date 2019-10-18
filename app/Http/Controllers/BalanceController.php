@@ -19,7 +19,7 @@ class BalanceController extends Controller
 	      $obj->column = $request->column;
 	      $obj->word = $request->word;
 
-    	$saldos = Balance::listaSaldos($obj)->paginate(50);
+    	$saldos = Balance::listaSaldos($obj)->paginate(200);
 
     	return view('balance.index',compact('columns','saldos'));
     }

@@ -25,11 +25,17 @@
             <div class="thumbnail colorBground">
 
               <div style="height: 185px; border: 1px solid #ccc">
-                <label class="badge badge-danger pull-right" style="margin: 2px;">{{ $gift->Q_Stock }}</label>
+                @if (session()->get('usuario')->modo_continuo == 0)
+                  <label class="badge badge-danger pull-right" style="margin: 2px;">{{ $gift->Q_Stock }}</label>
+                @else
+                  <label class="badge badge-danger pull-right" style="margin: 2px;">{{ $gift->Q_GC }} GC</label>
+                  <label class="badge badge-warning pull-right" style="margin: 2px;">{{ $gift->Q_Uso }} usos</label>
+                @endif
+                
                 <a
                   title="cargar saldo"
                   onclick="request(event)"
-                  href="{{url('crear_saldo_cuenta',[$account_id,$gift->titulo,$gift->consola])}}">
+                  href="{{url('crear_saldo_minimo_cuenta',[$account_id,$gift->ID_stk])}}">
                 
                   <div class="colorText">
                       <br>

@@ -641,8 +641,75 @@
 							alt="{{$stock->titulo}}"
 							src='{{asset("img/productos/".$stock->consola."/".$stock->titulo.".jpg")}}'>
 
-						<div class="caption text-center">
-            </div>
+						<div class="caption text-center"></div>
+
+						@if ($stock->consola == 'ps3')
+
+						<div class="dropdown text-left">
+						  <button
+							class="btn btn-link dropdown-toggle btn-xs"
+							type="button" id="vender_cli2"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+							  Vender a Cliente #2
+							  {{-- <span class="caret"></span> --}}
+						  </button>
+		
+						  <ul class="dropdown-menu bg-info" aria-labelledby="vender_cli2">
+							<li class="dropdown-header">¿Estas seguro?</li>
+							<li role="separator" class="divider"></li>
+							<li>
+							  <a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+							</li>
+						  </ul>
+		
+						</div>
+		
+					@elseif ($stock->consola == 'ps4')
+		
+					  <div class="dropdown text-left">
+						<button
+						  class="btn btn-link dropdown-toggle btn-xs"
+						  type="button" id="vender_pri_cli1"
+						  data-toggle="dropdown"
+						  aria-haspopup="true"
+						  aria-expanded="false">
+							Vender Primario a Cliente #1
+							{{-- <span class="caret"></span> --}}
+						</button>
+		
+						<ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli1">
+						  <li class="dropdown-header">¿Estas seguro?</li>
+						  <li role="separator" class="divider"></li>
+						  <li>
+							<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+						  </li>
+						</ul>
+		
+					  </div>
+					  <div class="dropdown text-left">
+						<button
+						  class="btn btn-link dropdown-toggle btn-xs"
+						  type="button" id="vender_secu_cli2"
+						  data-toggle="dropdown"
+						  aria-haspopup="true"
+						  aria-expanded="false">
+							Vender Secundario a Cliente #1
+							{{-- <span class="caret"></span> --}}
+						</button>
+		
+						<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+						  <li class="dropdown-header">¿Estas seguro?</li>
+						  <li role="separator" class="divider"></li>
+						  <li>
+							<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Secundario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+						  </li>
+						</ul>
+		
+					  </div>
+		
+					@endif
 
           </div>
         </div>

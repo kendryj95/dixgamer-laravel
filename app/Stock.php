@@ -323,7 +323,10 @@ class Stock extends Model
                     ORDER BY consola, titulo DESC
             "),[$title]);
         } else {
-            $condRestrictGift = session()->get('usuario')->modo_continuo == 0 ? " AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))" : "";
+            $vendedor = session()->get('usuario')->Nombre;
+            /* $condRestrictGift = session()->get('usuario')->modo_continuo == 0 ? " AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))" : " AND usuario!= '$vendedor'"; */
+            $condRestrictGift = session()->get('usuario')->modo_continuo == 0 ? " AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))" : " AND usuario!= '$vendedor' AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))";
+
               return DB::select(DB::raw("
                 SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
                     FROM stock

@@ -1592,23 +1592,15 @@ class CustomerController extends Controller
       }
     }
 
-    public function saleToClient($titulo, $consola, $slot) {
+    public function saleToClient($id_stock, $consola, $slot) {
       $cliente_id = $consola == 'ps3' ? 2 : 1;
-
-      $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
-
-      if(!is_array($row_rsSTK)) {
-          return redirect()->back()->withErrors(["No hay stock del Juego: $titulo ($consola)"]);
-      } else {
-        $stk_ID = $row_rsSTK[0]->ID_stk;
-      }
 
       DB::beginTransaction();
 
       try {
         # DATA PARA TABLA VENTAS.
         $data['clientes_id'] = $cliente_id;
-        $data['stock_id'] = $stk_ID;
+        $data['stock_id'] = $id_stock;
         $data['cons'] = $consola;
         $data['slot'] = $slot;
         $data['medio_venta'] = 'Mail';

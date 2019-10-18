@@ -65,8 +65,9 @@ class AccountController extends Controller
 
     public function accountAmount(Request $request)
     {
+      $orderBy = isset($request->order) ? $request->order : null;
       // Traer la lista de cuentas
-      $accounts = Account::accountAmounts($request->console)->paginate(50);
+      $accounts = Account::accountAmounts($request->console, $orderBy)->paginate(50);
 
       return view('account.index_amount',
                   compact(
@@ -703,44 +704,41 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $giftDisponible = $this->validarGift($stock);
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
 
-              if ($giftDisponible) {
-                $date = date('Y-m-d H:i:s', time());
-                $data = [
-                  'cuentas_id'=>$account,
-                  'ex_stock_id'=>$stock->ID,
-                  'titulo'=>$title,
-                  'consola'=>$console,
-                  'medio_pago'=>$stock->medio_pago,
-                  'costo_usd'=>$stock->costo_usd,
-                  'costo'=>$stock->costo,
-                  'code'=>$stock->code,
-                  'code_prov'=>$stock->code_prov,
-                  'n_order'=>$stock->n_order,
-                  'Day'=>$date,
-                  'ex_Day_stock'=>$stock->Day,
-                  'Notas'=>$stock->Notas,
-                  'usuario'=>session()->get('usuario')->Nombre,
-                  'ex_usuario'=>$stock->usuario
-                ];
+              try {
+                $this->blc->storeBalanceAccount($data);
 
-                try {
-                  $this->blc->storeBalanceAccount($data);
-
-                  // Eliminando stock
-                  $stock = Stock::where('ID',$stock->ID)->delete();
-                  // Mensaje de notificacion
-                  // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                  // return redirect('cuentas/'.$account);
-                  $band = true;
-                } catch (\Exception $e) {
-                  // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                  $band = false;
-                }
-              } else {
-                return redirect()->back()->withErrors(['No se pudo acreditar el saldo ya que el código ha sido usado el día de hoy.']);
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
               }
+            
+            } else {
+              return redirect()->back()->withErrors(['No hay stock de la gift']);
             }
           }
           
@@ -755,44 +753,41 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $giftDisponible = $this->validarGift($stock);
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
 
-              if ($giftDisponible) {
-                $date = date('Y-m-d H:i:s', time());
-                $data = [
-                  'cuentas_id'=>$account,
-                  'ex_stock_id'=>$stock->ID,
-                  'titulo'=>$title,
-                  'consola'=>$console,
-                  'medio_pago'=>$stock->medio_pago,
-                  'costo_usd'=>$stock->costo_usd,
-                  'costo'=>$stock->costo,
-                  'code'=>$stock->code,
-                  'code_prov'=>$stock->code_prov,
-                  'n_order'=>$stock->n_order,
-                  'Day'=>$date,
-                  'ex_Day_stock'=>$stock->Day,
-                  'Notas'=>$stock->Notas,
-                  'usuario'=>session()->get('usuario')->Nombre,
-                  'ex_usuario'=>$stock->usuario
-                ];
+              try {
+                $this->blc->storeBalanceAccount($data);
 
-                try {
-                  $this->blc->storeBalanceAccount($data);
-
-                  // Eliminando stock
-                  $stock = Stock::where('ID',$stock->ID)->delete();
-                  // Mensaje de notificacion
-                  // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                  // return redirect('cuentas/'.$account);
-                  $band = true;
-                } catch (\Exception $e) {
-                  // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                  $band = false;
-                }
-              } else {
-                return redirect()->back()->withErrors(['No se pudo acreditar el saldo ya que el código ha sido usado el día de hoy.']);
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
               }
+            
+            } else {
+              return redirect()->back()->withErrors(['No hay stock de la gift']);
             }
           }
 
@@ -806,44 +801,41 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $giftDisponible = $this->validarGift($stock);
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
 
-              if ($giftDisponible) {
-                $date = date('Y-m-d H:i:s', time());
-                $data = [
-                  'cuentas_id'=>$account,
-                  'ex_stock_id'=>$stock->ID,
-                  'titulo'=>$title,
-                  'consola'=>$console,
-                  'medio_pago'=>$stock->medio_pago,
-                  'costo_usd'=>$stock->costo_usd,
-                  'costo'=>$stock->costo,
-                  'code'=>$stock->code,
-                  'code_prov'=>$stock->code_prov,
-                  'n_order'=>$stock->n_order,
-                  'Day'=>$date,
-                  'ex_Day_stock'=>$stock->Day,
-                  'Notas'=>$stock->Notas,
-                  'usuario'=>session()->get('usuario')->Nombre,
-                  'ex_usuario'=>$stock->usuario
-                ];
+              try {
+                $this->blc->storeBalanceAccount($data);
 
-                try {
-                  $this->blc->storeBalanceAccount($data);
-
-                  // Eliminando stock
-                  $stock = Stock::where('ID',$stock->ID)->delete();
-                  // Mensaje de notificacion
-                  // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                  // return redirect('cuentas/'.$account);
-                  $band = true;
-                } catch (\Exception $e) {
-                  // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                  $band = false;
-                }
-              } else {
-                return redirect()->back()->withErrors(['No se pudo acreditar el saldo ya que el código ha sido usado el día de hoy.']);
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
               }
+            
+            } else {
+              return redirect()->back()->withErrors(['No hay stock de la gift']);
             }
           }
         } elseif ($title == 'gift-card-55-usd-org') {
@@ -857,44 +849,41 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $giftDisponible = $this->validarGift($stock);
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
 
-              if ($giftDisponible) {
-                $date = date('Y-m-d H:i:s', time());
-                $data = [
-                  'cuentas_id'=>$account,
-                  'ex_stock_id'=>$stock->ID,
-                  'titulo'=>$title,
-                  'consola'=>$console,
-                  'medio_pago'=>$stock->medio_pago,
-                  'costo_usd'=>$stock->costo_usd,
-                  'costo'=>$stock->costo,
-                  'code'=>$stock->code,
-                  'code_prov'=>$stock->code_prov,
-                  'n_order'=>$stock->n_order,
-                  'Day'=>$date,
-                  'ex_Day_stock'=>$stock->Day,
-                  'Notas'=>$stock->Notas,
-                  'usuario'=>session()->get('usuario')->Nombre,
-                  'ex_usuario'=>$stock->usuario
-                ];
+              try {
+                $this->blc->storeBalanceAccount($data);
 
-                try {
-                  $this->blc->storeBalanceAccount($data);
-
-                  // Eliminando stock
-                  $stock = Stock::where('ID',$stock->ID)->delete();
-                  // Mensaje de notificacion
-                  // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                  // return redirect('cuentas/'.$account);
-                  $band = true;
-                } catch (\Exception $e) {
-                  // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                  $band = false;
-                }
-              } else {
-                return redirect()->back()->withErrors(['No se pudo acreditar el saldo ya que el código ha sido usado el día de hoy.']);
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
               }
+            
+            } else {
+              return redirect()->back()->withErrors(['No hay stock de la gift']);
             }
           }
 
@@ -909,44 +898,41 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $giftDisponible = $this->validarGift($stock);
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
 
-              if ($giftDisponible) {
-                $date = date('Y-m-d H:i:s', time());
-                $data = [
-                  'cuentas_id'=>$account,
-                  'ex_stock_id'=>$stock->ID,
-                  'titulo'=>$title,
-                  'consola'=>$console,
-                  'medio_pago'=>$stock->medio_pago,
-                  'costo_usd'=>$stock->costo_usd,
-                  'costo'=>$stock->costo,
-                  'code'=>$stock->code,
-                  'code_prov'=>$stock->code_prov,
-                  'n_order'=>$stock->n_order,
-                  'Day'=>$date,
-                  'ex_Day_stock'=>$stock->Day,
-                  'Notas'=>$stock->Notas,
-                  'usuario'=>session()->get('usuario')->Nombre,
-                  'ex_usuario'=>$stock->usuario
-                ];
+              try {
+                $this->blc->storeBalanceAccount($data);
 
-                try {
-                  $this->blc->storeBalanceAccount($data);
-
-                  // Eliminando stock
-                  $stock = Stock::where('ID',$stock->ID)->delete();
-                  // Mensaje de notificacion
-                  // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                  // return redirect('cuentas/'.$account);
-                  $band = true;
-                } catch (\Exception $e) {
-                  // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                  $band = false;
-                }
-              } else {
-                return redirect()->back()->withErrors(['No se pudo acreditar el saldo ya que el código ha sido usado el día de hoy.']);
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
               }
+            
+            } else {
+              return redirect()->back()->withErrors(['No hay stock de la gift']);
             }
           }
 
@@ -961,55 +947,51 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $giftDisponible = $this->validarGift($stock);
+              $date = date('Y-m-d H:i:s', time());
+              $data = [
+                'cuentas_id'=>$account,
+                'ex_stock_id'=>$stock->ID,
+                'titulo'=>$title,
+                'consola'=>$console,
+                'medio_pago'=>$stock->medio_pago,
+                'costo_usd'=>$stock->costo_usd,
+                'costo'=>$stock->costo,
+                'code'=>$stock->code,
+                'code_prov'=>$stock->code_prov,
+                'n_order'=>$stock->n_order,
+                'Day'=>$date,
+                'ex_Day_stock'=>$stock->Day,
+                'Notas'=>$stock->Notas,
+                'usuario'=>session()->get('usuario')->Nombre,
+                'ex_usuario'=>$stock->usuario
+              ];
 
-              if ($giftDisponible) {
-                $date = date('Y-m-d H:i:s', time());
-                $data = [
-                  'cuentas_id'=>$account,
-                  'ex_stock_id'=>$stock->ID,
-                  'titulo'=>$title,
-                  'consola'=>$console,
-                  'medio_pago'=>$stock->medio_pago,
-                  'costo_usd'=>$stock->costo_usd,
-                  'costo'=>$stock->costo,
-                  'code'=>$stock->code,
-                  'code_prov'=>$stock->code_prov,
-                  'n_order'=>$stock->n_order,
-                  'Day'=>$date,
-                  'ex_Day_stock'=>$stock->Day,
-                  'Notas'=>$stock->Notas,
-                  'usuario'=>session()->get('usuario')->Nombre,
-                  'ex_usuario'=>$stock->usuario
-                ];
+              try {
+                $this->blc->storeBalanceAccount($data);
 
-                try {
-                  $this->blc->storeBalanceAccount($data);
-
-                  // Eliminando stock
-                  $stock = Stock::where('ID',$stock->ID)->delete();
-                  // Mensaje de notificacion
-                  // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                  // return redirect('cuentas/'.$account);
-                  $band = true;
-                } catch (\Exception $e) {
-                  // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                  $band = false;
-                }
-              } else {
-                return redirect()->back()->withErrors(['No se pudo acreditar el saldo ya que el código ha sido usado el día de hoy.']);
+                // Eliminando stock
+                $stock = Stock::where('ID',$stock->ID)->delete();
+                // Mensaje de notificacion
+                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                // return redirect('cuentas/'.$account);
+                $band = true;
+              } catch (\Exception $e) {
+                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                $band = false;
               }
+            
+            } else {
+              return redirect()->back()->withErrors(['No hay stock de la gift']);
             }
           }
 
         } else {
           $stock_valido = \Helper::availableStock($account,$title,$console);
-          $stock_valido_id = $stock_valido[0]->ID_stk;
-          $stock = Stock::stockDetail($stock_valido_id)->first();
 
-          $giftDisponible = $this->validarGift($stock);
+          if (is_array($stock_valido)) { 
+            $stock_valido_id = $stock_valido[0]->ID_stk;
+            $stock = Stock::stockDetail($stock_valido_id)->first();
 
-          if ($giftDisponible) {
             $date = date('Y-m-d H:i:s', time());
             $data = [
               'cuentas_id'=>$account,
@@ -1042,8 +1024,9 @@ class AccountController extends Controller
               // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
               $band = false;
             }
+          
           } else {
-            return redirect()->back()->withErrors(['No se pudo acreditar el saldo ya que el código ha sido usado el día de hoy.']);
+            return redirect()->back()->withErrors(['No hay stock de la gift']);
           }
         }
 
@@ -1061,10 +1044,50 @@ class AccountController extends Controller
         } else {
           return redirect('/cuentas')->withErrors('Intentelo nuevamente');
         }
-        
 
+      }
+    }
 
+    public function storeBalanceMinimAccount($account_id, $stock_id) {
+      if ($this->validarGift($stock_id)) {
+        $stock = Stock::stockDetail($stock_id)->first();
 
+        $date = date('Y-m-d H:i:s', time());
+        $data = [
+          'cuentas_id'=>$account_id,
+          'ex_stock_id'=>$stock->ID,
+          'titulo'=>$stock->titulo,
+          'consola'=>$stock->consola,
+          'medio_pago'=>$stock->medio_pago,
+          'costo_usd'=>$stock->costo_usd,
+          'costo'=>$stock->costo,
+          'code'=>$stock->code,
+          'code_prov'=>$stock->code_prov,
+          'n_order'=>$stock->n_order,
+          'Day'=>$date,
+          'ex_Day_stock'=>$stock->Day,
+          'Notas'=>$stock->Notas,
+          'usuario'=>session()->get('usuario')->Nombre,
+          'ex_usuario'=>$stock->usuario
+        ];
+
+        DB::beginTransaction();
+
+        try {
+          $this->blc->storeBalanceAccount($data);
+          $stock = Stock::where('ID',$stock->ID)->delete();
+          DB::commit();
+
+          \Helper::messageFlash('Cuentas','Saldo Minimo agregado correctamente.','alert_cuenta');
+
+          return redirect()->back();
+          
+        } catch (Exception $e) {
+          DB::rollback();
+          return redirect()->back()->withErrors(['Ha ocurrido un error inesperado, por favor intentelo de nuevo.']);
+        }
+      } else {
+        return redirect()->back()->withErrors(['No hay stock de la gift o ya el ID stock ha sido usado.']);
       }
     }
 
@@ -2065,22 +2088,10 @@ class AccountController extends Controller
       }
     }
 
-    private function validarGift($stock) {
-      if ($stock->costo_usd >= 10) {
-        return true;
-      } else {
-        if (session()->get('usuario')->modo_continuo == 0) {
-          return true;
-        } else {
-          $code = substr($stock->code, 0, 19);
-          $giftDisponible = Balance::giftMinimAvailable($code)->first();
-          if (!$giftDisponible) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
+    private function validarGift($stock_id) {
+      $stock = DB::table('stock')->where('ID',$stock_id)->first();
+
+      return $stock ? true : false;
     }
 
     public function modoContinuo(Request $request) {

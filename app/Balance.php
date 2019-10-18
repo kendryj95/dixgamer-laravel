@@ -61,6 +61,8 @@ class Balance extends Model
       } else {
 
         $query = "";
+		//$nombre = session()->get('usuario')->Nombre;
+		$nombre= session()->get('usuario')->Nombre;
 
         if (session()->get('usuario')->modo_continuo == 0) {
           $query = "SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, COUNT(*) AS Q_Stock
@@ -68,20 +70,25 @@ class Balance extends Model
               WHERE ID > 100000 
               AND consola='ps'
               AND costo_usd < 10
-              GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))) as agrupado
-              WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
+              GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))
+			  ) as agrupado
+          WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
           GROUP BY titulo
           ORDER BY titulo ASC, ID ASC";
         } else {
-          $query = "SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, SUM(sum) AS Q_Stock
-                  FROM (SELECT *, Count(ID) as sum FROM stock
-                  WHERE ID > 100000
-                  AND consola='ps'
-                  AND costo_usd < 10
-                  GROUP BY titulo) as agrupado
-                  GROUP BY titulo
-                  ORDER BY titulo ASC, ID ASC";
+          $query = "SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, SUM(cant) AS Q_Uso, COUNT(cant) AS Q_GC
+            FROM (SELECT *, COUNT(ID) as cant FROM stock
+              WHERE ID > 100000 
+              AND consola='ps'
+              AND costo_usd < 10
+              GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))
+              ORDER BY ID ASC) as agrupado
+          WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND usuario != '$nombre' AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
+          GROUP BY titulo
+          ORDER BY titulo ASC, ID ASC";
         }
+
+        //dd($query); 
 
         return DB::select(DB::raw($query));
       }
@@ -154,7 +161,7 @@ class Balance extends Model
       return DB::table('saldo')
       ->select(DB::raw("TRIM(SUBSTRING(code,1,19)) AS code_subs"))
       ->where('costo_usd','<',10)
-      ->where(DB::raw("NOW() <= DATE_ADD(Day, INTERVAL 12 HOUR)"))
+      ->where(DB::raw("NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR)"))
       ->having('code_subs',$code_gift);
     }
 

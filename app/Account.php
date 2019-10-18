@@ -89,8 +89,8 @@ class Account extends Model
 
 
     // cuentas con saldo, pasando el parametro de consola a buscar
-    public function ScopeAccountAmounts($query, $console){
-      return DB::table(DB::raw("(SELECT cuentas_id as sa_cta_id, SUM(costo_usd) as sa_costo_usd,
+    public function ScopeAccountAmounts($query, $console, $order = null){
+      $query = DB::table(DB::raw("(SELECT cuentas_id as sa_cta_id, SUM(costo_usd) as sa_costo_usd,
                                 SUM(costo) as sa_costo
                                 FROM saldo GROUP BY cuentas_id) as saldo"))
                 ->select(
@@ -118,8 +118,27 @@ class Account extends Model
                       if (!empty($console)) {
                         $query->where('consola', 'like', '%'.$console.'%');
                       }
-                    })
-                  ->orderBy("libre_usd",'DESC');
+                    });
+      
+      if ($order === null) {
+        $query->orderBy("libre_usd",'DESC');
+      } else {
+        if ($order == 'monto') {
+          $query->orderBy("libre_usd",'DESC');
+        } elseif ($order == 'cuenta') {
+          $query->orderBy("cuentas_id",'DESC');
+        } elseif ($order == 'monto-cuenta') {
+          $query->orderBy("libre_usd",'DESC');
+          $query->orderBy("cuentas_id",'DESC');
+        } elseif ($order == 'cuenta-monto') {
+          $query->orderBy("cuentas_id",'DESC');
+          $query->orderBy("libre_usd",'DESC');
+        }
+      }
+
+      return $query;
+
+
     }
 
     // cuentas para juegos PS3

@@ -70,7 +70,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('update_amounts/{cobro}/{cliente_id}', 'CustomerController@updateAmounts');
   Route::get('delete_amounts/{id}', 'CustomerController@deleteAmount');
   Route::get('delete_notes/{id}/{tipo}', 'CustomerController@deleteNotes');
-  Route::get('saleToClient/{titulo}/{consola}/{slot}', 'CustomerController@saleToClient');
+  Route::get('saleToClient/{id_stock}/{consola}/{slot}', 'CustomerController@saleToClient');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');
@@ -99,6 +99,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('recharge_account/{id}', 'AccountController@rechargeBalance');
   Route::get('recharge_minim_account/{id}', 'AccountController@rechargeBalanceMinim');
   Route::get('crear_saldo_cuenta/{account_id}/{title}/{console}', 'AccountController@storeBalanceAccount');
+  Route::get('crear_saldo_minimo_cuenta/{account_id}/{stock_id}', 'AccountController@storeBalanceMinimAccount');
   Route::get('crear_nota_cuenta/{account_id}', 'AccountController@createNote');
   Route::get('editar_direccion_cuenta/{account_id}', 'AccountController@editAddressAccount');
   Route::post('guardar_nota_cuenta/{account_id}', 'AccountController@storeNote');
