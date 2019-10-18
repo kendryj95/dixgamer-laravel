@@ -90,6 +90,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('listaYopmail', 'AccountController@listaYopmail');
   Route::get('change_email_dixgamer/{account_id}', 'AccountController@changeEmailDixgamer');
   Route::get('nota_siguejugando/{account_id}', 'AccountController@sigueJugando');
+  Route::get('nota_siguejugandopri/{account_id}', 'AccountController@sigueJugandoPri');
   Route::get('nota_intentorecuperar/{account_id}', 'AccountController@intentoRecuperar');
   Route::get('agregar_20_off/{account}/{title}/{console}', 'AccountController@product20off');
   Route::get('cuentas_con_saldo', 'AccountController@accountAmount');
@@ -106,7 +107,7 @@ Route::group(['middleware' => ['login']], function()
   Route::post('actualizar_password_cuenta/{account_id}/{param?}', 'AccountController@updatePassword');
   Route::post('actualizar_direccion_cuenta/{account_id}', 'AccountController@updateAddressAccount');
   Route::post('devolver_saldo_cuentas', 'AccountController@rollbackBalance');
-  Route::post('resetear_cuenta/{id}', 'AccountController@resetAccount');
+  Route::post('resetear_cuenta/{id}/{recu_pri}', 'AccountController@resetAccount');
   Route::get('solicitar_reseteo_cuenta/{id}', 'AccountController@requestReset');
   Route::post('solicitar_reseteo_cuenta/{id}', 'AccountController@storeRequestReset');
   Route::get('stock_insertar_cuenta/{id}', 'AccountController@createStockAccount');

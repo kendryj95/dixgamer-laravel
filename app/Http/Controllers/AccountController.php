@@ -350,6 +350,7 @@ class AccountController extends Controller
       $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
 
       $operador_pass = $this->showBtnSigueJugando($id);
+      $operador_reset = $this->showBtnSigueJugandoPri($id);
       
       $vendedor = session()->get('usuario')->Nombre;
 
@@ -382,6 +383,7 @@ class AccountController extends Controller
                 'back',
                 'oferta_fortnite',
                 'operador_pass',
+                'operador_reset',
                 'product_20_off',
                 'existeStock_product_20_off'
       ));
@@ -390,7 +392,7 @@ class AccountController extends Controller
 
     private function showBtnSigueJugando($account_id)
     {
-      $operadores_especiales = \Helper::getOperatorsEspecials();
+      $operadores_especiales = \Helper::getOperatorsEspecials('Secu');
       $show = false;
 
       ## CONSULTANDO SI ESTA CUENTA TIENE UNA VENTA SECUNDARIA
@@ -408,6 +410,35 @@ class AccountController extends Controller
         ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL CAMBIO DE CONTRASEÑA
 
         if ($venta->Day < $cuenta_pass->Day) {
+          $show = true;
+        }
+        
+      }
+
+      return $show;
+      
+    }
+
+    private function showBtnSigueJugandoPri($account_id)
+    {
+      $operadores_especiales = \Helper::getOperatorsEspecials('Pri');
+      $show = false;
+
+      ## CONSULTANDO SI ESTA CUENTA TIENE UNA VENTA SECUNDARIA
+
+      $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+      $stocks = explode(",", $stocks);
+
+      $venta = DB::table('ventas')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')->first();
+
+      ## CONSULTANDO SI HUBO UN CAMBIO DE CONTRASEÑA PARA ESTA CUENTA CON ALGUNOS DE LOS OPERADORES ESPECIALES.
+      $cuenta_reset = DB::table('reseteo')->where('cuentas_id',$account_id)->whereIn('usuario',$operadores_especiales)->orderBy('Day','DESC')->first();
+
+      if ($cuenta_reset && $venta) {
+
+        ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL CAMBIO DE CONTRASEÑA
+
+        if ($venta->Day < $cuenta_reset->Day) {
           $show = true;
         }
         
@@ -1175,7 +1206,7 @@ class AccountController extends Controller
     }
 
 
-    public function resetAccount($id){
+    public function resetAccount($id, $recu_pri){
       $account = Account::where('ID',$id)->first();
 
       if (!$account)
@@ -1189,7 +1220,14 @@ class AccountController extends Controller
         $data['usuario']= session()->get('usuario')->Nombre;
         $this->rst->storeResetAccount($data);
 
-        \Helper::messageFlash('Cuentas','Cuenta reseteada','alert_cuenta');
+        $mensaje = 'Cuenta reseteada';
+
+        if ($recu_pri != '') {
+          $mensaje = 'Intento recuperar pri satisfactoriamente.';
+          $this->intentoRecuperarPri($id);
+        }
+
+        \Helper::messageFlash('Cuentas',$mensaje,'alert_cuenta');
         return redirect('cuentas/'.$id);
 
       } catch (\Exception $e) {
@@ -1884,7 +1922,7 @@ class AccountController extends Controller
 
           DB::table('ventas_notas')->insert($data);
 
-          $operators_especials = \Helper::getOperatorsEspecials();
+          $operators_especials = \Helper::getOperatorsEspecials('Secu');
 
           ## OBTENER EL ULTIMO REGISTRO DE CAMBIO DE CONTRASEÑA POR UN OPERADOR ESPECIAL
           $cta_pass = DB::table('cta_pass')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
@@ -1899,6 +1937,66 @@ class AccountController extends Controller
           DB::commit();
 
           \Helper::messageFlash('Cuentas',"Nota generada de sigue jugando.",'alert_cuenta');
+
+
+          return redirect()->back();
+        } else {
+          return redirect()->back()->withErrors(['Ha ocurrido un error al completar toda la información correspondiente para generar la nota.']);
+        }
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);
+      }
+
+      
+    }
+
+    public function sigueJugandoPri($account_id)
+    {
+      $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+      $stocks = explode(",", $stocks);
+
+      $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')
+      ->join('clientes AS c','c.ID','=','ventas.clientes_id')
+      ->first();
+
+      $vendedor = session()->get('usuario')->Nombre;
+
+      DB::beginTransaction();
+
+      try {
+        if ($venta) {
+          $data = [];
+          $data['cuentas_id'] = $account_id;
+          $data['Notas'] = "Cliente Primario #$venta->clientes_id $venta->nombre $venta->apellido sigue jugando";
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('cuentas_notas')->insert($data);
+
+          $data = [];
+          $data['id_ventas'] = $venta->ID;
+          $data['Notas'] = "Cliente sigue jugando";
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('ventas_notas')->insert($data);
+
+          $operators_especials = \Helper::getOperatorsEspecials('Pri');
+
+          ## OBTENER EL ULTIMO REGISTRO DE CAMBIO DE CONTRASEÑA POR UN OPERADOR ESPECIAL
+          $cta_reset = DB::table('reseteo')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
+
+          if ($cta_reset) { // Si existreseteoe el registro
+
+            foreach ($cta_reset as $cta) {
+              DB::table('reseteo')->where('ID',$cta->ID)->update(['usuario' => "ex-$cta->usuario"]);
+            }
+          }
+
+          DB::commit();
+
+          \Helper::messageFlash('Cuentas',"Nota generada de sigue jugando pri.",'alert_cuenta');
 
 
           return redirect()->back();
@@ -1961,6 +2059,28 @@ class AccountController extends Controller
       }
 
       
+    }
+
+    private function intentoRecuperarPri($account_id) {
+      $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+      $stocks = explode(",", $stocks);
+
+      $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')
+      ->join('clientes AS c','c.ID','=','ventas.clientes_id')
+      ->first();
+
+      $vendedor = session()->get('usuario')->Nombre;
+
+      if ($venta) {
+        $data = [];
+        $data['id_ventas'] = $venta->ID;
+        $data['Notas'] = "Intento recuperar pri";
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = $vendedor;
+
+        DB::table('ventas_notas')->insert($data);
+      }
+      return;
     }
 
     public function product20off($account,$title,$console)

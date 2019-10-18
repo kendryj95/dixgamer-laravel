@@ -93,14 +93,30 @@
 
             <div class="panel-body" style="background-color: #efefef;">
 
-            	@if($operador_pass)
+            	@if($operador_pass || $operador_reset)
 
-            	<a
-            	href="{{ url('nota_siguejugando', $account->ID) }}"
-            	class="btn btn-danger btn-xs pull-right"
-            	>
-            		<b><i class="fa fa-fw fa-gamepad"></i> Sigue jugando</b>
-            	</a><br><br>
+            		@if($operador_pass)
+
+	            	<a
+	            	href="{{ url('nota_siguejugando', $account->ID) }}"
+	            	class="btn btn-danger btn-xs pull-right"
+	            	>
+	            		<b><i class="fa fa-fw fa-gamepad"></i> Sigue jugando</b>
+	            	</a>
+            		@endif
+
+            		@if($operador_reset)
+
+	            	<a
+	            	href="{{ url('nota_siguejugandopri', $account->ID) }}"
+	            	class="btn btn-primary btn-xs pull-right"
+	            	>
+	            		<b><i class="fa fa-fw fa-gamepad"></i> Pri Sigue jugando</b>
+	            	</a>
+            		@endif
+
+
+            	<br><br>
 
             	@else
 
@@ -449,6 +465,14 @@
 										</span>
 				 				@endif
 
+				 			@php
+
+				 			$texto_reset1 = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "Recuperar Pri" : "Resetear";
+				 			$texto_reset2 = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "Recuperar Pri" : "Resetear la cuenta";
+				 			$param_reset = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "recuperar_pri" : "";
+
+				 			@endphp
+
 						  	@if (($account->days_from_reset == NULL) || ($account->days_from_reset > 180))
 									<div class="dropdown pull-left">
 										<button
@@ -458,16 +482,16 @@
 											aria-haspopup="true"
 											aria-expanded="false">
 												<i class="fa fa-fw fa-power-off"></i>
-												Resetear
+												{{ $texto_reset1 }}
 												<span class="caret"></span>
 										</button>
 
 										<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
 											<li class="dropdown-header">¿Seguro deseas</li>
-											<li class="dropdown-header">resetear la cuenta?</li>
+											<li class="dropdown-header">{{ $texto_reset2 }}?</li>
 											<li role="separator" class="divider"></li>
 											<li>
-												<form class=" text-center" id="form_resetear" action="{{url('resetear_cuenta',[$account->ID])}}" method="post">
+												<form class=" text-center" id="form_resetear" action="{{url('resetear_cuenta',[$account->ID, $param_reset])}}" method="post">
 													{{ csrf_field() }}
 													<button
 														class="btn btn-danger btn-block"

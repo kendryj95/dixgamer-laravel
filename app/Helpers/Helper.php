@@ -279,9 +279,26 @@ class Helper
       return false;
     }
 
-    public static function getOperatorsEspecials()
+    public static function operatorsRecoverPri($usuario)
     {
-      $operators = ['Kendry','Javier','Marcelo','Enzo','Roman'];
+      $operators = ['Kendry','Alfredo', 'Hector', 'Luis', 'Saul'];
+
+      if (in_array($usuario, $operators)) {
+        return true;
+      }
+
+      return false;
+    }
+
+    public static function getOperatorsEspecials($tipo)
+    {
+      $operators = [];
+
+      if ($tipo == 'Secu') {
+        $operators = ['Kendry','Javier','Marcelo','Enzo','Roman'];
+      } elseif($tipo == 'Pri') {
+        $operators = ['Kendry','Alfredo', 'Hector', 'Luis', 'Saul'];
+      }
 
       return $operators;
     }
