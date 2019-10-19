@@ -468,6 +468,7 @@
 				 			@php
 
 				 			$texto_reset1 = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "Recuperar Pri" : "Resetear";
+				 			$colorReset = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "primary" : "default";
 				 			$texto_reset2 = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "Recuperar Pri" : "Resetear la cuenta";
 				 			$param_reset = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "recuperar_pri" : "";
 
@@ -476,7 +477,7 @@
 						  	@if (($account->days_from_reset == NULL) || ($account->days_from_reset > 180))
 									<div class="dropdown pull-left">
 										<button
-											class="btn btn-default dropdown-toggle btn-xs"
+											class="btn btn-{{$colorReset}} dropdown-toggle btn-xs"
 											type="button" id="dropdownMenu1"
 											data-toggle="dropdown"
 											aria-haspopup="true"
@@ -961,6 +962,13 @@
 						
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
+					
+					<span id="avisopri-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>{{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede usarlo con normalidad. Tuvimos un error de sistema y si no puede jugar queremos ayudarlo a solucionar.<br /><br />
+
+						{!! html_entity_decode($oferta_fortnite) !!} <br>
+						
+						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
+					</span>
 					</div>
 
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
@@ -991,6 +999,7 @@
 				<?php if (strpos($sc->consola, 'ps4') !== false):?>
 					<?php if ($sc->slot == 'Primario'):?>
 					<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
+					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a> 
 					<?php else: ?>
 					<br><a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
 					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 

@@ -107,7 +107,7 @@ Route::group(['middleware' => ['login']], function()
   Route::post('actualizar_password_cuenta/{account_id}/{param?}', 'AccountController@updatePassword');
   Route::post('actualizar_direccion_cuenta/{account_id}', 'AccountController@updateAddressAccount');
   Route::post('devolver_saldo_cuentas', 'AccountController@rollbackBalance');
-  Route::post('resetear_cuenta/{id}/{recu_pri}', 'AccountController@resetAccount');
+  Route::post('resetear_cuenta/{id}/{recu_pri?}', 'AccountController@resetAccount');
   Route::get('solicitar_reseteo_cuenta/{id}', 'AccountController@requestReset');
   Route::post('solicitar_reseteo_cuenta/{id}', 'AccountController@storeRequestReset');
   Route::get('stock_insertar_cuenta/{id}', 'AccountController@createStockAccount');

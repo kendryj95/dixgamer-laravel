@@ -1206,7 +1206,7 @@ class AccountController extends Controller
     }
 
 
-    public function resetAccount($id, $recu_pri){
+    public function resetAccount($id, $recu_pri = null){
       $account = Account::where('ID',$id)->first();
 
       if (!$account)
@@ -1222,7 +1222,7 @@ class AccountController extends Controller
 
         $mensaje = 'Cuenta reseteada';
 
-        if ($recu_pri != '') {
+        if ($recu_pri != null) {
           $mensaje = 'Intento recuperar pri satisfactoriamente.';
           $this->intentoRecuperarPri($id);
         }
@@ -1984,13 +1984,23 @@ class AccountController extends Controller
 
           $operators_especials = \Helper::getOperatorsEspecials('Pri');
 
-          ## OBTENER EL ULTIMO REGISTRO DE CAMBIO DE CONTRASEÑA POR UN OPERADOR ESPECIAL
+          ## OBTENER EL ULTIMO REGISTRO DE RESETEO POR UN OPERADOR ESPECIAL
           $cta_reset = DB::table('reseteo')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
+
+          ## OBTENER EL ULTIMO REGISTRO DE CAMBIO DE CONTRASEÑA POR UN OPERADOR ESPECIAL
+          $cta_pass = DB::table('cta_pass')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
 
           if ($cta_reset) { // Si existreseteoe el registro
 
             foreach ($cta_reset as $cta) {
               DB::table('reseteo')->where('ID',$cta->ID)->update(['usuario' => "ex-$cta->usuario"]);
+            }
+          }
+
+          if ($cta_pass) { // Si existe el registro
+
+            foreach ($cta_pass as $cta) {
+              DB::table('cta_pass')->where('ID',$cta->ID)->update(['usuario' => "ex-$cta->usuario"]);
             }
           }
 
@@ -2071,7 +2081,18 @@ class AccountController extends Controller
 
       $vendedor = session()->get('usuario')->Nombre;
 
+      $account_pass_act = DB::table('cuentas')->where('ID',$account_id)->value('pass');
+
       if ($venta) {
+
+        $data = [];
+        $data['cuentas_id'] = $account_id;
+        $data['new_pass'] = $account_pass_act;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('cta_pass')->insert($data);
+        
         $data = [];
         $data['id_ventas'] = $venta->ID;
         $data['Notas'] = "Intento recuperar pri";
