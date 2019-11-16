@@ -77,6 +77,21 @@ class Sales extends Model
       }
     }
 
+    public function ScopeGetSalesSinEntregar($query, $obj) {
+        $query->select('ventas.ID','clientes_id','ventas.cons',DB::raw("DATE_FORMAT(ventas.Day,'%d/%m/%Y %H:%i:%s') AS Day"))
+        ->leftJoin(DB::raw("(SELECT * from mailer group by ventas_id) as mailer"),'ventas.ID','=','mailer.ventas_id')
+        ->whereNull('mailer.ID')
+        ->whereRaw('((ventas.cons="ps3" or ventas.cons="ps4") or (ventas.cons="ps" and ventas.Day>"2018-01-01"))')
+        ->where('clientes_id','>',2)
+        ->where('ventas.ID','>',1000);
+
+        if (!empty($obj->column) && !empty($obj->word)) {
+            $query->where("ventas.$obj->column",'like','%'.$obj->word.'%');
+        }else{
+            return $query;
+        }
+    }
+
     public function ScopeGetDatosCobros($query)
     {
         $query->select(
@@ -113,13 +128,13 @@ class Sales extends Model
             'titulo',
             'consola',
             'cuentas_id',
-            'costo',
+            'costo_usd',
             'q_vta',
             DB::raw("(SELECT IFNULL(color, 'secondary') FROM usuarios WHERE Nombre = ventas.usuario) AS color_user")
         )
         ->leftJoin(DB::raw("(select ventas_id, medio_cobro, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro"),'ventas.ID','=','ventas_cobro.ventas_id')
         ->leftJoin('clientes','ventas.clientes_id','=','clientes.ID')
-        ->leftJoin(DB::raw("(select ID, titulo, consola, cuentas_id, costo, q_vta FROM stock LEFT JOIN (select count(*) as q_vta, stock_id from ventas group by stock_id) as vendido ON stock.ID = vendido.stock_id) as stock"),'ventas.stock_id','=','stock.ID')
+        ->leftJoin(DB::raw("(select ID, titulo, consola, cuentas_id, costo_usd, q_vta FROM stock LEFT JOIN (select count(*) as q_vta, stock_id from ventas group by stock_id) as vendido ON stock.ID = vendido.stock_id) as stock"),'ventas.stock_id','=','stock.ID')
         ->orderBy('ventas.ID','DESC');
     }
 
@@ -136,7 +151,7 @@ class Sales extends Model
 
     public function stockVendido()
     {
-        return DB::select("SELECT stock.ID, SUM(costo) as costo FROM (SELECT stock_id FROM `ventas` GROUP BY stock_id) as vendido LEFT JOIN stock ON vendido.stock_id = stock.ID")[0];
+        return DB::select("SELECT stock.ID, SUM(costo_usd) as costo FROM (SELECT stock_id FROM `ventas` GROUP BY stock_id) as vendido LEFT JOIN stock ON vendido.stock_id = stock.ID")[0];
     }
 
     public function datosVentasBalance($tipo = '')

@@ -745,5 +745,17 @@ class SalesController extends Controller
 
     }
 
+    public function sinEntregar(Request $request) {
+        $obj = new \stdClass;
+        $obj->column = $request->column;
+        $obj->word = $request->word;
+
+        $sales = Sales::getSalesSinEntregar($obj)->paginate(50);
+
+        $columns = Schema::getColumnListing('ventas');
+
+        return view('sales.lista_sin_entregar')->with(['datos' => $sales, 'columns' => $columns]);
+    }
+
 
 }
