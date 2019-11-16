@@ -259,7 +259,7 @@ class Stock extends Model
 
     public function ScopePs3($query){
         return DB::select(DB::raw("
-        SELECT ID_stk AS id_stk, titulo, consola, stk_ctas_id, dayreset, q_reset, days_from_reset, q_vta, round(AVG(costo),0) as costo, SUM(Q_Stock) AS q_stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo),0) as costo, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS q_stock
+        SELECT ID_stk AS id_stk, titulo, consola, stk_ctas_id, dayreset, q_reset, days_from_reset, q_vta, round(AVG(costo_usd),2) as costo, SUM(Q_Stock) AS q_stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo_usd),2) as costo_usd, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS q_stock
         FROM stock
         LEFT JOIN
         (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo
@@ -438,7 +438,7 @@ class Stock extends Model
 
         if (($consola && ($consola == "ps4")) or ($titulo && ($titulo == "plus-12-meses-slot"))){
             if ($slot && (ucwords($slot) == "Primario")) {
-                $row_rsSTK = DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vta, Q_vta, dayvta, Q_vta_pri, Q_vta_sec, COUNT(*) AS Q_Stock
+                $row_rsSTK = DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo_usd),2) as costo, ID_vta, Q_vta, dayvta, Q_vta_pri, Q_vta_sec, COUNT(*) AS Q_Stock
                         FROM stock
                         LEFT JOIN
                         (SELECT ventas.ID as ID_vta, stock_id, SUM(case when slot = 'Primario' then 1 else null end) AS Q_vta_pri, SUM(case when slot = 'Secundario' then 1 else null end) AS Q_vta_sec, COUNT(*) AS Q_vta, Day AS dayvta
@@ -453,7 +453,7 @@ class Stock extends Model
 
             } elseif ($slot && (ucwords($slot) == "Secundario")) {
 
-                $row_rsSTK = DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vta, Q_vta, dayvta, Q_vta_pri, Q_vta_sec, COUNT(*) AS Q_Stock
+                $row_rsSTK = DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo_usd),2) as costo, ID_vta, Q_vta, dayvta, Q_vta_pri, Q_vta_sec, COUNT(*) AS Q_Stock
                     FROM stock
                     LEFT JOIN
                     (SELECT ventas.ID as ID_vta, stock_id, SUM(case when slot = 'Primario' then 1 else null end) AS Q_vta_pri, SUM(case when slot = 'Secundario' then 1 else null end) AS Q_vta_sec, COUNT(*) AS Q_vta, Day AS dayvta
@@ -645,7 +645,7 @@ class Stock extends Model
     public function ScopeGetDatosBalanceProductosDias($query, $dias)
     {
         return DB::select("SELECT vtas.*, stk.Q_Stock FROM
-        (SELECT titulo, consola, IFNULL(SUM(cantidadventa),0) AS q_venta, IFNULL(SUM(ingresototal),0) AS ing_total, AVG(vtas.costo) as costo, AVG(vtas.costo_usd) as costo_usd, COUNT(stock_id) as stks_usados
+        (SELECT titulo, consola, IFNULL(SUM(cantidadventa),0) AS q_venta, IFNULL(SUM(ingresototal),0) AS ing_total, AVG(vtas.costo_usd) as costo_usd, AVG(vtas.costo_usd) as costo, COUNT(stock_id) as stks_usados
         FROM stock
         LEFT JOIN ## 2019-03-04 Antes era RIGHT JOIN, ahora quiero listar todo el catalogo siempre
         (SELECT vtas2.*, stock.costo, stock.costo_usd FROM

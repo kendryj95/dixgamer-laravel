@@ -526,11 +526,11 @@
               <?php
 
                 $costo = 0;
-                if (($dataCustomer->consola == 'ps4') && ($dataCustomer->slot == 'Primario')): $costo = round($dataCustomer->costo * 0.6);
-                elseif (($dataCustomer->consola == 'ps4') && ($dataCustomer->slot == 'Secundario')): $costo = round($dataCustomer->costo * 0.4);
-                elseif ($dataCustomer->consola == 'ps3'): $costo = round($dataCustomer->costo * (1 / (2 + (2 * $dataCustomer->q_reset))));
-                elseif ($dataCustomer->titulo == 'plus-12-meses-slot'): $costo = round($dataCustomer->costo * 0.5);
-                elseif (($dataCustomer->consola !== 'ps4') && ($dataCustomer->consola !== 'ps3') && ($dataCustomer->titulo !== 'plus-12-meses-slot')): $costo = round($dataCustomer->costo);
+                if (($dataCustomer->consola == 'ps4') && ($dataCustomer->slot == 'Primario')): $costo = round($dataCustomer->costo_usd * 0.6,2);
+                elseif (($dataCustomer->consola == 'ps4') && ($dataCustomer->slot == 'Secundario')): $costo = round($dataCustomer->costo_usd * 0.4,2);
+                elseif ($dataCustomer->consola == 'ps3'): $costo = round($dataCustomer->costo_usd * (1 / (2 + (2 * $dataCustomer->q_reset))),2);
+                elseif ($dataCustomer->titulo == 'plus-12-meses-slot'): $costo = round($dataCustomer->costo_usd * 0.5,2);
+                elseif (($dataCustomer->consola !== 'ps4') && ($dataCustomer->consola !== 'ps3') && ($dataCustomer->titulo !== 'plus-12-meses-slot')): $costo = round($dataCustomer->costo_usd,2);
                 endif;
 
               ?>
@@ -539,10 +539,11 @@
               @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                 @if(!empty($expensesIncome))
                   <?php
-                    $gtoestimado = round($expensesIncome[0]->gto_x_ing * $dataCustomer->precio);
+                    // $gtoestimado = round($expensesIncome[0]->gto_x_ing * $dataCustomer->precio);
+				    $gtoestimado = round($dataCustomer->precio * 0.12,2);
 
-                    $iibbestimado = round($dataCustomer->precio * 0.04);
-                    $ganancia = round($dataCustomer->precio - $dataCustomer->comision - $costo - $gtoestimado - $iibbestimado);
+                    $iibbestimado = round($dataCustomer->precio * 0.04,2);
+                    $ganancia = round($dataCustomer->precio - $dataCustomer->comision - $costo - $gtoestimado - $iibbestimado,2);
 
                   ?>
                 @endif
@@ -557,7 +558,7 @@
 
                 <small class="text-success">
                   <i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>
-                  <?php echo round($dataCustomer->precio); ?>
+                  <?php echo round($dataCustomer->precio,2); ?>
                 </small>
 
                 @if(Helper::validateAdministrator(session()->get('usuario')->Level))
@@ -579,7 +580,7 @@
                     aria-hidden="true">
                   </i>
 
-                  <?php echo round($dataCustomer->comision); ?>
+                  <?php echo round($dataCustomer->comision,2); ?>
                   @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     <?php echo ', ' . $gtoestimado . ', ' . $iibbestimado . ', ' . $costo; ?>
                   @endif
@@ -820,82 +821,6 @@
               </a>
             </div>
 
-            @if ($dataCustomer->consola == 'ps3')
-
-                @if ($customer->ID != 2)
-
-                <div class="dropdown text-left">
-                  <button
-                    class="btn btn-link dropdown-toggle btn-xs"
-                    type="button" id="vender_cli2"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                      Vender a Cliente #2
-                      {{-- <span class="caret"></span> --}}
-                  </button>
-
-                  <ul class="dropdown-menu bg-info" aria-labelledby="vender_cli2">
-                    <li class="dropdown-header">¿Estas seguro?</li>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                      <a href="{{ url('saleToClient', [$dataCustomer->titulo, $dataCustomer->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
-                    </li>
-                  </ul>
-
-                </div>
-
-                @endif
-
-            @elseif ($dataCustomer->consola == 'ps4')
-
-              @if ($customer->ID != 1)
-
-              <div class="dropdown text-left">
-                <button
-                  class="btn btn-link dropdown-toggle btn-xs"
-                  type="button" id="vender_pri_cli1"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-                    Vender Primario a Cliente #1
-                    {{-- <span class="caret"></span> --}}
-                </button>
-
-                <ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli1">
-                  <li class="dropdown-header">¿Estas seguro?</li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a href="{{ url('saleToClient', [$dataCustomer->titulo, $dataCustomer->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
-                  </li>
-                </ul>
-
-              </div>
-              <div class="dropdown text-left">
-                <button
-                  class="btn btn-link dropdown-toggle btn-xs"
-                  type="button" id="vender_secu_cli2"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-                    Vender Secundario a Cliente #1
-                    {{-- <span class="caret"></span> --}}
-                </button>
-
-                <ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
-                  <li class="dropdown-header">¿Estas seguro?</li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a href="{{ url('saleToClient', [$dataCustomer->titulo, $dataCustomer->consola, 'Secundario']) }}" class="btn btn-danger">Sí, Seguro!</a>
-                  </li>
-                </ul>
-
-              </div>
-
-              @endif
-
-            @endif
-
             @if ($ventas_notas)
               @foreach ($ventas_notas as $venta_nota)
                 @if ($venta_nota->id_ventas == $dataCustomer->ID_ventas)
@@ -1005,15 +930,15 @@
               {{-- <small style="color:#CFCFCF;"><i class="fa fa-download fa-fw" aria-hidden="true"></i></small> --}}
               <?php //endif; ?>
               </p>
-        <?php if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo * 0.6) ?>
-              <?php elseif (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo * 0.4) ?>
-              <?php elseif ($lowerSale->consola == 'ps3'): $costo2 = round($lowerSale->costo * 0.25) ?>
-              <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot')&& ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo * 0.6) ?>
-              <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot')&& ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo * 0.4) ?>
-              <?php elseif (($lowerSale->consola !== 'ps4') && ($lowerSale->consola !== 'ps3') && ($lowerSale->titulo !== 'plus-12-meses-slot')): $costo2 = round($lowerSale->costo) ?>
+        <?php if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo_usd * 0.6,2) ?>
+              <?php elseif (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo_usd * 0.4,2) ?>
+              <?php elseif ($lowerSale->consola == 'ps3'): $costo2 = round($lowerSale->costo_usd * 0.25,2) ?>
+              <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot')&& ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo_usd * 0.6,2) ?>
+              <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot')&& ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo_usd * 0.4,2) ?>
+              <?php elseif (($lowerSale->consola !== 'ps4') && ($lowerSale->consola !== 'ps3') && ($lowerSale->titulo !== 'plus-12-meses-slot')): $costo2 = round($lowerSale->costo_usd,2) ?>
               <?php endif; ?>
-              <?php $ganancia2 = round($lowerSale->precio - $lowerSale->comision - $costo2); ?>
-              <p><small class="text-success"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo round($lowerSale->precio); ?></small><br /><small class="text-danger"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo round($lowerSale->comision); ?></small>
+              <?php $ganancia2 = round($lowerSale->precio - $lowerSale->comision - $costo2,2); ?>
+              <p><small class="text-success"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo round($lowerSale->precio,2); ?></small><br /><small class="text-danger"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo round($lowerSale->comision,2); ?></small>
         @if(Helper::validateAdministrator(session()->get('usuario')->Level))
               <br /><small class="text-danger"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo $costo2; ?></small><hr style="margin:0px"><small class="<?php if ($ganancia2 < '0'):?>text-danger<?php else:?>text-success<?php endif;?>"><i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo $ganancia2; ?></small>
         @endif

@@ -998,7 +998,7 @@
 				</div>
 				<?php if (strpos($sc->consola, 'ps4') !== false):?>
 					<?php if ($sc->slot == 'Primario'):?>
-					<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
+					<br><a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
 					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a> 
 					<?php else: ?>
 					<br><a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 

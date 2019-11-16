@@ -182,11 +182,11 @@ class ControlsController extends Controller
         }
 
         /*$query_Diario = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
-(SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' and DATE_FORMAT(Day, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')
-UNION ALL
-SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' and DATE_FORMAT(ex_Day_stock, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')) AS resultado
-GROUP BY consola, titulo
-ORDER BY consola, titulo ASC";
+		(SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' and DATE_FORMAT(Day, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')
+		UNION ALL
+		SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' and DATE_FORMAT(ex_Day_stock, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')) AS resultado
+		GROUP BY consola, titulo
+		ORDER BY consola, titulo ASC";
 
         $row_Diario = DB::select($query_Diario);
 
@@ -1239,7 +1239,7 @@ ORDER BY consola, titulo ASC";
 
                 $configuraciones = $this->getConfiguraciones();
 
-                $condicion_prod_excl = $configuraciones->productos_excluidos ? "AND titulo NOT IN ($configuraciones->productos_excluidos)" : "";
+                $condicion_prod_excl = $configuraciones->productos_excluidos ? "WHERE producto NOT IN ($configuraciones->productos_excluidos)" : "";
 
                 $datos = DB::select("SELECT web.*, vtas.*, IFNULL((Q_vta_pri - Q_vta_sec),0) as libre
                         FROM
@@ -1279,11 +1279,13 @@ ORDER BY consola, titulo ASC";
                         ON 
                             ventas.stock_id = stock.ID
                         WHERE 
-                            (consola = 'ps4' or titulo = 'plus-12-meses-slot') $condicion_prod_excl
+                            (consola = 'ps4' or titulo = 'plus-12-meses-slot')
                         GROUP BY 
                             titulo  ) as vtas
                         ON
-                        web.producto = vtas.titulo");
+                        web.producto = vtas.titulo
+                        $condicion_prod_excl
+                        ");
 
                 $mensajes = '';
 
@@ -1450,9 +1452,9 @@ ORDER BY consola, titulo ASC";
                     LEFT JOIN
 
 
-                    (SELECT ID_stk, stk.titulo, stk.consola, (costo / Q_Stock) as costoxU, Q_Stock, IFNULL(q_venta,0) as Q_Vta
+                    (SELECT ID_stk, stk.titulo, stk.consola, (costo_usd / Q_Stock) as costoxU, Q_Stock, IFNULL(q_venta,0) as Q_Vta
                     FROM
-                    (SELECT ID_stk, titulo, consola, stk_ctas_id, dayreset, Q_reset, days_from_reset, Q_vta, round(AVG(costo),0) as costo, SUM(Q_Stock) AS Q_Stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo),0) as costo, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS Q_Stock
+                    (SELECT ID_stk, titulo, consola, stk_ctas_id, dayreset, Q_reset, days_from_reset, Q_vta, round(AVG(costo_usd),2) as costo_usd, SUM(Q_Stock) AS Q_Stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo_usd),2) as costo_usd, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS Q_Stock
                     FROM stock 
                     LEFT JOIN
                     (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo
@@ -1515,25 +1517,56 @@ ORDER BY consola, titulo ASC";
                             
                             $new_price = ($precio_base / $multiplier); 
                             
-                            if($new_price < ($costoxU * 1.25)) { 
-                                $new_price = $costoxU * 1.25;
+                            if($new_price < ($costoxU * 1.10)) { 
+                               $new_price = $costoxU * 1.10;
                             }
-                            if($new_price < 100) { $new_price = 100;}
+                            // 2019-10-28 actualizado para pasar a usd
+							//if($new_price < 100) { $new_price = 100;}
+							if($new_price < 1.5) { $new_price = 1.5;}
                             
                             if($new_price > ($precio_base * 1.1)) { $new_price = ($precio_base * 1.1);} 
                             
-                            $new_price = (round($new_price, 0)/5); //redondeo resultado
-                            $new_price = (ceil($new_price)*5);
-                            
-                            if(($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))){  
-                                DB::table('cbgw_postmeta')
+							//redondeo resultado
+                            //$new_price = (round($new_price, 0)/5); 
+                            //$new_price = (ceil($new_price)*5);
+                            // 2019-10-28 actualizado para usd
+							// $new_price = round($new_price, 0);
+							$si = "no";
+                            if(($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))){
+                                $si = "sii";
+                                
+                                $_sale_price = DB::table('cbgw_postmeta')
                                 ->where('post_id',$ID)
-                                ->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                ->where('meta_key','_sale_price')->first();
+                                
+                                if ($_sale_price) {
+                                    DB::table('cbgw_postmeta')
+                                    ->where('post_id',$ID)
+                                    ->where('meta_key','_sale_price')
+                                    //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                    ->update([
+                                        'meta_value' => $new_price
+                                    ]);
+                                } else {
+                                    $data['post_id'] = $ID;
+                                    $data['meta_key'] = '_sale_price';
+                                    $data['meta_value'] = $new_price;
+
+                                    DB::table('cbgw_postmeta')->insert($data);
+                                }
+                                
+                                
+                                
+								
+								DB::table('cbgw_postmeta')
+                                ->where('post_id',$ID)
+								->where('meta_key','_price')
+                                //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
                                 ->update([
                                     'meta_value' => $new_price
                                 ]);
 
-                                $mensajes .= " -s:". $Q_Stock . " -v:". $Q_Vta . " -divis:". round($multiplier,2) . " -costoxU:" . $costoxU . " //// " . $producto.  " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ")<br>";
+                                $mensajes .= " -s:". $Q_Stock . " -v:". $Q_Vta . " -divis:". round($multiplier,2) . " -costoxU:" . $costoxU . " //// " . $producto.  " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ") atacó db: " . $si . "<br>";
                             }
                             
                         }
@@ -1559,7 +1592,7 @@ ORDER BY consola, titulo ASC";
 
                 $condicion_prod_excl = $configuraciones->productos_excluidos ? "AND producto NOT IN ($configuraciones->productos_excluidos)" : "";
 
-                $datos = DB::select("SELECT web.*, IFNULL(Qvp,0) as Qvp, IFNULL(Qvs,0) as Qvs, IFNULL((Qvp - Qvs),0) as libre, IFNULL(antiguedad,0) as antiguedad, IFNULL(Qvp_45d,0) as Qvp_45d, IFNULL(Qvs_45d,0) as Qvs_45d, IFNULL(costo,0) as costo, IFNULL(Q_stk,0) as Q_stk
+                $datos = DB::select("SELECT web.*, IFNULL(Qvp,0) as Qvp, IFNULL(Qvs,0) as Qvs, IFNULL((Qvp - Qvs),0) as libre, IFNULL(antiguedad,0) as antiguedad, IFNULL(Qvp_45d,0) as Qvp_45d, IFNULL(Qvs_45d,0) as Qvs_45d, IFNULL(costo_usd,0) as costo_usd, IFNULL(Q_stk,0) as Q_stk
                     FROM
                     (select
                         p.ID,
@@ -1605,7 +1638,7 @@ ORDER BY consola, titulo ASC";
 
                     LEFT JOIN
 
-                    (SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo),0)*0.61) as costo, 'primario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+                    (SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.61) as costo_usd, 'primario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
                     FROM stock
                     LEFT JOIN
                     (SELECT stock_id, SUM(case when slot = 'Primario' then 1 else null end) AS Q_vta_pri_1
@@ -1617,7 +1650,7 @@ ORDER BY consola, titulo ASC";
 
                     UNION ALL
 
-                    SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo),0)*0.39) as costo, 'secundario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+                    SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.39) as costo_usd, 'secundario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
                     FROM stock
                     LEFT JOIN
                     (SELECT stock_id, SUM(case when slot = 'Secundario' then 1 else null end) AS Q_vta_sec_1
@@ -1652,7 +1685,7 @@ ORDER BY consola, titulo ASC";
                             $libre = $value->libre;
                             $qvp_45d = $value->Qvp_45d;
                             $qvs_45d = $value->Qvs_45d;
-                            $costo = $value->costo * $configuraciones->costo_automatizar_web_ps4;
+                            $costo_usd = $value->costo_usd * $configuraciones->costo_automatizar_web_ps4;
                             $antiguedad = $value->antiguedad;
                             $Q_stk = $value->Q_stk;
                             $qv = null;
@@ -1673,12 +1706,12 @@ ORDER BY consola, titulo ASC";
                                 
                             // nueva formula para aplicar baja de precio a mayor antiguedad del stock, 
                             // todo lo que está entre 60d y 1000d el exponente va a ser antiguedad dividido 50, mayor antiguedad -> mayor exponente
-                            if($antiguedad <= 60) {$elevado=0.001;} elseif($antiguedad >= 1000){$elevado=20;} else{$elevado=($antiguedad/50);}
+                            if($antiguedad <= 60) {$elevado=0.001;} elseif($antiguedad >= 1200){$elevado=24;} else{$elevado=($antiguedad/50);}
                             //pow es la formula de exponente para PHP, no existe el ^
-                            $costo = $costo *( pow(0.95,$elevado));
+                            $costo_usd = $costo_usd *( pow(0.95,$elevado));
                             
                             // el precio de oferta sugerido tiene que ser 40% mayor al costo para asegurar ganancia
-                            $oferta_sugerida = $costo * $valor_configuracion;
+                            $oferta_sugerida = $costo_usd * $valor_configuracion;
                             
                             
                             // si hay muchas ventas y poco stock voy subiendo el precio de oferta
@@ -1717,30 +1750,31 @@ ORDER BY consola, titulo ASC";
                             
                             // límite inferior máximo: la oferta no puede ser menor al 30% del valor "precio base"
                             if($oferta_sugerida < ($precio_base * 0.3))  {$oferta_sugerida = ($precio_base * 0.3);}
-                            
-                            
+                       
                             // si no queda stock secundario quito oferta
                             if(($slot == "secundario") and ($libre <= 0)) {$oferta_sugerida = 0;}
                             
-                            // si la cantidad de venta histórica es menor o igual a 2 y además es igual a lo vendido en 45 días posiblemente es juego nuevo y no quiero bajar precio
-                            if(($qv <= 2) and ($qv = $qv_45d)) {$oferta_sugerida = 0;}
+                            // si la cantidad de venta histórica es menor o igual a 3 y además es igual a lo vendido en 45 días posiblemente es juego nuevo y no quiero bajar precio
+                            if(($qv <= 3) and ($qv = $qv_45d)) {$oferta_sugerida = 0;}
                             
-                            // si hay mucho (secundario) -> libre en relación a las ventas de primario voy aumentando el precio
-                            if(($slot == "primario") and ($libre > 5)) {$oferta_sugerida = $oferta_sugerida * (1+(($libre/$qv)*($libre/$qv)));}
-                            
-                            // si hay mas de 10 secundarios libres voy aumentando el precio al primario exponencialmente
-                            if ($antiguedad <= 365) {
-                                if($libre <= 10){$elev2=1;} else{$elev2=($libre/10);}
-                                if($libre > 10){
-                                    if($slot == "primario") {$oferta_sugerida = $oferta_sugerida * (pow(1.05,$elev2));}
-                                }               
-                            }                                             
+							// si hay mucho (secundario) -> libre en relación a las ventas de primario voy aumentando el precio
+							if($antiguedad <= 365) {
+								if(($slot == "primario") and ($libre > 5)) {$oferta_sugerida = $oferta_sugerida * (1+(($libre/$qv)*($libre/$qv)));}
+								if($libre <= 10){$elev2=1;} else{$elev2=($libre/10);}
+								if($libre > 10) {
+									if($slot == "primario") {$oferta_sugerida = $oferta_sugerida * (pow(1.05,$elev2));}
+								}	
+							}
+
+							// si hay mas de 10 secundarios libres voy aumentando el precio al primario exponencialmente                                         
                             
                             // redondeo la oferta
-                            $oferta_sugerida = (round($oferta_sugerida, 0)/25);
-                            $oferta_sugerida = (ceil($oferta_sugerida)*25);
+                            // $oferta_sugerida = (round($oferta_sugerida, 0)/25);
+                            // $oferta_sugerida = (ceil($oferta_sugerida)*25);
+							// actualizado para pasar a US
+							$oferta_sugerida = round($oferta_sugerida, 2);
 
-                            $mensajes .= "<tr><td>[" . $ID . " exp: " . pow(0.95,$elevado) . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sale: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>Qvp:" . $qvp . "</td><td>Qvs:" . $qvs ."</td><td>Qvp_45d:" . $qvp_45d . "</td><td>Qvs_45d:" . $qvs_45d . "</td><td>Qs:" . $Q_stk . "</td><td>V_45d/Qs: " . $divi . "</td><td>C_mod:". $costo ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
+                            $mensajes .= "<tr><td>[" . $ID . " exp: " . pow(0.95,$elevado) . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sale: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>Qvp:" . $qvp . "</td><td>Qvs:" . $qvs ."</td><td>Qvp_45d:" . $qvp_45d . "</td><td>Qvs_45d:" . $qvs_45d . "</td><td>Qs:" . $Q_stk . "</td><td>V_45d/Qs: " . $divi . "</td><td>C_mod:". $costo_usd ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
                             
                             
                             if(($Q_stk < 1) or (($Q_stk/$qv_45d) < 0.10)) {$oferta_sugerida = 0;}
@@ -1748,15 +1782,27 @@ ORDER BY consola, titulo ASC";
 
                             if($oferta_sugerida >= ($precio_base * 0.963)) {$oferta_sugerida = 0;}
                                 
-                            
                             if($oferta_sugerida == 0) {
                                 if($sale_price !== ""){ 
+                                    $_sale_price = DB::table('cbgw_postmeta')
+                                    ->where('post_id',$ID)
+                                    ->where('meta_key','_sale_price')->first();
+                                    
+                                    if ($_sale_price) {
                                         DB::table('cbgw_postmeta')
                                         ->where('post_id',$ID)
                                         ->where('meta_key','_sale_price')
+                                        //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
                                         ->update([
                                             'meta_value' => ''
                                         ]);
+                                    } else {
+                                        $data['post_id'] = $ID;
+                                        $data['meta_key'] = '_sale_price';
+                                        $data['meta_value'] = '';
+    
+                                        DB::table('cbgw_postmeta')->insert($data);
+                                    }
 
                                         $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " REMOVIDA<br><br>";
                                     }
@@ -1765,13 +1811,26 @@ ORDER BY consola, titulo ASC";
 
                                 if(($oferta_sugerida <= ($precio_base * 0.963)) and ($Q_stk >= 1)) {
                                     if($sale_price == "") { $sale_price = 1; }
-                                    if((($oferta_sugerida >= ($sale_price * 1.05)) or ($oferta_sugerida <= ($sale_price * 0.95))) and $oferta_sugerida > 125){
+                                    if((($oferta_sugerida >= ($sale_price * 1.05)) or ($oferta_sugerida <= ($sale_price * 0.95))) and $oferta_sugerida > 1){
+                                        $_sale_price = DB::table('cbgw_postmeta')
+                                        ->where('post_id',$ID)
+                                        ->where('meta_key','_sale_price')->first();
+                                        
+                                        if ($_sale_price) {
                                             DB::table('cbgw_postmeta')
                                             ->where('post_id',$ID)
                                             ->where('meta_key','_sale_price')
+                                            //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
                                             ->update([
                                                 'meta_value' => $oferta_sugerida
                                             ]);
+                                        } else {
+                                            $data['post_id'] = $ID;
+                                            $data['meta_key'] = '_sale_price';
+                                            $data['meta_value'] = $oferta_sugerida;
+        
+                                            DB::table('cbgw_postmeta')->insert($data);
+                                        }
 
                                             $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <br><br>";
 
