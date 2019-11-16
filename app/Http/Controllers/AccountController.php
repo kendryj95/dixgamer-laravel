@@ -354,6 +354,8 @@ class AccountController extends Controller
       
       $vendedor = session()->get('usuario')->Nombre;
 
+      $cuenta_robada = $this->isAccountStolen($id);
+
       $lastGame = false;
       
       if ($lastAccountGames) {
@@ -385,9 +387,20 @@ class AccountController extends Controller
                 'operador_pass',
                 'operador_reset',
                 'product_20_off',
-                'existeStock_product_20_off'
+                'existeStock_product_20_off',
+                'cuenta_robada'
       ));
 
+    }
+
+    private function isAccountStolen($account_id) {
+      $account = DB::table('cuentas_robadas')->where('cuentas_id',$account_id)->value('cuentas_id');
+
+      if ($account) {
+        return true;
+      }
+
+      return false;
     }
 
     private function showBtnSigueJugando($account_id)
@@ -2081,17 +2094,25 @@ class AccountController extends Controller
 
       $vendedor = session()->get('usuario')->Nombre;
 
-      $account_pass_act = DB::table('cuentas')->where('ID',$account_id)->value('pass');
+      $npass = \Helper::getRandomPass();
+
+      ## CAMBIAR LA CONTRASEÑA
+
+      $data = [];
+      $data['cuentas_id'] = $account_id;
+      $data['new_pass'] = $npass;
+      $data['Day'] = date('Y-m-d H:i:s');
+      $data['usuario'] = session()->get('usuario')->Nombre;
+      $this->acc->createAccPass($data,$account_id);
+
+
+      $account = [];
+      $account['pass'] = $npass;
+      $this->acc->updateAccount($account,$account_id);
+
+      #########
 
       if ($venta) {
-
-        $data = [];
-        $data['cuentas_id'] = $account_id;
-        $data['new_pass'] = $account_pass_act;
-        $data['Day'] = date('Y-m-d H:i:s');
-        $data['usuario'] = session()->get('usuario')->Nombre;
-
-        DB::table('cta_pass')->insert($data);
         
         $data = [];
         $data['id_ventas'] = $venta->ID;
@@ -2211,6 +2232,15 @@ class AccountController extends Controller
 
             DB::table('cuentas_notas')->insert($data);
 
+            ## REGISTRAR CUENTA ROBADA
+
+            $data = [];
+            $data['cuentas_id'] = $account_id;
+            $data['Day'] = date('Y-m-d H:i:s');
+            $data['usuario'] = session()->get('usuario')->Nombre;
+
+            DB::table('cuentas_robadas')->insert($data);
+
             DB::commit();
 
             \Helper::messageFlash('Cuentas',"Nota generada predefinida",'alert_cuenta');
@@ -2296,6 +2326,52 @@ class AccountController extends Controller
 
       return;
 
+    }
+
+    public function cuentasRobadas(Request $request) {
+      // Columnas de la base de datos
+      $columns = Schema::getColumnListing('cuentas');
+      // Traer la lista de cuentas
+
+      // cuentas con filtro
+      $obj = new \stdClass;
+      $obj->column = $request->column;
+      $obj->word = $request->word;
+
+
+      $accounts = Account::accountStolen($obj)->paginate(50);
+
+
+      return view('account.index_stolen',
+                  compact(
+                    'accounts',
+                    'columns'
+                  ));
+    }
+
+    public function recoverAccount(Request $request) {
+      DB::beginTransaction();
+
+      try {
+        $data = [];
+        $data['cuentas_id'] = $request->account_id;
+        $data['Notas'] = "Cuenta Recuperada!";
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('cuentas_notas')->insert($data);
+
+        DB::table('cuentas_robadas')->where('cuentas_id',$request->account_id)->delete();
+
+        DB::commit();
+
+        \Helper::messageFlash('Cuentas',"Cuenta Recuperada Exitosamente!",'alert_cuenta');
+
+        return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);
+      }
     }
 
 }

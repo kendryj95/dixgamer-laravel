@@ -82,6 +82,7 @@
                 <li><a href=" {{url('cuentas_con_saldo') }} "><i class="fa fa-list fa-fw" aria-hidden="true"></i> Saldo libre</a></li>
                 <li><a href="{{ url('cuentas_para_ps3') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Para Juego PS3</a></li>
                 <li><a href="{{ url('cuentas_para_ps4') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Para Juego PS4</a></li>
+                <li><a href="{{ url('cuentas_robadas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Robadas</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href="{{ url('/cuentas/create') }}"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
               </ul>

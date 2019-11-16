@@ -32,6 +32,33 @@ class Account extends Model
               })
             ->orderBy('cuentas.id','DESC');
     }
+    
+    public function ScopeAccountStolen($query,$obj){
+      return DB::table('cuentas')
+          ->select(
+            'cuentas.ID AS id',
+            'mail_fake',
+            'stk.juego',
+            'stk.cuentas_id',
+            'cr.usuario',
+            DB::raw("(SELECT color FROM usuarios WHERE Nombre = cr.usuario) AS color_user")
+            )
+            ->join('cuentas_robadas AS cr','cr.cuentas_id','=','cuentas.ID')
+            ->leftjoin(DB::raw("
+              (SELECT cuentas_id, group_concat(concat(titulo, ':', consola)) AS juego
+              FROM stock WHERE cuentas_id IS NOT NULL GROUP BY cuentas_id)
+              as stk"
+            ), function($join)
+            {
+              $join->on('cuentas.id', '=', 'stk.cuentas_id');
+            })
+            ->where(function ($query) use ($obj) {
+                if (!empty($obj->column) && !empty($obj->word)) {
+                  $query->where($obj->column,'like','%'.$obj->word.'%');
+                }
+              })
+            ->orderBy('cuentas.id','DESC');
+    }
 
     public function ScopeCuentasNotas($query,$obj){
       $query = DB::table('cuentas_notas')->select('cuentas_notas.*')->join('cuentas','cuentas.ID','=','cuentas_notas.cuentas_id')

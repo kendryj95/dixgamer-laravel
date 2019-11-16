@@ -417,6 +417,7 @@
 
 
           <ul class="list-group">
+			  @if (!$cuenta_robada)
               <li class="list-group-item" style="background-color: #efefef;">
               	@php
 									$solicitud = strtotime($maxDayReset->Max_Day_Solicitado);
@@ -518,7 +519,50 @@
 											</em>
 								@endif
 
-               </li>
+			   </li>
+			   
+			   @else
+			  
+			   <li class="list-group-item" style="background-color: #efefef;">
+					<div class="dropdown">
+							<button
+							class="btn btn-success btn-xs dropdown-toggle pull-right"
+							type="button"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+								<i class="fa fa-fw fa-check-circle"></i>
+								¿Recuperada?
+							</button>
+
+							<ul style="left:355px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+								<li class="dropdown-header">¿Se recuperó</li>
+								<li class="dropdown-header">la cuenta?</li>
+								<li role="separator" class="divider"></li>
+								<li>
+									<form class=" text-center" id="form_recuperar" action="{{url('recuperar_cuenta')}}" method="post">
+										{{ csrf_field() }}
+									<input type="hidden" name="account_id" value="{{ $account->ID }}">
+										<button
+											class="btn btn-success btn-block"
+											title="Recuperada"
+											id="recuperar"
+											type="button">
+											Si, recuperada!
+										</button>
+									</form>
+								</li>
+							</ul>
+						</div>
+
+  
+						<span class="badge badge-danger pull-left"><i class="fa fa-fw fa-times-circle"></i> Cuenta Robada</span>
+
+						<div class="clearfix"></div>
+
+			   </li>
+			   
+			   @endif
             </ul>
         </div>
      </div>
@@ -1059,6 +1103,11 @@
 			$('#resetear').on('click', function(){
 				$(this).prop('disabled', true);
 				$('#form_resetear').submit();
+			});
+			
+			$('#recuperar').on('click', function(){
+				$(this).prop('disabled', true);
+				$('#form_recuperar').submit();
 			});
 
 			$('#reseteo').on('click', function(){

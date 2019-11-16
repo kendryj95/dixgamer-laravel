@@ -11,7 +11,7 @@
           @if(app('request')->input('column') == $column)
             <option selected value="{{ $column }}"> {{$column}} </option>
           @else
-              @if($path == 'cuentas')
+              @if($path == 'cuentas' || $path == 'cuentas_robadas')
                 @if($column == 'mail_fake')
                   @php $selected = 'selected'; @endphp
                 @else
