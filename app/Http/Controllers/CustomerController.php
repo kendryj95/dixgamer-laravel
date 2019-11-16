@@ -925,7 +925,7 @@ class CustomerController extends Controller
         } else {
           $data['stock_id'] = 1;
         }
-        $data['cons'] = 'ps';
+        $data['cons'] = 'x';
         $data['slot'] = 'No';
 
         DB::table('ventas')->where('ID',$id)->update($data);

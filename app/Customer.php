@@ -73,7 +73,7 @@ class Customer extends Model
                   'ID_cobro',
                   'titulo',
                   'consola',
-                  'costo',
+                  'costo_usd',
                   'code',
                   'code_prov',
                   'n_order',
@@ -109,7 +109,7 @@ class Customer extends Model
                   'ID AS ID_stock',
                   'titulo',
                   'consola',
-                  'costo',
+                  'costo_usd',
                   'Notas AS stock_Notas',
                   'cuentas_id',
                   'client.*'
