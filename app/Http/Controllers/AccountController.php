@@ -2241,6 +2241,8 @@ class AccountController extends Controller
 
             DB::table('cuentas_robadas')->insert($data);
 
+            $this->addOrRemoveExcludedAccount('Add', $account_id);
+
             DB::commit();
 
             \Helper::messageFlash('Cuentas',"Nota generada predefinida",'alert_cuenta');
@@ -2256,6 +2258,25 @@ class AccountController extends Controller
         default:
           # code...
           break;
+      }
+    }
+
+    private function addOrRemoveExcludedAccount($accion, $id_account) {
+      $cuentas_excluidas = DB::table('configuraciones')->where('ID',1)->value('cuentas_excluidas');
+      $cuentasExcluidas = explode(",",$cuentas_excluidas);
+      
+      if ($accion == 'Add') {
+        array_push($cuentasExcluidas, $id_account);
+
+        $data['cuentas_excluidas'] = implode(",",$cuentasExcluidas);
+        DB::table('configuraciones')->where('ID',1)->update($data);
+      } elseif ($accion == 'Remove') {
+        $index = array_search($id_account, $cuentasExcluidas);
+        if ($index !== false) {
+          unset($cuentasExcluidas[$index]);
+          $data['cuentas_excluidas'] = implode(",",$cuentasExcluidas);
+          DB::table('configuraciones')->where('ID',1)->update($data);
+        }
       }
     }
 
@@ -2362,6 +2383,8 @@ class AccountController extends Controller
         DB::table('cuentas_notas')->insert($data);
 
         DB::table('cuentas_robadas')->where('cuentas_id',$request->account_id)->delete();
+
+        $this->addOrRemoveExcludedAccount('Remove', $request->account_id);
 
         DB::commit();
 

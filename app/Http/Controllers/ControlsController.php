@@ -780,7 +780,13 @@ class ControlsController extends Controller
             
             case 2: // Cuentas Excluidas
                 $data = [];
-                $data['cuentas_excluidas'] = $request->cuentas_excluidas;
+                $cuentas_excluidas = explode(",",$request->cuentas_excluidas);
+
+                $cuentas_excluidas = array_map(function($ele) {
+                    return trim($ele);
+                }, $cuentas_excluidas);
+
+                $data['cuentas_excluidas'] = implode(",",$cuentas_excluidas);
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
                 \Helper::messageFlash('Configuraciones','Cuentas excluidas en PS3 Resetear actualizada.');
@@ -1308,14 +1314,6 @@ class ControlsController extends Controller
                             if(($value->libre === "NULL") or ($value->libre < 0)): $libre = 0; else: $libre = $value->libre; endif;
 
                             if(strpos($value->producto, 'fifa-18') !== false): $margen = 0;
-                            elseif(strpos($value->producto, 'call-of-duty-black-ops-4') !== false): $margen = 20;
-                            elseif(strpos($value->producto, 'mortal-kombat-11') !== false): $margen = 40;
-                            elseif(strpos($value->producto, 'red-dead-redemption-2') !== false): $margen = 40;
-                            elseif(strpos($value->producto, 'fifa-19') !== false): $margen = 150;
-                            elseif(strpos($value->producto, 'marvel-spider-man') !== false): $margen = 20;
-                            elseif(strpos($value->producto, 'pes-2019') !== false): $margen = 20;
-                            elseif(strpos($value->producto, 'god-of-war') !== false): $margen = 25;
-                            elseif(strpos($value->producto, 'gta-v') !== false): $margen = 40;
                             elseif(strpos($value->producto, 'plus-12-meses-slot') !== false): $margen = 0;
                             else: $margen = 5;
                             endif;
@@ -1339,19 +1337,21 @@ class ControlsController extends Controller
                                 $multiplier = 1 + ($factorA + $factorB + $factorC); 
                                 if($multiplier > 1.30) {$multiplier = 1.30;}
                                 $new_price = ($precio_base * $multiplier); 
-                                $new_price = (round($new_price, 0)/25);
-                                $new_price = (ceil($new_price)*25);
+                                $new_price = round($new_price, 1);
+                                //$new_price = (ceil($new_price)*25);
                                     
                                     
-                                if((($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))) and $new_price > 100){  
+                                if((($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))) and $new_price > 1){  
                                     DB::table('cbgw_postmeta')
                                     ->where('post_id',$ID)
-                                    ->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                    ->whereRaw("(meta_key='_price' or meta_key='_regular_price')")
+									//->where('meta_key','_price')
                                     ->update([
                                         'meta_value' => $new_price
                                     ]);
+									
 
-                                    $mensajes .= " -multi:". round($multiplier,2) . "-qvp:" . $qvp . " -qvs:" . $qvs . " -lib:". $libre ." -ant:" . $antiguedad_juego . " //// " . $producto.  " " . $slot . " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ")<br>";
+                                    $mensajes .= "ID:" . $ID . " -multi:". round($multiplier,2) . " -qvp:" . $qvp . " -qvs:" . $qvs . " -lib:". $libre ." -ant:" . $antiguedad_juego . " //// " . $producto.  " " . $slot . " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ")<br>";
                                 }
                                 
                                 
@@ -1387,7 +1387,8 @@ class ControlsController extends Controller
                                           ]);
 
                                           $mensajes .= $producto.  " " .$slot. " quitado de stock<br>";
-                                    }}
+                                    }
+								}
                                 if(($qvs < $qvp) && ($stock == "outofstock")){
                                     DB::table('cbgw_postmeta')
                                     ->where('post_id',$ID)
@@ -1508,6 +1509,8 @@ class ControlsController extends Controller
                             $Q_Vta = $value->Q_Vta;
                             $costoxU = $value->costoxU;
                             
+							$costoxU = $costoxU * 1.25; //le recargo 25% por las dudas
+							
                             $multiplier = 1;
                             if($Q_Vta > 0) { 
                                 $multiplier = ($Q_Stock / ($Q_Vta * 0.66)); 
@@ -1592,7 +1595,7 @@ class ControlsController extends Controller
 
                 $condicion_prod_excl = $configuraciones->productos_excluidos ? "AND producto NOT IN ($configuraciones->productos_excluidos)" : "";
 
-                $datos = DB::select("SELECT web.*, IFNULL(Qvp,0) as Qvp, IFNULL(Qvs,0) as Qvs, IFNULL((Qvp - Qvs),0) as libre, IFNULL(antiguedad,0) as antiguedad, IFNULL(Qvp_45d,0) as Qvp_45d, IFNULL(Qvs_45d,0) as Qvs_45d, IFNULL(costo_usd,0) as costo_usd, IFNULL(Q_stk,0) as Q_stk
+                $datos = DB::select("SELECT web.*, IFNULL(Qvp,0) as Qvp, IFNULL(Qvs,0) as Qvs, IFNULL((Qvp - Qvs),0) as libre,  IFNULL(antiguedad,0) as ant_stk, IFNULL(Qvp_45d,0) as Qvp_45d, IFNULL(Qvs_45d,0) as Qvs_45d, IFNULL(costo_usd,0) as costo_usd, IFNULL(Q_stk,0) as Q_stk
                     FROM
                     (select
                         p.ID,
@@ -1632,7 +1635,7 @@ class ControlsController extends Controller
                         SUM(case when slot = 'Secundario' then 1 else 0 end) AS Qvs_45d
                     FROM ventas LEFT JOIN stock 
                     ON ventas.stock_id = stock.ID
-                    WHERE consola = 'ps4' AND DATEDIFF(NOW(), ventas.Day) < 45
+                    WHERE consola = 'ps4' AND (DATEDIFF(NOW(), ventas.Day) < 45)
                     GROUP BY titulo) as vtas_45d
                     ON web.producto = vtas_45d.titulo
 
@@ -1665,7 +1668,8 @@ class ControlsController extends Controller
                     web.producto = stk.titulo and web.slot = stk.Stk_slot
                     WHERE producto!='plus-12-meses-slot' $condicion_prod_excl
                     ORDER BY producto ASC");
-
+				
+				$control_individual = '';
                 $mensajes = '';
 
                 DB::beginTransaction();
@@ -1685,14 +1689,30 @@ class ControlsController extends Controller
                             $libre = $value->libre;
                             $qvp_45d = $value->Qvp_45d;
                             $qvs_45d = $value->Qvs_45d;
+							$costo_usd_original = $value->costo_usd;
                             $costo_usd = $value->costo_usd * $configuraciones->costo_automatizar_web_ps4;
-                            $antiguedad = $value->antiguedad;
+                            $antiguedad = $value->ant_stk;
                             $Q_stk = $value->Q_stk;
                             $qv = null;
                             $qv_45d = null;
                             $divi = null;
-                            $valor_configuracion = $configuraciones->valor_oferta_sugerida;
+                            $valor_oferta_sugerida = $configuraciones->valor_oferta_sugerida;
+							
+							/***
+							if($costo_usd < 20) { // si es menor a 20 redondeo de a 10 usd
+								$x=10;
+							} else { // si es superior a 20 redondeo de a 5 usd
+								$x=5;
+							}*/
+							$x=5; // redondeo de 5 en 5 el costo usd porque es un AVG y no siempre tiene sentido
+							$n = $costo_usd;
+							$costo_usd_redondo = (ceil($n)%$x === 0) ? ceil($n) : round(($n+$x/2)/$x)*$x;
                             
+					$control_individual .= " <strong>ID: " . $ID . " - ". str_replace('-', ' ', $producto) . " " . $slot ."</strong>";
+					$control_individual .= "<br />Reg: " . $precio_regular . " // Base: " . $precio_base . " // Sale: " . $sale_price . " // C_orig: " . $costo_usd_original . " // C_redondeo: " . $costo_usd_redondo . " // Q_Stk: " . $Q_stk . " // Ant: " . $antiguedad ;
+							
+							$costo_usd = $costo_usd_redondo; // cambio el costo usd al redondeado
+															
                             // arreglo la variable qv y qv_45d
                             if($slot == "primario"){
                                 $qv = $qvp; $qv_45d=$qvp_45d;
@@ -1702,16 +1722,33 @@ class ControlsController extends Controller
                             }
                             
                             //Si la cantidad de venta es 0 las paso a 1
-                            if($qv<=1) {$qv=1;} if($qv_45d<=1){$qv_45d=1;} 
+                            if($qv<=1) {$qv=1;}
+							if($qv_45d<=1) {$qv_45d=1;} 
+							
+					$control_individual .= "<br />qvp_45d: " . $qvp_45d . " // qvs_45d: " . $qvs_45d . " // qvp: " . $qvp . " // qvs: " . $qvs . " // Libre: " . $libre . " // Q_Stk: " . $Q_stk;
                                 
-                            // nueva formula para aplicar baja de precio a mayor antiguedad del stock, 
-                            // todo lo que está entre 60d y 1000d el exponente va a ser antiguedad dividido 50, mayor antiguedad -> mayor exponente
-                            if($antiguedad <= 60) {$elevado=0.001;} elseif($antiguedad >= 1200){$elevado=24;} else{$elevado=($antiguedad/50);}
+                            // nueva formula para aplicar baja de precio a mayor antiguedad del stock
+							// 0.96 elevado a la 35 da 0.25, es decir que reduciría el costo a 25% del original
+							if ($antiguedad >= 720) { // Si > 500 días dejo en 50 -> que me va a dar 25% del costo original
+								$elevado=36;
+							} 
+                            elseif ($antiguedad >= 360) { // Si > 500 días dejo en 50 -> que me va a dar 25% del costo original
+								$elevado=($antiguedad/20);
+							} 
+							elseif ($antiguedad >= 45) { // si es < 500 va a ir reduciendo el costo original de a poco cuanto mas días pasan
+								$elevado=($antiguedad/30);
+							}
+							else {
+								$elevado=0.1;
+							}
                             //pow es la formula de exponente para PHP, no existe el ^
-                            $costo_usd = $costo_usd *( pow(0.95,$elevado));
+							$fn_exp = (pow(0.97, $elevado));
+                            $costo_usd = $costo_usd * $fn_exp;
                             
-                            // el precio de oferta sugerido tiene que ser 40% mayor al costo para asegurar ganancia
-                            $oferta_sugerida = $costo_usd * $valor_configuracion;
+                            // el precio de oferta sugerido tiene que ser X % mayor al costo para asegurar ganancia, configuro desde sistema en CONFIG > GENERAL
+                            $oferta_sugerida = $costo_usd * $valor_oferta_sugerida;
+							
+					$control_individual .= "<br /><br /> costo x (elevado: 0.97 ^" . round($elevado,2) . ") = C_modif: " . round($costo_usd,2) . " x (multi con gcia includ): " . $valor_oferta_sugerida . " queda en: " . round($oferta_sugerida,2);
                             
                             
                             // si hay muchas ventas y poco stock voy subiendo el precio de oferta
@@ -1721,9 +1758,9 @@ class ControlsController extends Controller
                                 if($divi >= 3) {$oferta_sugerida = $oferta_sugerida * 3;}
                                 elseif($divi <= 0.9) {$oferta_sugerida = $oferta_sugerida * 0.9;}
                                 else{$oferta_sugerida = $oferta_sugerida * $divi;}
+					$control_individual .= "<br /> Stk >3 subo precio si hay mucha Vta_45 y poco Stk // el es multi es: " . round($divi,2) . " queda en " . round($oferta_sugerida,2);
                             }
-                            
-                            
+					
                             // limito la oferta si queda poco stock
                             if($Q_stk == 5){$limite_Stk = $precio_base * 0.800;} 
                             elseif($Q_stk == 4){$limite_Stk = $precio_base * 0.850;}
@@ -1731,39 +1768,67 @@ class ControlsController extends Controller
                             elseif($Q_stk == 2){$limite_Stk = $precio_base * 0.900;} 
                             elseif($Q_stk == 1){$limite_Stk = $precio_base * 0.920;} 
                             else{$limite_Stk = $oferta_sugerida;} 
-                            
-                            if($oferta_sugerida < $limite_Stk){$oferta_sugerida = $limite_Stk;} 
+					                            
+                            if($oferta_sugerida < $limite_Stk) {
+								$oferta_sugerida = $limite_Stk;
+					$control_individual .= "<br />queda < 5 stk -> subo precio // precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida,2);
+							} 
+					
                             
                             if($qv_45d == 3){$estimulo_Vta45 = 0.95;} 
                             elseif($qv_45d == 2){$estimulo_Vta45 = 0.92;} 
                             elseif($qv_45d == 1){$estimulo_Vta45 = 0.89;}
                             elseif($qv_45d == 0){$estimulo_Vta45 = 0.86;}
                             else{$estimulo_Vta45 = 1;}
-                            
-                            if(($Q_stk/$qv) > 0.30){$estimulo_Relacion = 0.925;} 
-                            elseif(($Q_stk/$qv) > 0.20){$estimulo_Relacion = 0.950;} 
-                            elseif(($Q_stk/$qv) > 0.10){$estimulo_Relacion = 0.975;} 
-                            else{$estimulo_Relacion = 1;} 
+							
+                    /**** 2019-11-27 quito esto porque no tiene tanta relación, mejoro oferta cuanto mas stock tengo en relación a mis ventas... mayor stk disponible mejor oferta traslado al público */
+                            //if(($Q_stk/$qv) > 0.30){$estimulo_Relacion = 0.925;} 
+                            //elseif(($Q_stk/$qv) > 0.20){$estimulo_Relacion = 0.950;} 
+                            //elseif(($Q_stk/$qv) > 0.10){$estimulo_Relacion = 0.975;} 
+                            //else{$estimulo_Relacion = 1;} 
+							$estimulo_Relacion = 1; //COMENTAR ESTA LINEA SI HABILITO LA DE ARRIBA
                             
                             $oferta_sugerida = $oferta_sugerida * $estimulo_Vta45 * $estimulo_Relacion;
+					$control_individual .= "<br /> Si menos de 3 vta en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2) ;
 
                             
-                            // límite inferior máximo: la oferta no puede ser menor al 30% del valor "precio base"
-                            if($oferta_sugerida < ($precio_base * 0.3))  {$oferta_sugerida = ($precio_base * 0.3);}
+                            // límite inferior máximo: la oferta no puede ser menor al 25% del valor "precio base"
+                            if($oferta_sugerida < ($precio_base * 0.25))  {
+								$oferta_sugerida = ($precio_base * 0.25);
+					$control_individual .= "<br /> oferta sugerida no puede ser < a 25% de base // queda en : " . round($oferta_sugerida,2);
+							}
                        
                             // si no queda stock secundario quito oferta
-                            if(($slot == "secundario") and ($libre <= 0)) {$oferta_sugerida = 0;}
+                            if(($slot == "secundario") and ($libre <= 0)) {
+								$oferta_sugerida = 0;
+					$control_individual .= "<br /> no queda STK secu quito oferta secu";
+							}
                             
                             // si la cantidad de venta histórica es menor o igual a 3 y además es igual a lo vendido en 45 días posiblemente es juego nuevo y no quiero bajar precio
-                            if(($qv <= 3) and ($qv = $qv_45d)) {$oferta_sugerida = 0;}
-                            
+							/*** 2019-11-27 QUITO ESTO QUE NO ME PERMITIÓ VENDER EL NINJA GO DE LEGO CUANDO COMPRAMOS BARATO POR PRIMERA VEZ 
+                            if(($qv <= 3) and ($qv = $qv_45d)) {
+								$oferta_sugerida = 0;
+							}
+                            */
+							
 							// si hay mucho (secundario) -> libre en relación a las ventas de primario voy aumentando el precio
 							if($antiguedad <= 365) {
-								if(($slot == "primario") and ($libre > 5)) {$oferta_sugerida = $oferta_sugerida * (1+(($libre/$qv)*($libre/$qv)));}
-								if($libre <= 10){$elev2=1;} else{$elev2=($libre/10);}
-								if($libre > 10) {
-									if($slot == "primario") {$oferta_sugerida = $oferta_sugerida * (pow(1.05,$elev2));}
+								if(($slot == "primario") and ($libre >= 4) and ($libre <= 10)) {
+									$oferta_sugerida = $oferta_sugerida * (1+($libre/$qv));
+				$control_individual .= "<br /> ant < a 365d, controlo libres: <br/> es pri y 4 a 10 libres, multiplico precio por: " . round(1+(($libre/$qv)),2) . " queda en: " . round($oferta_sugerida,2);
+								}
+							/**** 2019-11-27 quito esto porque no le encuentro sentido, en la de arriba ya defino un aumento de precio al pri cuando hay mucho libre 
+								if($libre <= 10) {
+									$elev2=1;} 
+								else {
+									$elev2=($libre/10);
+								}*/
+								if(($slot == "primario") and ($libre > 10)) {
+									$oferta_sugerida = $oferta_sugerida * (pow(1.04,($libre/10)));
+				$control_individual .= "<br /> ant < a 365d, controlo libres: <br/> es pri y +10 libres, multi por: " . round((pow(1.04,($libre/10))),2) . " queda en: " . round($oferta_sugerida,2);
+									
 								}	
+								
 							}
 
 							// si hay mas de 10 secundarios libres voy aumentando el precio al primario exponencialmente                                         
@@ -1773,20 +1838,29 @@ class ControlsController extends Controller
                             // $oferta_sugerida = (ceil($oferta_sugerida)*25);
 							// actualizado para pasar a US
 							$oferta_sugerida = round($oferta_sugerida, 2);
+					$control_individual .= "<br /> Sug redondeado: " . $oferta_sugerida;
 
-                            $mensajes .= "<tr><td>[" . $ID . " exp: " . pow(0.95,$elevado) . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sale: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>Qvp:" . $qvp . "</td><td>Qvs:" . $qvs ."</td><td>Qvp_45d:" . $qvp_45d . "</td><td>Qvs_45d:" . $qvs_45d . "</td><td>Qs:" . $Q_stk . "</td><td>V_45d/Qs: " . $divi . "</td><td>C_mod:". $costo_usd ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
+                            $mensajes .= "<tr><td>[" . $ID . " exp: " . round($fn_exp,2) . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs ."</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:". round($costo_usd,2)  . " de " . round($costo_usd_original) ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
                             
                             
-                            if(($Q_stk < 1) or (($Q_stk/$qv_45d) < 0.10)) {$oferta_sugerida = 0;}
+                            if(($Q_stk < 1) or (($Q_stk/$qv_45d) < 0.10)) {
+					$control_individual .= "<br /> queda 0 stk o es menor al 10% de lo vendido en 45d, quito oferta";
+								$oferta_sugerida = 0;
+							}
+					
                             
 
-                            if($oferta_sugerida >= ($precio_base * 0.963)) {$oferta_sugerida = 0;}
-                                
-                            if($oferta_sugerida == 0) {
-                                if($sale_price !== ""){ 
+                            if($oferta_sugerida >= ($precio_base * 0.963)) {
+					$control_individual .= "<br /> Sug es casi lo mismo que precio base, quito oferta";
+								$oferta_sugerida = 0;
+							}
+							
+					
+                            if($oferta_sugerida == 0) { // si no hay precio de oferta 
+                                if($sale_price !== ""){  // y el producto tiene actualmente un precio de oferta, le quito
                                     $_sale_price = DB::table('cbgw_postmeta')
                                     ->where('post_id',$ID)
-                                    ->where('meta_key','_sale_price')->first();
+                                    ->where('meta_key','_sale_price')->first(); //encuentro si existe el meta key sale_price
                                     
                                     if ($_sale_price) {
                                         DB::table('cbgw_postmeta')
@@ -1794,14 +1868,14 @@ class ControlsController extends Controller
                                         ->where('meta_key','_sale_price')
                                         //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
                                         ->update([
-                                            'meta_value' => ''
+                                            'meta_value' => '' // quito el precio de oferta actual
                                         ]);
                                     } else {
                                         $data['post_id'] = $ID;
                                         $data['meta_key'] = '_sale_price';
                                         $data['meta_value'] = '';
     
-                                        DB::table('cbgw_postmeta')->insert($data);
+                                        DB::table('cbgw_postmeta')->insert($data); // si no existe el meta key sale_price lo creo
                                     }
 
                                         $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " REMOVIDA<br><br>";
@@ -1816,7 +1890,7 @@ class ControlsController extends Controller
                                         ->where('post_id',$ID)
                                         ->where('meta_key','_sale_price')->first();
                                         
-                                        if ($_sale_price) {
+                                        if ($_sale_price) { // si existe el sale_price lo actualizo
                                             DB::table('cbgw_postmeta')
                                             ->where('post_id',$ID)
                                             ->where('meta_key','_sale_price')
@@ -1824,7 +1898,7 @@ class ControlsController extends Controller
                                             ->update([
                                                 'meta_value' => $oferta_sugerida
                                             ]);
-                                        } else {
+                                        } else { // si no existe lo creo
                                             $data['post_id'] = $ID;
                                             $data['meta_key'] = '_sale_price';
                                             $data['meta_value'] = $oferta_sugerida;
@@ -1832,22 +1906,26 @@ class ControlsController extends Controller
                                             DB::table('cbgw_postmeta')->insert($data);
                                         }
 
-                                            $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <br><br>";
+										$mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <br><br>";
 
                                         }
                                     }
                                 }
                             }
+						$control_individual .= "<p> .... </p>";
                     }
-
-                    $mensajes .= "</table>";
+					
+					$control_individual .= "<p>..............fin che</p>";
+					
+                    $mensajes .= "</table>" . $control_individual;
+					
 
                     DB::commit();
 
                     /*\Helper::messageFlash('Configuraciones',"Stock web PS4 automatizados correctamente.");
 
                     return redirect()->back();*/
-                    return $mensajes;
+                    return $mensajes ;
                 } catch (Exception $e) {
                     DB::rollback();
                     // return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
