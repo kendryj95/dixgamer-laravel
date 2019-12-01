@@ -36,7 +36,10 @@
                 <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Cantidad</th>
+                        <th class="text-center">
+                          Cantidad<br>
+                          Cargados / Pedido
+                        </th>
                         <th>Cover</th>
                         <th>Titulo</th>
                         <th>Link/s</th>
@@ -46,15 +49,19 @@
                     <tbody>
                     @if(count($pedidos) > 0)
                         @php $total_cantidad = 0 @endphp
+                        @php $total_pedido = 0 @endphp
                         @foreach($pedidos as $pedido)
                         @php $total_cantidad += $pedido->cantidad_cargar  @endphp
+                        @php $total_pedido += $pedido->cantidad  @endphp
                         <tr>
-                            <td>{{ $pedido->cantidad_cargar }}</td>
+                            <td class="text-center">
+                              <span class="label label-success">{{ $pedido->cantidad_cargar }}</span> / <span class="label label-primary">{{ $pedido->cantidad }}</span>
+                            </td>
                             <td>
                                 <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />
                             </td>
                             <td>
-                                {{ $pedido->titulo }}
+                                {{ ucwords(str_replace('-',' ',$pedido->titulo)) }}
                                 <span class="label label-default {{$pedido->consola}}">
                                     {{$pedido->consola}}
                                 </span>
@@ -84,7 +91,7 @@
                         </tr>
                         @endforeach
                         <tr>
-                            <td><b>{{ $total_cantidad }}</b></td>
+                        <td class="text-center"><b>{{ $total_cantidad }}</b> / <b>{{ $total_pedido }}</b></td>
                             <td colspan="4"></td>
                         </tr>
                     @else
