@@ -61,7 +61,7 @@ class Stock extends Model
             'ID_vtas',
             'Q_vta',
             'dayvta',
-            DB::raw('round(AVG(costo),0) as costo'),
+            DB::raw('round(AVG(costo_usd),2) as costo'),
             DB::raw('COUNT(*) AS Q_Stock')
         )
             ->leftjoin(DB::raw('
@@ -94,7 +94,7 @@ class Stock extends Model
             'vendido.dayvta',
             'vendido.q_vta_pri',
             'vendido.q_vta_sec',
-            DB::raw('round(AVG(costo),0) as costo'),
+            DB::raw('round(AVG(costo_usd),2) as costo'),
             DB::raw('COUNT(*) AS q_stock')
         )
             ->leftjoin(DB::raw(
@@ -127,7 +127,8 @@ class Stock extends Model
                       consola,
                       stock.usuario,
                       cuentas_id AS stock_cuentas_id,
-                      medio_pago, costo_usd,
+                      medio_pago,
+					  costo_usd,
                       costo,
                       stock.Notas AS stock_Notas,
                       Day AS daystock,
@@ -283,7 +284,7 @@ class Stock extends Model
 
     public function ScopePs3ByTitle($query,$title){
         return DB::select(DB::raw("
-        SELECT ID_stk AS id_stk, titulo, consola, stk_ctas_id, dayreset, q_reset, days_from_reset, q_vta, round(AVG(costo),0) as costo, SUM(Q_Stock) AS q_stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo),0) as costo, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS q_stock
+        SELECT ID_stk AS id_stk, titulo, consola, stk_ctas_id, dayreset, q_reset, days_from_reset, q_vta, round(AVG(costo_usd),2) as costo, SUM(Q_Stock) AS q_stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo_usd),2) as costo_usd, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS q_stock
         FROM stock
         LEFT JOIN
         (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo
@@ -310,7 +311,7 @@ class Stock extends Model
 
         if ($gift_card_costo >= 10 || $title == 'plus-12-meses') {
               return DB::select(DB::raw("
-                SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
+                SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo_usd),2) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
                     FROM stock
                     LEFT JOIN
                     (SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
@@ -328,7 +329,7 @@ class Stock extends Model
             $condRestrictGift = session()->get('usuario')->modo_continuo == 0 ? " AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))" : " AND usuario!= '$vendedor' AND NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(stock.code,1,19)))";
 
               return DB::select(DB::raw("
-                SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
+                SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo_usd),2) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
                     FROM stock
                     LEFT JOIN
                     (SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
@@ -471,7 +472,7 @@ class Stock extends Model
 
         } elseif  ($consola && ($consola == "ps3")) {
 
-            $row_rsSTK = DB::select(DB::raw("SELECT ID_stk, titulo, consola, stk_ctas_id, dayreset, Q_reset, days_from_reset, Q_vta, round(AVG(costo),0) as costo, SUM(Q_Stock) AS Q_Stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo),0) as costo, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS Q_Stock
+            $row_rsSTK = DB::select(DB::raw("SELECT ID_stk, titulo, consola, stk_ctas_id, dayreset, Q_reset, days_from_reset, Q_vta, round(AVG(costo_usd),2) as costo, SUM(Q_Stock) AS Q_Stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo_usd),2) as costo_usd, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS Q_Stock
                 FROM stock 
                 LEFT JOIN
                 (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo
@@ -495,7 +496,7 @@ class Stock extends Model
 
         } else {
 
-            $row_rsSTK = DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo),0) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
+            $row_rsSTK = DB::select(DB::raw("SELECT ID AS ID_stk, titulo, consola, cuentas_id AS stk_ctas_id, round(AVG(costo_usd),2) as costo, ID_vtas, Q_vta, dayvta, COUNT(*) AS Q_Stock
                 FROM stock
                 LEFT JOIN
                 (SELECT ventas.ID as ID_vtas, stock_id, slot, COUNT(*) AS Q_vta, Day AS dayvta
@@ -611,7 +612,7 @@ class Stock extends Model
     {
         $query->select(
             DB::raw("COUNT(*) AS TotalC"),
-            DB::raw("SUM(costo) AS TotalP")
+            DB::raw("SUM(costo_usd) AS TotalP")
         )
         ->where('costo','>',0);
     }
@@ -625,10 +626,10 @@ class Stock extends Model
             DB::raw("COUNT(*) AS q_stock"),
             DB::raw('(COUNT(*) - SUM(slotprimario)) as s_pri'),
             DB::raw('(COUNT(*) - SUM(slotsecundario)) as s_sec'),
-            DB::raw('round(AVG(costo),0) AS costoprom'),
-            DB::raw('SUM(costo) AS costototal'),
-            DB::raw('Min(costo) AS costomin'),
-            DB::raw('Max(costo) AS costomax'),
+            DB::raw('round(AVG(costo_usd),2) AS costoprom'),
+            DB::raw('SUM(costo_usd) AS costototal'),
+            DB::raw('Min(costo_usd) AS costomin'),
+            DB::raw('Max(costo_usd) AS costomax'),
             DB::raw('SUM(cantidadventa) AS q_venta'),
             DB::raw('SUM(ingresototal) AS ing_total'),
             DB::raw('SUM(comisiontotal) AS com_total')
@@ -644,7 +645,7 @@ class Stock extends Model
 
     public function ScopeGetDatosBalanceProductosDias($query, $dias)
     {
-        return DB::select("SELECT vtas.*, stk.Q_Stock FROM
+        return DB::select("SELECT vtas.*, precio_web, stk.Q_Stock FROM
         (SELECT titulo, consola, IFNULL(SUM(cantidadventa),0) AS q_venta, IFNULL(SUM(ingresototal),0) AS ing_total, AVG(vtas.costo_usd) as costo_usd, AVG(vtas.costo_usd) as costo, COUNT(stock_id) as stks_usados
         FROM stock
         LEFT JOIN ## 2019-03-04 Antes era RIGHT JOIN, ahora quiero listar todo el catalogo siempre
@@ -659,6 +660,32 @@ class Stock extends Model
         ON stock.ID = vtas.stock_id
         GROUP BY consola, titulo
         ORDER BY q_venta DESC, consola ASC, titulo ASC) as vtas
+		
+		LEFT JOIN
+		## 2019-11-28 AGREGO INFO DE LOS PRECIOS EN LA WEB
+		(SELECT producto, consola, GROUP_CONCAT(case when _sale_price = '' then _regular_price else _sale_price end) as precio_web
+		FROM 
+			(select
+			p.ID,
+			REPLACE(REPLACE(REPLACE(REPLACE(TRIM(LCASE(p_p.post_title)), ' ', '-'), '''', ''), '’', ''), '.', '') as producto,
+			max( CASE WHEN pm.meta_key = 'consola' and  p.post_parent = pm.post_id THEN pm.meta_value END ) as consola,
+			max( CASE WHEN pm2.meta_key = '_regular_price' and p.ID = pm2.post_id THEN pm2.meta_value END ) as _regular_price,
+			max( CASE WHEN pm2.meta_key = '_sale_price' and p.ID = pm2.post_id THEN pm2.meta_value END ) as _sale_price
+			from
+			 cbgw_posts as p
+			 left join cbgw_posts as p_p ON p.post_parent = p_p.ID
+			 left join cbgw_postmeta as pm ON p.post_parent = pm.post_id
+			 left join cbgw_postmeta as pm2 ON p.ID = pm2.post_id 
+			where
+				p.post_type = 'product_variation' and
+				p_p.post_status = 'publish'
+			group by
+				p.ID
+				order by p.post_title ASC) AS final
+				group by producto, consola) as finalWeb
+		
+		ON vtas.titulo = finalWeb.producto and vtas.consola = finalWeb.consola
+		
         LEFT JOIN
 
         (SELECT titulo, consola, SUM(Q_Stock) as Q_Stock FROM

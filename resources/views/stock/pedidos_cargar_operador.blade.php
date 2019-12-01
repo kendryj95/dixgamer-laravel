@@ -38,7 +38,7 @@
                     <tr>
                         <th class="text-center">
                           Cantidad<br>
-                          Cargados / Pedido
+                          Faltan / Pedido
                         </th>
                         <th>Cover</th>
                         <th>Titulo</th>
@@ -55,7 +55,8 @@
                         @php $total_pedido += $pedido->cantidad  @endphp
                         <tr>
                             <td class="text-center">
-                              <span class="label label-success">{{ $pedido->cantidad_cargar }}</span> / <span class="label label-primary">{{ $pedido->cantidad }}</span>
+                                @if($pedido->cantidad_cargar > 0) @php $color = 'warning' @endphp @else @php $color = 'success' @endphp @endif
+                                <span class="label label-{{$color}}">{{ $pedido->cantidad_cargar }}</span> / <span class="label label-secondary">{{ $pedido->cantidad }}</span>
                             </td>
                             <td>
                                 <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />

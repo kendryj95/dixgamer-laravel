@@ -37,6 +37,8 @@
 
         <th width="50" title="Cantidad Ventas">Vta</th>
 
+    <th width="30" title="Precio Web">Precio Web</th>
+
     <th width="30" title="Precio Promedio">Precio Prom</th>
       
         <th width="30" title="Costo Promedio">Costo Prom</th>
@@ -87,7 +89,9 @@
                     
       $rend = round((($ingresomedio/$cost)-1)*100);
       if ($rend > 500): $rend = "+500"; endif;
-      @endphp 
+      @endphp
+      
+        <td><p class="badge badge-info">{{ $row_rsCXP->precio_web }}</p></td>
       
         <td><p class="badge badge-success">$ {{ $ingresomedio }}</p><br>
       @php 
@@ -155,6 +159,7 @@
 
         <th>{{ $q_venta }}</th>
 
+        <th></th>
         <th></th>
         <th></th>
        <th></th>
