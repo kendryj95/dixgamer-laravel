@@ -1,4 +1,4 @@
-@extends('layouts.master-layouts')
+﻿@extends('layouts.master-layouts')
 @section('title', 'Balance')
 
 @section('container')
@@ -59,7 +59,7 @@
             </li>
             <li class="unit price-primary" style="min-width:200px;">
                 <div class="price-title">
-                    <h3>${{ round(($row_rsStock->TotalP - $row_rsStockVendido->costo)) }}</h3>
+                    <h3>${{ round(($row_rsStock2019->TotalP - $row_rsStockVendido->costo)) }}</h3>
                     <p>costo no consumido</p>
                 </div>
             </li>

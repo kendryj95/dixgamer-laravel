@@ -113,6 +113,8 @@
 
                 @if(Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
                   <li><a href="{{ url('stock_insertar_codigo_g') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P2</a></li>
+                  
+                  <li><a href="{{ url('stock_insertar_codigo_g_vcc') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P2 - VCC</a></li>
                 @endif
 
                 @if(Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))

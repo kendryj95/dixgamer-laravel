@@ -159,6 +159,7 @@ Route::group(['middleware' => ['login']], function()
     // P2
     Route::get('stock_insertar_codigo_g','StockController@createCodeG');
     Route::post('stock_insertar_codigo_g','StockController@storeCodeG');
+    Route::get('stock_insertar_codigo_g_vcc','StockController@createCodeGVCC');
 
     Route::post('asignar_stock','StockController@asignarStockStore');
     Route::get('pedidos_carga/admin', 'StockController@pedCargaAdmin');

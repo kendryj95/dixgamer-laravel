@@ -1005,6 +1005,7 @@ class ControlsController extends Controller
         $row_rsVentas = $this->sales->totalVentas()->first();
         $row_rsGastos = Expenses::totalGastos()->first();
         $row_rsStock = Stock::totalesStock()->first();
+		$row_rsStock2019 = Stock::totalesStock2019()->first();
         $row_rsStockVendido = $this->sales->stockVendido();
         $balance_mensual = $this->balance->balanceMensual();
         $row_rsCicloVtaGRAL = $this->sales->datosVentasBalance();
@@ -1013,7 +1014,7 @@ class ControlsController extends Controller
         $row_rsCicloVtaPS3 = $this->sales->datosVentasBalance('vta_ps3');
         $row_rsCicloVtaPS = $this->sales->datosVentasBalance('vta_ps');
 
-        return view('control.balance', compact('row_rsVentas','row_rsGastos','row_rsStock','row_rsStockVendido','balance_mensual','row_rsCicloVtaGRAL','row_rsCicloVta','row_rsCicloVtaPS4','row_rsCicloVtaPS3','row_rsCicloVtaPS'));
+        return view('control.balance', compact('row_rsVentas','row_rsGastos','row_rsStock','row_rsStock2019','row_rsStockVendido','balance_mensual','row_rsCicloVtaGRAL','row_rsCicloVta','row_rsCicloVtaPS4','row_rsCicloVtaPS3','row_rsCicloVtaPS'));
     }
 
     public function balanceProductos()
@@ -1129,6 +1130,7 @@ class ControlsController extends Controller
                 break;
             case 'actualizar_ids_ventas':
 
+				///// 2019-12-06 agrego limit de 4800 order item id para que no tire abajo el servidor
                 DB::table('ventas AS a')
                 ->leftjoin(DB::raw("(SELECT 
                 order_item_id,
@@ -1137,7 +1139,9 @@ class ControlsController extends Controller
                 FROM cbgw_woocommerce_order_items
                 LEFT JOIN cbgw_postmeta 
                 ON order_id = cbgw_postmeta.post_id
-                GROUP BY order_item_id) as b"),'a.order_item_id','=','b.order_item_id')
+                GROUP BY order_item_id
+				ORDER BY order_item_id desc
+                LIMIT 4800) as b"),'a.order_item_id','=','b.order_item_id')
                 ->whereNotNull('a.order_item_id')
                 ->whereNull('a.order_id_ml')
                 ->whereNotNull('b.order_id_ml')
@@ -1640,8 +1644,8 @@ class ControlsController extends Controller
                     ON web.producto = vtas_45d.titulo
 
                     LEFT JOIN
-
-                    (SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.61) as costo_usd, 'primario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+					## 2019-12-04 aumento el costo de pri a 63% y bajo el de secu porque siempre se vende el pri facil
+                    (SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.63) as costo_usd, 'primario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
                     FROM stock
                     LEFT JOIN
                     (SELECT stock_id, SUM(case when slot = 'Primario' then 1 else null end) AS Q_vta_pri_1
@@ -1653,7 +1657,7 @@ class ControlsController extends Controller
 
                     UNION ALL
 
-                    SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.39) as costo_usd, 'secundario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+                    SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.37) as costo_usd, 'secundario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
                     FROM stock
                     LEFT JOIN
                     (SELECT stock_id, SUM(case when slot = 'Secundario' then 1 else null end) AS Q_vta_sec_1
@@ -1741,44 +1745,54 @@ class ControlsController extends Controller
 							else {
 								$elevado=0.1;
 							}
+							
+							if ($antiguedad >= 180) { // 2019-12-03 : si ant prom es > 180d le bajo 10% mas
+								$extra_x_anti=0.9;
+							} 
+							else {
+								$extra_x_anti=1;
+							}
                             //pow es la formula de exponente para PHP, no existe el ^
 							$fn_exp = (pow(0.97, $elevado));
-                            $costo_usd = $costo_usd * $fn_exp;
+                            $costo_usd = $costo_usd * $fn_exp * $extra_x_anti;
                             
                             // el precio de oferta sugerido tiene que ser X % mayor al costo para asegurar ganancia, configuro desde sistema en CONFIG > GENERAL
                             $oferta_sugerida = $costo_usd * $valor_oferta_sugerida;
 							
-					$control_individual .= "<br /><br /> costo x (elevado: 0.97 ^" . round($elevado,2) . ") = C_modif: " . round($costo_usd,2) . " x (multi con gcia includ): " . $valor_oferta_sugerida . " queda en: " . round($oferta_sugerida,2);
+					$control_individual .= "<br /><br /> costo x (0.97 ^" . round($elevado,2) . ") = C_modif: " . round($costo_usd,2) . " x (multi con gcia): " . $valor_oferta_sugerida . " * coef ant 180: " . $extra_x_anti . " queda en: " . round($oferta_sugerida,2);
                             
                             
                             // si hay muchas ventas y poco stock voy subiendo el precio de oferta
                             if($Q_stk > 3){
                                 $divi = ($qv_45d/$Q_stk);
                                 $divi = round(pow($divi,0.8),2); // elevo a la 0,8 para suavizar el resultado a menos
-                                if($divi >= 3) {$oferta_sugerida = $oferta_sugerida * 3;}
-                                elseif($divi <= 0.9) {$oferta_sugerida = $oferta_sugerida * 0.9;}
-                                else{$oferta_sugerida = $oferta_sugerida * $divi;}
-					$control_individual .= "<br /> Stk >3 subo precio si hay mucha Vta_45 y poco Stk // el es multi es: " . round($divi,2) . " queda en " . round($oferta_sugerida,2);
+                                if($divi >= 3) {$divi = 3;}
+                                elseif($divi <= 0.85) {$divi = 0.85;}
+								else {$divi = $divi;}
+                                $oferta_sugerida = $oferta_sugerida * $divi;
+					$control_individual .= "<br /> >3 Stk subo precio si hay mucha Vta_45 y poco Stk // el es multi es: " . round($divi,2) . " queda en " . round($oferta_sugerida,2);
                             }
 					
-                            // limito la oferta si queda poco stock
-                            if($Q_stk == 5){$limite_Stk = $precio_base * 0.800;} 
-                            elseif($Q_stk == 4){$limite_Stk = $precio_base * 0.850;}
-                            elseif($Q_stk == 3){$limite_Stk = $precio_base * 0.870;}
-                            elseif($Q_stk == 2){$limite_Stk = $precio_base * 0.900;} 
-                            elseif($Q_stk == 1){$limite_Stk = $precio_base * 0.920;} 
-                            else{$limite_Stk = $oferta_sugerida;} 
-					                            
-                            if($oferta_sugerida < $limite_Stk) {
+                            // si se vendió 4 o mas limito la oferta cuando queda poco stock
+							if($qv_45d > 3) {
+								if($Q_stk == 5){$limite_Stk = $precio_base * 0.750;} 
+								elseif($Q_stk == 4){$limite_Stk = $precio_base * 0.800;}
+								elseif($Q_stk == 3){$limite_Stk = $precio_base * 0.850;}
+								elseif($Q_stk == 2){$limite_Stk = $precio_base * 0.900;} 
+								elseif($Q_stk == 1){$limite_Stk = $precio_base * 0.920;} 
+								else{$limite_Stk = $oferta_sugerida;} 
+								
+								if($oferta_sugerida < $limite_Stk) {
 								$oferta_sugerida = $limite_Stk;
-					$control_individual .= "<br />queda < 5 stk -> subo precio // precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida,2);
+					$control_individual .= "<br /> >3 Vtas y <5 stk -> precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida,2);
 							} 
+							}					             
 					
                             
-                            if($qv_45d == 3){$estimulo_Vta45 = 0.95;} 
-                            elseif($qv_45d == 2){$estimulo_Vta45 = 0.92;} 
-                            elseif($qv_45d == 1){$estimulo_Vta45 = 0.89;}
-                            elseif($qv_45d == 0){$estimulo_Vta45 = 0.86;}
+                            if($qv_45d == 3){$estimulo_Vta45 = 0.94;} 
+                            elseif($qv_45d == 2){$estimulo_Vta45 = 0.90;} 
+                            elseif($qv_45d == 1){$estimulo_Vta45 = 0.86;}
+                            elseif($qv_45d == 0){$estimulo_Vta45 = 0.82;}
                             else{$estimulo_Vta45 = 1;}
 							
                     /**** 2019-11-27 quito esto porque no tiene tanta relación, mejoro oferta cuanto mas stock tengo en relación a mis ventas... mayor stk disponible mejor oferta traslado al público */
@@ -1789,13 +1803,13 @@ class ControlsController extends Controller
 							$estimulo_Relacion = 1; //COMENTAR ESTA LINEA SI HABILITO LA DE ARRIBA
                             
                             $oferta_sugerida = $oferta_sugerida * $estimulo_Vta45 * $estimulo_Relacion;
-					$control_individual .= "<br /> Si menos de 3 vta en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2) ;
+					$control_individual .= "<br /> < 3 vtas en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2) ;
 
                             
                             // límite inferior máximo: la oferta no puede ser menor al 25% del valor "precio base"
                             if($oferta_sugerida < ($precio_base * 0.25))  {
 								$oferta_sugerida = ($precio_base * 0.25);
-					$control_individual .= "<br /> oferta sugerida no puede ser < a 25% de base // queda en : " . round($oferta_sugerida,2);
+					$control_individual .= "<br /> oferta no puede ser < 25% de precio base // queda en : " . round($oferta_sugerida,2);
 							}
                        
                             // si no queda stock secundario quito oferta
@@ -1813,9 +1827,9 @@ class ControlsController extends Controller
 							
 							// si hay mucho (secundario) -> libre en relación a las ventas de primario voy aumentando el precio
 							if($antiguedad <= 365) {
-								if(($slot == "primario") and ($libre >= 4) and ($libre <= 10)) {
+								if(($slot == "primario") and ($libre >= 4) and ($libre <= 8)) {
 									$oferta_sugerida = $oferta_sugerida * (1+($libre/$qv));
-				$control_individual .= "<br /> ant < a 365d, controlo libres: <br/> es pri y 4 a 10 libres, multiplico precio por: " . round(1+(($libre/$qv)),2) . " queda en: " . round($oferta_sugerida,2);
+				$control_individual .= "<br /> ant < 365d, controlo libres: <br/> es pri y 4-8 libres, precio * " . round(1+(($libre/$qv)),2) . " queda en: " . round($oferta_sugerida,2);
 								}
 							/**** 2019-11-27 quito esto porque no le encuentro sentido, en la de arriba ya defino un aumento de precio al pri cuando hay mucho libre 
 								if($libre <= 10) {
@@ -1823,9 +1837,9 @@ class ControlsController extends Controller
 								else {
 									$elev2=($libre/10);
 								}*/
-								if(($slot == "primario") and ($libre > 10)) {
-									$oferta_sugerida = $oferta_sugerida * (pow(1.04,($libre/10)));
-				$control_individual .= "<br /> ant < a 365d, controlo libres: <br/> es pri y +10 libres, multi por: " . round((pow(1.04,($libre/10))),2) . " queda en: " . round($oferta_sugerida,2);
+								if(($slot == "primario") and ($libre > 8)) {
+									$oferta_sugerida = $oferta_sugerida * (pow(1.04,($libre/8)));
+				$control_individual .= "<br /> ant < 365d, controlo libres: <br/> es pri y +8 libres, precio * " . round((pow(1.04,($libre/10))),2) . " queda en: " . round($oferta_sugerida,2);
 									
 								}	
 								

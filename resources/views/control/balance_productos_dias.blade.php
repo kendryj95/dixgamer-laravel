@@ -1,4 +1,4 @@
-@extends('layouts.master-layouts')
+﻿@extends('layouts.master-layouts')
 @section('title', 'Balance por Productos '. $dias . ' días')
 
 @section('container')
@@ -36,8 +36,6 @@
     @if(!isset($acceso)) {{-- Solo tiene acceso a estos campos el admin --}}
 
         <th width="50" title="Cantidad Ventas">Vta</th>
-
-    <th width="30" title="Precio Web">Precio Web</th>
 
     <th width="30" title="Precio Promedio">Precio Prom</th>
       
@@ -91,12 +89,12 @@
       if ($rend > 500): $rend = "+500"; endif;
       @endphp
       
-        <td><p class="badge badge-info">{{ $row_rsCXP->precio_web }}</p></td>
-      
-        <td><p class="badge badge-success">$ {{ $ingresomedio }}</p><br>
+
+        <td><p title="ingreso promedio" class="badge badge-success">$ {{ $ingresomedio }}</p><br>
       @php 
-      if($rend >= 50 or $rend <= 10): $colorRend="color: red; font-weight:bold; opacity: 0.6;";  else: $colorRend=" opacity:0.4;"; endif; @endphp
-    <small style="{{ $colorRend  }}">{{ $rend }} %</p>
+      if($rend <= 30): $colorRend="color: red; font-weight:bold; opacity: 0.6;"; elseif($rend >= 60): $colorRend="color: green; font-weight:bold; opacity: 0.6;"; else: $colorRend="opacity: 0.4;"; endif; @endphp
+    <p title="rendimiento"><small style="{{ $colorRend  }}">{{ $rend }} %</small></p>
+	<p class="badge badge-default" title="precio web">$ {{ $row_rsCXP->precio_web }}</p>
     </td>
       
         <td><p class="badge badge-normal" style="opacity:0.85;">$ {{ round($cost) }}</p><br>

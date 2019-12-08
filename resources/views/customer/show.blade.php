@@ -930,7 +930,9 @@
               {{-- <small style="color:#CFCFCF;"><i class="fa fa-download fa-fw" aria-hidden="true"></i></small> --}}
               <?php //endif; ?>
               </p>
-        <?php if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo_usd * 0.6,2) ?>
+        <?php 
+        $costo2 = 0;
+        if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo_usd * 0.6,2) ?>
               <?php elseif (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo_usd * 0.4,2) ?>
               <?php elseif ($lowerSale->consola == 'ps3'): $costo2 = round($lowerSale->costo_usd * 0.25,2) ?>
               <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot')&& ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo_usd * 0.6,2) ?>

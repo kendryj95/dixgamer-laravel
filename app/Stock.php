@@ -614,7 +614,17 @@ class Stock extends Model
             DB::raw("COUNT(*) AS TotalC"),
             DB::raw("SUM(costo_usd) AS TotalP")
         )
-        ->where('costo','>',0);
+		->where('costo','>',0);
+    }
+	
+	public function ScopeTotalesStock2019($query)
+    {
+        $query->select(
+            DB::raw("COUNT(*) AS TotalC"),
+            DB::raw("SUM(costo_usd) AS TotalP")
+        )
+		->whereRaw("DATEDIFF(NOW(), (stock.Day)) < 270");
+        ///// 2019-12-05 cambio para mejorar calculo ->where('costo','>',0);
     }
 
     public function ScopeGetDatosBalanceProductos($query)
@@ -648,8 +658,8 @@ class Stock extends Model
         return DB::select("SELECT vtas.*, precio_web, stk.Q_Stock FROM
         (SELECT titulo, consola, IFNULL(SUM(cantidadventa),0) AS q_venta, IFNULL(SUM(ingresototal),0) AS ing_total, AVG(vtas.costo_usd) as costo_usd, AVG(vtas.costo_usd) as costo, COUNT(stock_id) as stks_usados
         FROM stock
-        LEFT JOIN ## 2019-03-04 Antes era RIGHT JOIN, ahora quiero listar todo el catalogo siempre
-        (SELECT vtas2.*, stock.costo, stock.costo_usd FROM
+        LEFT JOIN ## 2019-03-04 Antes era RIGHT JOIN, ahora quiero listar todo el catalogo siempre, 2019-12-02 quito el costo en ars
+        (SELECT vtas2.*, stock.costo_usd FROM
         (SELECT stock_id, COUNT(*) AS cantidadventa, SUM(precio) AS ingresototal
         FROM ventas
         LEFT JOIN (select ventas_id, sum(precio) as precio FROM ventas_cobro WHERE ventas_cobro.Day >= DATE(NOW() - INTERVAL '$dias' DAY) GROUP BY ventas_id) as ventas_cobro ON ventas.ID = ventas_cobro.ventas_id
@@ -658,12 +668,11 @@ class Stock extends Model
         LEFT JOIN stock
         ON vtas2.stock_id = stock.ID) AS vtas
         ON stock.ID = vtas.stock_id
-        GROUP BY consola, titulo
-        ORDER BY q_venta DESC, consola ASC, titulo ASC) as vtas
+        GROUP BY consola, titulo) as vtas
 		
 		LEFT JOIN
 		## 2019-11-28 AGREGO INFO DE LOS PRECIOS EN LA WEB
-		(SELECT producto, consola, GROUP_CONCAT(case when _sale_price = '' then _regular_price else _sale_price end) as precio_web
+		(SELECT producto, consola, GROUP_CONCAT(case when _sale_price = '' then ROUND(_regular_price,0) else ROUND(_sale_price,0) end ORDER BY 1 ASC SEPARATOR '-') as precio_web
 		FROM 
 			(select
 			p.ID,
@@ -709,6 +718,7 @@ class Stock extends Model
         WHERE (consola = 'ps4' OR titulo = 'plus-12-meses-slot') AND (Q_vta_pri IS NULL)
         GROUP BY consola, titulo
         ORDER BY consola, titulo, ID DESC) as ps4pri
+		
         UNION ALL
         SELECT ID_stk, titulo, consola, Q_Stock
         FROM
@@ -767,7 +777,9 @@ class Stock extends Model
         GROUP BY consola, titulo
         ORDER BY consola, titulo DESC) as psn) as todo 
         GROUP BY consola, titulo) as stk
-        ON vtas.titulo = stk.titulo and vtas.consola = stk.consola");
+        ON vtas.titulo = stk.titulo and vtas.consola = stk.consola
+		
+        ORDER BY q_venta DESC, consola ASC, titulo ASC");
     }
 
     public function scopeCalcularCotizCode($query) {

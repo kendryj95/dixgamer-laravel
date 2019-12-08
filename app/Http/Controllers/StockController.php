@@ -124,6 +124,14 @@ class StockController extends Controller
         'giftCards'
       ));
     }
+    
+    public function createCodeGVCC(){
+      $cotiz = Stock::calcularCotizCode()->value('cotiz');
+
+      return view('stock.store_code_g_vcc',compact(
+        'cotiz'
+      ));
+    }
 
     public function createCodep3(){
         $cotiz = Stock::calcularCotizCode()->value('cotiz');

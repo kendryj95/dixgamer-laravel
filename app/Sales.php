@@ -151,7 +151,8 @@ class Sales extends Model
 
     public function stockVendido()
     {
-        return DB::select("SELECT stock.ID, SUM(costo_usd) as costo FROM (SELECT stock_id FROM `ventas` GROUP BY stock_id) as vendido LEFT JOIN stock ON vendido.stock_id = stock.ID")[0];
+        return DB::select("SELECT SUM(costo_usd) as costo FROM (select stock_id from ventas group by stock_id) as vendido LEFT JOIN stock ON vendido.stock_id = stock.ID WHERE costo_usd>=0 and DATEDIFF(NOW(), (stock.Day)) < 270")[0];
+		///// 2019-12-05 cambio para mejorar calculo return DB::select("SELECT stock.ID, SUM(costo_usd) as costo FROM (SELECT stock_id FROM `ventas` GROUP BY stock_id) as vendido LEFT JOIN stock ON vendido.stock_id = stock.ID")[0];
     }
 
     public function datosVentasBalance($tipo = '')
