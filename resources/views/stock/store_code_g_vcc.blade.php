@@ -18,7 +18,7 @@
 	@endif
   <div class="row">
     <div class="col-md-12">
-        <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo_g') }}">
+        <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo_g_vcc') }}">
             {{ csrf_field() }}
         
             <div class="col-md-9">
@@ -81,7 +81,7 @@
                               <div class="col-md-3">
                                   <div class="input-group form-group">
                                   <span class="input-group-addon">Cant</span>
-                                  <input type="text" class="form-control input-sm" name="cant_1" id="cant_1">
+                                  <input type="text" class="form-control input-sm" name="cant_1" id="cant_1" onchange="validarCantidad(this)">
                                 </div>
                               </div>
                               
@@ -107,7 +107,7 @@
                               </div>
 
                               <div class="col-md-12">
-                                <hr>
+                                <hr style="border-color: #000">
                               </div>
                             </div>
                       </div>
@@ -127,6 +127,8 @@
             </div>
             <div class="col-md-3" >
                 <div class="row" id="container_codes" style="padding-left: 10px;"></div>
+
+                <div id="container_costos"></div>
             </div>
         </form>
     </div>
@@ -185,7 +187,7 @@
     });
 
     function agregarGift() {
-      var html = '<div class="filas" id="fila'+gifts+'" class="row"> <div class="col-md-3"> <div class="input-group form-group"> <span class="input-group-addon">Valor #1</span> <input type="text" class="form-control input-sm" name="valor_1_'+gifts+'" id="valor_1_'+gifts+'"> </div></div><div class="col-md-3"> <div class="input-group form-group"> <span class="input-group-addon">Valor #2</span> <input type="text" class="form-control input-sm" name="valor_2_'+gifts+'" id="valor_2_'+gifts+'"> </div></div><div class="col-md-3"> <div class="input-group form-group"> <span class="input-group-addon">Valor #3</span> <input type="text" class="form-control input-sm" name="valor_3_'+gifts+'" id="valor_3_'+gifts+'"> </div></div><div class="col-md-2"> <div class="input-group form-group"> <span class="input-group-addon">Cant</span> <input type="text" class="form-control input-sm" name="cant_'+gifts+'" id="cant_'+gifts+'"> </div></div><div class="col-md-1"> <button type="button" onclick="eliminarGift(this)" class="btn btn-link btn-sm" data-delete="'+gifts+'"><i class="fa fa-times text-danger"></i></button> </div><div class="col-md-4"> <div class="input-group form-group" id="div_costo_usd"> <span class="input-group-addon">usd</span> <input class="form-control input-sm" type="text" name="costo_usd_'+gifts+'" data-id="'+gifts+'" onchange="calcularResultado(this)" id="multiplicando_'+gifts+'" value=""> </div></div><div class="col-md-4"> <div class="input-group form-group"> <span class="input-group-addon">ctz</span> <input class="form-control input-sm" type="text" data-id="'+gifts+'" onchange="calcularResultado(this)" id="multiplicador_'+gifts+'" value="'+ctz+'"> </div></div><div class="col-md-4"> <div class="input-group form-group"> <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span> <input class="form-control input-sm" type="text" name="costo_'+gifts+'" id="resultado_'+gifts+'" value="" style="text-align:right; color: #777" readonly> </div></div><div class="col-md-12"> <hr> </div></div>';
+      var html = '<div class="filas" id="fila'+gifts+'" class="row"> <div class="col-md-3"> <div class="input-group form-group"> <span class="input-group-addon">Valor #1</span> <input type="text" class="form-control input-sm" name="valor_1_'+gifts+'" id="valor_1_'+gifts+'"> </div></div><div class="col-md-3"> <div class="input-group form-group"> <span class="input-group-addon">Valor #2</span> <input type="text" class="form-control input-sm" name="valor_2_'+gifts+'" id="valor_2_'+gifts+'"> </div></div><div class="col-md-3"> <div class="input-group form-group"> <span class="input-group-addon">Valor #3</span> <input type="text" class="form-control input-sm" name="valor_3_'+gifts+'" id="valor_3_'+gifts+'"> </div></div><div class="col-md-2"> <div class="input-group form-group"> <span class="input-group-addon">Cant</span> <input type="text" class="form-control input-sm" name="cant_'+gifts+'" id="cant_'+gifts+'"> </div></div><div class="col-md-1"> <button type="button" onclick="eliminarGift(this)" class="btn btn-link btn-sm" data-delete="'+gifts+'"><i class="fa fa-times text-danger"></i></button> </div><div class="col-md-4"> <div class="input-group form-group" id="div_costo_usd"> <span class="input-group-addon">usd</span> <input class="form-control input-sm" type="text" name="costo_usd_'+gifts+'" data-id="'+gifts+'" onchange="calcularResultado(this)" id="multiplicando_'+gifts+'" value=""> </div></div><div class="col-md-4"> <div class="input-group form-group"> <span class="input-group-addon">ctz</span> <input class="form-control input-sm" type="text" data-id="'+gifts+'" onchange="calcularResultado(this)" id="multiplicador_'+gifts+'" value="'+ctz+'"> </div></div><div class="col-md-4"> <div class="input-group form-group"> <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span> <input class="form-control input-sm" type="text" name="costo_'+gifts+'" id="resultado_'+gifts+'" value="" style="text-align:right; color: #777" readonly> </div></div><div class="col-md-12"> <hr style="border-color: #000"> </div></div>';
 
       $('#container-gifts').append(html);
 
@@ -204,18 +206,25 @@
     function construirCodes() {
       var codes = '';
       var filas = $('.filas').length;
+      var inputs = '';
 
       for (let i = 1; i <= filas; i++) {
         var valor1 = $('#valor_1_'+i).val(),
             valor2 = $('#valor_2_'+i).val(),
             valor3 = $('#valor_3_'+i).val(),
             usd = $('#multiplicando_'+i).val(),
+            costo = $('#resultado_'+i).val(),
             cant = $('#cant_'+i).val();
 
-            for (let j = 0; j < cant; j++) {
-              codes += valor1 + ' ' + valor2 + ' ' + valor3 + ' ' + usd + getLetter(j);
-              if (j != (cant - 1)) {
-                codes += "\n";
+            if (valor1 != "" && valor2 != "" && valor3 != "" && usd != "" && cant != "") {
+              for (let j = 0; j < cant; j++) {
+                codes += valor1 + ' ' + valor2 + ' ' + valor3 + ' ' + usd + getLetter(j);
+                if (j != (cant - 1)) {
+                  codes += "\n";
+                } else if (i < filas) {
+                  codes += "\n";
+                }
+                inputs += '<input type="hidden" name="costo[]" value="'+costo+'" /><input type="hidden" name="costo_usd[]" value="'+usd+'" />';
               }
             }
       }
@@ -223,6 +232,7 @@
       codes = codes.replace(/-/g, "");
 
       $('#excel_data').val(codes);
+      $('#container_costos').html(inputs);
 
       createColumn($('#excel_data'),'code_g');
     }
@@ -240,6 +250,17 @@
       let multiplicador = $("#multiplicador_"+pos).val();
       let r = multiplicando*multiplicador;
       $('#resultado_'+pos).val(r);
+    }
+
+    function validarCantidad(selector) {
+      var valor = $(selector).val();
+
+      if (valor != "") {
+        if (valor == 0 || valor > 28) {
+          alert("La cantidad debe ser mayor a 0 y menor o igual a 28");
+          $(selector).val("").focus();
+        }
+      }
     }
 
 

@@ -345,14 +345,41 @@
 											</div>
 										@endif
 
-
 									@endif
 
 									@if(!empty($balance->costo_usd))
-										<em>
 								@if ($balance->code != NULL)
+									@php $hoy = date('Y-m-d H:i:s') @endphp
+									@if($balance->costo_usd < 10 && $balance->validacion == 'Mostrar')
+									<div class="dropdown" style="display:inline;">
+										<button
+											class="btn btn-default dropdown-toggle btn-xs"
+											type="button"
+											id="dropdownMenu4"
+											data-toggle="dropdown"
+											aria-haspopup="true"
+											aria-expanded="false">
+											<i class="fa fa-fw fa-clock-o"></i>
+										</button>
+
+										<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu4">
+											<li class="dropdown-header">Congelar TC?</li>
+											<li role="separator" class="divider"></li>
+											<li>
+												<form action="{{ url('congelar_tc') }}" method="post">
+													{{ csrf_field() }}
+													<input type="hidden" name="id" value="{{$balance->ID}}">
+													<button type="submit" class="btn btn-danger btn-block">Si, seguro!</button>
+												</form>
+
+											</li>
+										</ul>
+									</div>
+									@endif
+									@php $colorLabel = $balance->Day > $hoy ? 'success' : 'default' @endphp
+										<em>
 			                <small
-												class="label label-default">
+												class="label label-{{$colorLabel}}">
 												{{ str_replace('-', '', $balance->code) }}
 											</small>
 

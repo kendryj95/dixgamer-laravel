@@ -403,6 +403,56 @@ class StockController extends Controller
 
     }
 
+    public function storeCodeGVCC(Request $request)
+    {
+
+        foreach ($request->codes as $codes){
+
+            $locate = DB::table('stock')->where('code',$codes)->first();
+
+
+            if(!empty($locate)){
+                return redirect()->back()->withInput()->withErrors('El código '. $codes . ' Esta duplicado o ya se encuentra en la Base de datos, por favor verifique e intente de nuevo.');
+            } else {
+
+            }
+        }
+
+      try {
+
+        $stocks = [];
+        $costos = $request->costo;
+        $costos_usd = $request->costo_usd;
+        
+        $stockArr['medio_pago'] = $request->medio_pago;
+        $stockArr['n_order'] = $request->n_order;
+        $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
+        $stockArr['code_prov'] = 'P2';
+
+        foreach ($request->codes as $i => $code) {
+          $stockArr['titulo'] = "gift-card-$costos_usd[$i]-usd";
+          $stockArr['consola'] = "ps";
+          $stockArr['costo_usd'] = $costos_usd[$i];
+          $stockArr['costo'] = $costos[$i];
+          $stockArr['code'] = $code;
+          array_push($stocks,$stockArr);
+        }
+
+        $saving = $this->st->storeCodes($stocks);
+
+        // Mensaje de notificacion
+        \Helper::messageFlash('Stock','Código G guardado');
+        return redirect('stock');
+
+      } catch (\Exception $e) {
+          return $e;
+        //return redirect()->back()->withInput()->withErrors(['Intentelo nuevamente final']);
+      }
+
+
+
+    }
+
     public function storeCodep3(Request $request)
     {
         // Mensajes de alerta

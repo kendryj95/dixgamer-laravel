@@ -83,7 +83,7 @@
                             @endif
                         </td>
                         <td style="vertical-align: middle;">
-                            <span class="label label-{{\Helper::userColor($value->usuario)}}" title="{{ $value->usuario }}"><strong>{{strtoupper(substr($value->usuario,0,1))}}</strong></span>
+                            <span class="label label-{{$value->color_user}}" title="{{ $value->usuario }}"><strong>{{strtoupper(substr($value->usuario,0,1))}}</strong></span>
                         </td>
                     </tr>
                     @endforeach

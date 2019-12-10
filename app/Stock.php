@@ -361,7 +361,8 @@ class Stock extends Model
             'consola',
             DB::raw("GROUP_CONCAT(cuentas_id) AS cuentas"),
             DB::raw("GROUP_CONCAT(ID) AS stocks_id"),
-            'usuario'
+            'usuario',
+            DB::raw("(SELECT color FROM usuarios WHERE Nombre = REPLACE(stock.usuario,'-GC','')) AS color_user")
         )
         ->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)
         ->where(DB::raw('DATE(Day)'),'<=',$fecha_fin)

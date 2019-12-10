@@ -363,7 +363,7 @@
 
                 <p>
                   <span
-                    class="badge badge-<?php echo $color;?> pull-right"
+                    class="badge badge-{{ $dataCustomer->color_user }} pull-right"
                     style="opacity:0.7; font-weight:400;"
                     title="<?php echo $dataCustomer->usuario; ?>">
                     <?php echo substr($dataCustomer->usuario, 0, 1); ?>

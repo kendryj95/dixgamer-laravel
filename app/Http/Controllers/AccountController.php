@@ -2397,4 +2397,26 @@ class AccountController extends Controller
       }
     }
 
+    public function congelarTC(Request $request) 
+    {
+      DB::beginTransaction();
+
+      try {
+        $fechaStock = DB::table('saldo')->where('ID',$request->id)->value('Day');
+        $new_fecha = strtotime('+2 days', strtotime($fechaStock));
+        $new_fecha = date('Y-m-d H:i:s', $new_fecha);
+
+        DB::table('saldo')->where('ID', $request->id)->update(['Day' => $new_fecha]);
+
+        DB::commit();
+
+        \Helper::messageFlash('Cuentas',"Se ha congelado satisfactoriamente.",'alert_cuenta');
+
+        return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Intentalo nuevamente.']);
+      }
+    }
+
 }

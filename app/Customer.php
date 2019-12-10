@@ -88,7 +88,7 @@ class Customer extends Model
                 "),'stock.cuentas_id','=','ctas_reseteadas.cuentas_id')
                 ->rightjoin(
                   DB::raw("
-                    (SELECT ventas.ID AS ID_ventas, ID_cobro, clientes_id, stock_id, slot, medio_venta, order_item_id, order_id_web, order_id_ml, medio_cobro, ref_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day, ventas.usuario as usuario, clientes.ID AS ID_clientes, apellido, nombre, email, mail.*
+                    (SELECT ventas.ID AS ID_ventas, ID_cobro, clientes_id, stock_id, slot, medio_venta, order_item_id, order_id_web, order_id_ml, medio_cobro, ref_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day, ventas.usuario as usuario, (SELECT color FROM usuarios WHERE Nombre = ventas.usuario) AS color_user, clientes.ID AS ID_clientes, apellido, nombre, email, mail.*
                     FROM ventas
                     LEFT JOIN (select GROUP_CONCAT(ID SEPARATOR ',') as ID_cobro, ventas_id, medio_cobro, GROUP_CONCAT(ref_cobro SEPARATOR ',') as ref_cobro, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro ON ventas.ID = ventas_cobro.ventas_id
                     LEFT JOIN
