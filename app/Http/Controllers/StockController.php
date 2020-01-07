@@ -779,4 +779,20 @@ ORDER BY libre DESC";
 
       echo json_encode($pedidos);
     }
+
+    public function updateTitleProductX($id_stock,$accion) 
+    {
+      $titulo_orig = DB::table('stock')->where('ID',$id_stock)->value('titulo');
+      if ($accion == 'agregar') {
+        $titulo_new = "xx-".$titulo_orig;
+      } else {
+        $titulo_new = str_replace("xx-","",$titulo_orig);
+      }
+
+      DB::table('stock')->where('ID',$id_stock)->update(["titulo" => $titulo_new]);
+
+      \Helper::messageFlash('Stock','Titulo del producto actualizado.');
+      return redirect()->back();
+      
+    }
 }

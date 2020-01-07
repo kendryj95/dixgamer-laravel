@@ -139,6 +139,8 @@ Route::group(['middleware' => ['login']], function()
   Route::get('publicaciones_secundarias_ml', 'StockController@publicacionesSecundariasML');
   Route::get('stocks_cargados', 'StockController@indexCargados');
   Route::get('pedidos_cargar/{user?}','StockController@pedidosCargar');
+  Route::get('update_product_x/{id_stock}/{accion}', 'StockController@updateTitleProductX');
+
 
   Route::get('saldos','BalanceController@listarSaldos');
 

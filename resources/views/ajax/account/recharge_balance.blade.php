@@ -50,7 +50,8 @@
                   "account_id" => $account_id,
                   "titulo" => $gift->titulo,
                   "consola" => $gift->consola,
-                  "costo_usd" => number_format($gift->costo_usd,0,"","")
+                  "costo_usd" => number_format($gift->costo_usd,0,"",""),
+                  "cantidad" => $gift->Q_Stock
                 ];
               } elseif (($gift->costo_usd) < 60) {
                 if ($bandera1 >= 2) { // Para 20+10 y 20+20
@@ -58,13 +59,15 @@
                     "account_id" => $account_id,
                     "titulo" => 'gift-card-30-usd-org',
                     "consola" => $gift->consola,
-                    "costo_usd" => 30
+                    "costo_usd" => 30,
+                    "cantidad" => ""
                   ];
                   $gifts_array[] = [
                     "account_id" => $account_id,
                     "titulo" => 'gift-card-35-usd-org',
                     "consola" => $gift->consola,
-                    "costo_usd" => 35
+                    "costo_usd" => 35,
+                    "cantidad" => ""
                   ];
                 }
                 if ($bandera2 >= 2) {
@@ -72,35 +75,40 @@
                     "account_id" => $account_id,
                     "titulo" => 'gift-card-40-usd-org',
                     "consola" => $gift->consola,
-                    "costo_usd" => 40
+                    "costo_usd" => 40,
+                    "cantidad" => ""
                   ];
 
                   $gifts_array[] = [
                     "account_id" => $account_id,
                     "titulo" => 'gift-card-45-usd-org',
                     "consola" => $gift->consola,
-                    "costo_usd" => 45
+                    "costo_usd" => 45,
+                    "cantidad" => ""
                   ];
                 }
                 $gifts_array[] = [
                     "account_id" => $account_id,
                     "titulo" => $gift->titulo,
                     "consola" => $gift->consola,
-                    "costo_usd" => number_format($gift->costo_usd,0,"","")
+                    "costo_usd" => number_format($gift->costo_usd,0,"",""),
+                    "cantidad" => $gift->Q_Stock
                 ];
                 if ($bandera3 == 2) {
                   $gifts_array[] = [
                     "account_id" => $account_id,
                     "titulo" => 'gift-card-55-usd-org',
                     "consola" => $gift->consola,
-                    "costo_usd" => 55
+                    "costo_usd" => 55,
+                    "cantidad" => ""
                   ];
 
                   $gifts_array[] = [
                       "account_id" => $account_id,
                       "titulo" => 'gift-card-60-usd-org',
                       "consola" => $gift->consola,
-                      "costo_usd" => 60
+                      "costo_usd" => 60,
+                      "cantidad" => ""
                   ];
                 }
               } else {
@@ -110,14 +118,16 @@
                       "account_id" => $account_id,
                       "titulo" => 'gift-card-60-usd-org',
                       "consola" => $gift->consola,
-                      "costo_usd" => 60
+                      "costo_usd" => 60,
+                      "cantidad" => ""
                   ];
                 }
                 $gifts_array[] = [
                     "account_id" => $account_id,
                     "titulo" => $gift->titulo,
                     "consola" => $gift->consola,
-                    "costo_usd" => number_format($gift->costo_usd,0,"","")
+                    "costo_usd" => number_format($gift->costo_usd,0,"",""),
+                    "cantidad" => $gift->Q_Stock
                 ];
               }
           @endphp
@@ -144,6 +154,10 @@
           <div class="thumbnail">
 
             <div style="height: 185px; border: 1px solid #ccc">
+              @if($gift['cantidad'] != "")
+              <label class="badge badge-danger pull-right" style="margin: 2px;">{{ $gift['cantidad'] }}</label>
+              @endif
+              
               <a
                 title="cargar saldo"
                 onclick="request(event)"

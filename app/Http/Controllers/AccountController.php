@@ -160,9 +160,9 @@ class AccountController extends Controller
     {
         $vendedor = strtolower(session()->get('usuario')->Nombre);
         $emailcuenta1 = substr($vendedor, 0, 2);
-        $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 15658;
-        $idcuenta = "dix" . $emailcuenta1 . $emailcuenta2;
-        $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@dixabc.com"; // cambio de abcdix.com a game24hs.com 2019-02-25
+        $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 36979;
+        $idcuenta = "dix" . $emailcuenta2 . $emailcuenta1;
+        $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@123dix.site"; // cambio de abcdix.com a game24hs.com 2019-02-25
 
 
         return view('account.create', compact('idcuenta', 'emailcuenta'));
@@ -378,7 +378,6 @@ class AccountController extends Controller
                 'maxDayReset',
                 'accountBalances',
                 'hasBalance',
-                'paccount',
                 'lastAccountGames',
                 'lastGame',
                 'next',

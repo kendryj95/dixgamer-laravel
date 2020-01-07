@@ -807,6 +807,29 @@
 		
 					@endif
 
+					@php $texto_x = strpos($stock->titulo,"xx-") !== false ? "Quitar" : "Agregar" @endphp
+
+					<div class="dropdown text-left">
+						<button
+						  class="btn btn-link dropdown-toggle btn-xs"
+						  type="button" id="vender_secu_cli2"
+						  data-toggle="dropdown"
+						  aria-haspopup="true"
+						  aria-expanded="false">
+							{{ $texto_x }} doble x
+							{{-- <span class="caret"></span> --}}
+						</button>
+		
+						<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+						  <li class="dropdown-header">¿Estas seguro?</li>
+						  <li role="separator" class="divider"></li>
+						  <li>
+							<a href="{{ url('update_product_x', [$stock->ID_stock, strtolower($texto_x)]) }}" class="btn btn-danger">Sí, Seguro!</a>
+						  </li>
+						</ul>
+		
+					  </div>
+
           </div>
         </div>
 			@endforeach
