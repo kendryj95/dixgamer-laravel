@@ -127,6 +127,12 @@
 	      					<input type="date" name="fecha_referencia" id="fecha_referencia" class="form-control" value="{{ $configuraciones->fecha_referencia }}" >
 	      				</div>
 	      			</div>
+	      			<div class="col-md-3">
+	      				<div class="form-group">
+	      					<label style="margin-bottom: 25px" for="dias">Días Congelar TC</label>
+	      					<input type="number" name="dias" id="dias" class="form-control" value="{{ $configuraciones->dias_congelar_tc }}" >
+	      				</div>
+	      			</div>
 	      			<div class="col-md-12">
 	      				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i> Guardar</button>
 	      			</div>

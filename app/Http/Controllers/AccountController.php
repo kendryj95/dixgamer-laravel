@@ -2399,10 +2399,11 @@ class AccountController extends Controller
     public function congelarTC(Request $request) 
     {
       DB::beginTransaction();
+      $dias = DB::table('configuraciones')->where('ID',1)->value('dias_congelar_tc');
 
       try {
         $fechaStock = DB::table('saldo')->where('ID',$request->id)->value('Day');
-        $new_fecha = strtotime('+2 days', strtotime($fechaStock));
+        $new_fecha = strtotime("+$dias days", strtotime($fechaStock));
         $new_fecha = date('Y-m-d H:i:s', $new_fecha);
 
         DB::table('saldo')->where('ID', $request->id)->update(['Day' => $new_fecha]);
