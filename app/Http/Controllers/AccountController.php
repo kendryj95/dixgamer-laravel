@@ -1138,7 +1138,7 @@ class AccountController extends Controller
     public function createLastStock($id){
       $account = Account::where('ID',$id)->first();
 
-      if (!count($account) > 0)
+      if (!$account)
         return redirect('/cuentas')->withErrors('Intentelo nuevamente');
 
       // Ultimos stocks
