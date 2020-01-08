@@ -154,13 +154,18 @@
       if (precio != "" && comision != "") {
         if (medio_cobro.indexOf("Mercado") >= 0) {
           if (ref_cobro != "") {
-            if (isNum(ref_cobro)) {
+			  if (val2 != 'PayPal') {
+				if (isNum(ref_cobro)) {
 
-              $('#form1').submit();
-            } else {
-              $('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
-              $btn.prop('disabled', false);
-            }
+					$('#form1').submit();
+				} else {
+					$('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
+					$btn.prop('disabled', false);
+				}
+			  } else {
+				$('#form1').submit();
+			  }
+
           } else {
             $('#alert-ventasInsert').html('<p>Ref. de cobro es obligatorio para MercadoPago.</p>').fadeIn();
             $btn.prop('disabled', false);
