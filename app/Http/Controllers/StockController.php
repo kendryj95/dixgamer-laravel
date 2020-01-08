@@ -782,17 +782,38 @@ ORDER BY libre DESC";
 
     public function updateTitleProductX($id_stock,$accion) 
     {
-      $titulo_orig = DB::table('stock')->where('ID',$id_stock)->value('titulo');
+      $stock = DB::table('stock')->where('ID',$id_stock)->first();
+      $nota = "";
       if ($accion == 'agregar') {
-        $titulo_new = "xx-".$titulo_orig;
+        $titulo_new = "xx-".$stock->titulo;
+        $nota = "Agregada doble x - juego {$stock->titulo} no cargado";
       } else {
-        $titulo_new = str_replace("xx-","",$titulo_orig);
+        $titulo_new = str_replace("xx-","",$stock->titulo);
+        $nota = "Quitada doble x - juego {$stock->titulo} cargado";
       }
 
-      DB::table('stock')->where('ID',$id_stock)->update(["titulo" => $titulo_new]);
+      DB::beginTransaction();
 
-      \Helper::messageFlash('Stock','Titulo del producto actualizado.');
-      return redirect()->back();
+      try {
+        DB::table('stock')->where('ID',$id_stock)->update(["titulo" => $titulo_new]);
+
+        $data = [];
+        $data['cuentas_id'] = $stock->cuentas_id;
+        $data['Notas'] = $nota;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('cuentas_notas')->insert($data);
+
+        DB::commit();
+
+        \Helper::messageFlash('Stock','Proceso doble x satisfactorio.');
+        return redirect()->back();
+        
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso de insercion. Por favor vuelve a intentarlo']);
+      }
       
     }
 }
