@@ -140,6 +140,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('stocks_cargados', 'StockController@indexCargados');
   Route::get('pedidos_cargar/{user?}','StockController@pedidosCargar');
   Route::get('update_product_x/{id_stock}/{accion}', 'StockController@updateTitleProductX');
+  Route::get('delete_product/{id_stock}', 'StockController@deleteProduct');
 
 
   Route::get('saldos','BalanceController@listarSaldos');

@@ -116,7 +116,7 @@ class Account extends Model
 
 
     // cuentas con saldo, pasando el parametro de consola a buscar
-    public function ScopeAccountAmounts($query, $console, $order = null){
+    public function ScopeAccountAmounts($query, $console, $order = null, $range){
       $query = DB::table(DB::raw("(SELECT cuentas_id as sa_cta_id, SUM(costo_usd) as sa_costo_usd,
                                 SUM(costo) as sa_costo
                                 FROM saldo GROUP BY cuentas_id) as saldo"))
@@ -141,9 +141,12 @@ class Account extends Model
                     $join->on('t_cuentas.cuentas_id','=','saldo.sa_cta_id');
                   })
                   ->whereRaw("(sa_costo_usd - COALESCE(st_costo_usd,0)) != 0.00")
-                  ->where(function ($query) use ($console) {
+                  ->where(function ($query) use ($console, $range) {
                       if (!empty($console)) {
                         $query->where('consola', 'like', '%'.$console.'%');
+                      }
+                      if ($range->saldoMin != null && $range->saldoMax != null) {
+                        $query->whereRaw("(sa_costo_usd - COALESCE(st_costo_usd,0)) BETWEEN {$range->saldoMin} AND {$range->saldoMax}");
                       }
                     });
       

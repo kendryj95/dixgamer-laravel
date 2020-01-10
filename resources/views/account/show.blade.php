@@ -317,7 +317,7 @@
 
 								@foreach($accountBalances as $balance)
 									@if(!empty($balance->costo_usd))
-										@if(Helper::validateAdministrator(session()->get('usuario')->Level) && $balance->code != NULL)
+										@if((Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::validateAdministrator(session()->get('usuario')->Nombre == "Leo") && $balance->code != NULL)
 											<div class="dropdown" style="display:inline;">
 												<button
 													class="btn btn-default dropdown-toggle btn-xs"
@@ -829,6 +829,31 @@
 						</ul>
 		
 					  </div>
+					
+				@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+					  
+				  <div class="dropdown text-left">
+						<button
+						  class="btn btn-link dropdown-toggle btn-xs"
+						  type="button" id="vender_secu_cli2"
+						  data-toggle="dropdown"
+						  aria-haspopup="true"
+						  aria-expanded="false">
+							Eliminar juego
+							{{-- <span class="caret"></span> --}}
+						</button>
+		
+						<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+						  <li class="dropdown-header">¿Estas seguro?</li>
+						  <li role="separator" class="divider"></li>
+						  <li>
+							<a href="{{ url('delete_product', $stock->ID_stock) }}" class="btn btn-danger">Sí, Seguro!</a>
+						  </li>
+						</ul>
+		
+				</div>
+
+				@endif
 
           </div>
         </div>

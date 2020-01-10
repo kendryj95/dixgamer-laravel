@@ -65,13 +65,19 @@ class AccountController extends Controller
 
     public function accountAmount(Request $request)
     {
+      // cuentas con filtro
+      $range = new \stdClass;
+      $range->saldoMin = $request->saldoMin;
+      $range->saldoMax = $request->saldoMax;
+
       $orderBy = isset($request->order) ? $request->order : null;
       // Traer la lista de cuentas
-      $accounts = Account::accountAmounts($request->console, $orderBy)->paginate(50);
+      $accounts = Account::accountAmounts($request->console, $orderBy, $range)->paginate(50);
 
       return view('account.index_amount',
                   compact(
-                    'accounts'
+                    'accounts',
+                    'range'
                   ));
     }
 

@@ -816,4 +816,31 @@ ORDER BY libre DESC";
       }
       
     }
+
+    public function deleteProduct($id_stock) {
+      $stock = DB::table("stock")->where("ID",$id_stock)->first();
+      $nota = "Producto ".str_replace("-"," ",$stock->titulo)." eliminado.";
+
+      DB::beginTransaction();
+
+      try {
+        DB::table("stock")->where("ID",$id_stock)->delete();
+
+        $data = [];
+        $data['cuentas_id'] = $stock->cuentas_id;
+        $data['Notas'] = $nota;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('cuentas_notas')->insert($data);
+
+        DB::commit();
+
+        \Helper::messageFlash('Stock',$nota);
+        return redirect()->back();
+      } catch (Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso de insercion. Por favor vuelve a intentarlo']);
+      }
+    }
 }

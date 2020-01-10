@@ -130,7 +130,7 @@
 	      			<div class="col-md-3">
 	      				<div class="form-group">
 	      					<label style="margin-bottom: 25px" for="dias">Días Congelar TC</label>
-	      					<input type="number" name="dias" id="dias" class="form-control" value="{{ $configuraciones->dias_congelar_tc }}" >
+	      					<input type="number" name="dias_congelar_tc" id="dias" class="form-control" value="{{ $configuraciones->dias_congelar_tc }}" >
 	      				</div>
 	      			</div>
 	      			<div class="col-md-12">

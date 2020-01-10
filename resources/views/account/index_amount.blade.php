@@ -32,6 +32,16 @@
         </select>
       </div>
     </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <input style="margin-top: 5px" type="number" name="min" id="min" onchange="filtroRange()" value="{{$range->saldoMin}}" placeholder="Saldo USD Min" class="form-control input-sm">
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <input style="margin-top: 5px" type="number" name="max" id="max" onchange="filtroRange()" value="{{$range->saldoMax}}" placeholder="Saldo USD Max" class="form-control input-sm">
+      </div>
+    </div>
   </div>
 
   <div class="table-responsive">
@@ -126,9 +136,28 @@
       queryParams += "?consola={{ $_GET['console'] }}";
     @endif
 
+    var min = $("#min").val();
+    var max = $("#max").val();
+    var queryRange = "";
+
     queryParams += queryParams != '' ? "&order="+orderBy : "?order="+orderBy;
 
+    if(min != "" && max != "") {
+      queryParams += "&saldoMin="+min+"&saldoMax="+max;
+    }
+
     window.location.href = "{{  url('cuentas_con_saldo') }}"+queryParams;
+  }
+
+  function filtroRange() {
+    var min = $("#min").val();
+    var max = $("#max").val();
+
+    if(min != "" && max != "") {
+      var urlParams = new URLSearchParams(window.location.search);
+      var queryString = urlParams.toString();
+      window.location.href = "?"+queryString+"&saldoMin="+min+"&saldoMax="+max;
+    }
   }
 </script>
 
