@@ -133,6 +133,12 @@
 	      					<input type="number" name="dias_congelar_tc" id="dias" class="form-control" value="{{ $configuraciones->dias_congelar_tc }}" >
 	      				</div>
 	      			</div>
+	      			<div class="col-md-3">
+	      				<div class="form-group">
+	      					<label style="margin-bottom: 25px" for="dias_modo_continuo">Días Modo Continuo</label>
+	      					<input type="number" name="dias_modo_continuo" id="dias_modo_continuo" class="form-control" value="{{ $configuraciones->dias_modo_continuo }}" >
+	      				</div>
+	      			</div>
 	      			<div class="col-md-12">
 	      				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i> Guardar</button>
 	      			</div>

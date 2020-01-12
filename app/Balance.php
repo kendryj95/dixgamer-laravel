@@ -62,7 +62,9 @@ class Balance extends Model
 
         $query = "";
 		//$nombre = session()->get('usuario')->Nombre;
-		$nombre= session()->get('usuario')->Nombre;
+    $nombre= session()->get('usuario')->Nombre;
+    $dias_modo = DB::table('configuraciones')->where('ID',1)->value('dias_modo_continuo');
+    $hours = 24 * $dias_modo;
 
         if (session()->get('usuario')->modo_continuo == 0) {
           $query = "SELECT ID AS ID_stk, titulo, consola, FORMAT(costo_usd,2) AS costo_usd, costo, COUNT(*) AS Q_Stock
@@ -72,7 +74,7 @@ class Balance extends Model
               AND costo_usd < 10
               GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))
 			  ) as agrupado
-          WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
+          WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND NOW() <= DATE_ADD(Day, INTERVAL $hours HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
           GROUP BY titulo
           ORDER BY titulo ASC, ID ASC";
         } else {
@@ -83,7 +85,7 @@ class Balance extends Model
               AND costo_usd < 10
               GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))
               ORDER BY ID ASC) as agrupado
-          WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND usuario != '$nombre' AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
+          WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND usuario != '$nombre' AND NOW() <= DATE_ADD(Day, INTERVAL $hours HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
           GROUP BY titulo
           ORDER BY titulo ASC, ID ASC";
         }
