@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Stock extends Model
+class Stock_Backup extends Model
 {
     protected $table = 'stock';
 

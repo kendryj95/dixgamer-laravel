@@ -40,6 +40,8 @@ class StockController extends Controller
           $columns = ['ID','titulo','consola','cuentas_id','Day'];
         }
         $stocks = Stock::stockList($obj)->paginate(50);
+        // $stocks = $this->st->stockListIndex($obj);
+
         return view('stock.index',compact(
           'stocks',
           'columns'

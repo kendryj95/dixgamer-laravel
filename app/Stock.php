@@ -245,7 +245,7 @@ class Stock extends Model
 
     public function ScopeStockList($query,$obj){
         if (!empty($obj->column) && !empty($obj->word)) {
-            $query->where($obj->column,$obj->word);
+            $query->where($obj->column,"like",$obj->word."%");
         }
         // Validamos que sea administrador o analitico
         if (!\Helper::validateAdminAnalyst(session()->get('usuario')->Level)) {
