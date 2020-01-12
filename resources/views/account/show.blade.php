@@ -317,7 +317,7 @@
 
 								@foreach($accountBalances as $balance)
 									@if(!empty($balance->costo_usd))
-										@if((Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::validateAdministrator(session()->get('usuario')->Nombre == "Leo") && $balance->code != NULL)
+										@if((Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::validateAdministrator(session()->get('usuario')->Nombre == "Leo")) && $balance->code != NULL)
 											<div class="dropdown" style="display:inline;">
 												<button
 													class="btn btn-default dropdown-toggle btn-xs"

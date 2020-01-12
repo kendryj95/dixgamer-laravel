@@ -24,7 +24,7 @@
     </div>
     <div class="col-md-2">
       <div class="form-group">
-        <select style="margin-top: 5px" onchange="filtrar(this.value)" class="form-control input-sm">
+        <select style="margin-top: 5px" onchange="filtrar(this.value)" id="orderBy" class="form-control input-sm">
           <option value="monto" @if(isset($_GET['order']) && $_GET['order'] == 'monto') selected @endif>Ordenar Monto Libre</option>
           <option value="cuenta" @if(isset($_GET['order']) && $_GET['order'] == 'cuenta') selected @endif>Ordenar ID Cuenta</option>
           <option value="monto-cuenta" @if(isset($_GET['order']) && $_GET['order'] == 'monto-cuenta') selected @endif>Ordenar Monto-Cuenta</option>
@@ -34,12 +34,12 @@
     </div>
     <div class="col-md-2">
       <div class="form-group">
-        <input style="margin-top: 5px" type="number" name="min" id="min" onchange="filtroRange()" value="{{$range->saldoMin}}" placeholder="Saldo USD Min" class="form-control input-sm">
+        <input style="margin-top: 5px" type="number" name="min" id="min" onchange="filtrar()" value="{{$range->saldoMin}}" placeholder="Saldo USD Min" class="form-control input-sm">
       </div>
     </div>
     <div class="col-md-2">
       <div class="form-group">
-        <input style="margin-top: 5px" type="number" name="max" id="max" onchange="filtroRange()" value="{{$range->saldoMax}}" placeholder="Saldo USD Max" class="form-control input-sm">
+        <input style="margin-top: 5px" type="number" name="max" id="max" onchange="filtrar()" value="{{$range->saldoMax}}" placeholder="Saldo USD Max" class="form-control input-sm">
       </div>
     </div>
   </div>
@@ -130,34 +130,33 @@
 @parent
 
 <script>
-  function filtrar(orderBy) {
-    var queryParams = '';
+  function filtrar() {
+    var params = {};
+    var min = $("#min").val();
+    var max = $("#max").val();
+    var orderBy = $('#orderBy').val();
+
     @if(isset($_GET['console']))
-      queryParams += "?consola={{ $_GET['console'] }}";
+      params.consola = "{{ $_GET['console'] }}";
     @endif
 
-    var min = $("#min").val();
-    var max = $("#max").val();
-    var queryRange = "";
-
-    queryParams += queryParams != '' ? "&order="+orderBy : "?order="+orderBy;
-
+    if (orderBy != '') {
+      params.order = orderBy;
+    }
     if(min != "" && max != "") {
-      queryParams += "&saldoMin="+min+"&saldoMax="+max;
+      params.saldoMin = min;
+      params.saldoMax = max;
+    } else {
+      if (min != '') {
+        return;
+      } else if (max != '') {
+        return;
+      }
     }
 
-    window.location.href = "{{  url('cuentas_con_saldo') }}"+queryParams;
-  }
+    var queryString = "?"+Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
-  function filtroRange() {
-    var min = $("#min").val();
-    var max = $("#max").val();
-
-    if(min != "" && max != "") {
-      var urlParams = new URLSearchParams(window.location.search);
-      var queryString = urlParams.toString();
-      window.location.href = "?"+queryString+"&saldoMin="+min+"&saldoMax="+max;
-    }
+    window.location.href = "{{  url('cuentas_con_saldo') }}"+queryString;
   }
 </script>
 
