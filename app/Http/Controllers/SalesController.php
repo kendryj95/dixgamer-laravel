@@ -198,8 +198,8 @@ class SalesController extends Controller
                                 FROM cbgw_postmeta 
                                 WHERE meta_key='_payment_method' AND post_id=p.ID) AS _payment_method"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_Mercado_Pago_Payment_IDs' AND post_id=p.ID LIMIT 1) AS ref_cobro"),
-                              DB::raw("(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(meta_value, 'payment_id=', -1),'&',1) FROM cbgw_postmeta WHERE meta_key='_transaction_details_ticket' AND post_id=p.ID) AS ref_cobro_2"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id=p.ID) AS ref_cobro_3"),
+                              DB::raw("(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(meta_value, 'payment_id=', -1),'&',1) FROM cbgw_postmeta WHERE meta_key='_transaction_details_ticket' AND post_id=p.ID LIMIT 1) AS ref_cobro_2"),
+                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id=p.ID LIMIT 1) AS ref_cobro_3"),
                               DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=wco.order_item_id) AS _qty"),
                               DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_line_total' AND order_item_id=wco.order_item_id) AS precio"),
                               DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=wco.order_item_id) AS slot"),
