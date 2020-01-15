@@ -2425,4 +2425,11 @@ class AccountController extends Controller
       }
     }
 
+    public function conTCSinJuego()
+    {
+      $cuentas = Balance::conTcSinJuego()->get();
+
+      return view('account.tc_sin_juego', compact('cuentas'));
+    }
+
 }

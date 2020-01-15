@@ -169,6 +169,15 @@ class Balance extends Model
       ->having('code_subs',$code_gift);
     }
 
+    public function ScopeConTcSinJuego($query)
+    {
+      $query->select('saldo.ID', 'saldo.cuentas_id', 'saldo.Day', 'stock.ID AS stock_id')
+      ->leftjoin('stock','saldo.cuentas_id','=','stock.cuentas_id')
+      ->whereNull('stock.cuentas_id')
+      ->where('saldo.costo_usd','<',10)
+      ->orderBy('saldo.ID','DESC');
+    }
+
 
 
 
