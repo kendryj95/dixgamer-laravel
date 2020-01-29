@@ -37,7 +37,9 @@
 		                    <option value="MP - Banco" data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco</option>
 		                    <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
 		                    <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
-		                    <option value="Banco" data-content="<span class='label label-info'>Banco</span>">Banco</option>
+							<option value="Banco" data-content="<span class='label label-info'>Banco</span>">Banco</option>
+							
+		                    <option value="PayPal" data-content="<span class='label label-secondary'>PayPal</span>">PayPal</option>
 	                    @else
 		                    <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
 		                    <option value="MP - Banco" data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco</option>
@@ -152,9 +154,23 @@
       $('#alert-ventasInsert').fadeOut();
 
       if (precio != "" && comision != "") {
-        if (medio_cobro.indexOf("Mercado") >= 0) {
+        if (medio_cobro.indexOf("MP") >= 0) {
           if (ref_cobro != "") {
-			  if (val2 != 'PayPal') {
+			if (isNum(ref_cobro)) {
+				$('#form1').submit();
+				} else {
+				$('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
+				$btn.prop('disabled', false);
+			}
+          } else {
+            $('#alert-ventasInsert').html('<p>Ref. de cobro es obligatorio para MercadoPago.</p>').fadeIn();
+            $btn.prop('disabled', false);
+          }
+        } else {
+          if (ref_cobro != "") {
+			  console.log(medio_cobro);
+			  
+            if (medio_cobro != 'PayPal') {
 				if (isNum(ref_cobro)) {
 
 					$('#form1').submit();
@@ -162,23 +178,9 @@
 					$('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
 					$btn.prop('disabled', false);
 				}
-			  } else {
+			} else {
 				$('#form1').submit();
-			  }
-
-          } else {
-            $('#alert-ventasInsert').html('<p>Ref. de cobro es obligatorio para MercadoPago.</p>').fadeIn();
-            $btn.prop('disabled', false);
-          }
-        } else {
-          if (ref_cobro != "") {
-            if (isNum(ref_cobro)) {
-
-              $('#form1').submit();
-            } else {
-              $('#alert-ventasInsert').html('<p>Ref. de cobro no es valido.</p>').fadeIn();
-              $btn.prop('disabled', false);
-            }
+			}
           } else {
             $('#form1').submit();
           }

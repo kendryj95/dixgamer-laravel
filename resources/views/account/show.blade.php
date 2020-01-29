@@ -107,12 +107,35 @@
 
             		@if($operador_reset)
 
-	            	<a
-	            	href="{{ url('nota_siguejugandopri', $account->ID) }}"
-	            	class="btn btn-primary btn-xs pull-right"
-	            	>
-	            		<b><i class="fa fa-fw fa-gamepad"></i> Pri Sigue jugando</b>
-	            	</a>
+					<div class="dropdown pull-right">
+						<button
+						  class="btn btn-primary dropdown-toggle btn-xs"
+						  type="button" id="dropdownMenu1"
+						  data-toggle="dropdown"
+						  aria-haspopup="true"
+						  aria-expanded="false">
+						  <i class="fa fa-fw fa-gamepad"></i>
+							Pri Sigue jugando
+						</button>
+  
+						<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+						  <li class="dropdown-header">¿Seguro deseas</li>
+						  <li class="dropdown-header">Ejecutarlo?</li>
+						  <li role="separator" class="divider"></li>
+						  <li>
+											  
+							<a
+							href="{{ url('nota_siguejugandopri', $account->ID) }}"
+								class="btn btn-danger"
+								  title="Primario Sigue jugando"
+								  id="pri_sigue_jugando"
+								  >
+								  Si, seguro!
+							  </a>
+						  </li>
+						</ul>
+  
+					  </div>
             		@endif
 
 
