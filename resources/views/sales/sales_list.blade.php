@@ -43,7 +43,9 @@
                                     @endif
                                 </td>
                                 <td>{{ date("d-M", strtotime($sales->ventas_Day)) }}</td>
-                                <td> {{ $sales->titulo }} </td>
+                                <td> 
+                                    {{ $sales->titulo }} @if($sales->slot == 'Secundario') <span class="label label-danger" style="opacity:0.5">2°</span> @endif
+                                </td>
                                 <td><span class="label label-default {{ $sales->consola }} ">{{ $sales->consola }}</span></td>
                                 <td><a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $sales->nombre }} {{ $sales->apellido }} </a></td>
                                 <td>{{ $sales->medio_venta }} </td>

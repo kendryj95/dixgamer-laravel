@@ -28,6 +28,7 @@ class SalesController extends Controller
         // $datos = $this->QueryIndex();
 
         $columns = Schema::getColumnListing('ventas');
+        array_push($columns, "titulo");
 
         return view('sales.sales_list')->with(['datos' => $datos, 'columns' => $columns]);
     }
