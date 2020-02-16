@@ -1125,7 +1125,7 @@
 					</div>
 					
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="reactivar-copy" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por favor ingresá a nuestra cuenta/usuario con el nombre {{ $account->name . " " . $account->surname }} una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:<br /><br />
+					<span id="reactivar-copy" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por favor ingresá a nuestra cuenta/usuario con el nombre <b>{{ $account->name . " " . $account->surname }}</b> una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:<br /><br />
 						1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar<br />
 						2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar<br />
 						3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.<br /><br />
