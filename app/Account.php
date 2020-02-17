@@ -33,7 +33,8 @@ class Account extends Model
             ->orderBy('cuentas.id','DESC');
     }
     
-    public function ScopeAccountStolen($query,$obj){
+    public function ScopeAccountStolen($query,$obj,$cuentas_excluidas){
+      $cuentas_excluidas = explode(",", $cuentas_excluidas);
       return DB::table('cuentas')
           ->select(
             'cuentas.ID AS id',
@@ -57,7 +58,12 @@ class Account extends Model
                   $query->where($obj->column,'like','%'.$obj->word.'%');
                 }
               })
-            ->orderBy('cuentas.id','DESC');
+            ->where(function ($query) use ($cuentas_excluidas) {
+                if (count($cuentas_excluidas) > 0) {
+                  $query->whereNotIn('cuentas.ID', $cuentas_excluidas);
+                }
+              })
+            ->orderBy('cuentas.ID','DESC');
     }
 
     public function ScopeCuentasNotas($query,$obj){

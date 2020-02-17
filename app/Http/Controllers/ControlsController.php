@@ -822,6 +822,20 @@ class ControlsController extends Controller
                 \Helper::messageFlash('Configuraciones','Productos excluidos registrados.');
                 return redirect()->back();
                 break;
+            case 5: // Cuentas Robadas Excluidas
+                $data = [];
+                $cuentas_excluidas = explode(",",$request->cuentas_excluidas);
+
+                $cuentas_excluidas = array_map(function($ele) {
+                    return trim($ele);
+                }, $cuentas_excluidas);
+
+                $data['cuentas_robadas_excluidas'] = implode(",",$cuentas_excluidas);
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Cuentas robadas excluidas satisfactoriamente.');
+                return redirect()->back();
+                break;
         }
     }
 

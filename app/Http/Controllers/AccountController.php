@@ -166,9 +166,9 @@ class AccountController extends Controller
     {
         $vendedor = strtolower(session()->get('usuario')->Nombre);
         $emailcuenta1 = substr($vendedor, 0, 2);
-        $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 36979;
+        $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 38917;
         $idcuenta = "dix" . $emailcuenta2 . $emailcuenta1;
-        $emailcuenta = $emailcuenta1 . "." . $emailcuenta2 . "@123dix.site"; // cambio de abcdix.com a game24hs.com 2019-02-25
+        $emailcuenta = "cuenta." . $emailcuenta1 . "." . $emailcuenta2 . "@abcdix.com"; ///// 15-02-2020 camio a abcdix de nuevo // 14-02-2020 cambio a dix111.com // cambio de abcdix.com a game24hs.com 2019-02-25
 
 
         return view('account.create', compact('idcuenta', 'emailcuenta'));
@@ -2364,14 +2364,15 @@ class AccountController extends Controller
       $obj->column = $request->column;
       $obj->word = $request->word;
 
+      $cuentas_excluidas = DB::table('configuraciones')->where('ID',1)->value('cuentas_robadas_excluidas');
 
-      $accounts = Account::accountStolen($obj)->paginate(50);
-
+      $accounts = Account::accountStolen($obj, $cuentas_excluidas)->paginate(50);
 
       return view('account.index_stolen',
                   compact(
                     'accounts',
-                    'columns'
+                    'columns',
+                    'cuentas_excluidas'
                   ));
     }
 

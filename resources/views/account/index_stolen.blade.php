@@ -2,6 +2,14 @@
 
 @section('title', "Listar cuentas robadas")
 
+<style>
+
+.bootstrap-tagsinput {
+  width: 100%;
+}
+
+</style>
+
 @section('container')
 <div class="container">
   <h1>Listar cuentas robadas</h1>
@@ -13,7 +21,25 @@
 						@endforeach
 					</ul>
 				</div>
-	@endif
+  @endif
+  
+  <div class="row">
+    <form action="{{ url('config/general') }}" id="cuentas_excluidas" method="post">
+      <div class="col-md-8">
+          {{ csrf_field() }}
+          <input type="hidden" name="opt" value="5">
+          <div class="form-group">
+            <label for="">Cuentas Excluidas:</label><br>
+            <input type="text" name="cuentas_excluidas" value="{{$cuentas_excluidas}}" data-role="tagsinput">
+          </div>
+      </div>
+      <div class="col-md-4">
+        <button style="margin-top: 24px" type="submit" class="btn btn-primary">Actualizar Config</button>
+      </div>
+    </form>
+  </div>
+
+
   <!-- Filter -->
     <div class="row">
         @component('components/filters/column_word')
@@ -34,5 +60,24 @@
 
 
 </div><!--/.container-->
+
+@endsection
+
+@section('scripts')
+@parent
+
+<script>
+
+$(document).ready(function() {
+  
+  $("#cuentas_excluidas").keypress(function(e) {
+    if (e.which == 13) {
+        return false;
+    }
+  });
+  
+})
+
+</script>
 
 @endsection
