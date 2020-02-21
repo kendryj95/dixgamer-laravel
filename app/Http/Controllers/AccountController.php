@@ -52,6 +52,7 @@ class AccountController extends Controller
       $obj->column = $request->column;
       $obj->word = $request->word;
 
+      $dominios = DB::table('dominios')->get();
 
       $accounts = Account::accountGames($obj)->paginate(50);
 
@@ -59,7 +60,8 @@ class AccountController extends Controller
       return view('account.index',
                   compact(
                     'accounts',
-                    'columns'
+                    'columns',
+                    'dominios'
                   ));
     }
 
@@ -164,16 +166,39 @@ class AccountController extends Controller
      */
     public function create()
     {
+      $dominios = DB::table('dominios')->where('indicador_habilitado', 1)->get();
+
+      if (count($dominios) > 0) {
+        $nom_dominios = [];
+
+        foreach ($dominios as $value) {
+          $nom_dominios[] = $value->dominio;
+        }
+
+        $chars = "123456789";
+        $random = substr( str_shuffle( $chars ), 0, 1 );
+        $comienzo = ['qer','adf','zcv','wrt','sfg','xvb','ety','dgh','cbn'];
+        $comienzo = $comienzo[$random-1];
         $vendedor = strtolower(session()->get('usuario')->Nombre);
-        $emailcuenta1 = substr($vendedor, 0, 2);
-        $emailcuenta2 = (DB::table('cuentas')->max('ID')) - 38917;
-        $idcuenta = "dix" . $emailcuenta2 . $emailcuenta1;
-        $emailcuenta = "cuenta." . $emailcuenta1 . "." . $emailcuenta2 . "@abcdix.com"; ///// 15-02-2020 camio a abcdix de nuevo // 14-02-2020 cambio a dix111.com // cambio de abcdix.com a game24hs.com 2019-02-25
+        $vendedor = substr($vendedor, 0, 2);
+        $nro = (DB::table('cuentas')->max('ID')) - 38000;
+        // $chars = "1234";
+        // $random = substr( str_shuffle( $chars ), 0, 1 );
+        $count_dom = count($nom_dominios);
+        $random = rand(1, $count_dom);
+        // $dominio = ['dix111.com','dixabc.com','123dix.site','dix111.com'];
+        $dominio = $nom_dominios[$random-1];
+        $idcuenta = "dix" . $nro . $vendedor;
+        $emailcuenta = $comienzo . "." . $vendedor . $nro . "@" . $dominio;///// 17-02-2020 arranco con nuevo sistema mucho mas aleatorio 
+            // $emailcuenta = "cuenta." . $emailcuenta1 . "." . $emailcuenta2 . "@abcdix.com"; ///// 15-02-2020 camio a abcdix de nuevo // 14-02-2020 cambio a dix111.com // cambio de abcdix.com a game24hs.com 2019-02-25
 
 
         return view('account.create', compact('idcuenta', 'emailcuenta'));
+      } else {
+        return redirect()->back()->withErrors(["No hay dominios disponibles para crear una cuenta"]);
+      }
+      
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -2431,6 +2456,17 @@ class AccountController extends Controller
       $cuentas = Balance::conTcSinJuego()->get();
 
       return view('account.tc_sin_juego', compact('cuentas'));
+    }
+
+    public function dominios(Request $request)
+    {
+      $data['indicador_habilitado'] = $request->indicador_habilitado;
+
+      DB::table('dominios')->where('ID', $request->ID)->update($data);
+
+      \Helper::messageFlash('Cuentas',"Estado del dominio actualizado.",'alert_cuenta');
+
+      return redirect()->back();
     }
 
 }
