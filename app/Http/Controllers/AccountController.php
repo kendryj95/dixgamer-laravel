@@ -52,7 +52,7 @@ class AccountController extends Controller
       $obj->column = $request->column;
       $obj->word = $request->word;
 
-      $dominios = DB::table('dominios')->get();
+      $dominios = Account::dominiosByUser()->get();
 
       $accounts = Account::accountGames($obj)->paginate(50);
 
@@ -2458,11 +2458,24 @@ class AccountController extends Controller
       return view('account.tc_sin_juego', compact('cuentas'));
     }
 
-    public function dominios(Request $request)
+    public function dominiosByUser(Request $request)
     {
-      $data['indicador_habilitado'] = $request->indicador_habilitado;
+      $usuario = session()->get('usuario')->Nombre;
+      $testData = DB::table('dominios_usuarios')->where('id_dominio', $request->ID)->where('usuario', $usuario)->first();
 
-      DB::table('dominios')->where('ID', $request->ID)->update($data);
+      $data['indicador_habilitado'] = $request->indicador_habilitado;
+      $data['update_at'] = date('Y-m-d H:i:s');
+
+      if ($testData) {
+        DB::table('dominios_usuarios')->where('ID', $testData->ID)->update($data);
+      } else {
+        $data['create_at'] = date('Y-m-d H:i:s');
+        $data['id_dominio'] = $request->ID;
+        $data['usuario'] = $usuario;
+
+        DB::table('dominios_usuarios')->insert($data);
+      }
+
 
       \Helper::messageFlash('Cuentas',"Estado del dominio actualizado.",'alert_cuenta');
 

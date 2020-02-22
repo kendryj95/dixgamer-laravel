@@ -349,5 +349,21 @@ class Account extends Model
 
     }
 
+    public function ScopeDominiosByUser($query)
+    {
+      $usuario = session()->get('usuario')->Nombre;
+
+      return DB::table('dominios AS d')->select(
+        'd.ID',
+        'd.dominio',
+        DB::raw("IFNULL(du.indicador_habilitado, 1) AS indicador_habilitado"),
+        DB::raw("IFNULL(du.update_at, d.create_at) AS update_at")
+      )
+      ->leftjoin(
+        DB::raw("(SELECT du.* FROM dominios_usuarios du INNER JOIN dominios d2 ON d2.ID = du.id_dominio WHERE du.usuario = '$usuario') AS du"),
+        "d.ID","=","du.id_dominio"
+      );
+    }
+
 
 }
