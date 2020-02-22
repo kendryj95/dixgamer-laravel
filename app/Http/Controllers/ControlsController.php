@@ -749,6 +749,8 @@ class ControlsController extends Controller
         ->orderBy(DB::raw("consola, titulo"))
         ->get();
 
+        $dominios = DB::table('dominios')->get();
+
         $cantidadStock = count($cantidadStock);
         $configuraciones = DB::table('configuraciones')->where('ID',1)->first();
         $titles = $this->wp_p->lastGameStockTitles();
@@ -763,7 +765,7 @@ class ControlsController extends Controller
         }
 
 
-        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos'));
+        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios'));
     }
 
     public function configGeneralStore(Request $request)
@@ -835,6 +837,36 @@ class ControlsController extends Controller
                 DB::table('configuraciones')->where('ID', 1)->update($data);
                 \Helper::messageFlash('Configuraciones','Cuentas robadas excluidas satisfactoriamente.');
                 return redirect()->back();
+                break;
+            case 6:
+
+                if ($request->dominio != "" && $request->accion == 'create-edit') {
+                    $data['dominio'] = $request->dominio;
+                    $data['create_at'] = date('Y-m-d H:i:s');
+                    $data['update_at'] = date('Y-m-d H:i:s');
+                    $data['usuario'] = session()->get('usuario')->Nombre;
+    
+                    $accion = '';
+    
+                    if ($request->id_dominio != 0) {
+                        $accion = 'editado';
+                        DB::table('dominios')->where('ID',$request->id_dominio)->update($data);
+                    } else {
+                        $accion = 'creado';
+                        DB::table('dominios')->insert($data);
+                    }
+                    
+                    \Helper::messageFlash('Configuraciones',"Dominio $accion satisfactoriamente.");
+                    return redirect()->back();
+                } elseif ($request->accion == 'delete') {
+                    DB::table('dominios')->where('ID',$request->id_dominio)->delete();
+                    \Helper::messageFlash('Configuraciones',"Dominio eliminado satisfactoriamente.");
+                }
+
+                return redirect()->back()->withErrors(["El dominio no puede ser vacío"]);
+                
+
+                
                 break;
         }
     }

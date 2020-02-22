@@ -23,6 +23,7 @@
 	        <li role="presentation"><a  data-toggle="tab" href="#menu4">Procesos Automaticos</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu5">Parametros</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu6">Productos Excluidos</a></li>
+	        <li role="presentation"><a  data-toggle="tab" href="#menu7">Dominios para Ctas</a></li>
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
@@ -148,7 +149,7 @@
 	      <div class="tab-pane fade" id="menu6" role="tabpanel">
 	      	<div class="row">
 	      		<div class="col-md-12">
-	      			<form action="{{ url('config/general') }}" id="cuentas_excluidas" method="post">
+	      			<form action="{{ url('config/general') }}" id="productos_excluidas" method="post">
 	      				{{ csrf_field() }}
 	      				<input type="hidden" name="opt" value="4">
 	      				<div class="form-group">
@@ -167,6 +168,52 @@
 				            </select>
 	      				</div>
 	      				<button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+	      			</form>
+	      		</div>
+	      	</div>
+	      </div>
+	      <div class="tab-pane fade" id="menu7" role="tabpanel">
+	      	<div class="row">
+	      		<div class="col-md-12">
+	      			<form action="{{ url('config/general') }}" id="form_dominios" method="post">
+	      				{{ csrf_field() }}
+						  <input type="hidden" name="opt" value="6">
+						  <input type="hidden" id="id_dominio" name="id_dominio">
+						  <input type="hidden" id="dominio" name="dominio">
+						  <input type="hidden" name="accion" id="accion_dom" value="create-edit">
+	      				
+	      				<table class="table table-striped">
+							  <thead>
+								  <tr>
+									  <th>#</th>
+									  <th>Dominio</th>
+									  <th>Creado</th>
+									  <th></th>
+								  </tr>
+							  </thead>
+							  <tbody>
+								  <tr>
+									  <td></td>
+									  <td colspan="2">
+										  <input type="text" id="dom0" data-id="0" placeholder="Escriba el nuevo dominio" class="form-control input-sm">
+									  </td>
+									  <td class="text-center">
+										<button type="button" class="btn btn-primary btn-sm" onclick="guardarDominio('0')"><i class="fa fa-save"></i></button>
+									  </td>
+								  </tr>
+								  @foreach($dominios as $dominio)
+								  <tr>
+								  	  <td> {{ $dominio->ID }} </td>
+									  <td> <input style="background: transparent; border: none" type="text" data-id="{{ $dominio->ID }}" id="dom{{$dominio->ID}}" value="{{ $dominio->dominio }}" class="form-control"> </td>
+									  <td> {{ date('d/m/Y H:i:s', strtotime($dominio->update_at)) }} </td>
+									  <td class="text-center">
+										  <button type="button" class="btn btn-success btn-sm" onclick="guardarDominio({{ $dominio->ID }})" title="Editar Dominio"><i class="fa fa-pencil"></i></button> 
+										  <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDominio({{ $dominio->ID }})"><i class="fa fa-trash"></i></button>
+									  </td>
+								  </tr>
+								  @endforeach
+							  </tbody>
+						  </table>
 	      			</form>
 	      		</div>
 	      	</div>
@@ -207,6 +254,28 @@
         	$('.select2-container').css('width', '100%');
         },300)
 	});
+
+	function guardarDominio(pos) {
+
+		var id_dominio = $("#dom"+pos).data('id');
+		var dominio = $("#dom"+pos).val();
+		
+		$('#id_dominio').val(id_dominio);
+		$('#dominio').val(dominio);
+
+		setTimeout(() => {
+			$('#form_dominios').submit();
+		}, 300);
+	}
+
+	function eliminarDominio(pos) {
+		$('#accion_dom').val('delete');
+		$('#id_dominio').val($('#dom'+pos).data('id'));
+
+		setTimeout(() => {
+			$('#form_dominios').submit();
+		}, 300);
+	}
 </script>
 
 @endsection
