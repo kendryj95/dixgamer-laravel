@@ -166,13 +166,15 @@ class AccountController extends Controller
      */
     public function create()
     {
-      $dominios = DB::table('dominios')->where('indicador_habilitado', 1)->get();
+      $dominios = Account::dominiosByUser()->get();
 
       if (count($dominios) > 0) {
         $nom_dominios = [];
 
         foreach ($dominios as $value) {
-          $nom_dominios[] = $value->dominio;
+          if ($value->indicador_habilitado == 1) {
+            $nom_dominios[] = $value->dominio;
+          }
         }
 
         $chars = "123456789";
