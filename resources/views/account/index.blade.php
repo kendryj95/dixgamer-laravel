@@ -25,7 +25,7 @@
             <label for="">{{ $value->dominio }}</label>
               @php $indicador_habilitado = $value->indicador_habilitado; @endphp
               <input type="checkbox" class="dominios" data-id="{{ $value->ID }}" @if ($indicador_habilitado == 1) checked @endif data-size="small">
-                <small style="display:block; margin-top: 5px" class="text-muted">Uso: {{ date('d/m/Y H:i:s', strtotime($value->update_at)) }}</small>
+                <small style="display:block; margin-top: 5px" class="text-muted">{!! \Helper::nicetime($value->update_at) !!}</small>
             </div>
           @endforeach
           </div>
