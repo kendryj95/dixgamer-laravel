@@ -341,7 +341,7 @@ class Helper
             
         } else {
             $difference     = $unix_date - $now;
-            $tense         = "from now";
+            $tense         = "Desde hace";
         }
         
         for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
@@ -350,8 +350,10 @@ class Helper
         
         $difference = round($difference);
         
-        if($difference != 1) {
-            $periods[$j].= "s";
+        if($difference == 0) {
+          return "<span class=\"mini\">Desde hace un instante</span> ";
+        } elseif($difference > 1) {
+          $periods[$j].= "s";
         }
         
         return "<span class=\"mini\">{$tense}</span><span class=\"big\"> $difference </span><span class=\"mini\">$periods[$j]</span> ";
