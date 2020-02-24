@@ -751,11 +751,25 @@ class SalesController extends Controller
         $obj->column = $request->column;
         $obj->word = $request->word;
 
-        $sales = Sales::getSalesSinEntregar($obj)->paginate(50);
+        $ventas_excluidas = DB::table('configuraciones')->where('ID', 1)->value('ventas_sinentregar');
+
+        $sales = Sales::getSalesSinEntregar($obj, $ventas_excluidas)->paginate(50);
+
 
         $columns = Schema::getColumnListing('ventas');
 
-        return view('sales.lista_sin_entregar')->with(['datos' => $sales, 'columns' => $columns]);
+        return view('sales.lista_sin_entregar')->with(['datos' => $sales, 'columns' => $columns, 'ventas_excluidas' => $ventas_excluidas]);
+    }
+
+    public function salesClient($id_sale) {
+        $venta = DB::table('ventas')->where('ID',$id_sale)->first();
+        $id_cliente = 0;
+
+        if ($venta) {
+            $id_cliente = $venta->clientes_id;
+        }
+
+        echo json_encode(['id_cliente' => $id_cliente]);
     }
 
 

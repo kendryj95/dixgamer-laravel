@@ -243,6 +243,7 @@ Route::group(['middleware' => ['login']], function()
     //Route::get('/web/sales', function() { return redirect('web/sales/list'); });
     Route::post('getDataClientWebSales','Pedidos_CobradosController@getDataClientWebSales')->name('getDataClientWebSales');
     Route::get('salesInsertWeb/{oii}/{titulo}/{consola}/{slot?}','SalesController@salesInsertWeb');
+    Route::get('sales/{id_sale}/cliente','SalesController@salesClient');
 
   Route::get('usuario', 'UsuariosController@create');
 

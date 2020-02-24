@@ -865,8 +865,20 @@ class ControlsController extends Controller
 
                 return redirect()->back()->withErrors(["El dominio no puede ser vacío"]);
                 
+                break;
+            case 7: // Ventas sin entregar Excluidas
+                $data = [];
+                $ventas_excluidas = explode(",",$request->ventas_excluidas);
 
-                
+                $ventas_excluidas = array_map(function($ele) {
+                    return trim($ele);
+                }, $ventas_excluidas);
+
+                $data['ventas_sinentregar'] = implode(",",$ventas_excluidas);
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Ventas sin entregar excluidas satisfactoriamente.');
+                return redirect()->back();
                 break;
         }
     }

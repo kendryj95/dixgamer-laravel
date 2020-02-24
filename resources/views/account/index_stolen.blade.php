@@ -8,6 +8,10 @@
   width: 100%;
 }
 
+.tag.label {
+  cursor: pointer;
+}
+
 </style>
 
 @section('container')
@@ -30,7 +34,7 @@
           <input type="hidden" name="opt" value="5">
           <div class="form-group">
             <label for="">Cuentas Excluidas:</label><br>
-            <input type="text" name="cuentas_excluidas" value="{{$cuentas_excluidas}}" data-role="tagsinput">
+            <input type="text" name="cuentas_excluidas" id="cuentas" value="{{$cuentas_excluidas}}" data-role="tagsinput">
           </div>
       </div>
       <div class="col-md-4">
@@ -67,7 +71,7 @@
 @parent
 
 <script>
-
+var band = true;
 $(document).ready(function() {
   
   $("#cuentas_excluidas").keypress(function(e) {
@@ -75,6 +79,22 @@ $(document).ready(function() {
         return false;
     }
   });
+
+  $('.bootstrap-tagsinput span.tag.label span[data-role="remove"]').on('click', function(event) {
+    band = false; // Bandera que evita que haga un redirect si eliminan un tag
+  })
+  $('.bootstrap-tagsinput span.tag.label').on('click', function() {
+    var el = $(this);
+    var id_cta = el.text();
+
+    if (band) {
+      setTimeout(() => {
+        window.location.href = "{{ url('cuentas') }}/"+id_cta;
+      }, 400);  
+    }
+
+    band = true;    
+  })
   
 })
 
