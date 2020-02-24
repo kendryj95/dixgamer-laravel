@@ -132,6 +132,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('modo_continuo', 'AccountController@modoContinuo');
   Route::get('con_tc_sin_juego', 'AccountController@conTCSinJuego');
   Route::post('dominios_cuentas', 'AccountController@dominiosByUser');
+  Route::get('cuentas_resetear', 'AccountController@ctasResetear');
 
   Route::get('balance/{page}', 'ControlsController@balanceProductosDiasCondicionado'); // Acceso solo para BETINA
 

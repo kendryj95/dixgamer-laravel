@@ -365,5 +365,11 @@ class Account extends Model
       );
     }
 
+    public function ScopeCtasResetear($query) {
+      return DB::table(DB::raw("(SELECT resetear.ID, resetear.cuentas_id, DATEDIFF(NOW(), MAX(resetear.Day)) as Day_pedido, DATEDIFF(NOW(), MAX(reseteo.Day)) as Day_reset FROM resetear left join reseteo on resetear.cuentas_id = reseteo.cuentas_id GROUP by resetear.cuentas_id ORDER BY `Day_reset` DESC) as rdo"))
+      ->where("Day_reset",">","Day_pedido")
+      ->orWhereRaw("Day_reset IS NULL");
+    }
+
 
 }

@@ -78,6 +78,7 @@
                 <li><a href="{{ url('/cuentas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
                 <li><a href="{{ url('/cuentas_notas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Notas</a></li>
                 <li><a href="{{ url('/listaYopmail') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Yopmail</a></li>
+                <li><a href="{{ url('cuentas_resetear') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Resetear</a></li>
                 <li><a href="{{ url('cuentas_reseteadas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Reseteadas</a></li>
                 <li><a href=" {{url('cuentas_con_saldo') }} "><i class="fa fa-list fa-fw" aria-hidden="true"></i> Saldo libre</a></li>
                 <li><a href="{{ url('cuentas_para_ps3') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Para Juego PS3</a></li>

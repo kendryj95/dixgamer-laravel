@@ -2484,4 +2484,10 @@ class AccountController extends Controller
       return redirect()->back();
     }
 
+    public function ctasResetear() {
+      $cuentas = Account::ctasResetear()->get();
+
+      return view('account.ctas_resetear', compact('cuentas'));
+    }
+
 }
