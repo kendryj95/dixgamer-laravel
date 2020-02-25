@@ -371,5 +371,16 @@ class Account extends Model
       ->orWhereRaw("Day_reset IS NULL");
     }
 
+    public function ScopeCtasVacias($query) {
+      $usuario = session()->get('usuario')->Nombre;
+
+      return $query
+            ->select('cuentas.*')
+            ->leftjoin("stock","cuentas.ID","=","stock.cuentas_id")
+            ->whereNull("stock.cuentas_id")
+            ->where("cuentas.usuario", $usuario)
+            ->orderBy("cuentas.ID","DESC");
+    }
+
 
 }

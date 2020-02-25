@@ -2490,4 +2490,12 @@ class AccountController extends Controller
       return view('account.ctas_resetear', compact('cuentas'));
     }
 
+    public function ctasVacias()
+    {
+      $cuentas = Account::ctasVacias()->get();
+
+      return view('account.ctas_vacias', compact('cuentas'));
+
+    }
+
 }
