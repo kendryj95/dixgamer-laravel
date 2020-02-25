@@ -118,7 +118,7 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function(response) {
                     if (response.id_cliente != 0) {
-                        window.location.href = "{{ url('clientes') }}/" + response.id_cliente;
+                        window.open("{{ url('clientes') }}/" + response.id_cliente, "_blank");
                     }
                 },
                 error: function(error) {

@@ -89,7 +89,7 @@ $(document).ready(function() {
 
     if (band) {
       setTimeout(() => {
-        window.location.href = "{{ url('cuentas') }}/"+id_cta;
+        window.open("{{ url('cuentas') }}/"+id_cta, "_blank");
       }, 400);  
     }
 
