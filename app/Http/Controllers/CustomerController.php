@@ -1641,4 +1641,34 @@ class CustomerController extends Controller
       }
 
     }
+
+    public function marcarEnviadoVenta($id_venta) {
+        DB::beginTransaction();
+
+        try {
+          $data['ventas_id'] = $id_venta;
+          $data['concepto'] = "datos1";
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('mailer')->insert($data);
+
+          $data2['id_ventas'] = $id_venta;
+          $data2['Notas'] = "Marcar como enviado";
+          $data2['Day'] = date('Y-m-d H:i:s');
+          $data2['usuario'] = session()->get('usuario')->Nombre;
+
+          DB::table('ventas_notas')->insert($data2);
+
+          DB::commit();
+
+          \Helper::messageFlash('Clientes',"La venta se ha marcado como enviada exitosamente.", 'alert_cliente');
+
+          return redirect()->back();
+
+        } catch (Exception $th) {
+          DB::rollback();
+          return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
+        }
+    }
 }

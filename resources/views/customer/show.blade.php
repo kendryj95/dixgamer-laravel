@@ -819,6 +819,41 @@
                   <i aria-hidden="true" class="fa fa-google"></i>
                   mail
               </a>
+
+              @php
+                $hoy = date('Y-m-d H:i:s');
+                $fecha_venta = $dataCustomer->Day;
+                $new_date = strtotime("+1 day", strtotime($fecha_venta));
+                $new_date = date('Y-m-d H:i:s', $new_date);
+                $mostrar_marcar_enviado = false;
+
+                if ($hoy > $new_date) {
+                  $mostrar_marcar_enviado = true;
+                }
+              @endphp
+
+              @if($colorcito == 'danger' && $mostrar_marcar_enviado)
+              <div class="dropdown text-left">
+                <button
+                  class="btn btn-link dropdown-toggle btn-xs"
+                  style="margin-left: -40px"
+                  type="button" id="vender_secu_cli2"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+                  Marcar como enviado
+                </button>
+        
+                <ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+                  <li class="dropdown-header">¿Estas seguro?</li>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                  <a href="{{ url('marcar_enviado', [$dataCustomer->ID_ventas]) }}" class="btn btn-danger">Sí, Seguro!</a>
+                  </li>
+                </ul>
+        
+                </div>
+              @endif
             </div>
 
             @if ($ventas_notas)

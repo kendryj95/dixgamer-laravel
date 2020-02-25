@@ -1864,10 +1864,10 @@ class ControlsController extends Controller
 					$control_individual .= "<br /> < 3 vtas en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2) ;
 
                             
-                            // límite inferior máximo: la oferta no puede ser menor al 25% del valor "precio base"
-                            if($oferta_sugerida < ($precio_base * 0.25))  {
-								$oferta_sugerida = ($precio_base * 0.25);
-					$control_individual .= "<br /> oferta no puede ser < 25% de precio base // queda en : " . round($oferta_sugerida,2);
+                            // límite inferior máximo: la oferta no puede ser menor al 35% del valor "precio base"
+                            if($oferta_sugerida < ($precio_base * 0.35))  {
+								$oferta_sugerida = ($precio_base * 0.35);
+					$control_individual .= "<br /> oferta no puede ser < 35% de precio base // queda en : " . round($oferta_sugerida,2);
 							}
                        
                             // si no queda stock secundario quito oferta
@@ -1915,8 +1915,8 @@ class ControlsController extends Controller
                             $mensajes .= "<tr><td>[" . $ID . " exp: " . round($fn_exp,2) . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs ."</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:". round($costo_usd,2)  . " de " . round($costo_usd_original) ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
                             
                             
-                            if(($Q_stk < 1) or (($Q_stk/$qv_45d) < 0.10)) {
-					$control_individual .= "<br /> queda 0 stk o es menor al 10% de lo vendido en 45d, quito oferta";
+                            if(($Q_stk <= 1) or (($Q_stk/$qv_45d) < 0.10)) {
+					$control_individual .= "<br /> stk <= 1 o < al 10% de lo vendido en 45d, quito oferta";
 								$oferta_sugerida = 0;
 							}
 					

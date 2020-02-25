@@ -74,6 +74,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('delete_amounts/{id}', 'CustomerController@deleteAmount');
   Route::get('delete_notes/{id}/{tipo}', 'CustomerController@deleteNotes');
   Route::get('saleToClient/{id_stock}/{consola}/{slot}', 'CustomerController@saleToClient');
+  Route::get('marcar_enviado/{id_venta}', 'CustomerController@marcarEnviadoVenta');
 
   //Card functions buttons
   Route::post('getDataName','EditButtonsController@getDataName')->name('getDataName');
