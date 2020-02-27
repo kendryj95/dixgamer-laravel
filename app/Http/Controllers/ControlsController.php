@@ -1790,14 +1790,14 @@ class ControlsController extends Controller
 					$control_individual .= "<br />qvp_45d: " . $qvp_45d . " // qvs_45d: " . $qvs_45d . " // qvp: " . $qvp . " // qvs: " . $qvs . " // Libre: " . $libre . " // Q_Stk: " . $Q_stk;
                                 
                             // nueva formula para aplicar baja de precio a mayor antiguedad del stock
-							// 0.96 elevado a la 35 da 0.25, es decir que reduciría el costo a 25% del original
-							if ($antiguedad >= 720) { // Si > 500 días dejo en 50 -> que me va a dar 25% del costo original
+							// 0.98 elevado a la 36 da 0.48, es decir que reduciría el costo a 48% del original
+							if ($antiguedad >= 720) { 
 								$elevado=36;
 							} 
-                            elseif ($antiguedad >= 360) { // Si > 500 días dejo en 50 -> que me va a dar 25% del costo original
+                            elseif ($antiguedad >= 360) { 
 								$elevado=($antiguedad/20);
 							} 
-							elseif ($antiguedad >= 45) { // si es < 500 va a ir reduciendo el costo original de a poco cuanto mas días pasan
+							elseif ($antiguedad >= 45) { // si es < 45 va a ir reduciendo el costo original de a poco cuanto mas días pasan
 								$elevado=($antiguedad/30);
 							}
 							else {
@@ -1811,6 +1811,7 @@ class ControlsController extends Controller
 								$extra_x_anti=1;
 							}
                             //pow es la formula de exponente para PHP, no existe el ^
+							////// 2020-02-26 actualizo el elavo a 0.98 para aumentar precios debido a que muchos reciclados son reclamados por los clientes
 							$fn_exp = (pow(0.97, $elevado));
                             $costo_usd = $costo_usd * $fn_exp * $extra_x_anti;
                             
@@ -1831,8 +1832,8 @@ class ControlsController extends Controller
 					$control_individual .= "<br /> >3 Stk subo precio si hay mucha Vta_45 y poco Stk // el es multi es: " . round($divi,2) . " queda en " . round($oferta_sugerida,2);
                             }
 					
-                            // si se vendió 4 o mas limito la oferta cuando queda poco stock
-							if($qv_45d > 3) {
+                            // si se vendió 2 o mas limito la oferta cuando queda poco stock
+							if($qv_45d >= 2) {
 								if($Q_stk == 5){$limite_Stk = $precio_base * 0.750;} 
 								elseif($Q_stk == 4){$limite_Stk = $precio_base * 0.800;}
 								elseif($Q_stk == 3){$limite_Stk = $precio_base * 0.850;}
@@ -1842,7 +1843,7 @@ class ControlsController extends Controller
 								
 								if($oferta_sugerida < $limite_Stk) {
 								$oferta_sugerida = $limite_Stk;
-					$control_individual .= "<br /> >3 Vtas y <5 stk -> precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida,2);
+					$control_individual .= "<br /> > 1 Vta y < 6 stk -> precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida,2);
 							} 
 							}					             
 					
@@ -1864,14 +1865,14 @@ class ControlsController extends Controller
 					$control_individual .= "<br /> < 3 vtas en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2) ;
 
                             
-                            // límite inferior máximo: la oferta no puede ser menor al 35% del valor "precio base"
-                            if($oferta_sugerida < ($precio_base * 0.35))  {
-								$oferta_sugerida = ($precio_base * 0.35);
+                            // límite inferior máximo: el precio de oferta no puede ser menor al 30% del "precio base"
+                            if($oferta_sugerida < ($precio_base * 0.30))  {
+								$oferta_sugerida = ($precio_base * 0.30);
 					$control_individual .= "<br /> oferta no puede ser < 35% de precio base // queda en : " . round($oferta_sugerida,2);
 							}
                        
                             // si no queda stock secundario quito oferta
-                            if(($slot == "secundario") and ($libre <= 0)) {
+                            if(($slot == "secundario") and ($libre <= 1)) {
 								$oferta_sugerida = 0;
 					$control_individual .= "<br /> no queda STK secu quito oferta secu";
 							}
@@ -1977,8 +1978,16 @@ class ControlsController extends Controller
         
                                             DB::table('cbgw_postmeta')->insert($data);
                                         }
-
-										$mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <br><br>";
+										
+										$variacion = round((($oferta_sugerida / $sale_price) - 1) * 100,2);
+										
+										if ($variacion >= 0) {
+											$color= "green";
+										} else {
+											$color= "red";
+										}
+										
+										$mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <span id='" . $ID . "' style='color:" . $color . ";'> (" . $variacion . " %)</span> " . " <br><br>";
 
                                         }
                                     }

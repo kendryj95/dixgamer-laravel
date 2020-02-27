@@ -518,10 +518,34 @@
 
 				 			@php
 
-				 			$texto_reset1 = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "Recuperar Pri" : "Resetear";
-				 			$colorReset = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "primary" : "default";
-				 			$texto_reset2 = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "Recuperar Pri" : "Resetear la cuenta";
-				 			$param_reset = \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre) ? "recuperar_pri" : "";
+							if (\Helper::operatorsRecoverPri(session()->get('usuario')->Nombre)) {
+								if ($ventaPs4Pri && $ventaPs4Secu) {
+									$texto_reset1 = "Recup Conj";
+									$texto_reset2 = "Recuperar Conj";
+									$colorReset = "normal";
+									$param_reset = "conj";
+								} elseif ($ventaPs4Pri) {
+									$texto_reset1 = "Recup Pri";
+									$texto_reset2 = "Recuperar Pri";
+									$colorReset = "primary";
+									$param_reset = "pri";
+								} elseif ($ventaPs4Secu) {
+									$texto_reset1 = "Recup Secu";
+									$texto_reset2 = "Recuperar Secu";
+									$colorReset = "success";
+									$param_reset = "secu";
+								} else {
+									$texto_reset1 = "Resetear";
+									$texto_reset2 = "Resetear la cuenta";
+									$colorReset = "default";
+									$param_reset = "";
+								}
+							} else {
+								$texto_reset1 = "Resetear";
+								$texto_reset2 = "Resetear la cuenta";
+								$colorReset = "default";
+								$param_reset = "";
+							}
 
 				 			@endphp
 

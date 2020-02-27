@@ -183,15 +183,15 @@ class AccountController extends Controller
         $comienzo = $comienzo[$random-1];
         $vendedor = strtolower(session()->get('usuario')->Nombre);
         $vendedor = substr($vendedor, 0, 2);
-        $nro = (DB::table('cuentas')->max('ID')) - 38000;
+        $nro = (DB::table('cuentas')->max('ID')) - 39000;
         // $chars = "1234";
         // $random = substr( str_shuffle( $chars ), 0, 1 );
         $count_dom = count($nom_dominios);
         $random = rand(1, $count_dom);
         // $dominio = ['dix111.com','dixabc.com','123dix.site','dix111.com'];
         $dominio = $nom_dominios[$random-1];
-        $idcuenta = "dix" . $nro . $vendedor;
-        $emailcuenta = $comienzo . "." . $vendedor . $nro . "@" . $dominio;///// 17-02-2020 arranco con nuevo sistema mucho mas aleatorio 
+        $idcuenta = $comienzo . $nro . $vendedor;
+        $emailcuenta = $comienzo . "." . $nro . $vendedor . "@" . $dominio;///// 17-02-2020 arranco con nuevo sistema mucho mas aleatorio 
             // $emailcuenta = "cuenta." . $emailcuenta1 . "." . $emailcuenta2 . "@abcdix.com"; ///// 15-02-2020 camio a abcdix de nuevo // 14-02-2020 cambio a dix111.com // cambio de abcdix.com a game24hs.com 2019-02-25
 
 
@@ -389,6 +389,9 @@ class AccountController extends Controller
 
       $cuenta_robada = $this->isAccountStolen($id);
 
+      $ventaPs4Pri = $this->ventaPs4Pri($id);
+      $ventaPs4Secu = $this->ventaPs4Secu($id);
+
       $lastGame = false;
       
       if ($lastAccountGames) {
@@ -420,7 +423,9 @@ class AccountController extends Controller
                 'operador_reset',
                 'product_20_off',
                 'existeStock_product_20_off',
-                'cuenta_robada'
+                'cuenta_robada',
+                'ventaPs4Pri',
+                'ventaPs4Secu'
       ));
 
     }
@@ -1251,7 +1256,7 @@ class AccountController extends Controller
     }
 
 
-    public function resetAccount($id, $recu_pri = null){
+    public function resetAccount($id, $recup = null){
       $account = Account::where('ID',$id)->first();
 
       if (!$account)
@@ -1267,9 +1272,19 @@ class AccountController extends Controller
 
         $mensaje = 'Cuenta reseteada';
 
-        if ($recu_pri != null) {
+        if ($recup == 'pri') {
           $mensaje = 'Intento recuperar pri satisfactoriamente.';
           $this->intentoRecuperarPri($id);
+          $this->updatePassRecu($id);
+        } elseif ($recup == 'secu') {
+          $mensaje = 'Intento recuperar secu satisfactoriamente.';
+          $this->intentoRecuperarSecu($id);
+          $this->updatePassRecu($id);
+        } elseif ($recup == 'conj') {
+          $mensaje = 'Intento recuperar pri y secu satisfactoriamente.';
+          $this->intentoRecuperarPri($id);
+          $this->intentoRecuperarSecu($id);
+          $this->updatePassRecu($id);
         }
 
         \Helper::messageFlash('Cuentas',$mensaje,'alert_cuenta');
@@ -2117,6 +2132,48 @@ class AccountController extends Controller
     }
 
     private function intentoRecuperarPri($account_id) {
+      
+      $venta = $this->ventaPs4Pri($account_id);
+
+      $vendedor = session()->get('usuario')->Nombre;
+
+      #########
+
+      if ($venta) {
+        
+        $data = [];
+        $data['id_ventas'] = $venta->ID;
+        $data['Notas'] = "Intento recuperar pri";
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = $vendedor;
+
+        DB::table('ventas_notas')->insert($data);
+      }
+      return;
+    }
+    
+    private function intentoRecuperarSecu($account_id) {
+      
+      $venta = $this->ventaPs4Secu($account_id);
+
+      $vendedor = session()->get('usuario')->Nombre;
+
+      #########
+
+      if ($venta) {
+        
+        $data = [];
+        $data['id_ventas'] = $venta->ID;
+        $data['Notas'] = "Intento recuperar secu";
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = $vendedor;
+
+        DB::table('ventas_notas')->insert($data);
+      }
+      return;
+    }
+
+    private function ventaPs4Pri($account_id) {
       $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
       $stocks = explode(",", $stocks);
 
@@ -2124,8 +2181,21 @@ class AccountController extends Controller
       ->join('clientes AS c','c.ID','=','ventas.clientes_id')
       ->first();
 
-      $vendedor = session()->get('usuario')->Nombre;
+      return $venta;
+    }
+    
+    private function ventaPs4Secu($account_id) {
+      $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
+      $stocks = explode(",", $stocks);
 
+      $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')->where('cons','ps4')
+      ->join('clientes AS c','c.ID','=','ventas.clientes_id')
+      ->first();
+
+      return $venta;
+    }
+
+    private function updatePassRecu($account_id) {
       $npass = \Helper::getRandomPass();
 
       ## CAMBIAR LA CONTRASEÑA
@@ -2142,18 +2212,6 @@ class AccountController extends Controller
       $account['pass'] = $npass;
       $this->acc->updateAccount($account,$account_id);
 
-      #########
-
-      if ($venta) {
-        
-        $data = [];
-        $data['id_ventas'] = $venta->ID;
-        $data['Notas'] = "Intento recuperar pri";
-        $data['Day'] = date('Y-m-d H:i:s');
-        $data['usuario'] = $vendedor;
-
-        DB::table('ventas_notas')->insert($data);
-      }
       return;
     }
 
