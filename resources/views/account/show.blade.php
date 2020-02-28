@@ -516,74 +516,100 @@
 										</span>
 				 				@endif
 
-				 			@php
+							@php
+							 
+							 $btnRecup = [
+							
+								"pri" => [
+									"texto_btn" => "Recup Pri",
+									"texto_msj" => "Recuperar Pri",
+									"color" => "primary",
+									"param" => "pri",
+									"ver" => false
+								],
+									
+								"secu" => [
+										"texto_btn" => "Recup Secu",
+										"texto_msj" => "Recuperar Secu",
+										"color" => "success",
+										"param" => "secu",
+										"ver" => false
+								],
+								"conj" => [
+										"texto_btn" => "Recup Conj",
+										"texto_msj" => "Recuperar Conk",
+										"color" => "normal",
+										"param" => "conj",
+										"ver" => false
+								],	
+								"reset" => [
+										"texto_btn" => "Resetear",
+										"texto_msj" => "Resetear la Cuenta",
+										"color" => "default",
+										"param" => "",
+										"ver" => false
+								]	
+							];
 
 							if (\Helper::operatorsRecoverPri(session()->get('usuario')->Nombre)) {
 								if ($ventaPs4Pri && $ventaPs4Secu) {
-									$texto_reset1 = "Recup Conj";
-									$texto_reset2 = "Recuperar Conj";
-									$colorReset = "normal";
-									$param_reset = "conj";
-								} elseif ($ventaPs4Pri) {
-									$texto_reset1 = "Recup Pri";
-									$texto_reset2 = "Recuperar Pri";
-									$colorReset = "primary";
-									$param_reset = "pri";
-								} elseif ($ventaPs4Secu) {
-									$texto_reset1 = "Recup Secu";
-									$texto_reset2 = "Recuperar Secu";
-									$colorReset = "success";
-									$param_reset = "secu";
-								} else {
-									$texto_reset1 = "Resetear";
-									$texto_reset2 = "Resetear la cuenta";
-									$colorReset = "default";
-									$param_reset = "";
+									$btnRecup["conj"]["ver"] = true;
+								} 
+								if ($ventaPs4Pri) {
+									$btnRecup["pri"]["ver"] = true;
+								} 
+								if ($ventaPs4Secu) {
+									$btnRecup["secu"]["ver"] = true;
+								} 
+								if (!$ventaPs4Pri && !$ventaPs4Secu) {
+									$btnRecup["reset"]["ver"] = true;
 								}
 							} else {
-								$texto_reset1 = "Resetear";
-								$texto_reset2 = "Resetear la cuenta";
-								$colorReset = "default";
-								$param_reset = "";
+								$btnRecup["reset"]["ver"] = true;
 							}
 
 				 			@endphp
 
 						  	@if (($account->days_from_reset == NULL) || ($account->days_from_reset > 180))
-									<div class="dropdown pull-left">
-										<button
-											class="btn btn-{{$colorReset}} dropdown-toggle btn-xs"
-											type="button" id="dropdownMenu1"
-											data-toggle="dropdown"
-											aria-haspopup="true"
-											aria-expanded="false">
-												<i class="fa fa-fw fa-power-off"></i>
-												{{ $texto_reset1 }}
-												<span class="caret"></span>
-										</button>
+								@foreach ($btnRecup as $tipo => $item)
+									@if ($item['ver'] === true)
+										<div class="dropdown pull-left" style="margin-bottom: 2px">
+											<button
+												class="btn btn-{{$item['color']}} dropdown-toggle btn-xs"
+												type="button" id="dropdownMenu1"
+												data-toggle="dropdown"
+												aria-haspopup="true"
+												aria-expanded="false">
+													<i class="fa fa-fw fa-power-off"></i>
+													{{ $item['texto_btn'] }}
+													<span class="caret"></span>
+											</button>
 
-										<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
-											<li class="dropdown-header">¿Seguro deseas</li>
-											<li class="dropdown-header">{{ $texto_reset2 }}?</li>
-											<li role="separator" class="divider"></li>
-											<li>
-												<form class=" text-center" id="form_resetear" action="{{url('resetear_cuenta',[$account->ID, $param_reset])}}" method="post">
-													{{ csrf_field() }}
-													<button
-														class="btn btn-danger btn-block"
-														title="cambiar pass"
-														id="resetear"
-														type="button">
-														Si, seguro!
-													</button>
-												</form>
-											</li>
-										</ul>
+											<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+												<li class="dropdown-header">¿Seguro deseas</li>
+												<li class="dropdown-header">{{ $item['texto_msj'] }}?</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<form class="text-center" id="form_resetear_{{$tipo}}" action="{{url('resetear_cuenta',[$account->ID, $item['param']])}}" method="post">
+														{{ csrf_field() }}
+														<button
+															class="btn btn-danger btn-block"
+															title="cambiar pass"
+															id="resetear_{{$tipo}}"
+															onclick="reset_recup('{{$tipo}}', this)"
+															type="button">
+															Si, seguro!
+														</button>
+													</form>
+												</li>
+											</ul>
 
-									</div>
+										</div>
 
-									<div class="clearfix"></div>
-							  @endif
+										<div class="clearfix"></div>
+									@endif
+								@endforeach
+							@endif
 
                 @if ($account->Q_reseteado)
 					          	<em class="small" style="color:#BBB;">
@@ -1222,10 +1248,10 @@
 				$('#form_cambiar_pass').submit();
 			});
 
-			$('#resetear').on('click', function(){
+			/*$('#resetear').on('click', function(){
 				$(this).prop('disabled', true);
 				$('#form_resetear').submit();
-			});
+			});*/
 			
 			$('#recuperar').on('click', function(){
 				$(this).prop('disabled', true);
@@ -1257,6 +1283,12 @@
 				e.preventDefault();
 				alert("Ya existe una petición abierta");
 			}
+		}
+
+		function reset_recup(tipo, el)
+		{
+			$(el).prop('disabled', true);
+			$('#form_resetear_'+tipo).submit();
 		}
 	</script>
 @endsection

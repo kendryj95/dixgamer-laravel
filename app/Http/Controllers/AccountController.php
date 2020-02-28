@@ -2175,24 +2175,34 @@ class AccountController extends Controller
 
     private function ventaPs4Pri($account_id) {
       $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
-      $stocks = explode(",", $stocks);
 
-      $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')
-      ->join('clientes AS c','c.ID','=','ventas.clientes_id')
-      ->first();
+      if ($stocks) {
+        $stocks = explode(",", $stocks);
 
-      return $venta;
+        $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')
+        ->join('clientes AS c','c.ID','=','ventas.clientes_id')
+        ->first();
+
+        return $venta;
+      }
+
+      return null;
     }
     
     private function ventaPs4Secu($account_id) {
       $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
-      $stocks = explode(",", $stocks);
 
-      $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')->where('cons','ps4')
-      ->join('clientes AS c','c.ID','=','ventas.clientes_id')
-      ->first();
+      if ($stocks) {
+        $stocks = explode(",", $stocks);
+        
+        $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')->where('cons','ps4')
+        ->join('clientes AS c','c.ID','=','ventas.clientes_id')
+        ->first();
 
-      return $venta;
+        return $venta;
+      }
+
+      return null;
     }
 
     private function updatePassRecu($account_id) {
