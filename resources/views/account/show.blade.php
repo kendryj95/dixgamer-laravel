@@ -531,14 +531,14 @@
 								"secu" => [
 										"texto_btn" => "Recup Secu",
 										"texto_msj" => "Recuperar Secu",
-										"color" => "success",
+										"color" => "danger",
 										"param" => "secu",
 										"ver" => false
 								],
 								"conj" => [
 										"texto_btn" => "Recup Conj",
-										"texto_msj" => "Recuperar Conk",
-										"color" => "normal",
+										"texto_msj" => "Recuperar Conj",
+										"color" => "success",
 										"param" => "conj",
 										"ver" => false
 								],	
@@ -594,7 +594,7 @@
 														{{ csrf_field() }}
 														<button
 															class="btn btn-danger btn-block"
-															title="cambiar pass"
+															title="{{ $item['texto_msj'] }}"
 															id="resetear_{{$tipo}}"
 															onclick="reset_recup('{{$tipo}}', this)"
 															type="button">

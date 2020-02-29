@@ -474,19 +474,19 @@ class AccountController extends Controller
       $operadores_especiales = \Helper::getOperatorsEspecials('Pri');
       $show = false;
 
-      ## CONSULTANDO SI ESTA CUENTA TIENE UNA VENTA SECUNDARIA
+      ## CONSULTANDO SI ESTA CUENTA TIENE UNA VENTA PRIMARIA
 
       $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$account_id)->groupBy('cuentas_id')->value('stocks_ids');
       $stocks = explode(",", $stocks);
 
       $venta = DB::table('ventas')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')->first();
 
-      ## CONSULTANDO SI HUBO UN CAMBIO DE CONTRASEÑA PARA ESTA CUENTA CON ALGUNOS DE LOS OPERADORES ESPECIALES.
+      ## CONSULTANDO SI HUBO UN RESETEO PARA ESTA CUENTA CON ALGUNOS DE LOS OPERADORES ESPECIALES.
       $cuenta_reset = DB::table('reseteo')->where('cuentas_id',$account_id)->whereIn('usuario',$operadores_especiales)->orderBy('Day','DESC')->first();
 
       if ($cuenta_reset && $venta) {
 
-        ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL CAMBIO DE CONTRASEÑA
+        ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL RESETEO
 
         if ($venta->Day < $cuenta_reset->Day) {
           $show = true;
@@ -2048,7 +2048,7 @@ class AccountController extends Controller
           $cta_reset = DB::table('reseteo')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
 
           ## OBTENER EL ULTIMO REGISTRO DE CAMBIO DE CONTRASEÑA POR UN OPERADOR ESPECIAL
-          $cta_pass = DB::table('cta_pass')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
+          //$cta_pass = DB::table('cta_pass')->where('cuentas_id', $account_id)->whereIn('usuario', $operators_especials)->orderBy('ID','DESC')->get();
 
           if ($cta_reset) { // Si existreseteoe el registro
 
@@ -2057,12 +2057,14 @@ class AccountController extends Controller
             }
           }
 
-          if ($cta_pass) { // Si existe el registro
+          ## SE COMENTA EL DÍA 29/02/2020 POR KENDRY. RAZÓN --> SOLO DEBE ACTUALIZAR EL/LOS REGISTROS DE RESETEO PARA QUE FUNCIONE EL BOTON RECUP CONJ
+
+          /*if ($cta_pass) { // Si existe el registro
 
             foreach ($cta_pass as $cta) {
               DB::table('cta_pass')->where('ID',$cta->ID)->update(['usuario' => "ex-$cta->usuario"]);
             }
-          }
+          }*/
 
           DB::commit();
 
