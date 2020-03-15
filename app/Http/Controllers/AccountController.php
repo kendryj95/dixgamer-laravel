@@ -1393,6 +1393,8 @@ class AccountController extends Controller
 
 
       try {
+        $notas = $this->buildNoteBeforeUpdate($request, $id);
+        
         $account = [];
         $account['mail_fake'] = $request->mail_fake;
         $account['mail'] = $request->mail;
@@ -1409,6 +1411,11 @@ class AccountController extends Controller
         $account['verificado'] = (\Helper::validateAdministrator(session()->get('usuario')->Level)) ? 'si' : 'no';
         $this->acc->createAccountMod($account);
 
+        $note['cuentas_id'] = $id;
+        $note['Notas'] = $notas;
+        $note['Day'] = date('Y-m-d H:i:s');
+        $note['usuario'] = session()->get('usuario')->Nombre;
+        DB::table('cuentas_notas')->insert($note);
 
         // Mensaje de notificacion
         \Helper::messageFlash('Cuentas','Cuenta editada','alert_cuenta');
@@ -1416,6 +1423,24 @@ class AccountController extends Controller
       } catch (\Exception $e) {
         return redirect('cuentas/'.$id)->withErrors('Intentelo nuevamente');
       }
+    }
+
+    private function buildNoteBeforeUpdate($values,$id_account) 
+    {
+      $notas = [];
+      $account = DB::table('cuentas')->where('ID',$id_account)->first();
+      
+      if ($values->mail != $account->mail) {
+        $notas[] = "Email ha cambiado de {$account->mail} a {$values->mail}";
+      }
+      if ($values->mail_fake != $account->mail_fake) {
+        $notas[] = "Email Fake ha cambiado de {$account->mail_fake} a {$values->mail_fake}";
+      }
+      if ($values->pass != $account->pass) {
+        $notas[] = "Contraseña ha cambiado de {$account->pass} a {$values->pass}";
+      }
+
+      return implode(" | ", $notas);
     }
 
 

@@ -1,5 +1,5 @@
 
-@if(count($account) > 0)
+@if($account)
 <div class="container">
   <h1 class="text-center" style="color:#000">Modificar Cuenta #{{$account->ID}}</h1>
 
