@@ -1275,7 +1275,7 @@ class AccountController extends Controller
         if ($recup == 'pri') {
           $mensaje = 'Intento recuperar pri satisfactoriamente.';
           $this->intentoRecuperarPri($id);
-          $this->updatePassRecu($id);
+          $this->updatePassRecu($id, "pri");
         } elseif ($recup == 'secu') {
           $mensaje = 'Intento recuperar secu satisfactoriamente.';
           $this->intentoRecuperarSecu($id);
@@ -2232,16 +2232,23 @@ class AccountController extends Controller
       return null;
     }
 
-    private function updatePassRecu($account_id) {
+    private function updatePassRecu($account_id, $tipo_rec = null) {
       $npass = \Helper::getRandomPass();
 
       ## CAMBIAR LA CONTRASEÑA
+      
+      $usuario = '';
+      if ($tipo_rec = "pri") {
+        $usuario = "rp" . session()->get('usuario')->Nombre;
+      } else {
+        $usuario = session()->get('usuario')->Nombre;
+      }
 
       $data = [];
       $data['cuentas_id'] = $account_id;
       $data['new_pass'] = $npass;
       $data['Day'] = date('Y-m-d H:i:s');
-      $data['usuario'] = session()->get('usuario')->Nombre;
+      $data['usuario'] = $usuario;
       $this->acc->createAccPass($data,$account_id);
 
 
