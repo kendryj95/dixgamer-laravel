@@ -11,9 +11,9 @@ class Balance extends Model
 
     public function ScopeAccountBalance($query,$id){
       return DB::select(DB::raw("
-      SELECT ID, ex_stock_id as stk_id, 'carga' as concepto, cuentas_id, costo, costo_usd, code, code_prov, n_order, usuario, Day, IF((Day BETWEEN DATE_SUB(NOW(), INTERVAL 1 DAY) AND NOW()),'Mostrar','No Mostrar') AS validacion FROM saldo WHERE cuentas_id = $id
+      SELECT ID, ex_stock_id as stk_id, 'carga' as concepto, cuentas_id, costo, costo_usd, code, code_prov, n_order, usuario, Day, IF((Day BETWEEN DATE_SUB(NOW(), INTERVAL 1 DAY) AND NOW()),'Mostrar','No Mostrar') AS validacion, (SELECT color FROM usuarios WHERE Nombre = saldo.usuario) AS color_user FROM saldo WHERE cuentas_id = $id
       UNION ALL
-      SELECT ID, ID as stk_id, 'descarga' as concepto, cuentas_id, (-1 * SUM(costo)) as costo, (-1 * SUM(costo_usd)) as costo_usd, '' as code, '' as code_prov, '' as n_order, usuario, '' AS Day, '' AS validacion FROM stock WHERE cuentas_id = $id"));
+      SELECT ID, ID as stk_id, 'descarga' as concepto, cuentas_id, (-1 * SUM(costo)) as costo, (-1 * SUM(costo_usd)) as costo_usd, '' as code, '' as code_prov, '' as n_order, usuario, '' AS Day, '' AS validacion, (SELECT color FROM usuarios WHERE Nombre = stock.usuario) AS color_user FROM stock WHERE cuentas_id = $id"));
 
     }
 

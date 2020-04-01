@@ -105,7 +105,7 @@ class Account extends Model
       if (empty($id))
         $id = "-1";
 
-      return $query->select(DB::raw("cuentas.*, reset.*, DATEDIFF(NOW(), dayreseteo) AS days_from_reset"))
+      return $query->select(DB::raw("cuentas.*, reset.*, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, (SELECT color FROM usuarios WHERE Nombre = cuentas.usuario) AS color_user"))
                     ->leftjoin(DB::raw("
                     (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo
                     FROM reseteo

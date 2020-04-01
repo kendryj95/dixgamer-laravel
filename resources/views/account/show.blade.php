@@ -4,7 +4,7 @@
 
 @php
 	$saldo = 0.00; $saldoARS = 0.00;
-	$color = Helper::userColor($account->usuario);
+	$color = $account->color_user;
 	$saldo_ultima_cta = 0;
 	$almaceno_ultima_cta_id  = 0;
 	$mostrar_carga_minim = true;
@@ -412,7 +412,7 @@
 												</span>
 											@endif
 												<span
-													class="badge badge-{{$color}}"
+													class="badge badge-{{$balance->color_user}}"
 													style="opacity:0.5; font-weight:400;"
 													title="Fondeado por {{ $balance->usuario }}">
 													{{ substr($balance->usuario ,0 , 1) }}
@@ -676,7 +676,7 @@
 			@php $cant_productos++; @endphp
 
 			<?php
-              $color = Helper::userColor($stock->usuario);
+              $color = $stock->color_user;
             ?>
     	<div class="col-xs-12 col-sm-4 col-md-3">
 				<div class="thumbnail">

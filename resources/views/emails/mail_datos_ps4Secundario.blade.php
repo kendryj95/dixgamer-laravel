@@ -205,9 +205,9 @@
                     6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong>
                     
                     <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
-  <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br />
+  {{-- <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br />
   <br />
-  <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br />
+  <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br /> --}}
                   </p>
                   <br />
                   <span style="font-size:22px; font-family: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #e74c3c;">Atenci&oacute;n!</span><br />

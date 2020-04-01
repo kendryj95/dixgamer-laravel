@@ -126,6 +126,7 @@ class Stock extends Model
                       titulo,
                       consola,
                       stock.usuario,
+                      (SELECT color FROM usuarios WHERE Nombre = stock.usuario) AS color_user,
                       cuentas_id AS stock_cuentas_id,
                       medio_pago,
 					  costo_usd,
