@@ -176,6 +176,7 @@ Route::group(['middleware' => ['login']], function()
 
     Route::post('asignar_stock','StockController@asignarStockStore');
     Route::get('pedidos_carga/admin', 'StockController@pedCargaAdmin');
+    Route::get('pedidos_finalizados/admin', 'StockController@pedCargaFinalizados');
     Route::get('confirmar_pedido/{id}', 'StockController@confirmPedCarga');
     Route::get('get_pedidos_edit/{id}', 'StockController@getPedidosEdit');
 

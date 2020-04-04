@@ -15,7 +15,7 @@
               @else
                 {{$data->days_from_vta}} días
               @endif
-              ) {{ $data->titulo }}
+              ) {{ \Helper::strTitleStock($data->titulo) }} ({{ $data->consola }})
             </span>
 
            	<img src="{{asset('img/productos/'.$data->consola .'/'.$data->titulo.'.jpg')}}"

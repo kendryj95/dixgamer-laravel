@@ -167,6 +167,7 @@ class AccountController extends Controller
     public function create()
     {
       $dominios = Account::dominiosByUser()->get();
+      $usuario = session()->get('usuario')->Nombre;
 
       if (count($dominios) > 0) {
         $nom_dominios = [];
@@ -176,7 +177,10 @@ class AccountController extends Controller
             $nom_dominios[] = $value->dominio;
           }
         }
-
+        
+        if (count($nom_dominios) == 0)
+          return redirect()->back()->withErrors([$usuario . ' no tienes ningún dominio habilitado asociado a ti. Debes habilitar al menos uno (1) para poder crear una cuenta.']);
+        
         $chars = "123456789";
         $random = substr( str_shuffle( $chars ), 0, 1 );
         $comienzo = ['qer','adf','zcv','wrt','sfg','xvb','ety','dgh','cbn'];
@@ -1363,11 +1367,11 @@ class AccountController extends Controller
 
 
     public function update(Request $request,$id){
+      // dd($request->all());
       // Mensajes de alerta
       $msgs = [
         'mail.required' => 'Email requerido',
         'mail_fake.required' => 'Email falso requerido',
-        'mail.email' => 'Ingrese Email valido',
         'mail_fake.email' => 'Ingrese Email falso valido',
         'mail.unique' => 'Emal ya existe',
         'mail_fake.unique' => 'Email falso ya existe',
@@ -1377,7 +1381,7 @@ class AccountController extends Controller
       ];
       // Validamos
       $v = Validator::make($request->all(), [
-          'mail' => 'required|email|unique:cuentas,mail,'.$id,
+          'mail' => 'required|unique:cuentas,mail,'.$id,
           'surname' => 'required',
           'name' => 'required',
           'mail_fake' => 'required|email|unique:cuentas,mail_fake,'.$id,

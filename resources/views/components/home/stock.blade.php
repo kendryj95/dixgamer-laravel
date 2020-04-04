@@ -11,7 +11,7 @@
 
             <div style="position:relative; overflow:hidden; padding-bottom:100%;">
               <span style="position:absolute; z-index:100; bottom: 0px; background-color: rgba(0, 0, 0, 0.8); color:#FFF; padding:3px; font-size:0.9em;">
-                {{ str_replace('-', ' ', $stock->titulo) }}
+                {{ \Helper::strTitleStock($stock->titulo) }}
               </span>
               <a title="vender {{$stock->titulo}}"
                   href="{{ url('sales/manual/add',[$stock->consola,$stock->titulo,'No']) }}{{$OII}}">

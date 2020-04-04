@@ -317,6 +317,13 @@ class Helper
       return $strFecha;
     }
 
+    public static function strTitleStock($title)
+    {
+      $titulo = str_replace('-',' ',$title);
+
+      return $titulo;
+    }
+
     public static function nicetime($date)
     {
         if(empty($date)) {
