@@ -108,6 +108,7 @@
                     <li class="divider" role="separator"></li>
                     <li><a href="{{ url('falta_cargar') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> Falta Cargar</a></li>
                     <li><a href="{{ url('stock_insertar_codigo') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P1</a></li>
+                    <li><a href="{{ url('stock_insertar_codigo_poff') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> POFF</a></li>
                 @endif
 
                 @if(\Helper::validateAdministrator(session()->get('usuario')->Level))

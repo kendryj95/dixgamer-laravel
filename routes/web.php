@@ -162,6 +162,8 @@ Route::group(['middleware' => ['login']], function()
     Route::get('stock_insertar_codigo_control','StockController@createCodeControl');
     Route::post('stock_insertar_codigo_control','StockController@storeCodeControl');
     Route::get('validaCodigo','StockController@validaCodigo');
+    Route::get('stock_insertar_codigo_poff','StockController@createCodePoff');
+    Route::post('stock_insertar_codigo_poff','StockController@storeCodePoff');
 
   });
 

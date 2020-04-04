@@ -153,8 +153,8 @@ function createColumn(selector,type = 'code'){
 			if (type == 'code_g') {
 				arr = nstr.split("\n");
 			}else{
-				var regexr = /(Voucher Code: \w+)|(Promo Code: \w+)|(Product Code: \w+)|(Product Key: \w+)|(Online Game Code: \w+)|(Redemption Code: \w+)/g;
-				var regexr2 = /(Voucher Code: )|(Promo Code: )|(Product Code: )|(Product Key: )|(Online Game Code: )|(Redemption Code: )/g;
+				var regexr = /(Voucher Code: \w+)|(Promo Code: \w+)|(Product Code: \w+)|(Product Key: \w+)|(Online Game Code: \w+)|(Redemption Code: \w+)|(Code : \w+)/g;
+				var regexr2 = /(Voucher Code: )|(Promo Code: )|(Product Code: )|(Product Key: )|(Online Game Code: )|(Redemption Code: )|(Code : )/g;
 				arr = nstr.match(regexr).map(function( m ){
 					return m.replace(regexr2,'');
 				});
