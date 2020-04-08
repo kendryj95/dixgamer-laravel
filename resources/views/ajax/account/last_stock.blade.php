@@ -35,8 +35,6 @@
 
 								@if($balance < $stock->costo_usd)
 									<p class="badge badge-danger">falta saldo</p>
-								@else
-									<button type="submit" class="btn badge badge-primary">Cargar</button>
 								@endif
 							</div>
 						</form>

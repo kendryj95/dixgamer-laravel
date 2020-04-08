@@ -8,7 +8,7 @@
 @endphp
 <div class="container">
 	@if($account)
-		<h1 style="color:#000">GUARDAR STOCK</h1>
+		<h1 style="color:#000">CARGAR JUEGO</h1>
 		<div class="row">
 			<div class="col-sm-2" style="text-align:right;">
 				<span id="alerta" class="label label-danger"></span>
@@ -142,6 +142,11 @@
 
 		<script type="text/javascript">
 			jQuery(function($) {
+
+					setTimeout(() => {
+						$('div.btn-group.bootstrap-select.input-group-btn.form-control').addClass('open');
+					}, 700);
+				
 							$("form").on('change', function() {
 									var titulo = document.getElementById('titulo-selec').value;
 					var select = document.getElementById('titulo-selec');

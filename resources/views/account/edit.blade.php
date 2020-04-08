@@ -11,10 +11,10 @@
       <form method="post" name="form1" action="{{url('cuentas',[$account->ID])}}">
         {{ csrf_field() }}
         <input type="hidden" name="_method" value="PUT">
-        <em class="text-muted">{{$account->mail}}</em>
+        <em class="text-muted">ID: {{$account->mail}}</em>
 
         <div id="user-result-div" class="input-group form-group">
-          <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+          <span class="input-group-addon"><i class="fa fa-slack fa-fw"></i></span>
           <input
             value="{{$account->mail}}"
             class="form-control"
@@ -23,12 +23,12 @@
             id="mail"
             autocomplete="off"
             spellcheck="false"
-            placeholder="Mail Real"
+            placeholder="ID"
             autofocus>
           <span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
         </div>
 
-        <em class="text-muted">{{$account->mail_fake}}</em>
+        <em class="text-muted">Email: {{$account->mail_fake}}</em>
         <div id="user-result-div" class="input-group form-group">
           <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
           <input
@@ -43,19 +43,19 @@
           <span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
         </div>
 
-        <em class="text-muted">{{$account->name}}</em>
+        <em class="text-muted">Nombre: {{$account->name}}</em>
         <div class="input-group form-group">
           <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
           <input class="form-control" type="text" value="{{$account->name}}" name="name" placeholder="Name">
         </div>
 
-        <em class="text-muted">{{$account->surname}}</em>
+        <em class="text-muted">Apellido: {{$account->surname}}</em>
         <div class="input-group form-group">
           <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
           <input class="form-control" value="{{$account->surname}}" type="text" name="surname" placeholder="Surname">
         </div>
 
-        <em class="text-muted">{{$account->pass}}</em>
+        <em class="text-muted">Contraseña: {{$account->pass}}</em>
         <div class="input-group form-group">
           <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
           <input class="form-control" value="{{$account->pass}}" type="text" name="pass">
