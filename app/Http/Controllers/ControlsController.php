@@ -1265,7 +1265,8 @@ class ControlsController extends Controller
 
                             }
 
-                            if($libre_usd < 0.22) {
+                            /****
+							if($libre_usd < 0.22) {
 
                                 DB::table('stock')->where('ID',$stock_id)
                                 ->update([
@@ -1286,7 +1287,7 @@ class ControlsController extends Controller
                                 $mensajes .= "[" . $cuentas_id . "] " . $stock_id . " actualizado en " . $libre_usd . " USD<br>";
                                 $mensajes .= "[" . $cuentas_id . "] nota añadida<br>";
 
-                            }
+                            }*/
                         }
                     }
 
