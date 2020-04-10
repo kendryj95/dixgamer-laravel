@@ -120,16 +120,17 @@ class Balance extends Model
       $query->select('cuentas_id')->where('usuario',$seller)->orderBy('ID','DESC');
     }
 
-    public function ScopeLastGiftsCharged($query,$seller,$lastAccountId)
+    public function ScopeLastGiftsCharged($query,$seller,$lastAccountId,$dateLastAccount)
     {
       $query->select(
+        'cuentas_id',
+        'consola',
         'titulo',
         'Day'
       )
       ->where('usuario',$seller)
       ->where('cuentas_id',$lastAccountId)
-      ->orderBy('ID','DESC')
-      ->limit(3);
+      ->whereRaw("Day > ('$dateLastAccount' - 1)");
     }
 
     public function balanceMensual()

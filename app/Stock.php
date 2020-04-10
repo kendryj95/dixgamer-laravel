@@ -228,13 +228,7 @@ class Stock extends Model
     public function lastAccountUserGames($seller){
 
         return DB::select(DB::raw("
-            SELECT cta.ID, stock.titulo, stock.consola, stock.costo_usd, stock.cuentas_id FROM
-            (SELECT cuentas.ID, stock.titulo FROM cuentas LEFT JOIN stock ON cuentas.ID = stock.cuentas_id WHERE titulo IS NOT NULL and cuentas.usuario='".$seller."' ORDER BY ID DESC LIMIT 1) as cta
-            LEFT JOIN
-            stock
-            ON cta.ID = stock.cuentas_id
-            WHERE stock.titulo IS NOT NULL
-            ORDER BY ID DESC
+        SELECT titulo, consola, cuentas_id, cuentas_id AS ID, costo_usd, DATE_FORMAT(Day,'%Y-%m-%d') as Day FROM stock WHERE cuentas_id is not null AND usuario = '$seller' ORDER BY stock.ID desc LIMIT 1
         "));
     }
 

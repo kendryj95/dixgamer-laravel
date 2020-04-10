@@ -1866,21 +1866,20 @@ class AccountController extends Controller
     {
       $vendedor = session()->get('usuario')->Nombre;
 
-      $lastAccountIdBalance = Balance::lastAccountIdBalance($vendedor)->value('cuentas_id');
+      $lastAccountGames = $this->tks->lastAccountUserGames(session()->get('usuario')->Nombre);
       $giftsCargadas = [];
 
-      if ($lastAccountIdBalance) {
-        $lastGiftsCharged = Balance::lastGiftsCharged($vendedor, $lastAccountIdBalance)->get();
+      if ($lastAccountGames) {
+        $id_cuenta = $lastAccountGames[0]->cuentas_id;
+        $last_date_stock = date('Y-m-d', strtotime($lastAccountGames[0]->Day));
+        $lastGiftsCharged = Balance::lastGiftsCharged($vendedor, $id_cuenta, $last_date_stock)->get();
+
+        // dd($lastGiftsCharged);
 
         if (count($lastGiftsCharged) > 0) {
           
-          $fecha_cargada_tmp = date('Y-m-d', strtotime($lastGiftsCharged[0]->Day));
-
           foreach ($lastGiftsCharged as $value) {
-            $fecha_gift = date('Y-m-d', strtotime($value->Day));
-            if ($fecha_gift == $fecha_cargada_tmp) { // Filtro para solo tomar las ultimas gifts cargadas en el mismo día.
-              $giftsCargadas[] = $value->titulo;
-            }
+            $giftsCargadas[] = $value->titulo;
           }
         } 
       }
@@ -2242,7 +2241,7 @@ class AccountController extends Controller
       ## CAMBIAR LA CONTRASEÑA
       
       $usuario = '';
-      if ($tipo_rec = "pri") {
+      if ($tipo_rec == "pri") {
         $usuario = "rp" . session()->get('usuario')->Nombre;
       } else {
         $usuario = session()->get('usuario')->Nombre;
