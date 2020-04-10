@@ -1268,13 +1268,15 @@ class AccountController extends Controller
 
       $date = date('Y-m-d H:i:s', time());
       try {
-        $data = [];
-        $data['cuentas_id']=$id;
-        $data['Day']=$date;
-        $data['usuario']= session()->get('usuario')->Nombre;
-        $this->rst->storeResetAccount($data);
+        if($recup != 'secu') {
+          $data = [];
+          $data['cuentas_id']=$id;
+          $data['Day']=$date;
+          $data['usuario']= session()->get('usuario')->Nombre;
+          $this->rst->storeResetAccount($data);
 
-        $mensaje = 'Cuenta reseteada';
+          $mensaje = 'Cuenta reseteada';
+        }
 
         if ($recup == 'pri') {
           $mensaje = 'Intento recuperar pri satisfactoriamente.';
