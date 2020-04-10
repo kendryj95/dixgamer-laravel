@@ -697,7 +697,7 @@
                     <ul style="top:-65px;left:25px" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                       <li class="dropdown-header">¿Deseas quitar producto?</li>
                       <li role="separator" class="divider"></li>
-                      <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, remover</a></li>
+                      <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, no merece</a></li>
                       @if($dataCustomer->consola == 'ps4')
                       @if($dataCustomer->slot == 'Secundario')
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?slot={{$dataCustomer->slot}}">Sí, tal vez no usa</a></li>

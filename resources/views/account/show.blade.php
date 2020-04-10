@@ -735,6 +735,7 @@
             		</p>
 
             		<p>
+			            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
 
 									<small class="text-success">
 										<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>
@@ -748,7 +749,6 @@
 									</small>
 									<br />
 
-			            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
 
 				            @php
 											$gtoestimado = round($expensesIncome->gto_x_ing * $stock->total_ing);
