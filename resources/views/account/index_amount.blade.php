@@ -118,7 +118,14 @@
     <div class="col-md-12">
 
       <ul class="pager">
-        {{ $accounts->render() }}
+        {{ $accounts->appends(
+          [
+            'console' => app('request')->input('console'),
+            'order' => app('request')->input('order'),
+            'saldoMin' => app('request')->input('saldoMin'),
+            'saldoMax' => app('request')->input('saldoMax'),
+          ]
+          )->render() }}
       </ul>
 
     </div>
