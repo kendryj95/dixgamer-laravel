@@ -858,8 +858,9 @@
 
             @if ($ventas_notas)
               @foreach ($ventas_notas as $venta_nota)
+                @php $nota_producto = false; @endphp
                 @if ($venta_nota->id_ventas == $dataCustomer->ID_ventas)
-                <div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.7;font-size: 0.9em">
+                <div id="nota_venta_{{$venta_nota->ID}}" class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.7;font-size: 0.9em">
                   <i class="fa fa-comment fa-fw"></i>
 
                   @if (strpos($venta_nota->Notas, "Antes asignado a cliente") !== false)
@@ -877,6 +878,8 @@
                     $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
                     $cuenta = substr($string, $pos+1);
                     $nota = substr($string, 0, $pos);
+                    list($id_stock,$title,$cons,$slot) = explode(" ",substr($nota,14));
+                    $nota_producto = true;
                     @endphp
 
                     {{$nota}} <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a>
@@ -890,25 +893,40 @@
                   {{ ($venta_nota->Notas) }}
                   @endif
                 </div>
-                <div class="text-right">
-                  <em
+                
+                <div @if($nota_producto) style="display: flex; justify-content: space-between" @endif class="text-right">
+                  @if ($nota_producto)
+                    <div class="dropdown">
+                      <button class="btn btn-link btn-xs dropdown-toggle" type="button" id="re_asignar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Re-asignar
+                      </button>
+                      <ul style="" class="dropdown-menu" aria-labelledby="re_asignar">
+                        <li class="dropdown-header">¿Seguro desea re asignar?</li>
+                        <li role="separator" class="divider"></li>
+                        <li><a class="btn btn-danger" href="javascript:void(0)" onclick="btnReAsignar('{{$title}}', '{{$cons}}', '{{$slot}}','{{ $venta_nota->id_ventas }}', event)">Sí, re asignar</a></li>
+                      </ul>
+                    </div>
+                  @endif
+                  <div>
+                    <em
                     class="small text-muted"
                     style="opacity: 0.7;font-size: 0.8em">
                     {{ date("d M 'y", strtotime($venta_nota->Day)) }}
                     ({{ $venta_nota->usuario }})
-                  </em>
-                  @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
-                  <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
-                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
-                      <i aria-hidden="true" class="fa fa-remove text-muted"></i>
-                    </button>
-                    <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                      <li class="dropdown-header">¿Eliminar nota de venta?</li>
-                      <li role="separator" class="divider"></li>
-                      <li><a href="{{ url('delete_notes',[$venta_nota->ID,'ventas']) }}">Sí, Eliminar</a></li>
-                    </ul>
+                    </em>
+                    @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+                    <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
+                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
+                        <i aria-hidden="true" class="fa fa-remove text-muted"></i>
+                      </button>
+                      <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li class="dropdown-header">¿Eliminar nota de venta?</li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url('delete_notes',[$venta_nota->ID,'ventas']) }}">Sí, Eliminar</a></li>
+                      </ul>
+                    </div>
+                    @endif
                   </div>
-                  @endif
                 </div>
                 @endif
               @endforeach
@@ -1738,6 +1756,19 @@
           setTimeout(function(){
             document.getElementById(input).focus();
           }, 600);
+        }
+
+        function btnReAsignar(titulo, cons, slot, id_venta, e)
+        {
+          if (cons == 'ps4') {
+            url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/${slot}/${id_venta}`;
+          } else {
+            url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/No/${id_venta}`;
+          }
+          
+          window.location.href = url;
+
+          e.preventDefault();
         }
 
     </script>

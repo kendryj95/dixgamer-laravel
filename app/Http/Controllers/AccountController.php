@@ -1636,24 +1636,24 @@ class AccountController extends Controller
 
       switch ($tipo) {
         case 'contra':
-          $day = DB::table('cta_pass')->where('ID',$id)->first();
+          $day = DB::table('cta_pass')->where('ID',$id)->value('Day');
           break;
         
         case 'reset':
-          $day = DB::table('reseteo')->where('ID',$id)->first();
+          $day = DB::table('reseteo')->where('ID',$id)->value('Day');
           break;
         case 'resetear':
-          $day = DB::table('resetear')->where('ID',$id)->first();
+          $day = DB::table('resetear')->where('ID',$id)->value('Day');
           break;
         case 'notas':
-          $day = DB::table('cuentas_notas')->where('ID',$id)->first();
+          $day = DB::table('cuentas_notas')->where('ID',$id)->value('Day');
           break;
         case 'venta':
-          $day = DB::table('ventas')->where('ID',$id)->first();
+          $day = DB::table('ventas')->where('ID',$id)->value('Day_modif');
           break;
       }
 
-      $day = date('Y-m-d', strtotime($day->Day));
+      $day = date('Y-m-d', strtotime($day));
 
       return view('ajax.account.modificar_fecha_operaciones',compact('id','tipo', 'day'));
     }
@@ -1678,7 +1678,7 @@ class AccountController extends Controller
             DB::table('cuentas_notas')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           case 'venta':
-            DB::table('ventas')->where('ID',$request->id)->update(['Day' => $request->Day]);
+            DB::table('ventas')->where('ID',$request->id)->update(['Day_modif' => $request->Day]);
             break;
         }
         DB::commit();

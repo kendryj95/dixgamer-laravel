@@ -431,6 +431,7 @@ class CustomerController extends Controller
             $data = [];
             $data['slot'] = $request->slot;
             $data['stock_id'] = $request->stock;
+            $data['Day_modif'] = date('Y-m-d H:i:s');
 
             DB::table('ventas')->where('ID',$request->ID)->update($data);
 
@@ -606,6 +607,7 @@ class CustomerController extends Controller
         $data['order_id_web'] = $venta_anterior->order_id_web;
         $data['estado'] = $venta_anterior->estado;
         $data['Day'] = $date;
+        $data['Day_modif'] = $date;
         $data['usuario'] = $vendedor;
 
         $idventa = DB::table('ventas')->insertGetId($data);
@@ -645,7 +647,28 @@ class CustomerController extends Controller
 
       if(!is_array($row_rsSTK)) {
           // $errors[] = "No hay stock disponibles.";
-        return redirect()->back()->withErrors(["No hay stock disponible para el Juego: $titulo ($consola)"]);
+        // return redirect()->back()->withErrors(["No hay stock disponible para el Juego: $titulo ($consola)"]);
+
+        $venta = DB::table('ventas')->select('ID','order_item_id','order_id_web AS order_id','clientes_id')->where('ID',$id_ventas)->first();
+
+        $existEmailCliente = DB::table('clientes')
+                                   ->select(
+                                       'ID',
+                                       'nombre',
+                                       'apellido',
+                                       'email',
+                                       'auto'
+                                   )
+                                   ->where('ID', $venta->clientes_id)
+                                   ->first();
+
+        return view('sales.salesUpdateWeb', [
+          "venta" => $venta,
+          "consola" => $consola,
+          "titulo" => $titulo,
+          "slot" => $slot,
+          "clientes" => $existEmailCliente
+        ]);
       } else {
         $stk_ID = $row_rsSTK[0]->ID_stk;
       }
@@ -658,10 +681,13 @@ class CustomerController extends Controller
                             's.titulo',
                             's.cuentas_id',
                             'v.cons',
-                            'v.slot'
+                            'v.slot',
+                            'v.clientes_id'
                           )
                           ->leftjoin('ventas AS v', 's.ID', '=', 'v.stock_id')
                           ->where('v.ID',$id_ventas)->first();
+      
+      $clientes_id = $stock_anterior->clientes_id;
 
       $nota = '';
 
@@ -689,6 +715,7 @@ class CustomerController extends Controller
         $data['stock_id'] = $stk_ID;
         $data['cons'] = $consola;
         $data['slot'] = $slot;
+        $data['Day_modif'] = date('Y-m-d H:i:s');
 
         DB::table('ventas')->where('ID', $id_ventas)->update($data);
 
@@ -706,7 +733,7 @@ class CustomerController extends Controller
 
         \Helper::messageFlash('Clientes','Venta de producto modificado.', 'alert_cliente');
 
-        return redirect()->back();
+        return redirect("clientes/$clientes_id");
 
       } catch (Exception $e) {
         DB::rollback();
@@ -838,6 +865,7 @@ class CustomerController extends Controller
               $data['stock_id'] = 1;
               $data['cons'] = 'ps';
               $data['slot'] = 'No';
+              $data['Day_modif'] = date('Y-m-d H:i:s');
 
               DB::table('ventas')->where('ID',$request->ID)->update($data);
 
@@ -1606,6 +1634,7 @@ class CustomerController extends Controller
         $data['medio_venta'] = 'Mail';
         $data['estado'] = 'listo';
         $data['Day'] = date('Y-m-d H:i:s');
+        $data['Day_modif'] = date('Y-m-d H:i:s');
         $data['usuario'] = session()->get('usuario')->Nombre;
 
         $venta_ID = DB::table('ventas')->insertGetId($data);

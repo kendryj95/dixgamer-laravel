@@ -199,7 +199,7 @@ class Stock extends Model
               (SELECT client.ID_ventas AS id, 'venta' as concepto, client.Day, ID AS ID_stock, titulo, consola, cuentas_id, clientes_id, slot, ventas_Notas, apellido, nombre, email,  NULL as new_pass, NULL as usuario, client.auto
               FROM stock
               RIGHT JOIN
-              (SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, medio_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day, clientes.ID AS ID_clientes, apellido, nombre, email, clientes.auto
+              (SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, medio_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day_modif AS Day, clientes.ID AS ID_clientes, apellido, nombre, email, clientes.auto
               FROM ventas
               LEFT JOIN (select ventas_id, medio_cobro, ref_cobro, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro ON ventas.ID = ventas_cobro.ventas_id
               LEFT JOIN

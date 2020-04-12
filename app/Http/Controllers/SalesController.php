@@ -111,7 +111,8 @@ class SalesController extends Controller
             'order_id_ml'   => $request->order_id_ml,
             'order_id_web'   => $request->order_id_web,
             'estado'        => $request->estado,
-            'Day'           => \Carbon\Carbon::now('America/New_York'),
+            'Day'           => date('Y-m-d H:i:s'),
+            'Day_modif'     => date('Y-m-d H:i:s'),
             'Notas'         => $request->Notas,
             'usuario'       => session()->get('usuario')->Nombre
 
@@ -439,6 +440,7 @@ class SalesController extends Controller
         $data['order_id_web'] = $order_id_web;
         $data['estado'] = $estado;
         $data['Day'] = $date;
+        $data['Day_modif'] = $date;
         $data['usuario'] = session()->get('usuario')->Nombre;
 
         return $data;
