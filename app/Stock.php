@@ -131,7 +131,6 @@ class Stock extends Model
                       medio_pago,
 					  costo_usd,
                       costo,
-                      stock.Notas AS stock_Notas,
                       Day AS daystock,
                       reset.ID_reseteo AS ID_reset,
                       reset.r_cuentas_id AS reset_cuentas_id,
