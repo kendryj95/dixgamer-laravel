@@ -789,7 +789,7 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $date = date('Y-m-d H:i:s', time());
+              $date = date('Y-m-d H:i:s');
               $data = [
                 'cuentas_id'=>$account,
                 'ex_stock_id'=>$stock->ID,
@@ -838,7 +838,7 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $date = date('Y-m-d H:i:s', time());
+              $date = date('Y-m-d H:i:s');
               $data = [
                 'cuentas_id'=>$account,
                 'ex_stock_id'=>$stock->ID,
@@ -886,7 +886,7 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $date = date('Y-m-d H:i:s', time());
+              $date = date('Y-m-d H:i:s');
               $data = [
                 'cuentas_id'=>$account,
                 'ex_stock_id'=>$stock->ID,
@@ -934,7 +934,7 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $date = date('Y-m-d H:i:s', time());
+              $date = date('Y-m-d H:i:s');
               $data = [
                 'cuentas_id'=>$account,
                 'ex_stock_id'=>$stock->ID,
@@ -983,7 +983,7 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $date = date('Y-m-d H:i:s', time());
+              $date = date('Y-m-d H:i:s');
               $data = [
                 'cuentas_id'=>$account,
                 'ex_stock_id'=>$stock->ID,
@@ -1032,7 +1032,7 @@ class AccountController extends Controller
               $stock_valido_id = $stock_valido[0]->ID_stk;
               $stock = Stock::stockDetail($stock_valido_id)->first();
 
-              $date = date('Y-m-d H:i:s', time());
+              $date = date('Y-m-d H:i:s');
               $data = [
                 'cuentas_id'=>$account,
                 'ex_stock_id'=>$stock->ID,
@@ -1077,7 +1077,7 @@ class AccountController extends Controller
             $stock_valido_id = $stock_valido[0]->ID_stk;
             $stock = Stock::stockDetail($stock_valido_id)->first();
 
-            $date = date('Y-m-d H:i:s', time());
+            $date = date('Y-m-d H:i:s');
             $data = [
               'cuentas_id'=>$account,
               'ex_stock_id'=>$stock->ID,
@@ -1137,7 +1137,7 @@ class AccountController extends Controller
       if ($this->validarGift($stock_id)) {
         $stock = Stock::stockDetail($stock_id)->first();
 
-        $date = date('Y-m-d H:i:s', time());
+        $date = date('Y-m-d H:i:s');
         $data = [
           'cuentas_id'=>$account_id,
           'ex_stock_id'=>$stock->ID,
@@ -1761,7 +1761,7 @@ class AccountController extends Controller
             $stock_valido_id = $stock_valido[0]->ID_stk;
             $stock = Stock::stockDetail($stock_valido_id)->first();
 
-            $date = date('Y-m-d H:i:s', time());
+            $date = date('Y-m-d H:i:s');
             $data = [
               'cuentas_id'=>$account_id,
               'ex_stock_id'=>$stock->ID,
@@ -2272,7 +2272,7 @@ class AccountController extends Controller
         $stock_valido_id = $stock_valido[0]->ID_stk;
         $stock = Stock::stockDetail($stock_valido_id)->first();
 
-        $date = date('Y-m-d H:i:s', time());
+        $date = date('Y-m-d H:i:s');
         $data = [
           'cuentas_id'=>$account,
           'ex_stock_id'=>$stock->ID,
