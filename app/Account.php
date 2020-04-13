@@ -375,15 +375,19 @@ class Account extends Model
       ->orWhereRaw("Day_reset IS NULL");
     }
 
-    public function ScopeCtasVacias($query) {
-      $usuario = session()->get('usuario')->Nombre;
+    public function ScopeCtasVacias($query, $usuario = null) {
 
-      return $query
-            ->select('cuentas.*')
+      $response = $query
+            ->select('cuentas.*', DB::raw("(SELECT color FROM usuarios WHERE Nombre = cuentas.usuario) AS color_user"))
             ->leftjoin("stock","cuentas.ID","=","stock.cuentas_id")
-            ->whereNull("stock.cuentas_id")
-            ->where("cuentas.usuario", $usuario)
-            ->orderBy("cuentas.ID","DESC");
+            ->whereNull("stock.cuentas_id");
+
+      if ($usuario != null) {
+        $response = $query->where("cuentas.usuario", $usuario);
+      }
+      $response = $query->orderBy("cuentas.ID","DESC");
+
+      return $response;
     }
 
 

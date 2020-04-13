@@ -7,6 +7,37 @@
         <h1>Lista Cuentas Vacias</h1>
         <!-- InstanceBeginEditable name="body" -->
 
+        @if (\Helper::validateAdministrator(session()->get('usuario')->Level))
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-12">
+
+                    <a
+                        class="btn @if($user == '') btn-success @else btn-default @endif btn-sm"
+                        href="{{ url('cuentas_vacias') }}"
+                        title="Filtrar Todos"
+                        style="margin:5px 0 0 0;">
+
+                        Todos
+
+                    </a>
+
+                    @foreach($usuarios as $value)
+        
+                    <a
+                        class="btn @if($user == $value) btn-success @else btn-default @endif btn-sm"
+                        href="{{ url('cuentas_vacias', $value) }}"
+                        title="Filtrar {{$value}}"
+                        style="margin:5px 0 0 0;">
+        
+                        {{$value}}
+        
+                    </a>
+        
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
@@ -40,7 +71,9 @@
                                     {{ $fecha }}
                                     </a>
                                 </td>
-                                <td><a title="Ir a Cuenta" href="{{ url('cuentas',$cta->ID) }}" target="_blank"> {{ $cta->usuario }} </a></td>
+                                <td>
+                                    <span class="badge badge-{{ $cta->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$cta->usuario}}">{{ substr($cta->usuario,0 , 1) }}</span>
+                                </td>
                 
                             </tr>
                         @endforeach

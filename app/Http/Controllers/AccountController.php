@@ -2593,11 +2593,22 @@ class AccountController extends Controller
       return view('account.ctas_resetear', compact('cuentas'));
     }
 
-    public function ctasVacias()
+    public function ctasVacias($user = null)
     {
       $cuentas = Account::ctasVacias()->get();
+      $usuarios = [];
 
-      return view('account.ctas_vacias', compact('cuentas'));
+      foreach ($cuentas as $value) { 
+        if (!in_array($value->usuario,$usuarios)) {
+          $usuarios[] = $value->usuario;
+        }
+      }
+      $data_user = session()->get('usuario');
+      $user = $user != null ? $user : (\Helper::validateAdministrator($data_user->Level) ? null : $data_user->Nombre);
+      
+      $cuentas = Account::ctasVacias($user)->get();
+
+      return view('account.ctas_vacias', compact('cuentas','usuarios','user'));
 
     }
 
