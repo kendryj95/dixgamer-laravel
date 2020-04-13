@@ -67,8 +67,8 @@ class Account extends Model
     }
 
     public function ScopeCuentasNotas($query,$obj){
-      $query = DB::table('cuentas_notas')->select('cuentas_notas.*')->join('cuentas','cuentas.ID','=','cuentas_notas.cuentas_id')
-      ->orderBy('cuentas_notas.ID', 'DESC');
+      $query = DB::table('cuentas_notas')->select('cuentas_notas.*', DB::raw("(SELECT color FROM usuarios WHERE Nombre = cuentas_notas.usuario) AS color_user"))->join('cuentas','cuentas.ID','=','cuentas_notas.cuentas_id')
+      ->orderBy('cuentas_notas.ID', 'DESC'); 
 
       if (!empty($obj->column) && !empty($obj->word)) {
         if ($obj->column == 'Notas') {

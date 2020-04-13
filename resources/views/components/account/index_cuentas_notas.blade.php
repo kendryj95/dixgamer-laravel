@@ -30,9 +30,7 @@
                 </a>
               </td>
               <td>
-                <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
-                  {{ $account->Notas }}
-                </a>
+                <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $account->Notas !!} </div>
               </td>
               <td>
                 @php
@@ -43,15 +41,13 @@
                 $fecha = "$dia-$mes-$anio";
                 @endphp
                 
-                <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
+                <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}"> 
                   {{ $fecha }}
                 </a>
               </td>
 
-              <td>
-                <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
-                  {{ $account->usuario }}
-                </a>
+              <td class="text-center">
+                <span class="badge badge-{{ $account->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$account->usuario}}">{{ substr($account->usuario,0 , 1) }}</span>
               </td>
 
 
