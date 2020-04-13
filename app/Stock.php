@@ -189,7 +189,7 @@ class Stock extends Model
     }
 
     public function storeStockAccount($data){
-        return DB::table('stock')->insert($data);
+        return DB::table('stock')->insertGetId($data);
     }
 
     public function soldFronConcept($id){
@@ -780,6 +780,16 @@ class Stock extends Model
 
     public function scopeCalcularCotizCode($query) {
         $query->select(DB::raw("ROUND(AVG(costo/costo_usd)) AS cotiz"))->where('titulo','gift-card-10-usd')->orderBy('ID','DESC')->limit(100);
+    }
+
+    public function storeNotesStock($stock_id, $nota) 
+    {
+        $data['stock_id'] = $stock_id;
+        $data['Notas'] = $nota;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('stock_notas')->insert($data);
     }
 
 

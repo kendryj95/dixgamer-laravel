@@ -734,10 +734,12 @@ class AccountController extends Controller
         $data['medio_pago'] = 'Saldo';
         $data['costo'] = $costo_ars;
         $data['Day'] = $this->dte;
-        $data['Notas'] = $request->Notas;
         $data['usuario'] = session()->get('usuario')->Nombre;
 
-        $this->tks->storeStockAccount($data);
+        $id_stock = $this->tks->storeStockAccount($data);
+        if ($request->Notas != null) {
+          $this->tks->storeNotesStock($id_stock, $request->Notas);
+        }
         \Helper::messageFlash('Cuentas','Stock agregado','alert_cuenta');
         return redirect('cuentas/'.$request->cuentas_id);
       } catch (\Exception $e) {
@@ -1323,7 +1325,8 @@ class AccountController extends Controller
       {
           return redirect()->back()->withErrors($v->errors());
       }
-      $date = date('Y-m-d H:i:s', time());
+      $date = date('Y-m-d H:i:s');
+      DB::beginTransaction();
       try {
 
         // datos del saldo
@@ -1342,17 +1345,20 @@ class AccountController extends Controller
         $data['code_prov'] = $balance->code_prov;
         $data['n_order'] = $balance->n_order;
         $data['Day'] = $date;
-        $data['Notas'] = "Devuelto de cta #$request->c_id";
         $data['usuario'] = $balance->ex_usuario;
         $saving = $this->tks->storeCodes($data);
+        $nota = "Devuelto de cta #$request->c_id";
+        $this->tks->storeNotesStock($request->id,$nota);
 
         // Eliminando saldo actual
         DB::table('saldo')->where('ex_stock_id',$request->id)->delete();
+        DB::commit();
         // Mensaje de notificacion
         \Helper::messageFlash('Cuentas','Saldo retornado','alert_cuenta');
         return redirect('cuentas/'.$request->c_id);
       } catch (\Exception $e) {
-        return redirect('cuentas/'.$request->c_id)->withErrors('Intentelo nuevamente');
+        DB::rollback();
+        return redirect('cuentas/'.$request->c_id)->withErrors('Ocurrio un error al intentar generar la devolucion de saldo.');
       }
 
     }
