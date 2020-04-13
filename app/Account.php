@@ -132,7 +132,8 @@ class Account extends Model
                   't_cuentas.usuario',
                   't_cuentas.color_user',
                   DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0)) libre_usd"),
-                  DB::raw("(sa_costo - COALESCE(st_costo,0)) libre_ars")
+                  DB::raw("(sa_costo - COALESCE(st_costo,0)) libre_ars"),
+                  DB::raw("IFNULL(reseteo.q,0) as reseteos")
                   )->leftjoin(DB::raw("
                     (SELECT cuentas_id as st_cta_id,
                     SUM(costo_usd) as st_costo_usd,
@@ -145,6 +146,9 @@ class Account extends Model
                   })
                   ->leftjoin(DB::raw("(SELECT c.ID AS cuentas_id, c.usuario, u.color AS color_user FROM cuentas c LEFT JOIN usuarios u ON c.usuario = u.Nombre) AS t_cuentas"), function($join){
                     $join->on('t_cuentas.cuentas_id','=','saldo.sa_cta_id');
+                  })
+                  ->leftjoin(DB::raw("(SELECT Count(*) as q, cuentas_id FROM reseteo group by cuentas_id) AS reseteo"), function($join){
+                    $join->on('t_cuentas.cuentas_id','=','reseteo.cuentas_id');
                   })
                   ->whereRaw("(sa_costo_usd - COALESCE(st_costo_usd,0)) != 0.00")
                   ->where(function ($query) use ($console, $range) {
