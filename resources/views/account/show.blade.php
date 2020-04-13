@@ -570,7 +570,7 @@
 
 				 			@endphp
 
-						  	@if (($account->days_from_reset == NULL) || ($account->days_from_reset > 180))
+							  @if (($account->days_from_reset === null) || ($account->days_from_reset > 180))
 								@foreach ($btnRecup as $tipo => $item)
 									@if ($item['ver'] === true)
 										<div class="dropdown pull-left" style="margin-bottom: 2px">
@@ -611,13 +611,13 @@
 								@endforeach
 							@endif
 
-                @if ($account->Q_reseteado)
-					          	<em class="small" style="color:#BBB;">
-												({{$account->Q_reseteado}}reset)
-												hace {{$account->days_from_reset}}
-												días
-											</em>
-								@endif
+							@if ($account->Q_reseteado)
+								<em class="small" style="color:#BBB;">
+									({{$account->Q_reseteado}}reset)
+									hace {{$account->days_from_reset}}
+									días
+								</em>
+							@endif
 
 			   </li>
 			   
