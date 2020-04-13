@@ -654,18 +654,18 @@
                   <i class="fa fa-gamepad fa-fw" aria-hidden="true"></i>
                   <?php echo $dataCustomer->ID_stock; ?>
                   @if(Helper::validateAdministrator(session()->get('usuario')->Level))
-                    @if($dataCustomer->stock_Notas)
+                    {{-- @if($dataCustomer->stock_Notas) 
                       <a
                         href="#"
                         data-toggle="popover"
                         data-placement="bottom"
                         data-trigger="focus"
                         title="Notas de Stock"
-                        data-content="<?php echo $dataCustomer->stock_Notas; ?>"
+                        data-content="{{$dataCustomer->stock_Notas}}"
                         style="color: #555555;">
                           <i class="fa fa-comment fa-fw"></i>
                         </a>
-                    @endif
+                    @endif --}}
                   @endif
                   {{--<a
                     title="Cambiar Producto"
@@ -964,7 +964,7 @@
                   <small style="color:#CFCFCF;" title="<?php echo $lowerSale->Day; ?>"><em class="fa fa-calendar-o fa-xs fa-fw" aria-hidden="true"></em><?php echo date("d-M", strtotime($lowerSale->Day)); ?></small>
                   <small style="color:#CFCFCF;" title="<?php echo $lowerSale->Day_baja; ?>"><em class="fa fa-trash-o fa-xs fa-fw" aria-hidden="true"></em><?php echo date("d-M", strtotime($lowerSale->Day_baja)); ?></small>
               </p>
-              <p><small style="color:#CFCFCF;"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> <?php echo $lowerSale->ID_stock; ?> <?php if ($lowerSale->stock_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Stock" data-content="<?php echo $lowerSale->stock_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></small>
+              <p><small style="color:#CFCFCF;"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> <?php echo $lowerSale->ID_stock; ?>  <?php// if ($lowerSale->stock_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Stock" data-content="<?php //echo $lowerSale->stock_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php// endif; ?>  </small>
               <small style="color:#CFCFCF;"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> <?php echo $lowerSale->ID_ventas; ?></small></p>
               <p>
               <?php

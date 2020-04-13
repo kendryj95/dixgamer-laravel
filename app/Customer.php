@@ -77,7 +77,6 @@ class Customer extends Model
                   'code',
                   'code_prov',
                   'n_order',
-                  'Notas AS stock_Notas',
                   'stock.cuentas_id',
                   'q_reset',
                   'max_Day',
@@ -110,7 +109,6 @@ class Customer extends Model
                   'titulo',
                   'consola',
                   'costo_usd',
-                  'Notas AS stock_Notas',
                   'cuentas_id',
                   'client.*'
                   )

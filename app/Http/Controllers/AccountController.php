@@ -805,7 +805,6 @@ class AccountController extends Controller
                 'n_order'=>$stock->n_order,
                 'Day'=>$date,
                 'ex_Day_stock'=>$stock->Day,
-                'Notas'=>$stock->Notas,
                 'usuario'=>session()->get('usuario')->Nombre,
                 'ex_usuario'=>$stock->usuario
               ];
@@ -854,7 +853,6 @@ class AccountController extends Controller
                 'n_order'=>$stock->n_order,
                 'Day'=>$date,
                 'ex_Day_stock'=>$stock->Day,
-                'Notas'=>$stock->Notas,
                 'usuario'=>session()->get('usuario')->Nombre,
                 'ex_usuario'=>$stock->usuario
               ];
@@ -902,7 +900,6 @@ class AccountController extends Controller
                 'n_order'=>$stock->n_order,
                 'Day'=>$date,
                 'ex_Day_stock'=>$stock->Day,
-                'Notas'=>$stock->Notas,
                 'usuario'=>session()->get('usuario')->Nombre,
                 'ex_usuario'=>$stock->usuario
               ];
@@ -950,7 +947,6 @@ class AccountController extends Controller
                 'n_order'=>$stock->n_order,
                 'Day'=>$date,
                 'ex_Day_stock'=>$stock->Day,
-                'Notas'=>$stock->Notas,
                 'usuario'=>session()->get('usuario')->Nombre,
                 'ex_usuario'=>$stock->usuario
               ];
@@ -999,7 +995,6 @@ class AccountController extends Controller
                 'n_order'=>$stock->n_order,
                 'Day'=>$date,
                 'ex_Day_stock'=>$stock->Day,
-                'Notas'=>$stock->Notas,
                 'usuario'=>session()->get('usuario')->Nombre,
                 'ex_usuario'=>$stock->usuario
               ];
@@ -1048,7 +1043,6 @@ class AccountController extends Controller
                 'n_order'=>$stock->n_order,
                 'Day'=>$date,
                 'ex_Day_stock'=>$stock->Day,
-                'Notas'=>$stock->Notas,
                 'usuario'=>session()->get('usuario')->Nombre,
                 'ex_usuario'=>$stock->usuario
               ];
@@ -1093,7 +1087,6 @@ class AccountController extends Controller
               'n_order'=>$stock->n_order,
               'Day'=>$date,
               'ex_Day_stock'=>$stock->Day,
-              'Notas'=>$stock->Notas,
               'usuario'=>session()->get('usuario')->Nombre,
               'ex_usuario'=>$stock->usuario
             ];
@@ -1153,7 +1146,6 @@ class AccountController extends Controller
           'n_order'=>$stock->n_order,
           'Day'=>$date,
           'ex_Day_stock'=>$stock->Day,
-          'Notas'=>$stock->Notas,
           'usuario'=>session()->get('usuario')->Nombre,
           'ex_usuario'=>$stock->usuario
         ];
@@ -1781,7 +1773,6 @@ class AccountController extends Controller
               'n_order'=>$stock->n_order,
               'Day'=>date('Y-m-d'),
               'ex_Day_stock'=>$stock->Day,
-              'Notas'=>$stock->Notas,
               'usuario'=>session()->get('usuario')->Nombre,
               'ex_usuario'=>$stock->usuario
             ];
@@ -2292,7 +2283,6 @@ class AccountController extends Controller
           'n_order'=>$stock->n_order,
           'Day'=>$date,
           'ex_Day_stock'=>$stock->Day,
-          'Notas'=>$stock->Notas,
           'usuario'=>session()->get('usuario')->Nombre,
           'ex_usuario'=>$stock->usuario
         ];
