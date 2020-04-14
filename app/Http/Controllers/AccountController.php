@@ -1771,7 +1771,7 @@ class AccountController extends Controller
               'code'=>$stock->code,
               'code_prov'=>$stock->code_prov,
               'n_order'=>$stock->n_order,
-              'Day'=>date('Y-m-d'),
+              'Day'=>$date,
               'ex_Day_stock'=>$stock->Day,
               'usuario'=>session()->get('usuario')->Nombre,
               'ex_usuario'=>$stock->usuario
