@@ -463,7 +463,7 @@ class AccountController extends Controller
 
         ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL CAMBIO DE CONTRASEÑA
 
-        if ($venta->Day < $cuenta_pass->Day) {
+        if ($venta->Day_modif < $cuenta_pass->Day) {
           $show = true;
         }
         
@@ -492,7 +492,7 @@ class AccountController extends Controller
 
         ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL RESETEO
 
-        if ($venta->Day < $cuenta_reset->Day) {
+        if ($venta->Day_modif < $cuenta_reset->Day) {
           $show = true;
         }
         
@@ -1264,7 +1264,7 @@ class AccountController extends Controller
           $data = [];
           $data['cuentas_id']=$id;
           $data['Day']=$date;
-          $data['usuario']= session()->get('usuario')->Nombre;
+          $data['usuario']= ($recup == "secu_reset" ? "rs" : "") . session()->get('usuario')->Nombre;
           $this->rst->storeResetAccount($data);
 
           $mensaje = 'Cuenta reseteada';
@@ -1274,10 +1274,10 @@ class AccountController extends Controller
           $mensaje = 'Intento recuperar pri satisfactoriamente.';
           $this->intentoRecuperarPri($id);
           $this->updatePassRecu($id, "pri");
-        } elseif ($recup == 'secu') {
+        } elseif ($recup == 'secu' || $recup == 'secu_reset') {
           $mensaje = 'Intento recuperar secu satisfactoriamente.';
           $this->intentoRecuperarSecu($id);
-          $this->updatePassRecu($id);
+          $this->updatePassRecu($id, "recu");
         } elseif ($recup == 'conj') {
           $mensaje = 'Intento recuperar pri y secu satisfactoriamente.';
           $this->intentoRecuperarPri($id);

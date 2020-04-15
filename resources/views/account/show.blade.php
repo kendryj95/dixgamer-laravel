@@ -141,19 +141,6 @@
 
             	<br><br>
 
-            	@else
-
-            		@if(\Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre))
-
-            		<a
-            		href="{{ url('nota_intentorecuperar', $account->ID) }}"
-            		class="btn btn-success btn-xs pull-right"
-            		>
-            			<b><i class="fa fa-fw fa-gamepad"></i> Intento recuperar secu</b>
-            		</a><br><br>
-
-            		@endif
-
             	@endif
 
             	@if(strpos($account->mail_fake, 'yopmail') !== false && \Helper::operatorsRecoverSecu(session()->get('usuario')->Nombre))
@@ -183,8 +170,8 @@
 
             	@php
             		$vendedor = session()->get('usuario')->Nombre;
-            		$texto_pass = \Helper::operatorsRecoverSecu($vendedor) ? 'recuperar secu' : 'cambiar pass';
-            		$param = \Helper::operatorsRecoverSecu($vendedor) ? 'operator' : null;
+            		$texto_pass = 'cambiar pass';
+            		$param = null;
             	@endphp
 
 
@@ -568,11 +555,60 @@
 								$btnRecup["reset"]["ver"] = true;
 							}
 
-				 			@endphp
+							 @endphp
+							 
+							 @if ($btnRecup['secu']['ver']===true)
+
+							 <div class="dropdown pull-left" style="margin-bottom: 2px">
+								<button
+									class="btn btn-{{$btnRecup['secu']['color']}} dropdown-toggle btn-xs"
+									type="button" id="dropdownMenu1"
+									data-toggle="dropdown"
+									aria-haspopup="true"
+									aria-expanded="false">
+										<i class="fa fa-fw fa-power-off"></i>
+										{{ $btnRecup['secu']['texto_btn'] }}
+										<span class="caret"></span>
+								</button>
+
+								<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+									<li class="dropdown-header">¿Seguro deseas</li>
+									<li class="dropdown-header">{{ $btnRecup['secu']['texto_msj'] }}?</li>
+									<li role="separator" class="divider"></li>
+									<li>
+										<form class="text-center" id="form_resetear_secu" action="{{url('resetear_cuenta',[$account->ID, $btnRecup['secu']['param']])}}" method="post">
+											{{ csrf_field() }}
+											<button
+												class="btn btn-{{$btnRecup['secu']['color']}} btn-block"
+												title="{{ $btnRecup['secu']['texto_msj'] }}"
+												id="resetear_secu"
+												onclick="reset_recup('secu', this)"
+												type="button">
+												Si, seguro!
+											</button>
+											@if (($account->days_from_reset === null) || ($account->days_from_reset > 180))
+											<button
+												class="btn btn-{{$btnRecup['secu']['color']}} btn-block"
+												title="Recuperar secu con reseteo"
+												id="resetear_secu_reset"
+												onclick="reset_recup('secu_reset', this)"
+												type="button">
+												Si, con reseteo!
+											</button>
+											@endif
+										</form>
+									</li>
+								</ul>
+
+							</div>
+
+							<div class="clearfix"></div>
+								 
+							 @endif
 
 							  @if (($account->days_from_reset === null) || ($account->days_from_reset > 180))
 								@foreach ($btnRecup as $tipo => $item)
-									@if ($item['ver'] === true)
+									@if ($item['ver'] === true && $tipo != 'secu')
 										<div class="dropdown pull-left" style="margin-bottom: 2px">
 											<button
 												class="btn btn-{{$item['color']}} dropdown-toggle btn-xs"
@@ -593,7 +629,7 @@
 													<form class="text-center" id="form_resetear_{{$tipo}}" action="{{url('resetear_cuenta',[$account->ID, $item['param']])}}" method="post">
 														{{ csrf_field() }}
 														<button
-															class="btn btn-danger btn-block"
+															class="btn btn-{{$item['color']}} btn-block"
 															title="{{ $item['texto_msj'] }}"
 															id="resetear_{{$tipo}}"
 															onclick="reset_recup('{{$tipo}}', this)"
@@ -1287,8 +1323,14 @@
 
 		function reset_recup(tipo, el)
 		{
+			var tipo_recu = tipo == 'secu_reset' ? 'secu' : tipo;
+			if (tipo == 'secu_reset') {
+				$('#form_resetear_secu').attr('action',"{{url('resetear_cuenta',[$account->ID,'secu_reset'])}}")
+			}
 			$(el).prop('disabled', true);
-			$('#form_resetear_'+tipo).submit();
+			setTimeout(() => {
+				$('#form_resetear_'+tipo_recu).submit();
+			}, 200);
 		}
 	</script>
 @endsection
