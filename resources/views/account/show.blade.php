@@ -1156,7 +1156,7 @@
 			<?php elseif ($sc->concepto == 'resetear'):?>
             <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;color:red"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Solicitud de Reseteo por <?php echo $sc->usuario;?></em></td>
             <?php elseif ($sc->concepto == 'referencia'):?>
-            <td><em class="badge badge-success" style="font-weight:normal; opacity:0.8;"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA {{ \Helper::formatFechaReferencia($sc->Day) }}</em></td>
+            <td colspan="4"><em class="badge badge-success" style="font-weight:normal; opacity:0.8; width: 100%"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA {{ \Helper::formatFechaReferencia($sc->Day) }}</em></td>
       		<td colspan="3"></td>
             <?php else:?>
             <td><span class="text-muted small">#<?php echo $sc->clientes_id; ?></span> <span class="label label-info"><?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span> @if($sc->auto == 're') <label for="" class="label label-danger" style="padding: 6px; margin-left: 20px">Revendedor</label> @endif
