@@ -113,12 +113,7 @@
 						</span>
 					</div>
 
-					<div class="input-group form-group">
-						<span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
-						<input class="form-control" type="text" name="Notas" placeholder="Notas de stock">
-					</div>
-
-					<button class="btn btn-primary btn-block" id="submiter" type="button">Guardar</button>
+					<button style="margin-top: 65px" class="btn btn-primary btn-block" id="submiter" type="button">Guardar</button>
 				</form>
 
 			</div>
@@ -145,6 +140,7 @@
 
 					setTimeout(() => {
 						$('div.btn-group.bootstrap-select.input-group-btn.form-control').addClass('open');
+						$('div.btn-group.bootstrap-select.input-group-btn.form-control .dropdown-menu .bs-searchbox input').focus();
 					}, 700);
 				
 							$("form").on('change', function() {

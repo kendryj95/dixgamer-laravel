@@ -737,9 +737,7 @@ class AccountController extends Controller
         $data['usuario'] = session()->get('usuario')->Nombre;
 
         $id_stock = $this->tks->storeStockAccount($data);
-        if ($request->Notas != null) {
-          $this->tks->storeNotesStock($id_stock, $request->Notas);
-        }
+        
         \Helper::messageFlash('Cuentas','Stock agregado','alert_cuenta');
         return redirect('cuentas/'.$request->cuentas_id);
       } catch (\Exception $e) {
