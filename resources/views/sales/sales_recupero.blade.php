@@ -40,7 +40,7 @@
                                     <a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $fecha }} </a>
                                   </td>
                                   <td>
-                                    <span class="badge badge-{{ $sales->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$sales->usuario}}">{{ substr($sales->usuario,0 , 1) }}</span>
+                                    <span class="badge badge-{{ $sales->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$sales->usuario}}">{{ $sales->usuario }}</span>
                                   </td>
                             </tr>
                         @endforeach
