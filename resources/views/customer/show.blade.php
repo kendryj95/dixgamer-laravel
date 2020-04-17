@@ -1762,6 +1762,8 @@
         {
           if (cons == 'ps4') {
             url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/${slot}/${id_venta}`;
+          } else if (cons == 'ps3') {
+            url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/Primario/${id_venta}`;
           } else {
             url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/No/${id_venta}`;
           }

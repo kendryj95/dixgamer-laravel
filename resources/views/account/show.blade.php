@@ -101,7 +101,7 @@
 	            	href="{{ url('nota_siguejugando', $account->ID) }}"
 	            	class="btn btn-danger btn-xs pull-right"
 	            	>
-	            		<b><i class="fa fa-fw fa-gamepad"></i> Sigue jugando</b>
+	            		<b><i class="fa fa-fw fa-gamepad"></i> Secu sigue jugando</b>
 	            	</a>
             		@endif
 
@@ -588,7 +588,7 @@
 											</button>
 											@if (($account->days_from_reset === null) || ($account->days_from_reset > 180))
 											<button
-												class="btn btn-{{$btnRecup['secu']['color']}} btn-block"
+												class="btn btn-success btn-block"
 												title="Recuperar secu con reseteo"
 												id="resetear_secu_reset"
 												onclick="reset_recup('secu_reset', this)"
