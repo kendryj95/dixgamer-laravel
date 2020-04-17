@@ -1264,7 +1264,14 @@ class AccountController extends Controller
           $data = [];
           $data['cuentas_id']=$id;
           $data['Day']=$date;
-          $data['usuario']= ($recup == "secu_reset" ? "rs" : "") . session()->get('usuario')->Nombre;
+          if ($recup == "secu_reset") {
+            $data['usuario']= "rs". session()->get('usuario')->Nombre;
+          } elseif (($recup == "reset_pass" || $recup == null) && \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre)) {
+            $data['usuario']= "rn". session()->get('usuario')->Nombre;
+          } else {
+            $data['usuario']= session()->get('usuario')->Nombre;
+          }
+          
           $this->rst->storeResetAccount($data);
 
           $mensaje = 'Cuenta reseteada';
@@ -1283,6 +1290,8 @@ class AccountController extends Controller
           $this->intentoRecuperarPri($id);
           $this->intentoRecuperarSecu($id);
           $this->updatePassRecu($id);
+        } elseif ($recup == "reset_pass") {
+          $this->updatePassRecu($id, "reset_pass");
         }
 
         \Helper::messageFlash('Cuentas',$mensaje,'alert_cuenta');
@@ -2240,6 +2249,8 @@ class AccountController extends Controller
       $usuario = '';
       if ($tipo_rec == "pri") {
         $usuario = "rp" . session()->get('usuario')->Nombre;
+      } elseif ($tipo_rec == "reset_pass" && \Helper::operatorsRecoverPri(session()->get('usuario')->Nombre)) {
+        $usuario = "rn" . session()->get('usuario')->Nombre;
       } else {
         $usuario = session()->get('usuario')->Nombre;
       }

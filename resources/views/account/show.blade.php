@@ -528,14 +528,7 @@
 										"color" => "success",
 										"param" => "conj",
 										"ver" => false
-								],	
-								"reset" => [
-										"texto_btn" => "Resetear",
-										"texto_msj" => "Resetear la Cuenta",
-										"color" => "default",
-										"param" => "",
-										"ver" => false
-								]	
+								]
 							];
 
 							if (\Helper::operatorsRecoverPri(session()->get('usuario')->Nombre)) {
@@ -547,13 +540,8 @@
 								} 
 								if ($ventaPs4Secu) {
 									$btnRecup["secu"]["ver"] = true;
-								} 
-								if (!$ventaPs4Pri && !$ventaPs4Secu) {
-									$btnRecup["reset"]["ver"] = true;
 								}
-							} else {
-								$btnRecup["reset"]["ver"] = true;
-							}
+							} 
 
 							 @endphp
 							 
@@ -645,6 +633,48 @@
 										<div class="clearfix"></div>
 									@endif
 								@endforeach
+								<div class="dropdown pull-left" style="margin-bottom: 2px">
+									<button
+										class="btn btn-default dropdown-toggle btn-xs"
+										type="button" id="dropdownMenu1"
+										data-toggle="dropdown"
+										aria-haspopup="true"
+										aria-expanded="false">
+											<i class="fa fa-fw fa-power-off"></i>
+											Resetear
+											<span class="caret"></span>
+									</button>
+	
+									<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+										<li class="dropdown-header">¿Seguro deseas</li>
+										<li class="dropdown-header">Resetear?</li>
+										<li role="separator" class="divider"></li>
+										<li>
+											<form class="text-center" id="form_resetear_reset" action="{{url('resetear_cuenta',[$account->ID, null])}}" method="post">
+												{{ csrf_field() }}
+												<button
+													class="btn btn-default btn-block"
+													title="Resetear"
+													id="resetear_secu"
+													onclick="reset_recup('reset', this)"
+													type="button">
+													Si, seguro!
+												</button>
+												<button
+													class="btn btn-danger btn-block"
+													title="Resetear con cambio pass"
+													id="resetear_reset_pass"
+													onclick="reset_recup('reset_pass', this)"
+													type="button">
+													Si, con cambio pass!
+												</button>
+											</form>
+										</li>
+									</ul>
+	
+								</div>
+	
+								<div class="clearfix"></div>
 							@endif
 
 							@if ($account->Q_reseteado)
@@ -1323,10 +1353,17 @@
 
 		function reset_recup(tipo, el)
 		{
-			var tipo_recu = tipo == 'secu_reset' ? 'secu' : tipo;
+			var tipo_recu = '';
 			if (tipo == 'secu_reset') {
+				tipo_recu = 'secu';
 				$('#form_resetear_secu').attr('action',"{{url('resetear_cuenta',[$account->ID,'secu_reset'])}}")
+			} else if (tipo == 'reset_pass') {
+				tipo_recu = 'reset';
+				$('#form_resetear_reset').attr('action',"{{url('resetear_cuenta',[$account->ID,'reset_pass'])}}")
+			} else {
+				tipo_recu = tipo;
 			}
+
 			$(el).prop('disabled', true);
 			setTimeout(() => {
 				$('#form_resetear_'+tipo_recu).submit();
