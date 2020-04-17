@@ -167,4 +167,17 @@ class Sales extends Model
         return DB::select($query_rsCicloVtaGRAL . $condicion)[0];
     }
 
+    public function scopeVentasRecupero($query) {
+        return DB::table('ventas_notas AS a')
+        ->select('b.clientes_id', 'a.id_ventas', 'a.Notas', 'a.Day', 'a.usuario', DB::raw("(SELECT color FROM usuarios WHERE BINARY Nombre = BINARY a.usuario) AS color_user"))
+        ->leftjoin('ventas AS b','a.id_ventas','=','b.ID')
+        ->whereRaw("a.ID IN (
+            SELECT MAX(ID)
+            FROM ventas_notas
+            GROUP BY id_ventas
+        )")
+        ->where('a.Notas','LIKE','intento recuperar%')
+        ->orderBy('a.Day');
+    }
+
 }

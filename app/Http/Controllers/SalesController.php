@@ -774,5 +774,11 @@ class SalesController extends Controller
         echo json_encode(['id_cliente' => $id_cliente]);
     }
 
+    public function salesListRecupero() {
+        $ventas = Sales::ventasRecupero()->paginate(50);
+
+        return view('sales.sales_recupero', compact('ventas'));
+    }
+
 
 }
