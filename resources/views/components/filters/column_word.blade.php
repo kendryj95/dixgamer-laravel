@@ -35,6 +35,10 @@
               @if($path == 'cuentas_notas' && $i == (count($columns)-1))
               <option value="Notas" selected>Notas</option>
               @endif
+              {{-- option adicional para cuentas_notas --}}
+              @if($path == 'stock_notas' && $i == (count($columns)-1))
+              <option value="Notas" selected>Notas</option>
+              @endif
           @endif
         @endforeach
       </select>

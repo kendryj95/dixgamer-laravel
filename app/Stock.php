@@ -249,6 +249,23 @@ class Stock extends Model
         }
 
     }
+    
+    public function ScopeStockNotesList($query,$obj){
+        $query = DB::table('stock_notas AS sn')
+        ->select('sn.*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = sn.usuario) AS color_user"))
+        ->join('stock AS s','sn.stock_id','=','s.ID');
+
+        if (!empty($obj->column) && !empty($obj->word)) {
+            if ($obj->column == 'Notas' || $obj->column == 'usuario') {
+                $query->where("sn.$obj->column",'like',"%$obj->word%");
+            } else {
+                $query->where("s.{$obj->column}","like",$obj->word."%");
+            }
+        }
+        
+        return $query->orderBy('sn.ID','DESC');
+
+    }
 
 
 

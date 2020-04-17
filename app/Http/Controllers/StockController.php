@@ -47,6 +47,21 @@ class StockController extends Controller
           'columns'
         ));
     }
+    
+    public function indexNotes(Request $request)
+    {
+        $obj = new \stdClass;
+        $obj->column = $request->column;
+        $obj->word = $request->word;
+
+        $columns = Schema::getColumnListing('stock');
+        $stocks_notes = Stock::stockNotesList($obj)->paginate(50);
+
+        return view('stock.index_stock_notes',compact(
+          'stocks_notes',
+          'columns'
+        ));
+    }
     public function indexLinkPsStore()
     {
         $stocks = WpPost::linkStore()->get();

@@ -141,6 +141,7 @@ Route::group(['middleware' => ['login']], function()
 
   // Rutas para stock
   Route::resource('stock', 'StockController');
+  Route::get('stock_notas', 'StockController@indexNotes');
   Route::get('falta_cargar', 'StockController@indexFaltaCargar');
   Route::get('catalogo_link_ps_store', 'StockController@indexLinkPsStore');
   Route::get('productos_catalogo', 'StockController@indexCatalogueProduct');
