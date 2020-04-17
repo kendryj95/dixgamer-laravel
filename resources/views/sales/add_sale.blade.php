@@ -138,10 +138,6 @@
                            value="<?php if(($colname_rsCON == 'ps') || ($colname_rsCON == 'steam')):?>listo<?php else:?>pendiente<?php endif;?>"
                            hidden>
 
-                    <div class="input-group form-group">
-                        <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
-                        <input class="form-control" type="text" name="Notas" placeholder="Notas de la venta">
-                    </div>
 
                     <!-- <div class="input-group form-group">
                         <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>

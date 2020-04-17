@@ -113,7 +113,6 @@ class SalesController extends Controller
             'estado'        => $request->estado,
             'Day'           => date('Y-m-d H:i:s'),
             'Day_modif'     => date('Y-m-d H:i:s'),
-            'Notas'         => $request->Notas,
             'usuario'       => session()->get('usuario')->Nombre
 
         ]);
@@ -127,7 +126,6 @@ class SalesController extends Controller
             'precio'        => $request->precio,
             'comision'      => $request->comision,
             'Day'           => date('Y-m-d H:i:s'),
-            'Notas'         => $request->Notas,
             'usuario'       => session()->get('usuario')->Nombre
         ]);
 
