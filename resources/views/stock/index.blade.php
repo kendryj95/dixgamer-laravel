@@ -31,6 +31,7 @@
                     @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                         <th>Pago por</th>
                     @endif
+                    <th>Operador</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -94,10 +95,14 @@
                                 <td>{{ $stock->medio_pago }}</td>
                             @endif
 
+                            <td class="text-center">
+                                <span class="badge badge-{{ $stock->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$stock->usuario}}">{{ substr($stock->usuario,0 , 1) }}</span>
+                            </td>
+
                         </tr>
                     @endforeach
                 @else
-                    <td colspan = '10' class="text-center">No se encontraron datos</td>
+                    <td colspan = '11' class="text-center">No se encontraron datos</td>
                 @endif
                 </tbody>
             </table>

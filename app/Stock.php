@@ -238,6 +238,8 @@ class Stock extends Model
     }
 
     public function ScopeStockList($query,$obj){
+        $query->select('stock.*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = usuario) AS color_user"));
+        
         if (!empty($obj->column) && !empty($obj->word)) {
             $query->where($obj->column,"like",$obj->word."%");
         }
