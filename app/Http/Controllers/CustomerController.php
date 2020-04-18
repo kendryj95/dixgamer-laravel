@@ -268,7 +268,6 @@ class CustomerController extends Controller
 
             $data = [];
             $data['clientes_id'] = $request->clientes_id;
-            $data['recup'] = 1;
 
             DB::table('ventas')->where('ID', $request->ID)->update($data);
 
@@ -433,6 +432,7 @@ class CustomerController extends Controller
             $data['slot'] = $request->slot;
             $data['stock_id'] = $request->stock;
             $data['Day_modif'] = date('Y-m-d H:i:s');
+            $data['recup'] = 1;
 
             DB::table('ventas')->where('ID',$request->ID)->update($data);
 
