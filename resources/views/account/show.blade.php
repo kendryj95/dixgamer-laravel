@@ -1284,7 +1284,7 @@
 					@if ($sc->recup == 2)
 						@if($operador_reset)
 
-						<div class="dropdown">
+						<div style="display: inline-block" class="dropdown">
 							<button
 							class="btn btn-primary dropdown-toggle btn-xs"
 							type="button" id="priSigueJugando2"
@@ -1313,17 +1313,19 @@
 							</ul>
 	
 						</div>
+
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
 						@endif
 					@else
 						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
-						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
+						
 					@endif 
 					<?php else: ?>
 					<br>
 					@if ($sc->recup == 2)
 						@if($operador_pass)
 						
-						<div class="dropdown">
+						<div style="display: inline-block" class="dropdown">
 							<button
 							class="btn btn-danger dropdown-toggle btn-xs"
 							type="button" id="secusiguejugando2"
@@ -1353,10 +1355,12 @@
 	
 						</div>
 
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
+
 						@endif
 					@else
 						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
-						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
+						
 						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a> 
 					@endif
 					<?php endif;?>
