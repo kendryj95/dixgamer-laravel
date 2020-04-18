@@ -268,6 +268,7 @@ class CustomerController extends Controller
 
             $data = [];
             $data['clientes_id'] = $request->clientes_id;
+            $data['recup'] = 1;
 
             DB::table('ventas')->where('ID', $request->ID)->update($data);
 
@@ -606,6 +607,7 @@ class CustomerController extends Controller
         $data['order_id_ml'] = $venta_anterior->order_id_ml;
         $data['order_id_web'] = $venta_anterior->order_id_web;
         $data['estado'] = $venta_anterior->estado;
+        $data['recup'] = 1;
         $data['Day'] = $date;
         $data['Day_modif'] = $date;
         $data['usuario'] = $vendedor;
@@ -715,6 +717,7 @@ class CustomerController extends Controller
         $data['stock_id'] = $stk_ID;
         $data['cons'] = $consola;
         $data['slot'] = $slot;
+        $data['recup'] = 1;
         $data['Day_modif'] = date('Y-m-d H:i:s');
 
         DB::table('ventas')->where('ID', $id_ventas)->update($data);
@@ -863,6 +866,7 @@ class CustomerController extends Controller
             if ($this->isNotStockDefault($stock_anterior->stock_id)) {
               $data = [];
               $data['stock_id'] = 1;
+              $data['recup'] = 1;
               $data['cons'] = 'ps';
               $data['slot'] = 'No';
               $data['Day_modif'] = date('Y-m-d H:i:s');
@@ -955,6 +959,7 @@ class CustomerController extends Controller
         }
         $data['cons'] = 'x';
         $data['slot'] = 'No';
+        $data['recup'] = 1;
 
         DB::table('ventas')->where('ID',$id)->update($data);
 
