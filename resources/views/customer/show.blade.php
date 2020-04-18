@@ -756,7 +756,7 @@
 
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Gift')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -770,7 +770,7 @@
               @elseif( ($dataCustomer->consola === "ps") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'plus-') !== false)))
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Plus')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -783,7 +783,7 @@
               @elseif ( ($dataCustomer->consola === "fifa-points") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'ps4') !== false)))
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'FifaPoints')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -797,7 +797,7 @@
 
                 <!--- aca entran los mails de juegos y ps plus slot pri y secu -->
                   <button
-                    class="btn btn-<?php echo $colorcito;?> btn-xs"
+                    class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
                     type="button"
                     onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}')">
                     <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
@@ -855,6 +855,78 @@
                 </div>
               @endif
             </div>
+
+            @if ($dataCustomer->cuentas_id != '' && $dataCustomer->recup == 2)
+              @if ($dataCustomer->consola == 'ps4' && $dataCustomer->slot == 'Primario')
+                  @if (\Helper::showBtnPriSigueJugando($dataCustomer->cuentas_id,$dataCustomer->ID_ventas))
+                    <div style="margin-bottom: 5px" class="dropdown pull-right">
+                      <button
+                      class="btn btn-primary dropdown-toggle btn-xs"
+                      type="button" id="priSigueJugando2"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false">
+                      <i class="fa fa-fw fa-gamepad"></i>
+                        Pri Sigue jugando
+                      </button>
+          
+                      <ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
+                      <li class="dropdown-header">¿Seguro deseas</li>
+                      <li class="dropdown-header">Ejecutarlo?</li>
+                      <li role="separator" class="divider"></li>
+                      <li>
+                                
+                        <a
+                        href="{{ url('nota_siguejugandopri', $dataCustomer->cuentas_id) }}"
+                          class="btn btn-danger"
+                          title="Primario Sigue jugando"
+                          id="pri_sigue_jugando"
+                          >
+                          Si, seguro!
+                        </a>
+                      </li>
+                      </ul>
+          
+                    </div>
+
+                    <div class="clearfix"></div>
+                  @endif
+              @elseif($dataCustomer->consola == 'ps4' && $dataCustomer->slot == 'Secundario')
+                @if (\Helper::showBtnSecuSigueJugando($dataCustomer->cuentas_id,$dataCustomer->ID_ventas))
+                  <div style="margin-bottom: 5px" class="dropdown pull-right">
+                    <button
+                    class="btn btn-danger dropdown-toggle btn-xs"
+                    type="button" id="secusiguejugando2"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="fa fa-fw fa-gamepad"></i>
+                      Secu Sigue jugando
+                    </button>
+        
+                    <ul class="dropdown-menu bg-info" aria-labelledby="secusiguejugando2">
+                    <li class="dropdown-header">¿Seguro deseas</li>
+                    <li class="dropdown-header">Ejecutarlo?</li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                              
+                      <a
+                      href="{{ url('nota_siguejugando', $dataCustomer->cuentas_id) }}"
+                        class="btn btn-danger"
+                        title="Secu Sigue jugando"
+                        id="secu_sigue_jugando"
+                        >
+                        Si, seguro!
+                      </a>
+                    </li>
+                    </ul>
+        
+                  </div>
+
+                  <div class="clearfix"></div>
+                @endif
+              @endif
+            @endif
 
             @if ($ventas_notas)
               @foreach ($ventas_notas as $venta_nota)

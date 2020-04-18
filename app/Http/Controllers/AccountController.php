@@ -2008,6 +2008,8 @@ class AccountController extends Controller
 
           DB::table('cuentas_notas')->insert($data);
 
+          DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 1]);
+
           $data = [];
           $data['id_ventas'] = $venta->ID;
           $data['Notas'] = "Cliente sigue jugando";
@@ -2067,6 +2069,8 @@ class AccountController extends Controller
           $data['usuario'] = session()->get('usuario')->Nombre;
 
           DB::table('cuentas_notas')->insert($data);
+
+          DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 1]);
 
           $data = [];
           $data['id_ventas'] = $venta->ID;
@@ -2176,6 +2180,8 @@ class AccountController extends Controller
       #########
 
       if ($venta) {
+
+        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2]);
         
         $data = [];
         $data['id_ventas'] = $venta->ID;
@@ -2197,6 +2203,8 @@ class AccountController extends Controller
       #########
 
       if ($venta) {
+
+        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2]);
         
         $data = [];
         $data['id_ventas'] = $venta->ID;

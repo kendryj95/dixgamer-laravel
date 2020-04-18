@@ -95,14 +95,38 @@
 
             	@if($operador_pass || $operador_reset)
 
-            		@if($operador_pass)
+					@if($operador_pass)
+					
+					<div class="dropdown pull-right">
+						<button
+						  class="btn btn-danger dropdown-toggle btn-xs"
+						  type="button" id="secusiguejugando"
+						  data-toggle="dropdown"
+						  aria-haspopup="true"
+						  aria-expanded="false">
+						  <i class="fa fa-fw fa-gamepad"></i>
+							Secu Sigue jugando
+						</button>
+  
+						<ul class="dropdown-menu bg-info" aria-labelledby="secusiguejugando">
+						  <li class="dropdown-header">¿Seguro deseas</li>
+						  <li class="dropdown-header">Ejecutarlo?</li>
+						  <li role="separator" class="divider"></li>
+						  <li>
+											  
+							<a
+							href="{{ url('nota_siguejugando', $account->ID) }}"
+								class="btn btn-danger"
+								  title="Secu Sigue jugando"
+								  id="secu_sigue_jugando"
+								  >
+								  Si, seguro!
+							  </a>
+						  </li>
+						</ul>
+  
+					  </div>
 
-	            	<a
-	            	href="{{ url('nota_siguejugando', $account->ID) }}"
-	            	class="btn btn-danger btn-xs pull-right"
-	            	>
-	            		<b><i class="fa fa-fw fa-gamepad"></i> Secu sigue jugando</b>
-	            	</a>
             		@endif
 
             		@if($operador_reset)
@@ -1256,12 +1280,85 @@
 				</div>
 				<?php if (strpos($sc->consola, 'ps4') !== false):?>
 					<?php if ($sc->slot == 'Primario'):?>
-					<br><a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
-					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a> 
+					<br>
+					@if ($sc->recup == 2)
+						@if($operador_reset)
+
+						<div class="dropdown">
+							<button
+							class="btn btn-primary dropdown-toggle btn-xs"
+							type="button" id="priSigueJugando2"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+							<i class="fa fa-fw fa-gamepad"></i>
+								Pri Sigue jugando
+							</button>
+	
+							<ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
+							<li class="dropdown-header">¿Seguro deseas</li>
+							<li class="dropdown-header">Ejecutarlo?</li>
+							<li role="separator" class="divider"></li>
+							<li>
+												
+								<a
+								href="{{ url('nota_siguejugandopri', $account->ID) }}"
+									class="btn btn-danger"
+									title="Primario Sigue jugando"
+									id="pri_sigue_jugando"
+									>
+									Si, seguro!
+								</a>
+							</li>
+							</ul>
+	
+						</div>
+						@endif
+					@else
+						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
+					@endif 
 					<?php else: ?>
-					<br><a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
-					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
-					<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a> 
+					<br>
+					@if ($sc->recup == 2)
+						@if($operador_pass)
+						
+						<div class="dropdown">
+							<button
+							class="btn btn-danger dropdown-toggle btn-xs"
+							type="button" id="secusiguejugando2"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+							<i class="fa fa-fw fa-gamepad"></i>
+								Secu Sigue jugando
+							</button>
+	
+							<ul class="dropdown-menu bg-info" aria-labelledby="secusiguejugando2">
+							<li class="dropdown-header">¿Seguro deseas</li>
+							<li class="dropdown-header">Ejecutarlo?</li>
+							<li role="separator" class="divider"></li>
+							<li>
+												
+								<a
+								href="{{ url('nota_siguejugando', $account->ID) }}"
+									class="btn btn-danger"
+									title="Secu Sigue jugando"
+									id="secu_sigue_jugando"
+									>
+									Si, seguro!
+								</a>
+							</li>
+							</ul>
+	
+						</div>
+
+						@endif
+					@else
+						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-danger label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a> 
+					@endif
 					<?php endif;?>
 				<?php endif;?>
 

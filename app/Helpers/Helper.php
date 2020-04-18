@@ -367,4 +367,56 @@ class Helper
 
     }
 
+    public static function showBtnSecuSigueJugando($account_id,$id_venta)
+    {
+      $operadores_especiales = self::getOperatorsEspecials('Secu');
+      $show = false;
+
+      ## CONSULTANDO SI ESTA CUENTA TIENE UNA VENTA SECUNDARIA
+
+      $venta = DB::table('ventas')->where('ID',$id_venta)->first();
+
+      ## CONSULTANDO SI HUBO UN CAMBIO DE CONTRASEÑA PARA ESTA CUENTA CON ALGUNOS DE LOS OPERADORES ESPECIALES.
+      $cuenta_pass = DB::table('cta_pass')->where('cuentas_id',$account_id)->whereIn('usuario',$operadores_especiales)->orderBy('Day','DESC')->first();
+
+      if ($cuenta_pass && $venta) {
+
+        ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL CAMBIO DE CONTRASEÑA
+
+        if ($venta->Day_modif < $cuenta_pass->Day) {
+          $show = true;
+        }
+        
+      }
+
+      return $show;
+      
+    }
+
+    public static function showBtnPriSigueJugando($account_id,$id_venta)
+    {
+      $operadores_especiales = self::getOperatorsEspecials('Pri');
+      $show = false;
+
+      ## CONSULTANDO SI ESTA CUENTA TIENE UNA VENTA PRIMARIA
+
+      $venta = DB::table('ventas')->where('ID',$id_venta)->first();
+
+      ## CONSULTANDO SI HUBO UN RESETEO PARA ESTA CUENTA CON ALGUNOS DE LOS OPERADORES ESPECIALES.
+      $cuenta_reset = DB::table('reseteo')->where('cuentas_id',$account_id)->whereIn('usuario',$operadores_especiales)->orderBy('Day','DESC')->first();
+
+      if ($cuenta_reset && $venta) {
+
+        ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL RESETEO
+
+        if ($venta->Day_modif < $cuenta_reset->Day) {
+          $show = true;
+        }
+        
+      }
+
+      return $show;
+      
+    }
+
 }
