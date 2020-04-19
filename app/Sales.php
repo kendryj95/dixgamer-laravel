@@ -193,4 +193,29 @@ class Sales extends Model
         return DB::select($query_rsCicloVtaGRAL . $condicion)[0];
     }
 
+    public function scopeVentasRecupero($query, $obj) {
+        $query = DB::table('ventas_notas AS a')
+        ->select('b.clientes_id', 'a.id_ventas', 's.titulo', 's.consola', 'b.slot', 'a.Notas', 'a.Day', 'a.usuario', 'b.recup', DB::raw("(SELECT color FROM usuarios WHERE BINARY Nombre = BINARY a.usuario) AS color_user"))
+        ->leftjoin('ventas AS b','a.id_ventas','=','b.ID')
+        ->leftjoin('stock AS s','b.stock_id','=','s.ID')
+        ->whereRaw("a.ID IN (
+            SELECT MAX(ID)
+            FROM ventas_notas
+            GROUP BY id_ventas
+        )")
+        ->whereRaw("(a.Notas LIKE 'intento recuperar%' OR b.recup = 2)");
+
+        if (!empty($obj->word) && !empty($obj->column)) {
+            if ($obj->column == 'titulo' || $obj->column == 'consola') {
+                $query = $query->where("s.$obj->column",'like',"$obj->word%");
+            } elseif ($obj->column == 'clientes_id' || $obj->column == 'slot' || $obj->column == 'recup') {
+                $query = $query->where("b.$obj->column",'like',"$obj->word%");
+            } elseif ($obj->column == 'id_ventas' || $obj->column == 'Notas' || $obj->column == 'Day' || $obj->column == 'usuario') {
+                $query = $query->where("a.$obj->column",'like',"$obj->word%");
+            }
+        }
+        
+        return $query->orderBy('a.Day');
+    }
+
 }

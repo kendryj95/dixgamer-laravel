@@ -772,10 +772,22 @@ class SalesController extends Controller
         echo json_encode(['id_cliente' => $id_cliente]);
     }
 
-    public function salesListRecupero() {
-        $ventas = Sales::ventasRecupero()->paginate(50);
+    public function salesListRecupero(Request $request) {
+        $obj = new \stdClass;
+        $obj->column = $request->column;
+        $obj->word = $request->word;
 
-        return view('sales.sales_recupero', compact('ventas'));
+        $ventas = Sales::ventasRecupero($obj)->paginate(50);
+        $columns = [];
+        foreach ($ventas as $sales) {
+            foreach ($sales as $columna => $value) {
+                if (!in_array($columna,$columns)) {
+                    $columns[] = $columna;
+                }
+            }
+        }
+
+        return view('sales.sales_recupero', compact('ventas','columns'));
     }
 
 

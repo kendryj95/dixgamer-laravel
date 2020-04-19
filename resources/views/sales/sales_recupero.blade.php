@@ -8,6 +8,13 @@
         <!-- InstanceBeginEditable name="body" -->
 
         <div class="row">
+            @component('components/filters/column_word')
+                @slot('columns',$columns);
+                @slot('path','sales/recupero');
+            @endcomponent
+        </div>
+
+        <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
@@ -15,6 +22,8 @@
                         <tr>
                             <th>Cte ID</th>
                             <th>Vta ID</th>
+                            <th>Producto</th>
+                            <th>Recup</th>
                             <th>Notas</th>
                             <th>Fecha</th>
                             <th>Operador</th>
@@ -25,6 +34,15 @@
                             <tr>
                                 <td><a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $sales->clientes_id }} </a></td>
                                 <td><a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $sales->id_ventas }} </a></td>
+                                <td>
+                                    {{ $sales->titulo }}
+                                    <span class="label label-default {{$sales->consola}}">
+                          {{$sales->consola}} 
+                      </span> &nbsp; @if ($sales->slot == 'Secundario') <span class="label label-danger">2°</span> @endif
+                                </td>
+                                <td>
+                                    {{ $sales->recup }}
+                                </td>
                                 <td>
                                     <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $sales->Notas !!} </div>
                                 </td>
