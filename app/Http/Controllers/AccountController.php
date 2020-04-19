@@ -1597,10 +1597,15 @@ class AccountController extends Controller
       $obj->word = $id;
       $account = Account::accountByColumnWord($obj)->first();
       if ($account) {
+        $nota = $request->notes;
+        if ($request->cliente != "") {
+         $cliente = DB::table('clientes')->where('ID',$request->cliente)->first();
+         $nota = "<a class=\"alert-link\" href=\"".url('clientes',$cliente->ID)."\">#".$cliente->ID." ".$cliente->nombre." ".$cliente->apellido."</a>: " . $nota;
+        }
         try {
           $data = [
                     'cuentas_id' => $id,
-                    'Notas'=>$request->notes,
+                    'Notas'=> $nota,
                     'Day'=>$date,
                     'usuario'=>session()->get('usuario')->Nombre
                   ];

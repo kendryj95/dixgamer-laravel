@@ -12,6 +12,18 @@
 
       <form method="post" id="form_create_note" action="{{ url('guardar_nota_cuenta',[$account]) }}">
         {{ csrf_field() }}
+
+        <div class="input-group form-group">
+          <span class="input-group-addon"><i class="fa fa-users fa-fw"></i></span>
+          <select id="cliente" name="cliente" class="selectpicker form-control" data-live-search="true" data-size="5">
+              <option value="" selected>¿Desea dirigir la nota a un cliente?</option>
+              @foreach($clientes_sales as $cliente)
+              <option value="{{ $cliente->clientes_id }}">{{ $cliente->cliente }}</option>
+              @endforeach
+  
+          </select>
+        </div>
+        
         <div class="input-group form-group">
           <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
           <textarea class="form-control" rows="4" name="notes" id="Notas" style="font-size: 22px;"></textarea>
@@ -59,6 +71,8 @@
       $(this).prop('disabled', true);
       $('#form_create_note').submit();
     });
+
+    $('.selectpicker').selectpicker();
 
     $('#btnCambiaronId').on('click', function(event) {
       var divClientes = $('#div-clientes');
