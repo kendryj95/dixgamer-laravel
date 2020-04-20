@@ -99,6 +99,9 @@
                   <li><a href="{{ url('stock_notas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Notas</a></li>
                 @endif
                 <li><a href="{{ url('saldos') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Saldo</a></li>
+                @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+                  <li><a href="{{ url('stock_cm') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar CM</a></li>
+                @endif
                 <li><a href="{{ url('stocks_cargados') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Cargados</a></li>
                 @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
                 <li><a href="{{ url('pedidos_carga/admin') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos de carga - Admin</a></li>

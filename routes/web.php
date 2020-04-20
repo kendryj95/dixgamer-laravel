@@ -182,6 +182,8 @@ Route::group(['middleware' => ['login']], function()
     Route::get('pedidos_finalizados/admin', 'StockController@pedCargaFinalizados');
     Route::get('confirmar_pedido/{id}', 'StockController@confirmPedCarga');
     Route::get('get_pedidos_edit/{id}', 'StockController@getPedidosEdit');
+    Route::get('stock_cm', 'StockController@listCM');
+    Route::get('stock_cm/{code}', 'StockController@listCMByCode');
 
 
     // Gastos

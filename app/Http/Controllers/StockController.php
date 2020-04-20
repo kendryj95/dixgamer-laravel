@@ -962,4 +962,18 @@ ORDER BY libre DESC";
         return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso de insercion. Por favor vuelve a intentarlo']);
       }
     }
+
+    public function listCM()
+    {
+      $datos = Stock::listCM()->get();
+
+      return view('stock.index_list_cm',compact('datos'));
+    }
+    
+    public function listCMByCode($code)
+    {
+      $datos = Stock::listCMByCode($code)->get();
+
+      return view('stock.index_list_cm_detail',compact('datos','code'));
+    }
 }
