@@ -419,4 +419,20 @@ class Helper
       
     }
 
+    public static function formatCodeStock($code)
+    {
+      $code = str_replace('-','',$code);
+      $lenCode = strlen($code);
+      $tam = ceil($lenCode / 4);
+      $size = 4;
+      $codigo = '';
+      for ($i=0; $i < $tam; $i++) { 
+        $start = 4*$i;
+        $c = substr($code,$start,$size);
+        $codigo .= $c . "-";
+      }
+
+      return trim($codigo,"-");
+    }
+
 }

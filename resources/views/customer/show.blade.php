@@ -591,7 +591,7 @@
               @if(($dataCustomer->code) && ($dataCustomer->slot == "No"))
                 <p>
                   <small class="">
-                    <?php echo str_replace('-','',$dataCustomer->code); ?>
+                    {{ \Helper::formatCodeStock($dataCustomer->code) }}
                   </small>
 
                   @if(Helper::validateAdministrator(session()->get('usuario')->Level))
