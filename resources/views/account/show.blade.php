@@ -1228,7 +1228,7 @@
 				-->
 				<div style="position:absolute; top:-1000; left:-1000px;">
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="newpass-copy" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por mantenimiento de los servidores actualizamos la contraseña de ésta Cuenta/Usuario,<br /><br />
+					<span id="newpass-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por mantenimiento de los servidores actualizamos la contraseña de ésta Cuenta/Usuario,<br /><br />
 						La nueva contraseña es: <?php echo $account->pass;?><br /><br />
 
 						{!! html_entity_decode($oferta_fortnite) !!}<br>
@@ -1265,7 +1265,7 @@
 					</div>
 					
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="reactivar-copy" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por favor ingresá a nuestra cuenta/usuario con el nombre <b>{{ $account->name . " " . $account->surname }}</b> una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:<br /><br />
+					<span id="reactivar-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }}, por favor ingresá a nuestra cuenta/usuario con el nombre <b>{{ $account->name . " " . $account->surname }}</b> una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:<br /><br />
 						1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar<br />
 						2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar<br />
 						3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.<br /><br />
@@ -1317,7 +1317,7 @@
 						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
 						@endif
 					@else
-						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
+						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
 						
 					@endif 
 					<?php else: ?>
@@ -1359,9 +1359,9 @@
 
 						@endif
 					@else
-						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#newpass-copy"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
+						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
 						
-						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a> 
+						{{-- <a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a>  --}}
 					@endif
 					<?php endif;?>
 				<?php endif;?>
