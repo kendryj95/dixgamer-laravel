@@ -102,7 +102,7 @@
                 </td>
                 
                 <td>
-                  <a class="badge @if($account->reseteos == 0) badge-success @else badge-danger @endif" title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
+                  <a class="badge @if($account->reseteos == 0) badge-success @elseif ($account->reseteos == 1) badge-warning @else badge-danger @endif" title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                     {{ $account->reseteos }}
                   </a>
                 </td>
