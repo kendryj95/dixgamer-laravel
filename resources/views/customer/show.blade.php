@@ -806,12 +806,20 @@
                     @endif
                    </button>
 
-              @endif
-
-
-
+                   @endif
+                   
               <!--- filtrar en gmail -->
-              <a
+              @if (\Helper::operatorsRecoverPri(session()->get('usuario')->Nombre))
+                <a
+                class="btn btn-xs btn-default"
+                href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($dataCustomer->email, 0, strpos($dataCustomer->email, '@')) . '+' . substr($dataCustomer->mail_cta, 0, strpos($dataCustomer->mail_cta, '@')) . '+' . $dataCustomer->pass ; ?>"
+                title="filtrar guia de descarga en gmail"
+                target="_blank">
+                  <i aria-hidden="true" class="fa fa-google"></i>
+                  mail
+              </a>
+              @else
+                <a
                 class="btn btn-xs btn-default"
                 href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($dataCustomer->email, 0, strpos($dataCustomer->email, '@')) . '+' . $dataCustomer->titulo . '+(' . $dataCustomer->consola .')'; ?>"
                 title="filtrar guia de descarga en gmail"
@@ -820,6 +828,9 @@
                   mail
               </a>
 
+              @endif
+
+              
               @php
                 $hoy = date('Y-m-d H:i:s');
                 $fecha_venta = $dataCustomer->Day;
