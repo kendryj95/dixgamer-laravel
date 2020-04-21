@@ -822,8 +822,8 @@ class Stock extends Model
 
     public function scopeListCMByCode($query, $code)
     {
-        $union = DB::table('saldo')
-        ->select('ID as stk_ID','titulo','costo_usd',DB::raw('NULL AS cuentas_id'),'n_order','Day',DB::raw('NULL as uso'),'usuario',DB::raw("(SELECT color FROM usuarios WHERE Nombre = saldo.usuario) AS color_user"))
+        $union = DB::table('stock')
+        ->select('ID as stk_ID','titulo','costo_usd',DB::raw('NULL AS cuentas_id'),'n_order','Day',DB::raw('NULL as uso'),'usuario',DB::raw("(SELECT color FROM usuarios WHERE Nombre = REPLACE(stock.usuario,'-GC','')) AS color_user"))
         ->where('code','like',"$code%");
 
         return DB::table('saldo')
