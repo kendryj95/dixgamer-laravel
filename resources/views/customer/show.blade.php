@@ -950,8 +950,15 @@
                     $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
                     $cuenta = substr($string, $pos+1);
                     $nota = substr($string, 0, $pos);
-                    list($id_stock,$title,$cons,$slot) = explode(" ",substr($nota,14));
-                    $nota_producto = true;
+                    $data_nota =  explode(" ",substr($nota,14));
+                    if (count($data_nota) == 4) {
+                      list($id_stock,$title,$cons,$slot,$otro) = $data_nota;
+                      $nota_producto = true;
+                    } elseif (count($data_nota) == 5) {
+                      list($id_stock,$title,$cons,$slot) = $data_nota;
+                      $nota_producto = true;
+                    }
+                    
                     @endphp
 
                     {{$nota}} <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a>
