@@ -229,14 +229,16 @@
 							<label for="">Productos Excluidos Primario:</label><br>
 							<select name="productos_excluidos_pri[]" value="" class="form-control select2-multiple select-recupero" multiple>
 							  @foreach($titles as $t)
-							  @php
-							  $selected = '';
-							  $titulo = explode(" (",$t->nombre_web)[0];
-							  if (in_array($titulo, $titulos_pri)) {
-								  $selected = 'selected';
-							  }
-							  @endphp
-							  <option value="{{ $titulo }}" {{$selected}}>{{ str_replace('-', ' ', $titulo) }}</option>
+								@if ($t->consola == 'ps4')
+									@php
+									$selected = '';
+									$titulo = explode(" (",$t->nombre_web)[0];
+									if (in_array($titulo, $titulos_pri)) {
+										$selected = 'selected';
+									}
+									@endphp
+									<option value="{{ $titulo }}" {{$selected}}>{{ str_replace('-', ' ', $titulo) }}</option>
+								@endif
 							  @endforeach
 						  </select>
 						</div>
@@ -244,14 +246,16 @@
 							<label for="">Productos Excluidos Secundario:</label><br>
 							<select name="productos_excluidos_secu[]" value="" class="form-control select2-multiple select-recupero" multiple>
 							  @foreach($titles as $t)
-							  @php
-							  $selected = '';
-							  $titulo = explode(" (",$t->nombre_web)[0];
-							  if (in_array($titulo, $titulos_secu)) {
-								  $selected = 'selected';
-							  }
-							  @endphp
-							  <option value="{{ $titulo }}" {{$selected}}>{{ str_replace('-', ' ', $titulo) }}</option>
+								@if ($t->consola == 'ps4')
+									@php
+									$selected = '';
+									$titulo = explode(" (",$t->nombre_web)[0];
+									if (in_array($titulo, $titulos_secu)) {
+										$selected = 'selected';
+									}
+									@endphp
+									<option value="{{ $titulo }}" {{$selected}}>{{ str_replace('-', ' ', $titulo) }}</option>
+								@endif
 							  @endforeach
 						  </select>
 						</div>

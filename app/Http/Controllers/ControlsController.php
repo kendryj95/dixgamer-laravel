@@ -900,19 +900,22 @@ class ControlsController extends Controller
                 $titulos_pri = $request->productos_excluidos_pri;
                 $titulos_secu = $request->productos_excluidos_secu;
                 $titles = [];
-                foreach ($titulos_pri as $value) {
-                    $titles[] = '"'.$value.'"';
+                if ($titulos_pri) {
+                    foreach ($titulos_pri as $value) {
+                        $titles[] = '"'.$value.'"';
+                    }
                 }
-
                 $titulos_pri = implode(",", $titles);
-                $titles = [];
-                foreach ($titulos_secu as $value) {
-                    $titles[] = '"'.$value.'"';
-                }
-
-                $titulos_secu = implode(",", $titles);
-
                 $data['prod_excluidos_pri'] = $titulos_pri;
+
+                $titles = [];
+                if ($titulos_secu) {
+                    foreach ($titulos_secu as $value) {
+                        $titles[] = '"'.$value.'"';
+                    }
+                }
+                $titulos_secu = implode(",", $titles);
+    
                 $data['prod_excluidos_secu'] = $titulos_secu;
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
