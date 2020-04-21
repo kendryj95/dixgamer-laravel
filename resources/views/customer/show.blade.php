@@ -950,9 +950,9 @@
                     $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
                     $cuenta = substr($string, $pos+1);
                     $nota = substr($string, 0, $pos);
-                    $data_nota =  explode(" ",substr($nota,14));
                     if ($cuenta != "") {
-                        if (count($data_nota) == 4) {
+                        $data_nota =  explode(" ",substr($nota,14));
+                        if (count($data_nota) == 5) {
                           list($id_stock,$title,$cons,$slot,$otro) = $data_nota;
                           $nota_producto = true;
                         } elseif (count($data_nota) == 5) {
