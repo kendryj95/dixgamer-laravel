@@ -166,7 +166,7 @@ function createColumn(selector,type = 'code'){
 			for(let word of arr){
 				// Creamos el input
 
-				word = format(word, [4, 4, 4, 4, 4, 4, 4, 4, 4], "-");
+				//word = format(word, [4, 4, 4, 4, 4, 4, 4, 4, 4], "-");
 
 				let input =`
 				<div class="input-group form-group" style="margin:0px;width:80%;">
