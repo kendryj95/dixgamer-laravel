@@ -943,7 +943,7 @@
                   Antes asignado a cliente <a href="{{ url('clientes', $cliente) }}" class="alert-link" target="_blank">#{{ $cliente }}</a>
 
                   @elseif(strpos($venta_nota->Notas, "Antes tenía") !== false) {{-- Solo notas para cambios de productos --}}
-                   @if(strpos($venta_nota->Notas, "#", 14)) {{-- Esta validación que funcione las notas anteriores antes de colocar el link para las cuentas --}}
+                   @if(strpos($venta_nota->Notas, "#", 14) !== false) {{-- Esta validación que funcione las notas anteriores antes de colocar el link para las cuentas --}}
 
                     @php
                     $string = $venta_nota->Notas;
@@ -951,17 +951,19 @@
                     $cuenta = substr($string, $pos+1);
                     $nota = substr($string, 0, $pos);
                     $data_nota =  explode(" ",substr($nota,14));
-                    if (count($data_nota) == 4) {
-                      list($id_stock,$title,$cons,$slot,$otro) = $data_nota;
-                      $nota_producto = true;
-                    } elseif (count($data_nota) == 5) {
-                      list($id_stock,$title,$cons,$slot) = $data_nota;
-                      $nota_producto = true;
+                    if ($cuenta != "") {
+                        if (count($data_nota) == 4) {
+                          list($id_stock,$title,$cons,$slot,$otro) = $data_nota;
+                          $nota_producto = true;
+                        } elseif (count($data_nota) == 5) {
+                          list($id_stock,$title,$cons,$slot) = $data_nota;
+                          $nota_producto = true;
+                        }
                     }
                     
                     @endphp
 
-                    {{$nota}} <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a>
+                    {{$nota}} @if ($cuenta != "") <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a> @endif
 
                     @else
                       {{ $venta_nota->Notas }}
