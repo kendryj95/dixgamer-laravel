@@ -2232,6 +2232,14 @@ class AccountController extends Controller
         ->join('clientes AS c','c.ID','=','ventas.clientes_id')
         ->first();
 
+        if ($venta) {
+          $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
+          $isExcluido = DB::table('configuraciones')->where('ID',1)->where('prod_excluidos_pri','like',"%$tituloStock%")->first();
+          if ($isExcluido) {
+            return null;
+          }
+        }
+        
         return $venta;
       }
 
@@ -2247,6 +2255,14 @@ class AccountController extends Controller
         $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')->where('cons','ps4')
         ->join('clientes AS c','c.ID','=','ventas.clientes_id')
         ->first();
+
+        if ($venta) {
+          $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
+          $isExcluido = DB::table('configuraciones')->where('ID',1)->where('prod_excluidos_secu','like',"%$tituloStock%")->first();
+          if ($isExcluido) {
+            return null;
+          }
+        }
 
         return $venta;
       }

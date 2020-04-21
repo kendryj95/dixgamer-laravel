@@ -24,6 +24,7 @@
 	        <li role="presentation"><a  data-toggle="tab" href="#menu5">Parametros</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu6">Productos Excluidos</a></li>
 	        <li role="presentation"><a  data-toggle="tab" href="#menu7">Dominios para Ctas</a></li>
+	        <li role="presentation"><a  data-toggle="tab" href="#menu8">Productos Excluidos Recupero</a></li>
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
@@ -217,7 +218,48 @@
 	      			</form>
 	      		</div>
 	      	</div>
-	      </div>
+		  </div>
+		  <div class="tab-pane fade" id="menu8" role="tabpanel">
+			<div class="row">
+				<div class="col-md-12">
+					<form action="{{ url('config/general') }}" id="productos_excluidos_recupero" method="post">
+						{{ csrf_field() }}
+						<input type="hidden" name="opt" value="8">
+						<div class="form-group">
+							<label for="">Productos Excluidos Primario:</label><br>
+							<select name="productos_excluidos_pri[]" value="" class="form-control select2-multiple select-recupero" multiple>
+							  @foreach($titles as $t)
+							  @php
+							  $selected = '';
+							  $titulo = explode(" (",$t->nombre_web)[0];
+							  if (in_array($titulo, $titulos_pri)) {
+								  $selected = 'selected';
+							  }
+							  @endphp
+							  <option value="{{ $titulo }}" {{$selected}}>{{ str_replace('-', ' ', $titulo) }}</option>
+							  @endforeach
+						  </select>
+						</div>
+						<div class="form-group">
+							<label for="">Productos Excluidos Secundario:</label><br>
+							<select name="productos_excluidos_secu[]" value="" class="form-control select2-multiple select-recupero" multiple>
+							  @foreach($titles as $t)
+							  @php
+							  $selected = '';
+							  $titulo = explode(" (",$t->nombre_web)[0];
+							  if (in_array($titulo, $titulos_secu)) {
+								  $selected = 'selected';
+							  }
+							  @endphp
+							  <option value="{{ $titulo }}" {{$selected}}>{{ str_replace('-', ' ', $titulo) }}</option>
+							  @endforeach
+						  </select>
+						</div>
+						<button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+					</form>
+				</div>
+			</div>
+		</div>
 	    </div>
 	  </div>
 	</div>
@@ -246,7 +288,7 @@
 		        }
 		});
 
-		$( "#titulo-select" ).select2({
+		$( "#titulo-select, .select-recupero" ).select2({
             theme: "bootstrap"
         });
 

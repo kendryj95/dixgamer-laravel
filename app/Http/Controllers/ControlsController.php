@@ -739,8 +739,6 @@ class ControlsController extends Controller
 
     public function configGeneral()
     {
-        $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
-        $cuentas_excluidas = DB::table('configuraciones')->where('ID',1)->value('cuentas_excluidas');
         $cantidadStock = DB::table('stock')->select(
             'titulo',
             'consola'
@@ -753,8 +751,12 @@ class ControlsController extends Controller
 
         $cantidadStock = count($cantidadStock);
         $configuraciones = DB::table('configuraciones')->where('ID',1)->first();
+        $oferta_fortnite = $configuraciones->oferta_fortnite;
+        $cuentas_excluidas = $configuraciones->cuentas_excluidas;
         $titles = $this->wp_p->lastGameStockTitles();
         $titulos = [];
+        $titulos_pri = [];
+        $titulos_secu = [];
 
         $productos_excluidos = explode(",", $configuraciones->productos_excluidos);
 
@@ -763,9 +765,23 @@ class ControlsController extends Controller
                 $titulos[] = str_replace('"', '', $value);
             }
         }
+        $productos_excluidos_pri = explode(",", $configuraciones->prod_excluidos_pri);
+
+        if ($productos_excluidos_pri) {
+            foreach ($productos_excluidos_pri as $value) {
+                $titulos_pri[] = str_replace('"', '', $value);
+            }
+        }
+        $productos_excluidos_secu = explode(",", $configuraciones->prod_excluidos_secu);
+
+        if ($productos_excluidos_secu) {
+            foreach ($productos_excluidos_secu as $value) {
+                $titulos_secu[] = str_replace('"', '', $value);
+            }
+        }
 
 
-        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios'));
+        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios','titulos_pri','titulos_secu'));
     }
 
     public function configGeneralStore(Request $request)
@@ -878,6 +894,29 @@ class ControlsController extends Controller
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
                 \Helper::messageFlash('Configuraciones','Ventas sin entregar excluidas satisfactoriamente.');
+                return redirect()->back();
+                break;
+            case 8:
+                $titulos_pri = $request->productos_excluidos_pri;
+                $titulos_secu = $request->productos_excluidos_secu;
+                $titles = [];
+                foreach ($titulos_pri as $value) {
+                    $titles[] = '"'.$value.'"';
+                }
+
+                $titulos_pri = implode(",", $titles);
+                $titles = [];
+                foreach ($titulos_secu as $value) {
+                    $titles[] = '"'.$value.'"';
+                }
+
+                $titulos_secu = implode(",", $titles);
+
+                $data['prod_excluidos_pri'] = $titulos_pri;
+                $data['prod_excluidos_secu'] = $titulos_secu;
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Productos excluidos recupero registrados.');
                 return redirect()->back();
                 break;
         }
