@@ -973,7 +973,14 @@ ORDER BY libre DESC";
     public function listCMByCode($code)
     {
       $datos = Stock::listCMByCode($code)->get();
+      $total = 0;
 
-      return view('stock.index_list_cm_detail',compact('datos','code'));
+      if ($datos) {
+        foreach ($datos as $value) {
+          $total += $value->costo_usd;
+        }
+      }
+
+      return view('stock.index_list_cm_detail',compact('datos','code','total'));
     }
 }

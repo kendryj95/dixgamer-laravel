@@ -6,7 +6,14 @@
 
 
 <div class="container">
-  <h1>Lista CM: {{ $code }}</h1>
+  <div class="row">
+    <div class="col-md-7">
+      <h1>Lista CM: {{ $code }}</h1>
+    </div>
+    <div class="col-md-5">
+      <span style="margin-top: 30px" class="pull-right fa-2x">Total: {{ $total }}</span>
+    </div>
+  </div>
 
 	<div class="row">
         <button style="margin-bottom: 10px" class="btn btn-primary btn-sm" onclick="window.history.back()">Volver</button>
