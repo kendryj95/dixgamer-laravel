@@ -207,7 +207,7 @@ class Sales extends Model
 
         if (!empty($obj->word) && !empty($obj->column)) {
             if ($obj->column == 'titulo' || $obj->column == 'consola') {
-                $query = $query->where("s.$obj->column",'like',"$obj->word%");
+                $query = $query->where("s.$obj->column",'like',str_replace(' ','-',trim($obj->word))."%");
             } elseif ($obj->column == 'clientes_id' || $obj->column == 'slot' || $obj->column == 'recup') {
                 $query = $query->where("b.$obj->column",'like',"$obj->word%");
             } elseif ($obj->column == 'id_ventas' || $obj->column == 'Notas' || $obj->column == 'Day' || $obj->column == 'usuario') {
