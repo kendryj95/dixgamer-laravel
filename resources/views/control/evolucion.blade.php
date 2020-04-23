@@ -56,7 +56,7 @@
 
              <div class="form-group col-md-1">
                  <label for="agrupar">Max Precio:</label>
-                 <input type="number" class="form-control input-sm" onchange="getData()" value="5000" name="max_precio" id="max_precio">
+                 <input type="number" class="form-control input-sm" onchange="getData()" value="70" name="max_precio" id="max_precio">
              </div>
 
              <div class="form-group col-md-1">
