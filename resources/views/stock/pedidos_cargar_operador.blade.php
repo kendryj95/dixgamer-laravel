@@ -36,6 +36,9 @@
                 <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
                     <thead>
                     <tr>
+                        @if (\Helper::validateAdministrator(session()->get('usuario')->Level))
+                        <th style="width: 20px"></th>
+                        @endif
                         <th class="text-center">
                           Cantidad<br>
                           Faltan / Pedido
@@ -54,6 +57,11 @@
                         @php $total_cantidad += $pedido->cantidad_cargar  @endphp
                         @php $total_pedido += $pedido->cantidad  @endphp
                         <tr>
+                            @if (\Helper::validateAdministrator(session()->get('usuario')->Level))
+                              <td style="width: 20px" class="text-center">
+                                <a href="{{ url('confirmar_pedido', $pedido->ID) }}" class="btn btn-success btn-xs" title="Confirmar"><i class="fa fa-check"></i></a>
+                              </td>
+                            @endif
                             <td class="text-center">
                                 @if($pedido->cantidad_cargar > 0) @php $color = 'warning' @endphp @else @php $color = 'success' @endphp @endif
                                 <span class="label label-{{$color}}">{{ $pedido->cantidad_cargar }}</span> / <span class="label label-secondary">{{ $pedido->cantidad }}</span>
@@ -92,6 +100,9 @@
                         </tr>
                         @endforeach
                         <tr>
+                        @if (\Helper::validateAdministrator(session()->get('usuario')->Level))
+                          <td style="width: 20px"></td>
+                        @endif
                         <td class="text-center"><b>{{ $total_cantidad }}</b> / <b>{{ $total_pedido }}</b></td>
                             <td colspan="4"></td>
                         </tr>

@@ -105,7 +105,7 @@
                                 <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $pedido->Notas !!} </div>
                             </td>
                             <td>
-                                <a class="btn btn-info btn-sm" href="#" title="Editar" onclick="editar('{{$pedido->ids}}','{{$i}}')"><i class="fa fa-pencil"></i></a> <a href="{{ url('confirmar_pedido', $pedido->ids) }}" class="btn btn-success btn-sm" title="Confirmar"><i class="fa fa-check"></i></a>
+                                <a class="btn btn-info btn-xs" href="#" title="Editar" onclick="editar('{{$pedido->ids}}','{{$i}}')"><i class="fa fa-pencil"></i></a> <a href="{{ url('confirmar_pedido', $pedido->ids) }}" class="btn btn-success btn-xs" title="Confirmar"><i class="fa fa-check"></i></a>
                             </td>
                         </tr>
                         {{-- Fila de edición --}}
