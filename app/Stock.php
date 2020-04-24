@@ -815,19 +815,20 @@ class Stock extends Model
         return DB::table(DB::raw("(SELECT costo_usd, code, n_order FROM `stock` where titulo LIKE 'gift-card-%' and costo_usd < 10 and LENGTH(code)  > 20
         UNION ALL
         SELECT costo_usd, code, n_order FROM `saldo` where titulo LIKE 'gift-card-%' and costo_usd < 10 and LENGTH(code)  > 20 ) as unido"))
-        ->select('code',DB::raw("SUM(costo_usd) as total_usd"),"n_order")
-        ->groupBy(DB::raw("substr(code,1,19)"))
+        ->select('unido.code',DB::raw("SUM(costo_usd) as total_usd"),"n_order",DB::raw("IFNULL(sgc.code,'No') AS controlado"))
+        ->leftjoin('stock_gc_controlado AS sgc',DB::raw('BINARY sgc.code'),DB::raw('BINARY SUBSTR(unido.code,1,19)'))
+        ->groupBy(DB::raw("substr(unido.code,1,19)"))
         ->orderBy("unido.n_order");
     }
 
     public function scopeListCMByCode($query, $code)
     {
         $union = DB::table('stock')
-        ->select('ID as stk_ID','titulo','costo_usd',DB::raw('NULL AS cuentas_id'),'code','n_order','Day',DB::raw('NULL as uso'),'usuario',DB::raw("(SELECT color FROM usuarios WHERE Nombre = REPLACE(stock.usuario,'-GC','')) AS color_user"))
+        ->select('ID as stk_ID','titulo','costo_usd',DB::raw('NULL AS cuentas_id'), 'code','n_order','Day',DB::raw('NULL as uso'),'usuario',DB::raw("(SELECT color FROM usuarios WHERE Nombre = REPLACE(stock.usuario,'-GC','')) AS color_user"))
         ->where('code','like',"$code%");
 
         return DB::table('saldo')
-        ->select('ex_stock_id as stk_ID','titulo','costo_usd','cuentas_id','code','n_order','ex_Day_stock as Day','Day as uso','usuario',DB::raw("(SELECT color FROM usuarios WHERE Nombre = saldo.usuario) AS color_user"))
+        ->select('ex_stock_id as stk_ID','titulo','costo_usd','cuentas_id', 'code','n_order','ex_Day_stock as Day','Day as uso','usuario',DB::raw("(SELECT color FROM usuarios WHERE Nombre = saldo.usuario) AS color_user"))
         ->where('code','like',"$code%")
         ->unionAll($union);
     }

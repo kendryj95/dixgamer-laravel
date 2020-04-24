@@ -983,4 +983,36 @@ ORDER BY libre DESC";
 
       return view('stock.index_list_cm_detail',compact('datos','code','total'));
     }
+
+    public function controlarCode(Request $request) 
+    {
+      // Mensajes de alerta
+
+      $msgs = [
+        'code.unique' => 'Ya ha sido controlado este código anteriormente.',
+      ];
+      // Validamos
+      $v = Validator::make($request->all(), [
+          'code' => 'unique:stock_gc_controlado,code',
+      ], $msgs);
+
+      // Si hay errores retornamos a la pantalla anterior con los mensajes
+      if ($v->fails())
+      {
+          return redirect()->back()->withInput()->withErrors($v->errors());
+      }
+
+      try {
+        $data['code'] = $request->code;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('stock_gc_controlado')->insert($data);
+
+        \Helper::messageFlash('Stock',"{$request->code} controlado exitosamente");
+        return redirect('stock_cm');
+      } catch (\Exception $th) {
+        return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso de insercion. Por favor vuelve a intentarlo']);
+      }
+    }
 }

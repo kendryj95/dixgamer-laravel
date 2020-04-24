@@ -18,6 +18,7 @@
                   <th>Code</th>
                   <th>Total USD</th>
                   <th>Nro. Order</th>
+                  <th>Controlado</th>
                 </tr> 
               </thead>
               <tbody>
@@ -29,17 +30,24 @@
                       <tr>
           
                         <td>
-                            <a href="{{ url('stock_cm', substr($stock->code,0,23))}}">{{ ($i + 1) }}</a>
+                            <a href="{{ url('stock_cm', substr($stock->code,0,19))}}">{{ ($i + 1) }}</a>
                         </td>
           
                         <td>
-                          <a href="{{ url('stock_cm', substr($stock->code,0,23))}}">{{ $stock->code }}</a>
+                          <a href="{{ url('stock_cm', substr($stock->code,0,19))}}">{{ $stock->code }}</a>
                         </td>
                         <td>
-                          <a href="{{ url('stock_cm', substr($stock->code,0,23))}}">{{ $stock->total_usd }}</a>
+                          <a href="{{ url('stock_cm', substr($stock->code,0,19))}}">{{ $stock->total_usd }}</a>
                         </td>
                         <td>
-                          <a href="{{ url('stock_cm', substr($stock->code,0,23))}}">{{ $stock->n_order }}</a>
+                          <a href="{{ url('stock_cm', substr($stock->code,0,19))}}">{{ $stock->n_order }}</a>
+                        </td>
+                        <td>
+                          @if ($stock->controlado == 'No')
+                              <span class="badge badge-danger"><i class="fa fa-times"></i></span>
+                          @else
+                              <span class="badge badge-success"><i class="fa fa-check"></i></span>
+                          @endif
                         </td>
           
           

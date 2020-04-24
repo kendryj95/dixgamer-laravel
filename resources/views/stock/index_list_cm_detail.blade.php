@@ -6,12 +6,59 @@
 
 
 <div class="container">
+
+  @if (count($errors) > 0)
+					<div class="alert alert-danger text-center">
+						<ul>
+							@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+							@endforeach
+						</ul>
+					</div>
+		@endif
   <div class="row">
     <div class="col-md-7">
       <h1>Lista CM: {{ $code }}</h1>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-5 text-right">
       <span style="margin-top: 30px" class="pull-right fa-2x">Total: {{ $total }}</span>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="dropdown pull-right" style="margin-bottom: 2px">
+            <button
+              class="btn btn-primary btn-sm dropdown-toggle"
+              type="button" id="dropdownMenu1"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false">
+                <i class="fa fa-fw fa-check"></i>
+                Controlado
+            </button>
+    
+            <ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+              <li class="dropdown-header">¿Seguro deseas</li>
+              <li class="dropdown-header">controlar code?</li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <form class="text-center" action="{{ url('stock/controlar_code') }}" method="post">
+                  {{ csrf_field() }}
+                  <input type="hidden" name="code" value="{{$code}}">
+                  <button
+                    type="submit"
+                    class="btn btn-danger btn-block"
+                    title="Controlar"
+                    id="controlar_code"
+                    type="button">
+                    Si, seguro!
+                  </button>
+                </form>
+              </li>
+            </ul>
+    
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
