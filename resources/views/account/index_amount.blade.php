@@ -55,6 +55,7 @@
               <th>Libre en Pesos</th>
             @endif
           <th>Para Consola</th>
+          <th>Dominio</th>
           <th>Reseteos</th>
           <th>Usuario</th>
         </tr>
@@ -98,6 +99,12 @@
                 <td>
                   <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                     {{ $consol }}
+                  </a>
+                </td>
+                
+                <td>
+                  <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
+                    {{ explode('@',$account->mail_fake)[1] }}
                   </a>
                 </td>
                 

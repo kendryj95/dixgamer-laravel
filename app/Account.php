@@ -131,6 +131,7 @@ class Account extends Model
                   'consola',
                   't_cuentas.usuario',
                   't_cuentas.color_user',
+                  't_cuentas.mail_fake',
                   DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0)) libre_usd"),
                   DB::raw("(sa_costo - COALESCE(st_costo,0)) libre_ars"),
                   DB::raw("IFNULL(reseteo.q,0) as reseteos")
@@ -144,7 +145,7 @@ class Account extends Model
                   {
                     $join->on('saldo.sa_cta_id', '=', 'stock.st_cta_id');
                   })
-                  ->leftjoin(DB::raw("(SELECT c.ID AS cuentas_id, c.usuario, u.color AS color_user FROM cuentas c LEFT JOIN usuarios u ON c.usuario = u.Nombre) AS t_cuentas"), function($join){
+                  ->leftjoin(DB::raw("(SELECT c.ID AS cuentas_id, c.usuario, c.mail_fake, u.color AS color_user FROM cuentas c LEFT JOIN usuarios u ON c.usuario = u.Nombre) AS t_cuentas"), function($join){
                     $join->on('t_cuentas.cuentas_id','=','saldo.sa_cta_id');
                   })
                   ->leftjoin(DB::raw("(SELECT Count(*) as q, cuentas_id FROM reseteo group by cuentas_id) AS reseteo"), function($join){
