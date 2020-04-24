@@ -26,6 +26,7 @@
                   <th>Titulo</th>
                   <th>Costo USD</th>
                   <th>Cta ID</th>
+                  <th>Code</th>
                   <th>Nro Order</th>
                   <th>Fecha</th>
                   <th>Uso</th>
@@ -54,6 +55,9 @@
                           <a href="{{ url('cuentas', $stock->cuentas_id)}}">{{ $stock->cuentas_id }}</a>
                         </td>
                         <td>
+                          {{ $stock->code }}
+                        </td>
+                        <td>
                           {{ $stock->n_order }}
                         </td>
                         <td>
@@ -73,7 +77,7 @@
           
                   @else
                     <tr>
-                      <td colspan = '4' class="text-center">No se encontraron datos</td>
+                      <td colspan = '9' class="text-center">No se encontraron datos</td>
                     </tr>
                   @endif
           

@@ -75,6 +75,7 @@ class Balance extends Model
               AND consola='ps'
               AND costo_usd < 10
               GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))
+			  ORDER BY Day ASC, ID ASC
 			  ) as agrupado
           WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND NOW() <= DATE_ADD(Day, INTERVAL $hours HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
           GROUP BY titulo
@@ -86,7 +87,7 @@ class Balance extends Model
               AND consola='ps'
               AND costo_usd < 10
               GROUP BY costo_usd, TRIM(SUBSTRING(stock.code,1,19))
-              ORDER BY ID ASC) as agrupado
+              ORDER BY Day ASC, ID ASC) as agrupado
           WHERE NOT EXISTS (SELECT TRIM(SUBSTRING(code,1,19)) AS code_subs FROM `saldo` WHERE `costo_usd` < 10 AND ex_stock_id > 100000 AND usuario != '$nombre' AND NOW() <= DATE_ADD(Day, INTERVAL 24 HOUR) HAVING code_subs = TRIM(SUBSTRING(agrupado.code,1,19)))
           GROUP BY titulo
           ORDER BY titulo ASC, ID ASC";
