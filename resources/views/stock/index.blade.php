@@ -58,7 +58,7 @@
                             </td>
 
                             <td>
-                                {{ $stock->titulo }}
+                                {{ \Helper::strTitleStock($stock->titulo) }}
                                 <span class="label label-default {{$stock->consola}}">
                       {{$stock->consola}}
                   </span>
