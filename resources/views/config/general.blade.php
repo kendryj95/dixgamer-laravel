@@ -89,7 +89,7 @@
 
 	      	<div style="margin-top: 20px" class="row">
 	      		<div class="col-md-4">
-	      			<a href="{{ url('config/proceso', 'actualizar_costo_ps4') }}" class="btn btn-primary btn-lg">Actualizar Costo PS4</a>
+	      			<a href="{{ url('config/proceso', 'actualizar_costo_ps4') }}" class="btn btn-warning btn-lg disabled">Actualizar Costo PS4</a>
 	      		</div>
 	      		<div class="col-md-4">
 	      			<a href="{{ url('config/proceso', 'automatizar_stock_web') }}" class="btn btn-primary btn-lg">Automatizar Stock Web</a>
