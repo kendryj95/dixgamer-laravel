@@ -181,6 +181,7 @@
 						  <input type="hidden" name="opt" value="6">
 						  <input type="hidden" id="id_dominio" name="id_dominio">
 						  <input type="hidden" id="dominio" name="dominio">
+						  <input type="hidden" id="habilitado" name="habilitado">
 						  <input type="hidden" name="accion" id="accion_dom" value="create-edit">
 	      				
 	      				<table class="table table-striped">
@@ -189,13 +190,14 @@
 									  <th>#</th>
 									  <th>Dominio</th>
 									  <th>Creado</th>
+									  <th>Habilitado</th>
 									  <th></th>
 								  </tr>
 							  </thead>
 							  <tbody>
 								  <tr>
 									  <td></td>
-									  <td colspan="2">
+									  <td colspan="3">
 										  <input type="text" id="dom0" data-id="0" placeholder="Escriba el nuevo dominio" class="form-control input-sm">
 									  </td>
 									  <td class="text-center">
@@ -207,6 +209,9 @@
 								  	  <td> {{ $dominio->ID }} </td>
 									  <td> <input style="background: transparent; border: none" type="text" data-id="{{ $dominio->ID }}" id="dom{{$dominio->ID}}" value="{{ $dominio->dominio }}" class="form-control"> </td>
 									  <td> {{ date('d/m/Y H:i:s', strtotime($dominio->update_at)) }} </td>
+									  <td>
+										  <input type="checkbox" id="hab{{$dominio->ID}}" @if($dominio->indicador_habilitado) checked @endif>
+									  </td>
 									  <td class="text-center">
 										  <button type="button" class="btn btn-success btn-sm" onclick="guardarDominio({{ $dominio->ID }})" title="Editar Dominio"><i class="fa fa-pencil"></i></button> 
 										  <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDominio({{ $dominio->ID }})"><i class="fa fa-trash"></i></button>
@@ -305,9 +310,11 @@
 
 		var id_dominio = $("#dom"+pos).data('id');
 		var dominio = $("#dom"+pos).val();
+		var habilitado = $("#hab"+pos).is(':checked') ? 1 : 0;
 		
 		$('#id_dominio').val(id_dominio);
 		$('#dominio').val(dominio);
+		$('#habilitado').val(habilitado);
 
 		setTimeout(() => {
 			$('#form_dominios').submit();

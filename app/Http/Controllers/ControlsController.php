@@ -858,9 +858,9 @@ class ControlsController extends Controller
 
                 if ($request->dominio != "" && $request->accion == 'create-edit') {
                     $data['dominio'] = $request->dominio;
-                    $data['create_at'] = date('Y-m-d H:i:s');
-                    $data['update_at'] = date('Y-m-d H:i:s');
+                    $data['indicador_habilitado'] = $request->habilitado;
                     $data['usuario'] = session()->get('usuario')->Nombre;
+                    $data['update_at'] = date('Y-m-d H:i:s');
     
                     $accion = '';
     
@@ -868,6 +868,7 @@ class ControlsController extends Controller
                         $accion = 'editado';
                         DB::table('dominios')->where('ID',$request->id_dominio)->update($data);
                     } else {
+                        $data['create_at'] = date('Y-m-d H:i:s');
                         $accion = 'creado';
                         DB::table('dominios')->insert($data);
                     }

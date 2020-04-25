@@ -367,7 +367,8 @@ class Account extends Model
       ->leftjoin(
         DB::raw("(SELECT du.* FROM dominios_usuarios du INNER JOIN dominios d2 ON d2.ID = du.id_dominio WHERE du.usuario = '$usuario') AS du"),
         "d.ID","=","du.id_dominio"
-      );
+      )
+      ->where('d.indicador_habilitado',1);
     }
 
     public function ScopeCtasResetear($query) {
