@@ -973,6 +973,7 @@ ORDER BY libre DESC";
     public function listCMByCode($code)
     {
       $datos = Stock::listCMByCode($code)->get();
+      $control = DB::table('stock_gc_controlado')->where('code',$code)->first();
       $total = 0;
 
       if ($datos) {
@@ -981,7 +982,7 @@ ORDER BY libre DESC";
         }
       }
 
-      return view('stock.index_list_cm_detail',compact('datos','code','total'));
+      return view('stock.index_list_cm_detail',compact('datos','code','total','control'));
     }
 
     public function controlarCode(Request $request) 

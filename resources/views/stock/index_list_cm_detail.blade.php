@@ -19,12 +19,18 @@
   <div class="row">
     <div class="col-md-7">
       <h1>Lista CM: {{ $code }}</h1>
+
+      <button style="margin-bottom: 10px" class="btn btn-primary btn-sm" onclick="window.history.back()">Volver</button>
+
     </div>
     <div class="col-md-5 text-right">
       <span style="margin-top: 30px" class="pull-right fa-2x">Total: {{ $total }}</span>
 
       <div class="row">
         <div class="col-md-12">
+          @if ($control)
+            <span class="text-muted">Control: {{ $control->Day }}</span>
+          @else
           <div class="dropdown pull-right" style="margin-bottom: 2px">
             <button
               class="btn btn-primary btn-sm dropdown-toggle"
@@ -57,13 +63,14 @@
             </ul>
     
           </div>
+          @endif
+
         </div>
       </div>
     </div>
   </div>
 
 	<div class="row">
-        <button style="margin-bottom: 10px" class="btn btn-primary btn-sm" onclick="window.history.back()">Volver</button>
         <div class="table-responsive">
             <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
           
