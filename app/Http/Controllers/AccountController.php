@@ -1343,7 +1343,7 @@ class AccountController extends Controller
         $data['code'] = $balance->code;
         $data['code_prov'] = $balance->code_prov;
         $data['n_order'] = $balance->n_order;
-        $data['Day'] = $date;
+        $data['Day'] = $balance->ex_Day_stock;
         $data['usuario'] = $balance->ex_usuario;
         $saving = $this->tks->storeCodes($data);
         $nota = "Devuelto de cta #$request->c_id";
