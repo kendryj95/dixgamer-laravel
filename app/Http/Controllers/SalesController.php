@@ -778,8 +778,11 @@ class SalesController extends Controller
         $obj->word = $request->word;
 
         $ventas = Sales::ventasRecupero($obj)->paginate(50);
+        $obj->column = "";
+        $obj->word = "";
+        $vtaColumns = Sales::ventasRecupero($obj)->limit(1)->get();
         $columns = [];
-        foreach ($ventas as $sales) {
+        foreach ($vtaColumns as $sales) {
             foreach ($sales as $columna => $value) {
                 if (!in_array($columna,$columns)) {
                     $columns[] = $columna;
