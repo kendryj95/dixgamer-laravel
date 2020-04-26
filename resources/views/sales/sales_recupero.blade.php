@@ -42,6 +42,9 @@
                                 </td>
                                 <td>
                                     @php
+                                    $hoy = date('Y-m-d H:i:s');
+                                    $last60days = strtotime('-60 days', strtotime($hoy));
+                                    $last60days = date('Y-m-d H:i:s',$last60days);
                                     $dia = date('d', strtotime($sales->Day));
                                     $mes = date('n', strtotime($sales->Day));
                                     $mes = \Helper::getMonthLetter($mes);
@@ -49,7 +52,7 @@
                                     $fecha = "$dia-$mes-$anio";
                                     @endphp
                                     
-                                    <a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $fecha }} </a>
+                                    <a class="@if($sales->Day >= $last60days && $sales->Day <= $hoy) text-danger @endif" title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $fecha }} </a>
                                   </td>
                                   <td>
                                         {{ $sales->recup }}
