@@ -241,7 +241,11 @@ class Stock extends Model
         $query->select('stock.*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = usuario) AS color_user"));
         
         if (!empty($obj->column) && !empty($obj->word)) {
-            $query->where($obj->column,"like",$obj->word."%");
+            if ($obj->column == 'titulo') {
+                $query->where($obj->column,"like",str_replace(' ','-',trim($obj->word))."%");
+            } else {
+                $query->where($obj->column,"like",$obj->word."%");
+            }
         }
         // Validamos que sea administrador o analitico
         if (!\Helper::validateAdminAnalyst(session()->get('usuario')->Level)) {
