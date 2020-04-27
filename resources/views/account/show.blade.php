@@ -1238,14 +1238,14 @@
 					</div>
 
 					<div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="avisosecu-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede acceder normalmente a la cuenta para jugar. Tuvimos un error de sistema y si no puede acceder queremos ayudarlo a solucionar.<br /><br />
+					<span id="avisosecu-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede acceder normalmente a la cuenta para jugar. Tuvimos un error de sistema y si no puede acceder queremos ayudarle a solucionar.<br /><br />
 
 						{!! html_entity_decode($oferta_fortnite) !!} <br>
 						
 						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
 					
-					<span id="avisopri-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>{{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede usarlo con normalidad. Tuvimos un error de sistema y si no puede jugar queremos ayudarlo a solucionar.<br /><br />
+					<span id="avisopri-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>{{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede usarlo con normalidad. Tuvimos un error de sistema y si no puede jugar queremos ayudarle a solucionar.<br /><br />
 
 						{!! html_entity_decode($oferta_fortnite) !!} <br>
 						
@@ -1284,36 +1284,6 @@
 					@if ($sc->recup == 2)
 						@if($operador_reset)
 
-						<div style="display: inline-block" class="dropdown">
-							<button
-							class="btn btn-primary dropdown-toggle btn-xs"
-							type="button" id="priSigueJugando2"
-							data-toggle="dropdown"
-							aria-haspopup="true"
-							aria-expanded="false">
-							<i class="fa fa-fw fa-gamepad"></i>
-								Pri Sigue jugando
-							</button>
-	
-							<ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
-							<li class="dropdown-header">¿Seguro deseas</li>
-							<li class="dropdown-header">Ejecutarlo?</li>
-							<li role="separator" class="divider"></li>
-							<li>
-												
-								<a
-								href="{{ url('nota_siguejugandopri', $account->ID) }}"
-									class="btn btn-danger"
-									title="Primario Sigue jugando"
-									id="pri_sigue_jugando"
-									>
-									Si, seguro!
-								</a>
-							</li>
-							</ul>
-	
-						</div>
-
 						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
 						@endif
 					@else
@@ -1325,7 +1295,65 @@
 					@if ($sc->recup == 2)
 						@if($operador_pass)
 						
-						<div style="display: inline-block" class="dropdown">
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
+
+						@endif
+					@else
+						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
+						
+						{{-- <a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a>  --}}
+					@endif
+					<?php endif;?>
+				<?php endif;?>
+
+			  </td>
+            <td>
+				<span class="label <?php if ($sc->slot == 'Primario'):?>label-default<?php endif;?>"><?php echo $sc->titulo; ?></span> 
+				<?php if ($sc->slot == 'Secundario'): ?>
+				<span class="label label-danger" style="opacity:0.7">2°</span>
+				<?php endif; ?> 
+				<span class="label label-default <?php echo $sc->consola; ?>"><?php echo $sc->consola; ?></span> 
+				<?php if ($sc->ventas_Notas):?>
+				<a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a>
+				<?php endif; ?>
+
+				@if ($sc->recup == 2)
+					@if($sc->slot == 'Primario' && $operador_reset)
+
+					<div style="margin-top: 5px" class="dropdown">
+						<button
+						class="btn btn-primary dropdown-toggle btn-xs"
+						type="button" id="priSigueJugando2"
+						data-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false">
+						<i class="fa fa-fw fa-gamepad"></i>
+							Pri Sigue jugando
+						</button>
+
+						<ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
+						<li class="dropdown-header">¿Seguro deseas</li>
+						<li class="dropdown-header">Ejecutarlo?</li>
+						<li role="separator" class="divider"></li>
+						<li>
+											
+							<a
+							href="{{ url('nota_siguejugandopri', $account->ID) }}"
+								class="btn btn-danger"
+								title="Primario Sigue jugando"
+								id="pri_sigue_jugando"
+								>
+								Si, seguro!
+							</a>
+						</li>
+						</ul>
+
+					</div>
+					@endif
+
+					@if($sc->slot == 'Secundario' && $operador_pass)
+						
+						<div style="margin-top: 5px" class="dropdown">
 							<button
 							class="btn btn-danger dropdown-toggle btn-xs"
 							type="button" id="secusiguejugando2"
@@ -1354,22 +1382,12 @@
 							</ul>
 	
 						</div>
-
-						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a> 
-
-						@endif
-					@else
-						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a> 
-						
-						{{-- <a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a>  --}}
 					@endif
-					<?php endif;?>
-				<?php endif;?>
+				@endif
+			</td>
 
-			  </td>
-            <td><span class="label <?php if ($sc->slot == 'Primario'):?>label-default<?php endif;?>"><?php echo $sc->titulo; ?></span> <?php if ($sc->slot == 'Secundario'): ?><span class="label label-danger" style="opacity:0.7">2°</span><?php endif; ?> <span class="label label-default <?php echo $sc->consola; ?>"><?php echo $sc->consola; ?></span> <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
-
-            <td style="text-align:right;"></td>
+			<td style="text-align:right;">
+			</td>
             <?php endif;?>
           </tr>
       @endforeach
