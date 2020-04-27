@@ -31,28 +31,31 @@
                         </thead>
                         <tbody>
                         @foreach($ventas as $sales)
+                            @php
+                                $hoy = date('Y-m-d H:i:s');
+                                $last60days = strtotime('-60 days', strtotime($hoy));
+                                $last60days = date('Y-m-d H:i:s',$last60days);
+                                $dia = date('d', strtotime($sales->Day));
+                                $mes = date('n', strtotime($sales->Day));
+                                $mes = \Helper::getMonthLetter($mes);
+                                $anio = date('Y', strtotime($sales->Day));
+                                $fecha = "$dia-$mes-$anio";
+                                $danger = ($sales->Day >= $last60days) ? 'text-danger' : '';
+                                $danger_nota = ($sales->Day >= $last60days) ? '#a94442' : '#8a6d3b';
+                            @endphp
                             <tr>
                                 <td><a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $sales->clientes_id }} </a></td>
-                                <td><a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $sales->id_ventas }} </a></td>
                                 <td>
-                                    {{ \Helper::strTitleStock($sales->titulo) }} ({{ $sales->consola }}) {{ $sales->slot }}
+                                    <span class="{{$danger}}">{{ $sales->id_ventas }}</span>
                                 </td>
                                 <td>
-                                    <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $sales->Notas !!} </div>
+                                  <span class="{{$danger}}">{{ \Helper::strTitleStock($sales->titulo) }} ({{ $sales->consola }}) {{ $sales->slot }}</span>
                                 </td>
                                 <td>
-                                    @php
-                                    $hoy = date('Y-m-d H:i:s');
-                                    $last60days = strtotime('-60 days', strtotime($hoy));
-                                    $last60days = date('Y-m-d H:i:s',$last60days);
-                                    $dia = date('d', strtotime($sales->Day));
-                                    $mes = date('n', strtotime($sales->Day));
-                                    $mes = \Helper::getMonthLetter($mes);
-                                    $anio = date('Y', strtotime($sales->Day));
-                                    $fecha = "$dia-$mes-$anio";
-                                    @endphp
-                                    
-                                    <a class="@if($sales->Day >= $last60days && $sales->Day <= $hoy) text-danger @endif" title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $fecha }} </a>
+                                    <div class="alert alert-warning {{$danger}}" style="color: {{$danger_nota}}; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $sales->Notas !!} </div>
+                                </td>
+                                <td>
+                                    <span class="{{$danger}}">{{$fecha}}</span>
                                   </td>
                                   <td>
                                         {{ $sales->recup }}
