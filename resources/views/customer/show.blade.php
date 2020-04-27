@@ -889,7 +889,7 @@
                                 
                         <a
                         href="{{ url('nota_siguejugandopri', $dataCustomer->cuentas_id) }}"
-                          class="btn btn-danger"
+                          class="btn btn-primary"
                           title="Primario Sigue jugando"
                           id="pri_sigue_jugando"
                           >
