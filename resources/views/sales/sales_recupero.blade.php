@@ -74,7 +74,12 @@
             <div class="col-md-12">
 
               <ul class="pager">
-                {{ $ventas->render() }}
+                {{ $ventas->appends(
+                    [
+                      'word' => app('request')->input('word'),
+                      'column' => app('request')->input('column')
+                    ]
+                    )->render() }}
               </ul>
 
             </div>
