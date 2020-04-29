@@ -46,16 +46,28 @@
                             <tr>
                                 <td><a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $sales->clientes_id }} </a></td>
                                 <td>
-                                    <span class="{{$danger}}">{{ $sales->id_ventas }}</span>
+                                    @if ($danger != '')
+                                        <span class="{{$danger}}">{{ $sales->id_ventas }}</span>
+                                    @else
+                                        <a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}"> {{ $sales->id_ventas }} </a>
+                                    @endif
                                 </td>
                                 <td>
-                                  <span class="{{$danger}}">{{ \Helper::strTitleStock($sales->titulo) }} ({{ $sales->consola }}) {{ $sales->slot }}</span>
+                                    @if ($danger != '')
+                                        <span class="{{$danger}}">{{ \Helper::strTitleStock($sales->titulo) }} ({{ $sales->consola }}) {{ $sales->slot }}</span>
+                                    @else
+                                        <a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}">{{ \Helper::strTitleStock($sales->titulo) }} ({{ $sales->consola }}) {{ $sales->slot }}</a>
+                                    @endif
                                 </td>
                                 <td>
-                                    <div class="alert alert-warning {{$danger}}" style="color: {{$danger_nota}}; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $sales->Notas !!} </div>
+                                    <div class="alert alert-warning" style="color: {{$danger_nota}}; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $sales->Notas !!} </div>
                                 </td>
                                 <td>
-                                    <span class="{{$danger}}">{{$fecha}}</span>
+                                    @if ($danger != '')
+                                        <span class="{{$danger}}">{{$fecha}}</span>
+                                    @else
+                                        <a title="Ir a Cliente" href="{{ url('clientes',$sales->clientes_id) }}">{{$fecha}}</a>
+                                    @endif
                                   </td>
                                   <td>
                                         {{ $sales->recup }}
