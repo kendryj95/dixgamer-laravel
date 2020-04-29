@@ -1204,7 +1204,7 @@
             <?php if ($sc->concepto == 'contra'):?>
             <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;"><i class="fa fa-key fa-fw"></i> Nueva contra: <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
 			<?php elseif ($sc->concepto == 'notas'):?>
-			<td colspan="4"><em class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! html_entity_decode($sc->new_pass) !!} (<?php echo $sc->usuario;?>)</em></td>
+			<td colspan="4"><em class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.8;"><i class="fa fa-comment fa-fw"></i> {!! html_entity_decode($sc->new_pass) !!} (<?php echo $sc->usuario;?>)</em></td>
 			<?php elseif ($sc->concepto == 'reset'):?>
             <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Reseteado por <?php echo $sc->usuario;?></em></td>
 			<?php elseif ($sc->concepto == 'resetear'):?>
@@ -1213,7 +1213,7 @@
             <td colspan="3"><em class="badge badge-success" style="font-weight:normal; opacity:0.8; width: 100%"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA {{ \Helper::formatFechaReferencia($sc->Day) }}</em></td>
       		<td></td>
             <?php else:?>
-            <td><span class="text-muted small">#<?php echo $sc->clientes_id; ?></span> <span class="label label-info"><?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span> @if($sc->auto == 're') <label for="" class="label label-danger" style="padding: 6px; margin-left: 20px">Revendedor</label> @endif
+            <td><span class="text-muted small">#<?php echo $sc->clientes_id; ?> <?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span> @if($sc->auto == 're') <label for="" class="label label-danger" style="padding: 6px; margin-left: 20px">Revendedor</label> @endif
             <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
 
             <td id="<?php echo $sc->clientes_id; ?>"><a title="Ir a Cliente" href="{{ url('clientes', $sc->clientes_id) }}"><?php echo $sc->email; ?></a> <a class="btn btn-xs btn-default" style="opacity:0.6;" href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($sc->email, 0, strpos($sc->email, '@')) . '+' . str_replace("-"," ",$sc->titulo); ?>" title="filtrar guia de descarga en gmail" target="_blank"><i aria-hidden="true" class="fa fa-google"></i>mail</a>
