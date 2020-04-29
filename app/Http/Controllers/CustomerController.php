@@ -170,8 +170,7 @@ class CustomerController extends Controller
       ->where('clientes_id',$customer->ID)
       ->get();
 
-
-      $ventas_notas = DB::table('ventas_notas')->whereIn('id_ventas',$id_ventas)->orderBy('Day','DESC')->get();
+      $ventas_notas = $this->buildNotesSales($id_ventas);
 
       return view('customer.show',compact(
         'customer',
@@ -183,6 +182,116 @@ class CustomerController extends Controller
         'ventas_notas',
         'othersEmails'
       ));
+    }
+
+    private function buildNotesSales($idsVentas, $others = false) 
+    {
+      $ventas_notas = DB::table('ventas_notas')->whereIn('id_ventas',$idsVentas)->orderBy('Day','DESC');
+      if ($others) {
+        $ventas_notas = $ventas_notas->offset(3)->limit(20);
+      }
+      $ventas_notas = $ventas_notas->get();
+      $notas = [];
+
+      foreach ($ventas_notas as $venta_nota) {
+        $nota_producto = false;
+        $datos = [];
+        $nota = '';
+        if (!array_key_exists(strval($venta_nota->id_ventas),$notas)) {
+          $notas[strval($venta_nota->id_ventas)] = [];
+        }
+
+        if (strpos($venta_nota->Notas, "Antes asignado a cliente") !== false) {
+          $cliente = substr($venta_nota->Notas, 26);
+          $nota = 'Antes asignado a cliente <a href="'.url('clientes', $cliente).'" class="alert-link" target="_blank">#'.$cliente.'</a>';
+          $datos = [
+            "ID" => $venta_nota->ID,
+            "Day" => $venta_nota->Day,
+            "usuario" => $venta_nota->usuario,
+            "nota" => $nota,
+            "nota_producto" => false,
+            "titulo" => '',
+            "consola" => '',
+            "slot" => '',
+            "Day_format" => date("d M 'y", strtotime($venta_nota->Day)),
+            "administrador" => \Helper::validateAdministrator(session()->get('usuario')->Level)
+          ];
+        } elseif(strpos($venta_nota->Notas, "Antes tenía") !== false) { // Solo notas para cambios de productos
+          if (strpos($venta_nota->Notas, "#", 14) !== false) { // Esta validación que funcione las notas anteriores antes de colocar el link para las cuentas
+            $string = $venta_nota->Notas;
+            $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
+            $cuenta = substr($string, $pos+1);
+            $nota_vta = substr($string, 0, $pos);
+            $title = '';
+            $cons = '';
+            $slot = '';
+            if ($cuenta != "") {
+                $data_nota =  explode(" ",substr($nota_vta,14));
+                $id_stock = $data_nota[0];
+                $title = $data_nota[1];
+                $cons = $data_nota[2];
+                $slot = $data_nota[3];
+                $nota_producto = true;
+            }
+
+            
+            if ($cuenta != '') {
+              $nota = $nota_vta . '<a href="'.url('cuentas',$cuenta).'" target="_blank" class="alert-link">#'.$cuenta.'</a>';
+            } else {
+              $nota = $nota_vta;
+            }
+
+            $datos = [
+              "ID" => $venta_nota->ID,
+              "Day" => $venta_nota->Day,
+              "usuario" => $venta_nota->usuario,
+              "nota" => $nota,
+              "nota_producto" => $nota_producto,
+              "titulo" => $title,
+              "consola" => $cons,
+              "slot" => $slot,
+              "Day_format" => date("d M 'y", strtotime($venta_nota->Day)),
+              "administrador" => \Helper::validateAdministrator(session()->get('usuario')->Level)
+            ];
+          } else {
+            $nota = $venta_nota->Notas;
+            $datos = [
+              "ID" => $venta_nota->ID,
+              "Day" => $venta_nota->Day,
+              "usuario" => $venta_nota->usuario,
+              "nota" => $nota,
+              "nota_producto" => false,
+              "titulo" => '',
+              "consola" => '',
+              "slot" => '',
+              "Day_format" => date("d M 'y", strtotime($venta_nota->Day)),
+              "administrador" => \Helper::validateAdministrator(session()->get('usuario')->Level)
+            ];
+          }
+        } else {
+          $nota = $venta_nota->Notas;
+          $datos = [
+            "ID" => $venta_nota->ID,
+            "Day" => $venta_nota->Day,
+            "usuario" => $venta_nota->usuario,
+            "nota" => $nota,
+            "nota_producto" => $nota_producto,
+            "titulo" => '',
+            "consola" => '',
+            "slot" => '',
+            "Day_format" => date("d M 'y", strtotime($venta_nota->Day)),
+            "administrador" => \Helper::validateAdministrator(session()->get('usuario')->Level)
+          ];
+        }
+        
+        if (!array_key_exists(strval($venta_nota->id_ventas),$notas)) {
+          $notas[strval($venta_nota->id_ventas)] = [$datos];
+        } else {
+          $notas[strval($venta_nota->id_ventas)][] = $datos;
+        }
+      }
+
+      return $notas;
     }
 
     public function edit(Customer $customer,$id)
@@ -1704,5 +1813,14 @@ class CustomerController extends Controller
           DB::rollback();
           return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
         }
+    }
+
+    public function loadNotesSales($id_venta)
+    {
+      $ids = [$id_venta];
+
+      $notas = $this->buildNotesSales($ids,true);
+
+      echo json_encode(["notas"=>$notas]);
     }
 }

@@ -940,86 +940,59 @@
             @endif
 
             @if ($ventas_notas)
-              @foreach ($ventas_notas as $venta_nota)
-                @php $nota_producto = false; @endphp
-                @if ($venta_nota->id_ventas == $dataCustomer->ID_ventas)
-                <div id="nota_venta_{{$venta_nota->ID}}" class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.7;font-size: 0.9em">
-                  <i class="fa fa-comment fa-fw"></i>
-
-                  @if (strpos($venta_nota->Notas, "Antes asignado a cliente") !== false)
-                  
-                  @php 
-                  $cliente = substr($venta_nota->Notas, 26);
-                  @endphp
-                  Antes asignado a cliente <a href="{{ url('clientes', $cliente) }}" class="alert-link" target="_blank">#{{ $cliente }}</a>
-
-                  @elseif(strpos($venta_nota->Notas, "Antes tenía") !== false) {{-- Solo notas para cambios de productos --}}
-                   @if(strpos($venta_nota->Notas, "#", 14) !== false) {{-- Esta validación que funcione las notas anteriores antes de colocar el link para las cuentas --}}
-
-                    @php
-                    $string = $venta_nota->Notas;
-                    $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
-                    $cuenta = substr($string, $pos+1);
-                    $nota = substr($string, 0, $pos);
-                    if ($cuenta != "") {
-                        $data_nota =  explode(" ",substr($nota,14));
-                        if (count($data_nota) == 5) {
-                          list($id_stock,$title,$cons,$slot,$otro) = $data_nota;
-                          $nota_producto = true;
-                        } elseif (count($data_nota) == 5) {
-                          list($id_stock,$title,$cons,$slot) = $data_nota;
-                          $nota_producto = true;
-                        }
-                    }
-                    
-                    @endphp
-
-                    {{$nota}} @if ($cuenta != "") <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a> @endif
-
-                    @else
-                      {{ $venta_nota->Notas }}
-                    @endif
-
-                  @else
-
-                  {{ ($venta_nota->Notas) }}
-                  @endif
-                </div>
-                
-                <div @if($nota_producto) style="display: flex; justify-content: space-between" @endif class="text-right">
-                  @if ($nota_producto)
-                    <div class="dropdown">
-                      <button class="btn btn-link btn-xs dropdown-toggle" type="button" id="re_asignar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Re-asignar
-                      </button>
-                      <ul style="" class="dropdown-menu" aria-labelledby="re_asignar">
-                        <li class="dropdown-header">¿Seguro desea re asignar?</li>
-                        <li role="separator" class="divider"></li>
-                        <li><a class="btn btn-danger" href="javascript:void(0)" onclick="btnReAsignar('{{$title}}', '{{$cons}}', '{{$slot}}','{{ $venta_nota->id_ventas }}', event)">Sí, re asignar</a></li>
-                      </ul>
-                    </div>
-                  @endif
-                  <div>
-                    <em
-                    class="small text-muted"
-                    style="opacity: 0.7;font-size: 0.8em">
-                    {{ date("d M 'y", strtotime($venta_nota->Day)) }}
-                    ({{ $venta_nota->usuario }})
-                    </em>
-                    @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
-                    <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
-                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
-                        <i aria-hidden="true" class="fa fa-remove text-muted"></i>
-                      </button>
-                      <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li class="dropdown-header">¿Eliminar nota de venta?</li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url('delete_notes',[$venta_nota->ID,'ventas']) }}">Sí, Eliminar</a></li>
-                      </ul>
-                    </div>
-                    @endif
+              @foreach ($ventas_notas as $id_venta => $notas)
+                @if ($id_venta == $dataCustomer->ID_ventas)
+                @php $i_nota = 0; @endphp
+                  @foreach ($notas as $venta_nota)
+                  @php $i_nota++; @endphp
+                  @if ($i_nota <= 3)
+                  <div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.7;font-size: 0.9em">
+                    <i class="fa fa-comment fa-fw"></i>
+    
+                    {!! $venta_nota['nota'] !!}
                   </div>
-                </div>
+                  
+                  <div @if($venta_nota['nota_producto']) style="display: flex; justify-content: space-between" @endif class="text-right">
+                    @if ($venta_nota['nota_producto'])
+                      <div class="dropdown">
+                        <button class="btn btn-link btn-xs dropdown-toggle" type="button" id="re_asignar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          Re-asignar
+                        </button>
+                        <ul style="" class="dropdown-menu" aria-labelledby="re_asignar">
+                          <li class="dropdown-header">¿Seguro desea re asignar?</li>
+                          <li role="separator" class="divider"></li>
+                          <li><a class="btn btn-danger" href="javascript:void(0)" onclick="btnReAsignar('{{$venta_nota['titulo']}}', '{{$venta_nota['consola']}}', '{{$venta_nota['slot']}}','{{ $dataCustomer->ID_ventas }}', event)">Sí, re asignar</a></li>
+                        </ul>
+                      </div>
+                    @endif
+                    <div>
+                      <em
+                      class="small text-muted"
+                      style="opacity: 0.7;font-size: 0.8em">
+                      {{ date("d M 'y", strtotime($venta_nota['Day'])) }}
+                      ({{ $venta_nota['usuario'] }})
+                      </em>
+                      @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+                      <div class="dropdown" title="Eliminar nota" style="display: inline-block;">
+                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
+                          <i aria-hidden="true" class="fa fa-remove text-muted"></i>
+                        </button>
+                        <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                          <li class="dropdown-header">¿Eliminar nota de venta?</li>
+                          <li role="separator" class="divider"></li>
+                          <li><a href="{{ url('delete_notes',[$venta_nota['ID'],'ventas']) }}">Sí, Eliminar</a></li>
+                        </ul>
+                      </div>
+                      @endif
+                    </div>
+                  </div>
+                  @else
+                      <div class="text-center" id="more_notes_{{$dataCustomer->ID_ventas}}">
+                        <a href="javascript:void(0)" onclick="cargar_notas('{{$dataCustomer->ID_ventas}}')">Ver más +</a>
+                      </div>
+                      @break
+                  @endif
+                  @endforeach
                 @endif
               @endforeach
             @endif
@@ -1863,6 +1836,74 @@
           window.location.href = url;
 
           e.preventDefault();
+        }
+
+        function cargar_notas(id_ventas)
+        {
+          if (id_ventas != '') {
+            $.ajax({
+              url: "{{url('cargar_notas_ventas')}}/" + id_ventas,
+              type: "GET",
+              dataType: 'json',
+              success: function(response) {
+                var html = '';
+                if (response != null) {
+                  for (const value of response.notas[id_ventas]) {
+                    html += `<div class="alert alert-warning" style="padding: 4px 7px;margin:0px;opacity: 0.7;font-size: 0.9em">
+                    <i class="fa fa-comment fa-fw"></i>
+    
+                    ${value.nota}
+                  </div>`;
+
+                  html += value.nota_producto ? `<div style="display: flex; justify-content: space-between" class="text-right">` : `<div class="text-right">`;
+                  
+                  if (value.nota_producto) {
+                    html += `<div class="dropdown">
+                        <button class="btn btn-link btn-xs dropdown-toggle" type="button" id="re_asignar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          Re-asignar
+                        </button>
+                        <ul style="" class="dropdown-menu" aria-labelledby="re_asignar">
+                          <li class="dropdown-header">¿Seguro desea re asignar?</li>
+                          <li role="separator" class="divider"></li>
+                          <li><a class="btn btn-danger" href="javascript:void(0)" onclick="btnReAsignar('${value.titulo}', '${value.consola}', '${value.slot}','${id_ventas}', event)">Sí, re asignar</a></li>
+                        </ul>
+                      </div>`;
+                  }
+                    
+                  html +=  `<div>
+                      <em
+                      class="small text-muted"
+                      style="opacity: 0.7;font-size: 0.8em">
+                      ${value.Day_format}
+                      (${value.usuario})
+                      </em>`;
+                  
+                  if (value.administrador) {
+                    html += `<div class="dropdown" title="Eliminar nota" style="display: inline-block;">
+                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
+                          <i aria-hidden="true" class="fa fa-remove text-muted"></i>
+                        </button>
+                        <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                          <li class="dropdown-header">¿Eliminar nota de venta?</li>
+                          <li role="separator" class="divider"></li>
+                          <li><a href="{{ url('delete_notes') }}/${value.ID}/ventas">Sí, Eliminar</a></li>
+                        </ul>
+                      </div>`;
+                  }
+                  html += `</div>
+                  </div>`;
+                    
+                  }
+
+                  $('#more_notes_'+id_ventas).removeClass("text-center").html(html);
+                }
+              },
+              error: function(error) {
+                console.log(error);
+                
+              }
+            })
+          }
         }
 
     </script>
