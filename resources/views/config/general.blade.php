@@ -8,6 +8,9 @@
 	.bootstrap-tagsinput {
 		width: 100% !important;
 	}
+	.tag.label {
+		cursor: pointer;
+	}
 </style>
 
 <div class="container">
@@ -278,6 +281,7 @@
 @parent
 
 <script>
+	var band = true;
 	$(document).ready(function() {
 		tinymce.init({
 			selector: '#form',
@@ -304,6 +308,23 @@
         setTimeout(function(){
         	$('.select2-container').css('width', '100%');
         },300)
+
+		// EVENTOS PARA CUENTAS EXCLUIDAS
+		$('.bootstrap-tagsinput span.tag.label span[data-role="remove"]').on('click', function(event) {
+   			 band = false; // Bandera que evita que haga un redirect si eliminan un tag
+		})
+		$('.bootstrap-tagsinput span.tag.label').on('click', function() {
+			var el = $(this);
+			var id_cta = el.text();
+
+			if (band) {
+			setTimeout(() => {
+				window.open("{{ url('cuentas') }}/"+id_cta, "_blank");
+			}, 400);  
+			}
+
+			band = true;    
+		})
 	});
 
 	function guardarDominio(pos) {
