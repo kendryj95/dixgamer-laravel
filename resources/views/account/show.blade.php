@@ -1213,8 +1213,79 @@
             <td colspan="3"><em class="badge badge-success" style="font-weight:normal; opacity:0.8; width: 100%"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA {{ \Helper::formatFechaReferencia($sc->Day) }}</em></td>
       		<td></td>
             <?php else:?>
-            <td><span class="text-muted small">#<?php echo $sc->clientes_id; ?> <?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span> @if($sc->auto == 're') <label for="" class="label label-danger" style="padding: 6px; margin-left: 20px">Revendedor</label> @endif
-            <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?></td>
+            <td>
+				<span class="text-muted small">#<?php echo $sc->clientes_id; ?> <?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span> @if($sc->auto == 're') <label for="" class="label label-danger" style="padding: 6px; margin-left: 20px">Revendedor</label> @endif
+				<?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?>
+
+				
+				@if ($sc->recup == 2)
+					@if($sc->slot == 'Primario' && $operador_reset)
+
+					<div style="margin-top: 5px" class="dropdown">
+						<button
+						class="btn btn-primary dropdown-toggle btn-xs"
+						type="button" id="priSigueJugando2"
+						data-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false">
+						<i class="fa fa-fw fa-gamepad"></i>
+							Pri Sigue jugando
+						</button>
+
+						<ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
+						<li class="dropdown-header">¿Seguro deseas</li>
+						<li class="dropdown-header">Ejecutarlo?</li>
+						<li role="separator" class="divider"></li>
+						<li>
+											
+							<a
+							href="{{ url('nota_siguejugandopri', $account->ID) }}"
+								class="btn btn-danger"
+								title="Primario Sigue jugando"
+								id="pri_sigue_jugando"
+								>
+								Si, seguro!
+							</a>
+						</li>
+						</ul>
+
+					</div>
+					@endif
+
+					@if($sc->slot == 'Secundario' && $operador_pass)
+						
+						<div style="margin-top: 5px" class="dropdown">
+							<button
+							class="btn btn-danger dropdown-toggle btn-xs"
+							type="button" id="secusiguejugando2"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+							<i class="fa fa-fw fa-gamepad"></i>
+								Secu Sigue jugando
+							</button>
+	
+							<ul class="dropdown-menu bg-info" aria-labelledby="secusiguejugando2">
+							<li class="dropdown-header">¿Seguro deseas</li>
+							<li class="dropdown-header">Ejecutarlo?</li>
+							<li role="separator" class="divider"></li>
+							<li>
+												
+								<a
+								href="{{ url('nota_siguejugando', $account->ID) }}"
+									class="btn btn-danger"
+									title="Secu Sigue jugando"
+									id="secu_sigue_jugando"
+									>
+									Si, seguro!
+								</a>
+							</li>
+							</ul>
+	
+						</div>
+					@endif
+				@endif
+			</td>
 
             <td id="<?php echo $sc->clientes_id; ?>"><a title="Ir a Cliente" href="{{ url('clientes', $sc->clientes_id) }}"><?php echo $sc->email; ?></a> <a class="btn btn-xs btn-default" style="opacity:0.6;" href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($sc->email, 0, strpos($sc->email, '@')) . '+' . str_replace("-"," ",$sc->titulo); ?>" title="filtrar guia de descarga en gmail" target="_blank"><i aria-hidden="true" class="fa fa-google"></i>mail</a>
 
@@ -1316,74 +1387,6 @@
 				<?php if ($sc->ventas_Notas):?>
 				<a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Venta" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a>
 				<?php endif; ?>
-
-				@if ($sc->recup == 2)
-					@if($sc->slot == 'Primario' && $operador_reset)
-
-					<div style="margin-top: 5px" class="dropdown">
-						<button
-						class="btn btn-primary dropdown-toggle btn-xs"
-						type="button" id="priSigueJugando2"
-						data-toggle="dropdown"
-						aria-haspopup="true"
-						aria-expanded="false">
-						<i class="fa fa-fw fa-gamepad"></i>
-							Pri Sigue jugando
-						</button>
-
-						<ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
-						<li class="dropdown-header">¿Seguro deseas</li>
-						<li class="dropdown-header">Ejecutarlo?</li>
-						<li role="separator" class="divider"></li>
-						<li>
-											
-							<a
-							href="{{ url('nota_siguejugandopri', $account->ID) }}"
-								class="btn btn-danger"
-								title="Primario Sigue jugando"
-								id="pri_sigue_jugando"
-								>
-								Si, seguro!
-							</a>
-						</li>
-						</ul>
-
-					</div>
-					@endif
-
-					@if($sc->slot == 'Secundario' && $operador_pass)
-						
-						<div style="margin-top: 5px" class="dropdown">
-							<button
-							class="btn btn-danger dropdown-toggle btn-xs"
-							type="button" id="secusiguejugando2"
-							data-toggle="dropdown"
-							aria-haspopup="true"
-							aria-expanded="false">
-							<i class="fa fa-fw fa-gamepad"></i>
-								Secu Sigue jugando
-							</button>
-	
-							<ul class="dropdown-menu bg-info" aria-labelledby="secusiguejugando2">
-							<li class="dropdown-header">¿Seguro deseas</li>
-							<li class="dropdown-header">Ejecutarlo?</li>
-							<li role="separator" class="divider"></li>
-							<li>
-												
-								<a
-								href="{{ url('nota_siguejugando', $account->ID) }}"
-									class="btn btn-danger"
-									title="Secu Sigue jugando"
-									id="secu_sigue_jugando"
-									>
-									Si, seguro!
-								</a>
-							</li>
-							</ul>
-	
-						</div>
-					@endif
-				@endif
 			</td>
 
 			<td style="text-align:right;">
