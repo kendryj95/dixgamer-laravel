@@ -242,9 +242,9 @@ class Stock extends Model
         
         if (!empty($obj->column) && !empty($obj->word)) {
             if ($obj->column == 'titulo') {
-                $query->where($obj->column,"like",str_replace(' ','-',trim($obj->word))."%");
+                $query->where($obj->column,"like","%".str_replace(' ','-',trim($obj->word))."%");
             } else {
-                $query->where($obj->column,"like",$obj->word."%");
+                $query->where($obj->column,"like","%".$obj->word."%");
             }
         }
         // Validamos que sea administrador o analitico
@@ -265,7 +265,7 @@ class Stock extends Model
             if ($obj->column == 'Notas' || $obj->column == 'usuario') {
                 $query->where("sn.$obj->column",'like',"%$obj->word%");
             } else {
-                $query->where("s.{$obj->column}","like",$obj->word."%");
+                $query->where("s.{$obj->column}","like","%".$obj->word."%");
             }
         }
         
