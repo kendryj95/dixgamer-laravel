@@ -790,7 +790,12 @@ class SalesController extends Controller
             }
         }
 
-        return view('sales.sales_recupero', compact('ventas','columns'));
+        $configuracion = DB::table('configuraciones')->where('ID',1)->first();
+
+        $prod_primarios = explode(",",$configuracion->prod_excluidos_pri);
+        $prod_secundarios = explode(",",$configuracion->prod_excluidos_secu);
+
+        return view('sales.sales_recupero', compact('ventas','columns','prod_primarios','prod_secundarios'));
     }
 
     public function listProdExcluidosRecu()

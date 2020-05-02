@@ -8,6 +8,27 @@
         <!-- InstanceBeginEditable name="body" -->
 
         <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="">Productos Excluidos Primario:</label><br>
+                    <select name="productos_excluidos_pri[]" value="" class="form-control select2-multiple select-recupero" multiple>
+                      @foreach($prod_primarios as $value)
+                      <option value="{{str_replace(['"','-'],['',' '],$value)}}" selected>{{ str_replace(['"','-'],['',' '],$value) }}</option>
+                      @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Productos Excluidos Secundario:</label><br>
+                    <select name="productos_excluidos_secu[]" value="" class="form-control select2-multiple select-recupero" multiple>
+                    @foreach($prod_secundarios as $value)
+                    <option value="{{str_replace(['"','-'],['',' '],$value)}}" selected>{{ str_replace(['"','-'],['',' '],$value) }}</option>
+                    @endforeach
+                  </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             @component('components/filters/column_word')
                 @slot('columns',$columns);
                 @slot('path','sales/recupero');
@@ -97,5 +118,17 @@
             </div>
         </div>
     </div>
+
+@section('scripts')
+@parent
+
+<script>
+    $(document).ready(function(){
+        $( ".select-recupero" ).select2({
+            theme: "bootstrap"
+        });
+    })
+</script>
+@endsection
 
 @endsection
