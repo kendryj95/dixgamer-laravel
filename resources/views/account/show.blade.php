@@ -569,7 +569,7 @@
 
 							 @endphp
 							 
-							 @if ($btnRecup['secu']['ver']===true)
+							 @if ($btnRecup['secu']['ver']===true && !$operador_pass)
 
 							 <div class="dropdown pull-left" style="margin-bottom: 2px">
 								<button

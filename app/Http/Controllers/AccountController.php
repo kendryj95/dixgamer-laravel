@@ -1536,7 +1536,7 @@ class AccountController extends Controller
         $data['cuentas_id'] = $id;
         $data['new_pass'] = $npass;
         $data['Day'] = $date;
-        $data['usuario'] = session()->get('usuario')->Nombre;
+        $data['usuario'] = "cp".session()->get('usuario')->Nombre;
         $this->acc->createAccPass($data,$id);
 
 
