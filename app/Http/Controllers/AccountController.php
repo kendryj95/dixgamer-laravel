@@ -2013,7 +2013,7 @@ class AccountController extends Controller
 
           DB::table('cuentas_notas')->insert($data);
 
-          DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 1]);
+          DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 1,'Day_modif' => date('Y-m-d H:i:s')]);
 
           $data = [];
           $data['id_ventas'] = $venta->ID;
@@ -2075,7 +2075,7 @@ class AccountController extends Controller
 
           DB::table('cuentas_notas')->insert($data);
 
-          DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 1]);
+          DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 1,'Day_modif' => date('Y-m-d H:i:s')]);
 
           $data = [];
           $data['id_ventas'] = $venta->ID;
