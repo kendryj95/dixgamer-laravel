@@ -1221,7 +1221,7 @@
 				@if ($sc->recup == 2)
 					@if($sc->slot == 'Primario' && $operador_reset)
 
-					<div style="margin-top: 5px" class="dropdown">
+					<div style="margin-top: 5px; display:inline-block" class="dropdown">
 						<button
 						class="btn btn-primary dropdown-toggle btn-xs"
 						type="button" id="priSigueJugando2"
@@ -1254,7 +1254,7 @@
 
 					@if($sc->slot == 'Secundario' && $operador_pass)
 						
-						<div style="margin-top: 5px" class="dropdown">
+						<div style="margin-top: 5px; display:inline-block" class="dropdown">
 							<button
 							class="btn btn-danger dropdown-toggle btn-xs"
 							type="button" id="secusiguejugando2"
