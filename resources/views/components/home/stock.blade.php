@@ -32,8 +32,8 @@
                   {{$stock->Q_Stock}}
               @else
 
-                @if($stock->Q_Stock > 10)
-                  +10
+                @if($stock->Q_Stock > 99)
+                  +99
                 @else
                   {{$stock->Q_Stock}}
                 @endif

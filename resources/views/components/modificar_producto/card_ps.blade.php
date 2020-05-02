@@ -48,8 +48,8 @@
                     {{$data->q_stock}}
                 @else
 
-                  @if($data->q_stock > 10)
-                    +10
+                  @if($data->q_stock > 99)
+                    +99
                   @else
                     {{$data->q_stock}}
                   @endif
