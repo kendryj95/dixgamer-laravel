@@ -872,6 +872,9 @@
 										<small>
 											<strong>
 												{{$stock->costo_usd}}
+												@if (!empty($stock->costo_usd_modif))
+													({{$stock->costo_usd_modif}})
+												@endif
 											</strong> 
 											<!-- <a href="javascript:;" title="Modificar Costo"><i class="fa fa-pencil"></i></a> -->
 										</small>

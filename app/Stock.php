@@ -130,6 +130,7 @@ class Stock extends Model
                       cuentas_id AS stock_cuentas_id,
                       medio_pago,
 					  costo_usd,
+					  costo_usd_modif,
                       costo,
                       Day AS daystock,
                       reset.ID_reseteo AS ID_reset,
