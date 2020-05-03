@@ -11,19 +11,15 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="">Productos Excluidos Primario:</label><br>
-                    <select name="productos_excluidos_pri[]" value="" class="form-control select2-multiple select-recupero" multiple>
-                      @foreach($prod_primarios as $value)
-                      <option value="{{str_replace(['"','-'],['',' '],$value)}}" selected>{{ str_replace(['"','-'],['',' '],$value) }}</option>
-                      @endforeach
-                  </select>
+                    @foreach($prod_primarios as $value)
+                      <img style="margin-right: 10px" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" title="{{$value}}" width="75">
+                    @endforeach
                 </div>
                 <div class="form-group">
                     <label for="">Productos Excluidos Secundario:</label><br>
-                    <select name="productos_excluidos_secu[]" value="" class="form-control select2-multiple select-recupero" multiple>
                     @foreach($prod_secundarios as $value)
-                    <option value="{{str_replace(['"','-'],['',' '],$value)}}" selected>{{ str_replace(['"','-'],['',' '],$value) }}</option>
+                      <img style="margin-right: 10px" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" title="{{$value}}" width="75">
                     @endforeach
-                  </select>
                 </div>
             </div>
         </div>
