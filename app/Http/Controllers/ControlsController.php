@@ -1747,7 +1747,7 @@ class ControlsController extends Controller
 
                     LEFT JOIN
 					## 2019-12-04 aumento el costo de pri a 63% y bajo el de secu porque siempre se vende el pri facil
-                    (SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.63) as costo_usd, 'primario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+                    (SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd_modif),0)*0.63) as costo_usd, 'primario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
                     FROM stock
                     LEFT JOIN
                     (SELECT stock_id, SUM(case when slot = 'Primario' then 1 else null end) AS Q_vta_pri_1
@@ -1759,7 +1759,7 @@ class ControlsController extends Controller
 
                     UNION ALL
 
-                    SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd),0)*0.37) as costo_usd, 'secundario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
+                    SELECT ID AS ID_stk, titulo, consola, (round(AVG(costo_usd_modif),0)*0.37) as costo_usd, 'secundario' as Stk_slot, Count(*) as Q_stk, DATEDIFF(NOW(), FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(stock.Day)))) as antiguedad
                     FROM stock
                     LEFT JOIN
                     (SELECT stock_id, SUM(case when slot = 'Secundario' then 1 else null end) AS Q_vta_sec_1
@@ -1810,7 +1810,7 @@ class ControlsController extends Controller
 							} else { // si es superior a 20 redondeo de a 5 usd
 								$x=5;
 							}*/
-							$x=5; // redondeo de 5 en 5 el costo usd porque es un AVG y no siempre tiene sentido
+							$x=3; // redondeo de 3 en 3 el costo usd porque es un AVG y no siempre tiene sentido
 							$n = $costo_usd;
 							$costo_usd_redondo = (ceil($n)%$x === 0) ? ceil($n) : round(($n+$x/2)/$x)*$x;
                             
@@ -1833,7 +1833,10 @@ class ControlsController extends Controller
 							
 					$control_individual .= "<br />qvp_45d: " . $qvp_45d . " // qvs_45d: " . $qvs_45d . " // qvp: " . $qvp . " // qvs: " . $qvs . " // Libre: " . $libre . " // Q_Stk: " . $Q_stk;
                                 
-                            // nueva formula para aplicar baja de precio a mayor antiguedad del stock
+                            /****
+							////// 2020/05/03 aplico nueva columna de costo_usd_modif para evitarme este calculo de abajo... 
+			
+							// nueva formula para aplicar baja de precio a mayor antiguedad del stock
 							// 0.98 elevado a la 36 da 0.48, es decir que reduciría el costo a 48% del original
 							if ($antiguedad >= 720) { 
 								$elevado=36;
@@ -1858,13 +1861,18 @@ class ControlsController extends Controller
 							////// 2020-02-26 actualizo el elavo a 0.98 para aumentar precios debido a que muchos reciclados son reclamados por los clientes
 							$fn_exp = (pow(0.97, $elevado));
                             $costo_usd = $costo_usd * $fn_exp * $extra_x_anti;
+							
+							***/
                             
                             // el precio de oferta sugerido tiene que ser X % mayor al costo para asegurar ganancia, configuro desde sistema en CONFIG > GENERAL
                             $oferta_sugerida = $costo_usd * $valor_oferta_sugerida;
 							
+					/**** 2020/05/03 modifico el texto que imprimo 
 					$control_individual .= "<br /><br /> costo x (0.97 ^" . round($elevado,2) . ") = C_modif: " . round($costo_usd,2) . " x (multi con gcia): " . $valor_oferta_sugerida . " * coef ant 180: " . $extra_x_anti . " queda en: " . round($oferta_sugerida,2);
-                            
-                            
+                    */
+                      
+					$control_individual .= "<br /><br /> C_modif: " . round($costo_usd,2) . " x (multi con gcia): " . $valor_oferta_sugerida . " queda en: " . round($oferta_sugerida,2);		
+							
                             // si hay muchas ventas y poco stock voy subiendo el precio de oferta
                             if($Q_stk > 3){
                                 $divi = ($qv_45d/$Q_stk);
@@ -1957,7 +1965,7 @@ class ControlsController extends Controller
 							$oferta_sugerida = round($oferta_sugerida, 2);
 					$control_individual .= "<br /> Sug redondeado: " . $oferta_sugerida;
 
-                            $mensajes .= "<tr><td>[" . $ID . " exp: " . round($fn_exp,2) . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs ."</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:". round($costo_usd,2)  . " de " . round($costo_usd_original) ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
+                            $mensajes .= "<tr><td>[" . $ID . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs ."</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:". round($costo_usd,2)  . " de " . round($costo_usd_original) ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
                             
                             
                             if(($Q_stk <= 1) or (($Q_stk/$qv_45d) < 0.10)) {
