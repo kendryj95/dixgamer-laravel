@@ -312,6 +312,7 @@ class AccountController extends Controller
           'titulo' => $game->titulo,
           'medio_pago' => 'Saldo',
           'costo_usd' => $game->costo_usd,
+          'costo_usd_modif' => $game->costo_usd,
           'costo' => $costo,
           'Day' => $this->dte,
           'usuario' => session()->get('usuario')->Nombre,
@@ -1339,6 +1340,7 @@ class AccountController extends Controller
         $data['cuentas_id'] = NULL;
         $data['medio_pago'] = $balance->medio_pago;;
         $data['costo_usd'] = $balance->costo_usd;
+        $data['costo_usd_modif'] = $balance->costo_usd;
         $data['costo'] = $balance->costo;
         $data['code'] = $balance->code;
         $data['code_prov'] = $balance->code_prov;
@@ -1832,6 +1834,7 @@ class AccountController extends Controller
               'titulo' => $game->titulo,
               'medio_pago' => 'Saldo',
               'costo_usd' => $game->costo_usd,
+              'costo_usd_modif' => $game->costo_usd,
               'costo' => $costo,
               'Day' => $this->dte,
               'usuario' => session()->get('usuario')->Nombre,

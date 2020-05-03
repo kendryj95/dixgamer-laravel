@@ -266,6 +266,7 @@ class StockController extends Controller
         $stockArr['consola'] = $request->clientes_id2;
         $stockArr['medio_pago'] = $request->medio_pago;
         $stockArr['costo_usd'] = $request->costo_usd;
+        $stockArr['costo_usd_modif'] = $request->costo_usd;
         $stockArr['costo'] = $request->costo;
         $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
         $stockArr['code_prov'] = 'P1';
@@ -342,6 +343,7 @@ class StockController extends Controller
         $stockArr['consola'] = $request->clientes_id2;
         $stockArr['medio_pago'] = $request->medio_pago;
         $stockArr['costo_usd'] = $request->costo_usd;
+        $stockArr['costo_usd_modif'] = $request->costo_usd;
         $stockArr['costo'] = $request->costo;
         $stockArr['n_order'] = $request->n_order;
         $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
@@ -415,6 +417,7 @@ class StockController extends Controller
         $stockArr['consola'] = $request->clientes_id2;
         $stockArr['medio_pago'] = $request->medio_pago;
         $stockArr['costo_usd'] = $request->costo_usd;
+        $stockArr['costo_usd_modif'] = $request->costo_usd;
         $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
         $stockArr['code_prov'] = 'P1';
 
@@ -491,6 +494,7 @@ class StockController extends Controller
         $stockArr['consola'] = $request->clientes_id2;
         $stockArr['medio_pago'] = $request->medio_pago;
         $stockArr['costo_usd'] = $request->costo_usd;
+        $stockArr['costo_usd_modif'] = $request->costo_usd;
         $stockArr['costo'] = $request->costo;
         $stockArr['n_order'] = $request->n_order;
         $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
@@ -546,6 +550,7 @@ class StockController extends Controller
           $stockArr['titulo'] = "gift-card-$costos_usd[$i]-usd";
           $stockArr['consola'] = "ps";
           $stockArr['costo_usd'] = $costos_usd[$i];
+          $stockArr['costo_usd_modif'] = $costos_usd[$i];
           $stockArr['costo'] = $costos[$i];
           $stockArr['code'] = $code;
           array_push($stocks,$stockArr);
@@ -616,6 +621,7 @@ class StockController extends Controller
             $stockArr['consola'] = $request->clientes_id2;
             $stockArr['medio_pago'] = $request->medio_pago;
             $stockArr['costo_usd'] = $request->costo_usd;
+            $stockArr['costo_usd_modif'] = $request->costo_usd;
             $stockArr['costo'] = $request->costo;
             $stockArr['n_order'] = $request->n_order;
             $stockArr['usuario'] = session()->get('usuario')->Nombre."-GC";
