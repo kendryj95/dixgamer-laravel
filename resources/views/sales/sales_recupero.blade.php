@@ -11,14 +11,16 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="">Productos Excluidos Primario:</label><br>
+                    @php sort($prod_primarios); @endphp
                     @foreach($prod_primarios as $value)
-                      <img style="margin-right: 10px" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" title="{{$value}}" width="75">
+                      <img style="margin-right: 5px;opacity: 0.9" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" data-toggle="tooltip" data-placement="bottom" title="{{$value}}" width="75">
                     @endforeach
                 </div>
                 <div class="form-group">
                     <label for="">Productos Excluidos Secundario:</label><br>
+                    @php sort($prod_secundarios); @endphp
                     @foreach($prod_secundarios as $value)
-                      <img style="margin-right: 10px" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" title="{{$value}}" width="75">
+                      <img style="margin-right: 5px;opacity: 0.9" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" data-toggle="tooltip" data-placement="bottom" title="{{$value}}" width="75">
                     @endforeach
                 </div>
             </div>
@@ -120,9 +122,7 @@
 
 <script>
     $(document).ready(function(){
-        $( ".select-recupero" ).select2({
-            theme: "bootstrap"
-        });
+        $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
 @endsection
