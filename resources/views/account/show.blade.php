@@ -872,8 +872,8 @@
 										<small>
 											<strong>
 												{{$stock->costo_usd}}
-												@if (!empty($stock->costo_usd_modif))
-													({{$stock->costo_usd_modif}})
+												@if (Helper::validateAdministrator(session()->get('usuario')->Level))
+													({{empty($stock->costo_usd_modif) ? '0.00' : $stock->costo_usd_modif}})
 												@endif
 											</strong> 
 											<!-- <a href="javascript:;" title="Modificar Costo"><i class="fa fa-pencil"></i></a> -->
