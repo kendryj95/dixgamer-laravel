@@ -33,13 +33,13 @@ class Kernel extends ConsoleKernel
                 DB::update("UPDATE stock SET costo_usd_modif=5 where consola='ps4' and costo_usd<=5");
 
                 DB::update("UPDATE stock s LEFT JOIN 
-                            (SELECT ID, IF(sugerido<(costo_usd * 0.25),FORMAT((costo_usd * 0.25),2),sugerido) as costo_usd_a_modificar FROM (SELECT ID, costo_usd, FORMAT(costo_usd * (0.02 + POWER(0.98,FLOOR((datediff(CURDATE(), Day))/7))),2) as sugerido FROM stock where consola='ps4' and costo_usd>5 and (titulo LIKE '%fifa%' or titulo LIKE '%pes$') ORDER BY ID ASC) AS primer_calculo) as rdo
+                            (SELECT ID, IF(sugerido<(costo_usd * 0.25),FORMAT((costo_usd * 0.25),2),sugerido) as costo_usd_a_modificar FROM (SELECT ID, costo_usd, FORMAT(costo_usd * (0.04 + POWER(0.985,FLOOR((datediff(CURDATE(), Day))/7))),2) as sugerido FROM stock where consola='ps4' and costo_usd>5 and (titulo LIKE '%fifa%' or titulo LIKE '%pes%') ORDER BY ID ASC) AS primer_calculo) as rdo
                             ON s.ID = rdo.ID
                             SET s.costo_usd_modif = rdo.costo_usd_a_modificar
                             WHERE rdo.ID is not null");
     
                 DB::update("UPDATE stock s LEFT JOIN 
-                            (SELECT ID, IF(sugerido<(costo_usd * 0.25),FORMAT((costo_usd * 0.25),2),sugerido) as costo_usd_a_modificar FROM (SELECT ID, costo_usd, FORMAT(costo_usd * (0.015 + POWER(0.988,FLOOR((datediff(CURDATE(), Day))/7))),2) as sugerido FROM stock where consola='ps4' and costo_usd>5 and titulo NOT LIKE '%fifa%' and titulo NOT LIKE '%pes$' ORDER BY ID ASC) AS primer_calculo) as rdo
+                            (SELECT ID, IF(sugerido<(costo_usd * 0.25),FORMAT((costo_usd * 0.25),2),sugerido) as costo_usd_a_modificar FROM (SELECT ID, costo_usd, FORMAT(costo_usd * (0.015 + POWER(0.988,FLOOR((datediff(CURDATE(), Day))/7))),2) as sugerido FROM stock where consola='ps4' and costo_usd>5 and titulo NOT LIKE '%fifa%' and titulo NOT LIKE '%pes%' ORDER BY ID ASC) AS primer_calculo) as rdo
                             ON s.ID = rdo.ID
                             SET s.costo_usd_modif = rdo.costo_usd_a_modificar
                             WHERE rdo.ID is not null");
@@ -51,7 +51,7 @@ class Kernel extends ConsoleKernel
 
             } catch (\Exception $e) {
                 DB::rollback();
-                echo "Error al ejecutar el crontab programado para domingos 5AM: " . $e->getMessage() . "\n";
+                echo "Error al ejecutar la tarea programada para domingos 5AM: " . $e->getMessage() . "\n";
             }
 
         })->cron('0 5 * * 0');
