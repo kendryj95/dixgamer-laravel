@@ -13,14 +13,14 @@
                     <label for="">Productos Excluidos Primario:</label><br>
                     @php sort($prod_primarios); @endphp
                     @foreach($prod_primarios as $value)
-                      <img style="margin-right: 5px;opacity: 0.9" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" data-toggle="tooltip" data-placement="bottom" title="{{$value}}" width="75">
+                      <img style="margin-right: 2px;opacity: 0.9" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" data-toggle="tooltip" data-placement="bottom" title="{{$value}}" width="60">
                     @endforeach
                 </div>
                 <div class="form-group">
                     <label for="">Productos Excluidos Secundario:</label><br>
                     @php sort($prod_secundarios); @endphp
                     @foreach($prod_secundarios as $value)
-                      <img style="margin-right: 5px;opacity: 0.9" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" data-toggle="tooltip" data-placement="bottom" title="{{$value}}" width="75">
+                      <img style="margin-right: 2px;opacity: 0.9" src="{{asset('img/productos')}}/ps4/{{ str_replace(['"'],[''],$value).'.jpg' }}" alt="{{$value}}" data-toggle="tooltip" data-placement="bottom" title="{{$value}}" width="60">
                     @endforeach
                 </div>
             </div>
