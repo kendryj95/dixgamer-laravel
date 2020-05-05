@@ -137,6 +137,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Vtas<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('sales/list') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+                <li><a href="{{ route('sales-notas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Notas</a></li>
                 <li><a href="{{ url('sales/lista_cobro') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Cobros</a></li>
                 <li><a href="{{ url('sales/lista_sin_entregar') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin Entregar</a></li>
                 <li><a href="{{ url('sales/recupero') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> En recupero</a></li>

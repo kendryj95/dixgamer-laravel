@@ -218,4 +218,15 @@ class Sales extends Model
         return $query->orderBy('a.Day');
     }
 
+    public function ScopeGetDataNotes($query,$obj){
+      $query = DB::table('ventas_notas')->select('ventas_notas.*','ventas.clientes_id', DB::raw("(SELECT color FROM usuarios WHERE BINARY Nombre = BINARY ventas_notas.usuario) AS color_user"))->join('ventas','ventas.ID','=','ventas_notas.id_ventas')
+      ->orderBy('ventas_notas.ID', 'DESC'); 
+
+      if (!empty($obj->column) && !empty($obj->word)) {
+        $query->where("ventas_notas.$obj->column",'like',"%$obj->word%");
+      }
+
+      return $query;
+    }
+
 }

@@ -32,6 +32,21 @@ class SalesController extends Controller
 
         return view('sales.sales_list')->with(['datos' => $datos, 'columns' => $columns]);
     }
+    
+    public function indexNotes(Request $request){
+
+        // Ventas con filtro
+        $obj = new \stdClass;
+        $obj->column = $request->column;
+        $obj->word = $request->word;
+
+        $datos = Sales::getDataNotes($obj)->paginate(50);
+        // $datos = $this->QueryIndex();
+
+        $columns = Schema::getColumnListing('ventas_notas');
+
+        return view('sales.sales_list_notes')->with(['datos' => $datos, 'columns' => $columns]);
+    }
 
     public function addManualSale(Request $request, $consola, $titulo, $slot){
 

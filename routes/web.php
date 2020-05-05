@@ -256,6 +256,7 @@ Route::group(['middleware' => ['login']], function()
     Route::get('salesInsertWeb/{oii}/{titulo}/{consola}/{slot?}','SalesController@salesInsertWeb');
     Route::get('sales/{id_sale}/cliente','SalesController@salesClient');
     Route::get('sales/recupero','SalesController@salesListRecupero');
+    Route::get('sales/list/notas','SalesController@indexNotes')->name('sales-notas');
 
   Route::get('usuario', 'UsuariosController@create');
 
