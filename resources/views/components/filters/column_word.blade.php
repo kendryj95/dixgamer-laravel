@@ -33,11 +33,11 @@
               <option value="{{ $column }}" {{ $selected }}> {{$column}} </option>
               {{-- option adicional para cuentas_notas --}}
               @if($path == 'cuentas_notas' && $i == (count($columns)-1))
-              <option value="Notas" selected>Notas</option>
+              <option value="Notas" @if(!app('request')->input('column') || app('request')->input('column') == 'Notas') selected @endif>Notas</option>
               @endif
               {{-- option adicional para cuentas_notas --}}
               @if($path == 'stock_notas' && $i == (count($columns)-1))
-              <option value="Notas" selected>Notas</option>
+              <option value="Notas" @if(!app('request')->input('column') || app('request')->input('column') == 'Notas') selected @endif>Notas</option>
               @endif
           @endif
         @endforeach
