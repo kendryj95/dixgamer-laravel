@@ -18,7 +18,7 @@
     <div class="row">
         @component('components/filters/column_word')
             @slot('columns',$columns);
-            @slot('path','ventas_notas');
+            @slot('path','sales/list/notas');
         @endcomponent
     </div>
 
