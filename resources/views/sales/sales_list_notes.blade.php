@@ -58,7 +58,44 @@
                           </a>
                         </td>
                         <td>
-                          <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $sale->Notas !!} </div>
+                            <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i>
+                                @if (strpos($sale->Notas, "Antes asignado a cliente") !== false)
+                  
+                                    @php 
+                                    $cliente = substr($sale->Notas, 26);
+                                    @endphp
+                                    Antes asignado a cliente <a href="{{ url('clientes', $cliente) }}" class="alert-link" target="_blank">#{{ $cliente }}</a>
+
+                                    @elseif(strpos($sale->Notas, "Antes tenía") !== false) {{-- Solo notas para cambios de productos --}}
+                                    @if(strpos($sale->Notas, "#", 14) !== false) {{-- Esta validación que funcione las notas anteriores antes de colocar el link para las cuentas --}}
+
+                                        @php
+                                        $string = $sale->Notas;
+                                        $pos = strripos($string, "#"); // calculando la posicion de ultima aparicion de cuenta_id
+                                        $cuenta = substr($string, $pos+1);
+                                        $nota = substr($string, 0, $pos);
+                                        /* if ($cuenta != "") {
+                                            $data_nota =  explode(" ",substr($nota,14));
+                                            if (count($data_nota) == 5) {
+                                            list($id_stock,$title,$cons,$slot,$otro) = $data_nota;
+                                            } elseif (count($data_nota) == 4) {
+                                            list($id_stock,$title,$cons,$slot) = $data_nota;
+                                            }
+                                        } */
+                                        
+                                        @endphp
+
+                                        {{$nota}} @if ($cuenta != "") <a href="{{url('cuentas',$cuenta)}}" target="_blank" class="alert-link">#{{$cuenta}}</a> @endif
+
+                                        @else
+                                        {{ $sale->Notas }}
+                                        @endif
+
+                                    @else
+
+                                    {{ ($sale->Notas) }}
+                                    @endif
+                            </div>
                         </td>
                         <td>
                           @php
