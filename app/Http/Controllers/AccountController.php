@@ -732,6 +732,7 @@ class AccountController extends Controller
         $data['consola'] = $request->consola;
         $data['cuentas_id'] = $request->cuentas_id;
         $data['costo_usd'] = $request->costo_usd;
+        $data['costo_usd_modif'] = $request->costo_usd;
         $data['medio_pago'] = 'Saldo';
         $data['costo'] = $costo_ars;
         $data['Day'] = $this->dte;
@@ -1237,6 +1238,7 @@ class AccountController extends Controller
         $data['consola'] = $request->consola;
         $data['cuentas_id'] = $id;
         $data['costo_usd'] = $costo_usd;
+        $data['costo_usd_modif'] = $costo_usd;
         $data['medio_pago'] = 'Saldo';
         $data['costo'] = $costo;
         $data['Day'] = $this->dte;
@@ -2512,6 +2514,7 @@ class AccountController extends Controller
       $data['consola'] = $consola;
       $data['cuentas_id'] = $id_account;
       $data['costo_usd'] = $costo_usd;
+      $data['costo_usd_modif'] = $costo_usd;
       $data['medio_pago'] = 'Saldo';
       $data['costo'] = $costo_ars;
       $data['Day'] = $this->dte;
