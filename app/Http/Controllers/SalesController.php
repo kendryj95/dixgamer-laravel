@@ -316,7 +316,15 @@ class SalesController extends Controller
                    elseif (strpos($venta->_payment_method, 'bacs') !== false): $medio_cobro = "Banco"; $multiplo = "0.00";
                    elseif (strpos($venta->_payment_method, 'yith') !== false): $medio_cobro = "Fondos"; $multiplo = "0.00";
                    // si es paypal va 7%
-                   elseif (strpos($venta->_payment_method, 'paypal') !== false): $medio_cobro = "PayPal"; $multiplo = "0.07";
+				   elseif (strpos($venta->_payment_method, 'paypal') !== false): $medio_cobro = "PayPal"; $multiplo = "0.07";
+
+				   
+				   // 2020-05-05 agrego cuentadigital y dlocal
+				   elseif (strpos($venta->_payment_method, 'cuentaDigitalPaymentGateway') !== false): $medio_cobro = "CD - Ticket"; $multiplo = "0.05";
+				   elseif (strpos($venta->_payment_method, 'cuentaDigitalTarjetaPaymentGateway') !== false): $medio_cobro = "CD - Tarjeta"; $multiplo = "0.05";
+				   
+				   elseif (strpos($venta->_payment_method, 'dlocal') !== false): $medio_cobro = "dLocal"; $multiplo = "0.05";
+
                    else: $medio_cobro = "No encontrado";
                    endif;
                    

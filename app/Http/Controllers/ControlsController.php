@@ -1810,10 +1810,15 @@ class ControlsController extends Controller
 							} else { // si es superior a 20 redondeo de a 5 usd
 								$x=5;
 							}*/
+							
+							/*** 2020-05-05 quito el redonde
 							$x=3; // redondeo de 3 en 3 el costo usd porque es un AVG y no siempre tiene sentido
 							$n = $costo_usd;
 							$costo_usd_redondo = (ceil($n)%$x === 0) ? ceil($n) : round(($n+$x/2)/$x)*$x;
+							*/
                             
+							$costo_usd_redondo = $costo_usd;
+							
 					$control_individual .= " <strong>ID: " . $ID . " - ". str_replace('-', ' ', $producto) . " " . $slot ."</strong>";
 					$control_individual .= "<br />Reg: " . $precio_regular . " // Base: " . $precio_base . " // Sale: " . $sale_price . " // C_orig: " . $costo_usd_original . " // C_redondeo: " . $costo_usd_redondo . " // Q_Stk: " . $Q_stk . " // Ant: " . $antiguedad ;
 							
