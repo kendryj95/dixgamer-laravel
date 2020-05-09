@@ -20,19 +20,16 @@
 	<div class="row">
 	  <div class="col-lg-3">
 	    <ul class="nav nav-pills nav-stacked">
-	      <li role="presentation" class="active"><a  data-toggle="tab" href="#menu1">Mensaje extra email</a></li>
-	        <li role="presentation"><a  data-toggle="tab" href="#menu2">Cuentas Excluidas - PS3 Resetear</a></li>
-	        <li role="presentation"><a  data-toggle="tab" href="#menu3">Reporte de Ventas</a></li>
-	        <li role="presentation"><a  data-toggle="tab" href="#menu4">Procesos Automaticos</a></li>
-	        <li role="presentation"><a  data-toggle="tab" href="#menu5">Parametros</a></li>
-	        <li role="presentation"><a  data-toggle="tab" href="#menu6">Productos Excluidos</a></li>
-	        <li role="presentation"><a  data-toggle="tab" href="#menu7">Dominios para Ctas</a></li>
-	        <li role="presentation"><a  data-toggle="tab" href="#menu8">Productos Excluidos Recupero</a></li>
+			@php $i = 0; @endphp
+	        @foreach ($options as $menu => $titulo)
+			<li role="presentation" class="@if($i == 0) active @endif"><a  data-toggle="tab" href="#{{$menu}}"> {{$titulo}} </a></li>
+			@php $i++; @endphp
+			@endforeach
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
 	    <div class="tab-content" id="v-pills-tabContent">
-	      <div class="tab-pane fade in active" id="menu1" role="tabpanel">
+	      <div class="tab-pane fade" id="menu1" role="tabpanel">
 			<div class="row">
 				<div class="col-md-12">
 					<form action="{{ url('config/general') }}" method="post">
@@ -47,7 +44,7 @@
 				</div>
 			</div>
 	      </div>
-	      <div class="tab-pane fade" id="menu2" role="tabpanel">
+	      <div class="tab-pane fade in active" id="menu2" role="tabpanel">
 	      	<div class="row">
 	      		<div class="col-md-12">
 	      			<form action="{{ url('config/general') }}" id="cuentas_excluidas" method="post">
@@ -272,6 +269,31 @@
 				</div>
 			</div>
 		</div>
+		<div class="tab-pane fade" id="menu9" role="tabpanel">
+			<div class="row">
+				<div class="col-md-12">
+					<form action="{{ url('config/general') }}" id="form_dominios_excluidos" method="post">
+						{{ csrf_field() }}
+						<input type="hidden" name="opt" value="9">
+						<div class="form-group">
+							<label for="">Dominios Excluidos:</label><br>
+							<select name="dominios_excluidos[]" id="dominios_excluidos" class="form-control select2-multiple" multiple>
+							  @foreach($dominios as $t)
+							  @php
+							  $selected = '';
+							  if (in_array($t->dominio, $dominios_exclu)) {
+								  $selected = 'selected';
+							  }
+							  @endphp
+							  <option value="{{ $t->dominio }}" {{$selected}}>{{ $t->dominio }}</option>
+							  @endforeach
+						  </select>
+						</div>
+						<button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+					</form>
+				</div>
+			</div>
+		</div>
 	    </div>
 	  </div>
 	</div>
@@ -301,7 +323,7 @@
 		        }
 		});
 
-		$( "#titulo-select, .select-recupero" ).select2({
+		$( "#titulo-select, .select-recupero, #dominios_excluidos" ).select2({
             theme: "bootstrap"
         });
 

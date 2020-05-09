@@ -403,6 +403,15 @@ class AccountController extends Controller
         $lastGame = $lastAccountGames[0];
       }
 
+      $dominios_excluidos = DB::table('configuraciones')->where('ID',1)->value('dominios_excluidos');
+      $dominios_excluidos = explode(",",$dominios_excluidos);
+      $domains_exclu = [];
+      foreach ($dominios_excluidos as $value) {
+        $domains_exclu[] = str_replace('"', '', $value);
+      }
+      $dominio = explode("@",$account->mail_fake)[1];
+      $dom_excluido = in_array($dominio,$domains_exclu);
+
       $product_20_off = DB::table('saldo')->where('titulo','20-off-playstation')->where('cuentas_id',$id)->first(); // Consulta para verificar si se cargó este producto en saldo con este id de cuenta
       $existeStock_product_20_off = DB::table('stock')->where('titulo','20-off-playstation')->where('consola','ps')->count(); // Consulta para verificar si existe stock de este producto.
 
@@ -430,7 +439,8 @@ class AccountController extends Controller
                 'existeStock_product_20_off',
                 'cuenta_robada',
                 'ventaPs4Pri',
-                'ventaPs4Secu'
+                'ventaPs4Secu',
+                'dom_excluido'
       ));
 
     }

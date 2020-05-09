@@ -757,6 +757,7 @@ class ControlsController extends Controller
         $titulos = [];
         $titulos_pri = [];
         $titulos_secu = [];
+        $dominios_exclu = [];
 
         $productos_excluidos = explode(",", $configuraciones->productos_excluidos);
 
@@ -780,8 +781,35 @@ class ControlsController extends Controller
             }
         }
 
+        $dominios_excluidos = explode(",", $configuraciones->dominios_excluidos);
 
-        return view('config.general', compact('oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios','titulos_pri','titulos_secu'));
+        if ($dominios_excluidos) {
+            foreach ($dominios_excluidos as $value) {
+                $dominios_exclu[] = str_replace('"', '', $value);
+            }
+        }
+
+        $options = $this->optionsConfig();
+
+        return view('config.general', compact('options','oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios','titulos_pri','titulos_secu','dominios_exclu'));
+    }
+
+    private function optionsConfig()
+    {
+        $options = [
+            "menu1" => "Mensaje extra email",
+            "menu2" => "Cuentas Excluidas - PS3 Resetear",
+            "menu3" => "Reporte de Ventas",
+            "menu4" => "Procesos Automaticos",
+            "menu5" => "Parametros",
+            "menu6" => "Productos Excluidos",
+            "menu7" => "Dominios para Ctas",
+            "menu8" => "Productos Excluidos Recupero",
+            "menu9" => "Dominios excluidos para GC"
+        ];
+        asort($options);
+
+        return $options;
     }
 
     public function configGeneralStore(Request $request)
@@ -921,6 +949,21 @@ class ControlsController extends Controller
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
                 \Helper::messageFlash('Configuraciones','Productos excluidos recupero registrados.');
+                return redirect()->back();
+                break;
+            case 9:
+                $dominios = $request->dominios_excluidos;
+                $domains = [];
+                foreach ($dominios as $value) {
+                    $domains[] = '"'.$value.'"';
+                }
+
+                $dominios = implode(",", $domains);
+
+                $data['dominios_excluidos'] = $dominios;
+
+                DB::table('configuraciones')->where('ID', 1)->update($data);
+                \Helper::messageFlash('Configuraciones','Dominios excluidos registrados.');
                 return redirect()->back();
                 break;
         }

@@ -1045,7 +1045,7 @@
 			</p>
 		@endif
 
-		@if($mostrar_carga_minim)
+		@if($mostrar_carga_minim && !$dom_excluido)
 
 			<p>
 				<button
