@@ -82,8 +82,9 @@ class Sales extends Model
       }
     }
 
-    public function ScopeGetSalesSinEntregar($query, $obj, $ventas_excluidas) {
+    public function ScopeGetSalesSinEntregar($query, $obj, $ventas_excluidas, $clientes_excluidos) {
         $ventas_excluidas = explode(",", $ventas_excluidas);
+        $clientes_excluidos = explode(",", $clientes_excluidos);
         $query->select('ventas.ID','clientes_id','ventas.cons',DB::raw("DATE_FORMAT(ventas.Day,'%d/%m/%Y %H:%i:%s') AS Day"))
         ->leftJoin(DB::raw("(SELECT * from mailer group by ventas_id) as mailer"),'ventas.ID','=','mailer.ventas_id')
         ->whereNull('mailer.ID')
@@ -93,6 +94,10 @@ class Sales extends Model
         
         if (count($ventas_excluidas) > 0) {
             $query->whereNotIn('ventas.ID', $ventas_excluidas);
+        }
+        
+        if (count($clientes_excluidos) > 0) {
+            $query->whereNotIn('ventas.clientes_id', $clientes_excluidos);
         }
 
         if (!empty($obj->column) && !empty($obj->word)) {

@@ -914,12 +914,18 @@ class ControlsController extends Controller
             case 7: // Ventas sin entregar Excluidas
                 $data = [];
                 $ventas_excluidas = explode(",",$request->ventas_excluidas);
+                $clientes_excluidos = explode(",",$request->clientes_excluidos);
 
                 $ventas_excluidas = array_map(function($ele) {
                     return trim($ele);
                 }, $ventas_excluidas);
+                
+                $clientes_excluidos = array_map(function($ele) {
+                    return trim($ele);
+                }, $clientes_excluidos);
 
                 $data['ventas_sinentregar'] = implode(",",$ventas_excluidas);
+                $data['clientes_sinentregar'] = implode(",",$clientes_excluidos);
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
                 \Helper::messageFlash('Configuraciones','Ventas sin entregar excluidas satisfactoriamente.');

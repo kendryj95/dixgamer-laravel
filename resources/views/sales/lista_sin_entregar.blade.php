@@ -28,8 +28,13 @@
                     <label for="">Ventas Excluidas:</label><br>
                     <input type="text" name="ventas_excluidas" id="cuentas" value="{{$ventas_excluidas}}" data-role="tagsinput">
                   </div>
+                  
+                  <div class="form-group">
+                    <label for="">Clientes Excluidos:</label><br>
+                    <input type="text" name="clientes_excluidos" id="clientes_excluidos" value="{{$clientes_excluidos}}" data-role="tagsinput">
+                  </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-4" style="padding-top: 35px">
                 <button style="margin-top: 24px" type="submit" class="btn btn-primary">Actualizar Config</button>
               </div>
             </form>
