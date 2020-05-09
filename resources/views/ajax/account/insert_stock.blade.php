@@ -103,7 +103,7 @@
 							class="form-control"
 							type="number"
 							step="0.01"
-							name="costo_usd" value="{{$accountBalance->costo_usd - $expense->costo_usd}}" @if ($expense->costo_usd) readonly @endif>
+							name="costo_usd" value="{{$accountBalance->costo_usd - $expense->costo_usd}}" @if ($account->Q_Stk == 2) readonly @endif>
 							<input type="hidden" name="saldo_act" value="{{$accountBalance->costo_usd - $expense->costo_usd}}">
 
 							<span class="input-group-addon">

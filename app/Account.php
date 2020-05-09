@@ -96,7 +96,7 @@ class Account extends Model
             {
               $join->on('cuentas.ID', '=', 'stk.cuentas_id');
             })
-            ->whereRaw("(Q_Stk < 2 OR Q_Stk IS NULL) AND (ID = $id) ")
+            ->whereRaw("(Q_Stk < 3 OR Q_Stk IS NULL) AND (ID = $id) ")
             ->orderBy('cuentas.id','DESC');
     }
 

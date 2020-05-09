@@ -762,13 +762,15 @@
   @endphp
 
   @if(count($stocks) > 0)
-		@foreach($stocks as $stock)
+  	<div class="col-xs-12 col-sm-6 col-md-6">
+		<div style="margin-left: 0 !important" class="row">
+		@foreach($stocks as $i => $stock)
 			@php $cant_productos++; @endphp
 
 			<?php
               $color = $stock->color_user;
             ?>
-    	<div class="col-xs-12 col-sm-4 col-md-3">
+    	<div class="col-xs-12 col-sm-6 col-md-5">
 				<div class="thumbnail">
 					<span class="pull-right" style="width: 45%;">
 						<p>
@@ -1022,8 +1024,13 @@
 				@endif
 
           </div>
-        </div>
+		</div>
+			@if ($i === 1)
+				<div class="clearfix"></div>
+			@endif
 			@endforeach
+		</div>
+  	</div>		
     @endif
 
 
@@ -1031,7 +1038,7 @@
 
 
     <div class="col-md-2 pull-right">
-    	@if ($cant_productos < 2)
+    	@if ($cant_productos < 3)
 			<p>
 				<button
 					class="btn btn-default btn-lg"

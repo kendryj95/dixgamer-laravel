@@ -42,7 +42,7 @@ $saldo = $accountBalance->costo_usd - $expense->costo_usd;
 							type="number"
 							step="0.01"
 							onchange="formatearCosto(this.value)"
-							name="costo_usd" value="{{$stock->costo_usd}}" @if ($saldo == 0 && $total_stocks > 1) readonly @endif>
+							name="costo_usd" value="{{$stock->costo_usd}}" @if ($saldo == 0 && $total_stocks > 2) readonly @endif>
 							<input type="hidden" name="saldo_act" value="{{$saldo}}">
 							<input type="hidden" name="costo_act" value="{{$stock->costo_usd}}">
 
