@@ -2248,9 +2248,15 @@ class AccountController extends Controller
         ->first();
 
         if ($venta) {
-          $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
-          $isExcluido = DB::table('configuraciones')->where('ID',1)->where('prod_excluidos_pri','like',"%$tituloStock%")->first();
-          if ($isExcluido) {
+          $fecha_venta = date('Y-m-d',strtotime($venta->Day));
+          $fecha_referencia = DB::table('configuraciones')->where('ID',1)->value('fecha_referencia');
+          if ($fecha_venta < $fecha_referencia) {
+            $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
+            $isExcluido = DB::table('configuraciones')->where('ID',1)->where('prod_excluidos_pri','like',"%$tituloStock%")->first();
+            if ($isExcluido) {
+              return null;
+            }
+          } else {
             return null;
           }
         }
@@ -2272,9 +2278,15 @@ class AccountController extends Controller
         ->first();
 
         if ($venta) {
-          $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
-          $isExcluido = DB::table('configuraciones')->where('ID',1)->where('prod_excluidos_secu','like',"%$tituloStock%")->first();
-          if ($isExcluido) {
+          $fecha_venta = date('Y-m-d',strtotime($venta->Day));
+          $fecha_referencia = DB::table('configuraciones')->where('ID',1)->value('fecha_referencia');
+          if ($fecha_venta < $fecha_referencia) {
+            $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
+            $isExcluido = DB::table('configuraciones')->where('ID',1)->where('prod_excluidos_secu','like',"%$tituloStock%")->first();
+            if ($isExcluido) {
+              return null;
+            }
+          } else {
             return null;
           }
         }
