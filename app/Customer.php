@@ -133,7 +133,7 @@ class Customer extends Model
 
 
     // Buscamos cliente por filtro
-    public function ScopeCustomerByCustomColumn($query,$obj){
+    public function ScopeCustomerByCustomColumn($query,$obj, $revendedor = null){
       if (!empty($obj->column) && !empty($obj->word)) {
         if ($obj->column == 'email') {
           $query->select('clientes.*')->leftjoin('clientes_email AS ce','ce.clientes_id','=','clientes.ID')->where('clientes.email','like','%'.$obj->word.'%')->orWhere('ce.email','like','%'.$obj->word.'%')->groupBy('clientes.ID');
@@ -145,7 +145,13 @@ class Customer extends Model
         if (!(\Helper::validateAdministrator(session()->get('usuario')->Level))) { 
           $query->where('clientes.ID','!=',371);
         }
+        if ($revendedor != null) {
+          $query->where('auto','re');
+        }
       }else{
+        if ($revendedor != null) {
+          $query->where('auto','re');
+        }
         if (!(\Helper::validateAdministrator(session()->get('usuario')->Level))) { 
           $query->where('clientes.ID','!=',371);
         } else {

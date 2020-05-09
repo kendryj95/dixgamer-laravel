@@ -67,6 +67,7 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-user fa-fw" aria-hidden="true"></i> Ctes<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('clientes') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+                <li><a href="{{ url('clientes/tipo/re') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Re vendedores</a></li>
                 <li class="divider" role="separator"></li>
                 <li><a href=" {{ url('clientes','create') }} "><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
                 </ul>

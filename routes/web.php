@@ -49,6 +49,7 @@ Route::group(['middleware' => ['login']], function()
 
   // Rutas para clientes
   Route::resource('clientes', 'CustomerController');
+  Route::get('clientes/tipo/{revendedor?}', 'CustomerController@index');
   Route::post('customer_ctrl_email', 'CustomerController@customerCtrlEmail');
   Route::post('customer_ctrl_ml_user', 'CustomerController@customerCtrlMlUsr');
   Route::get('customer_ventas_modificar/{id}/{opt}', 'CustomerController@ventasModificar');

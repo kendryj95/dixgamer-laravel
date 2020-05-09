@@ -1,10 +1,10 @@
 @extends('layouts.master-layouts')
 
-@section('title', 'Listar clientes')
+@section('title', 'Listar ' . $revendedor ? 'Re vendedores' : 'Clientes')
 
 @section('container')
 <div class="container">
-  <h1>Listar clientes</h1>
+  <h1>Listar {{ $revendedor ? 'Re vendedores' : 'Clientes' }}</h1>
   @if (count($errors) > 0)
 				<div class="alert alert-danger text-center">
 					<ul>
@@ -18,7 +18,7 @@
   <div class="row">
     @component('components/filters/column_word')
       @slot('columns',$columns);
-      @slot('path','clientes');
+      @slot('path',$revendedor ? 'clientes/tipo/re' : 'clientes');
     @endcomponent
   </div>
 

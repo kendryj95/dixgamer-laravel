@@ -20,7 +20,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $revendedor = null)
     {
       // Email
       $email = $request->email;
@@ -36,7 +36,7 @@ class CustomerController extends Controller
       $obj->word = $request->word;
 
       // Pasamos los filtros a la busqueda
-      $customers = Customer::customerByEmail($email)->customerByCustomColumn($obj)->orderBy('ID','DESC')->paginate($paginate);
+      $customers = Customer::customerByEmail($email)->customerByCustomColumn($obj, $revendedor)->orderBy('ID','DESC')->paginate($paginate);
 
       if (count($customers) == 1) { // Si es un solo registro, redireccionar al cliente en coincidencia.
         $id_cliente = $customers[0]->ID;
@@ -44,7 +44,7 @@ class CustomerController extends Controller
         return redirect('clientes/'.$id_cliente);
       }
 
-      return view('customer.index',compact('customers','columns'));
+      return view('customer.index',compact('customers','columns','revendedor'));
     }
 
     /**
