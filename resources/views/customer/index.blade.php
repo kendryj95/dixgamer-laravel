@@ -1,6 +1,6 @@
 @extends('layouts.master-layouts')
 
-@section('title', 'Listar ' . $revendedor ? 'Re vendedores' : 'Clientes')
+@section('title', 'Listar ' . ($revendedor ? 'Re vendedores' : 'Clientes'))
 
 @section('container')
 <div class="container">
