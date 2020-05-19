@@ -229,9 +229,11 @@ class CustomerController extends Controller
                 $data_nota =  explode(" ",substr($nota_vta,14));
                 $id_stock = $data_nota[0];
                 $title = $data_nota[1];
-                $cons = $data_nota[2];
-                $slot = $data_nota[3];
-                $nota_producto = true;
+                if (count($data_nota) > 2) {
+                  $cons = $data_nota[2];
+                  $slot = $data_nota[3];
+                  $nota_producto = true;
+                }
             }
 
             
