@@ -2540,7 +2540,6 @@ class AccountController extends Controller
       $data['medio_pago'] = 'Saldo';
       $data['costo'] = $costo_ars;
       $data['Day'] = $this->dte;
-      $data['Notas'] = '';
       $data['usuario'] = session()->get('usuario')->Nombre;
 
       $this->tks->storeStockAccount($data);
