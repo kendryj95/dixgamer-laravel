@@ -415,6 +415,15 @@ class AccountController extends Controller
       $product_20_off = DB::table('saldo')->where('titulo','20-off-playstation')->where('cuentas_id',$id)->first(); // Consulta para verificar si se cargó este producto en saldo con este id de cuenta
       $existeStock_product_20_off = DB::table('stock')->where('titulo','20-off-playstation')->where('consola','ps')->count(); // Consulta para verificar si existe stock de este producto.
 
+      $fornite = false;
+      $accountNotes = DB::table('cuentas_notas')->where('cuentas_id', $id)->get();
+
+      foreach ($accountNotes as $value) {
+        if ($value->Notas == "Fortnite comprado") {
+          $fornite = true;
+          break;
+        }
+      }
 
 
       return view('account.show',compact(
@@ -440,7 +449,8 @@ class AccountController extends Controller
                 'cuenta_robada',
                 'ventaPs4Pri',
                 'ventaPs4Secu',
-                'dom_excluido'
+                'dom_excluido',
+                'fornite'
       ));
 
     }
@@ -2675,6 +2685,22 @@ class AccountController extends Controller
 
       return view('account.ctas_vacias', compact('cuentas','usuarios','user'));
 
+    }
+
+    public function ctaFornite($id_account)
+    {
+      $data = [
+        "cuentas_id" => $id_account,
+        "Notas" => "Fortnite comprado",
+        "Day" => date('Y-m-d H:i:s'),
+        "usuario" => session()->get('usuario')->Nombre
+      ];
+
+      DB::table('cuentas_notas')->insert($data);
+
+      \Helper::messageFlash('Cuentas',"Nota de Fornite comprado agregada.",'alert_cuenta');
+
+      return redirect()->back();
     }
 
 }

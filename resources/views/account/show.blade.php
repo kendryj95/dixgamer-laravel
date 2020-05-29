@@ -1029,6 +1029,35 @@
 				<div class="clearfix"></div>
 			@endif
 			@endforeach
+			@if (count($stocks) == 1 && !$fornite)
+				<div class="col-xs-12 col-sm-6 col-md-5">
+					<div class="alert alert-danger text-center">
+						<h4>¿Ya compraste el Fortnite?</h4>
+						<br>
+						{{-- <button class="btn btn-danger btn-xl" type="button" id="fortnite">Si, ya compre!</button> --}}
+
+						<div class="dropdown">
+							<button
+							class="btn btn-danger btn-xl dropdown-toggle"
+							type="button"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+								Si, ya compre!
+							</button>
+
+							<ul class="dropdown-menu bg-info" aria-labelledby="dropdownFornite">
+								<li class="dropdown-header">¿Estas seguro?</li>
+								<li role="separator" class="divider"></li>
+								<li>
+									<a href="{{route('cuenta-fornite', $account->ID)}}" class="btn btn-danger btn-block">Sí, seguro</a>
+								</li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+			@endif
 		</div>
   	</div>		
     @endif

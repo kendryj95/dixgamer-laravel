@@ -137,6 +137,7 @@ Route::group(['middleware' => ['login']], function()
   Route::post('dominios_cuentas', 'AccountController@dominiosByUser');
   Route::get('cuentas_resetear', 'AccountController@ctasResetear');
   Route::get('cuentas_vacias/{usuario?}', 'AccountController@ctasVacias');
+  Route::get('cuentas/fornite/{id_account}', 'AccountController@ctaFornite')->name('cuenta-fornite');
 
   Route::get('balance/{page}', 'ControlsController@balanceProductosDiasCondicionado'); // Acceso solo para BETINA
 

@@ -54,7 +54,8 @@
                         @php $total_cantidad = 0 @endphp
                         @php $total_pedido = 0 @endphp
                         @foreach($pedidos as $pedido)
-                        @php $total_cantidad += $pedido->cantidad_cargar  @endphp
+                        @php $falta = $pedido->cantidad_cargar < 0 ? 0 : $pedido->cantidad_cargar @endphp
+                        @php $total_cantidad += $falta  @endphp
                         @php $total_pedido += $pedido->cantidad  @endphp
                         <tr>
                             @if (\Helper::validateAdministrator(session()->get('usuario')->Level))
@@ -63,8 +64,8 @@
                               </td>
                             @endif
                             <td class="text-center">
-                                @if($pedido->cantidad_cargar > 0) @php $color = 'warning' @endphp @else @php $color = 'success' @endphp @endif
-                                <span class="label label-{{$color}}">{{ $pedido->cantidad_cargar }}</span> / <span class="label label-secondary">{{ $pedido->cantidad }}</span>
+                                @if($falta > 0) @php $color = 'warning' @endphp @else @php $color = 'success' @endphp @endif
+                                <span class="label label-{{$color}}">{{ $falta }}</span> / <span class="label label-secondary">{{ $pedido->cantidad }}</span>
                             </td>
                             <td>
                                 <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />
