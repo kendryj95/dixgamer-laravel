@@ -34,6 +34,14 @@
 			</td>
 		  </tr>      
 		</table>
+
+		<?php if($linkPS && ($linkPS !== "")):?>
+					
+			<?php $array = (explode(',', $linkPS, 10)); 
+
+				foreach ($array as $valor) { echo "<a class='btn btn-default btn-sm' title='Ver en la Tienda de PS' target='_blank' href='$valor'><img src='".asset('img/gral/ps-store.png')."' width='18' /> Link PS </a> "; };
+			?> 
+		<?php endif; ?>
 			
 			<a type="button" href="{{ url('customer_ventas_modificar_producto_store',[$consola, $titulo, $slot, $venta->ID]) }}" class="btn btn-info pull-right" style="margin-bottom: 20px;"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i> Re Intentar Asignación</a>
 			

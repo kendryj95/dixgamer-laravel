@@ -753,6 +753,7 @@ class CustomerController extends Controller
     {
       
       $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
+      $link_PS = '';
       
       // $stk_ID = $row_rsSTK[0]->ID_stk;
 
@@ -775,12 +776,29 @@ class CustomerController extends Controller
                                    ->where('ID', $venta->clientes_id)
                                    ->first();
 
+        $rsLink_PS = DB::table('cbgw_postmeta')
+        ->select(
+            DB::raw("GROUP_CONCAT(meta_value) as meta_value")
+        )
+        ->where('post_id', $venta->order_item_id)
+        ->where('meta_key', 'link_ps')
+        ->groupBy('post_id')
+        ->first();
+
+        $link_PS = '';
+        
+        if ($rsLink_PS) {
+            
+            $link_PS = $rsLink_PS->meta_value;
+        }
+
         return view('sales.salesUpdateWeb', [
           "venta" => $venta,
           "consola" => $consola,
           "titulo" => $titulo,
           "slot" => $slot,
-          "clientes" => $existEmailCliente
+          "clientes" => $existEmailCliente,
+          "link_PS" => $link_PS
         ]);
       } else {
         $stk_ID = $row_rsSTK[0]->ID_stk;
