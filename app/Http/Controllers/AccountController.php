@@ -2211,7 +2211,7 @@ class AccountController extends Controller
 
       if ($venta) {
 
-        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2]);
+        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2, 'Day_modif' => date('Y-m-d H:i:s')]);
         
         $data = [];
         $data['id_ventas'] = $venta->ID;
@@ -2234,7 +2234,7 @@ class AccountController extends Controller
 
       if ($venta) {
 
-        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2]);
+        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2, 'Day_modif' => date('Y-m-d H:i:s')]);
         
         $data = [];
         $data['id_ventas'] = $venta->ID;
@@ -2258,7 +2258,7 @@ class AccountController extends Controller
         ->first();
 
         if ($venta) {
-          $fecha_venta = date('Y-m-d',strtotime($venta->Day));
+          $fecha_venta = date('Y-m-d',strtotime($venta->Day_modif));
           $fecha_referencia = DB::table('configuraciones')->where('ID',1)->value('fecha_referencia');
           if ($fecha_venta < $fecha_referencia) {
             $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
@@ -2288,7 +2288,7 @@ class AccountController extends Controller
         ->first();
 
         if ($venta) {
-          $fecha_venta = date('Y-m-d',strtotime($venta->Day));
+          $fecha_venta = date('Y-m-d',strtotime($venta->Day_modif));
           $fecha_referencia = DB::table('configuraciones')->where('ID',1)->value('fecha_referencia');
           if ($fecha_venta < $fecha_referencia) {
             $tituloStock = DB::table('stock')->where('ID',$venta->stock_id)->value('titulo');
