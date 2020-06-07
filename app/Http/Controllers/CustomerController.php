@@ -462,6 +462,7 @@ class CustomerController extends Controller
             $data = [];
             $data['medio_venta'] = $request->medio_venta;
             $data['Day'] = $fecha_venta . " $hora";
+            $data['Day_modif'] = $fecha_venta . " $hora";
             if ($request->medio_venta == 'Mail') {
               $data['order_item_id'] = NULL;
               $data['order_id_web'] = NULL;
@@ -1089,6 +1090,7 @@ class CustomerController extends Controller
         $data['cons'] = 'x';
         $data['slot'] = 'No';
         $data['recup'] = 1;
+        $data['Day_modif'] = date('Y-m-d H:i:s');
 
         DB::table('ventas')->where('ID',$id)->update($data);
 
