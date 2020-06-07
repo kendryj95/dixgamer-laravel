@@ -798,7 +798,7 @@ class CustomerController extends Controller
           "titulo" => $titulo,
           "slot" => $slot,
           "clientes" => $existEmailCliente,
-          "link_PS" => $link_PS
+          "linkPS" => $link_PS
         ]);
       } else {
         $stk_ID = $row_rsSTK[0]->ID_stk;
