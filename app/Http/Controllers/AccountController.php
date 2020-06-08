@@ -2211,7 +2211,7 @@ class AccountController extends Controller
 
       if ($venta) {
 
-        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2, 'Day_modif' => date('Y-m-d H:i:s')]);
+        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2]);
         
         $data = [];
         $data['id_ventas'] = $venta->ID;
@@ -2234,7 +2234,7 @@ class AccountController extends Controller
 
       if ($venta) {
 
-        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2, 'Day_modif' => date('Y-m-d H:i:s')]);
+        DB::table('ventas')->where('ID',$venta->ID)->update(['recup' => 2]);
         
         $data = [];
         $data['id_ventas'] = $venta->ID;
