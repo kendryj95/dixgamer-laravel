@@ -190,10 +190,10 @@
           <ul class="nav navbar-nav navbar-right">
 
             <li><a href="javascript:void(0)"><i class="glyphicon glyphicon-user text-success" aria-hidden="true"></i> {{ session()->get('usuario')->Nombre }}</a></li>
-          
-          @if(Helper::lessAdministrator(session()->get('usuario')->Level))
+          <!-- COMENTADO POR KENDRY POR PETICION DE VICTOR 10/06/20 -->
+          {{-- @if(Helper::lessAdministrator(session()->get('usuario')->Level))
             <li><a href="{{ url('horario') }}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
-          @endif
+          @endif --}}
 
           @if (Helper::validateAdminAnalyst(session()->get('usuario')->Level))
 

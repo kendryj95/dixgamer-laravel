@@ -235,7 +235,8 @@ Route::group(['middleware' => ['login']], function()
   Route::group(['middleware' => ['less.admin']], function()
   {
 
-    Route::resource('horario','ScheduleController');
+    ### COMENTADO POR KENDRY POR PETICION DE VICTOR 10/06/20
+    //Route::resource('horario','ScheduleController');
 
 
 
