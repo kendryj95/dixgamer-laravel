@@ -87,6 +87,14 @@ foreach ($data as $value) {
               <input type="hidden" name="fecha_old" value="{{$clientes->Day}}">
               <span class="input-group-addon"><em class="text-muted">Fecha Venta</em></span>
             </div>
+            
+            
+            <div class="input-group form-group">
+              <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+              <input value="{{ date('Y-m-d',strtotime($clientes->Day_modif)) }}" class="form-control" type="date" id="Day_modif" name="Day_modif" placeholder="Fecha Modif Venta">
+              <input type="hidden" name="fecha_modif_old" value="{{$clientes->Day_modif}}">
+              <span class="input-group-addon"><em class="text-muted">Fecha Modif Venta</em></span>
+            </div>
 
             @endif
 

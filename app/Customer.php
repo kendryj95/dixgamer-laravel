@@ -191,7 +191,8 @@ class Customer extends Model
                 'clientes.nombre',
                 'clientes.apellido',
                 'clientes.email',
-                'ventas.Day'
+                'ventas.Day',
+                'ventas.Day_modif'
               )
               ->leftjoin('clientes', 'ventas.clientes_id', '=', 'clientes.ID')
               ->where('ventas.ID', $id)

@@ -432,7 +432,9 @@ class CustomerController extends Controller
             $order_id_web = isset($request->order_id_web) ? $request->order_id_web : NULL;
             $order_id_ml = isset($request->order_id_ml) ? $request->order_id_ml : NULL;
             $fecha_venta = isset($request->Day) ? $request->Day : NULL;
+            $fecha_modif_venta = isset($request->Day_modif) ? $request->Day_modif : NULL;
             $hora = date('H:i:s', strtotime($request->fecha_old));
+            $hora_mod = date('H:i:s', strtotime($request->fecha_modif_old));
 
             $venta = DB::table('ventas')->where('ID', $request->ID)->first();
 
@@ -462,7 +464,7 @@ class CustomerController extends Controller
             $data = [];
             $data['medio_venta'] = $request->medio_venta;
             $data['Day'] = $fecha_venta . " $hora";
-            $data['Day_modif'] = $fecha_venta . " $hora";
+            $data['Day_modif'] = $fecha_modif_venta . " $hora_mod";
             if ($request->medio_venta == 'Mail') {
               $data['order_item_id'] = NULL;
               $data['order_id_web'] = NULL;
