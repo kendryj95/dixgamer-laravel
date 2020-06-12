@@ -15,10 +15,13 @@
 						@endforeach
 					</ul>
 				</div>
-	@endif
+  @endif
+  <div style="display: none" id="error-codes" class="alert alert-danger text-danger">
+    Debe generar los códigos antes de guardarlo.
+  </div>
   <div class="row">
     <div class="col-md-12">
-        <form method="POST" name="form_store_codes" action="{{ url('stock_insertar_codigo_g_vcc') }}">
+        <form method="POST" id="form_store_codes" name="form_store_codes" action="{{ url('stock_insertar_codigo_g_vcc') }}">
             {{ csrf_field() }}
         
             <div class="col-md-9">
@@ -117,7 +120,7 @@
                     <textarea name="excel_data" id="excel_data" cols="30" rows="10" hidden></textarea>
 
                     <div class="col-sm-12">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+                        <button class="btn btn-primary btn-lg btn-block" id="btn-form" type="button">Guardar</button>
                         <br>
                     </div>
                     
@@ -181,7 +184,16 @@
 			$('form').find('input').on('input',highlightDuplicates);
 
 
-
+      $('#btn-form').on('click', function() {
+          var codigos = $('input[name="costo[]"]');
+          if (codigos.length > 0) {
+            $('#error-codes').hide();
+            $('#form_store_codes').submit();
+            
+          } else {
+            $('#error-codes').show();
+          }
+      })
 
 
     });
