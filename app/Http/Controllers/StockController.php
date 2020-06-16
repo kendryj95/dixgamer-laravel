@@ -978,7 +978,7 @@ ORDER BY libre DESC";
     
     public function listCMByCode($code)
     {
-      $datos = Stock::listCMByCode($code)->get();
+      $datos = Stock::listCMByCode($code)->orderBy('uso','DESC')->get();
       $control = DB::table('stock_gc_controlado')->where('code',$code)->first();
       $total = 0;
 
