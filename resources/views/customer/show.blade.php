@@ -65,7 +65,7 @@
 
               <a
                 class="btn btn-xs btn-default"
-                href="https://mail.google.com/a/dixgamer.com/#search/{{ substr($customer->email, 0, strpos($customer->email, '@')) }}; "
+                href="https://mail.google.com/mail/u/1/#search/{{ substr($customer->email, 0, strpos($customer->email, '@')) }}; "
                 title="filtrar cliente en gmail"
                 target="_blank">
                   <i aria-hidden="true" class="fa fa-google"></i>
@@ -812,7 +812,7 @@
               @if (\Helper::operatorsRecoverPri(session()->get('usuario')->Nombre))
                 <a
                 class="btn btn-xs btn-default"
-                href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($dataCustomer->email, 0, strpos($dataCustomer->email, '@')) . '+' . substr($dataCustomer->mail_cta, 0, strpos($dataCustomer->mail_cta, '@')) . '+' . $dataCustomer->pass ; ?>"
+                href="https://mail.google.com/mail/u/1/#search/<?php echo substr($dataCustomer->email, 0, strpos($dataCustomer->email, '@')) . '+' . substr($dataCustomer->mail_cta, 0, strpos($dataCustomer->mail_cta, '@')) . '+' . $dataCustomer->pass ; ?>"
                 title="filtrar guia de descarga en gmail"
                 target="_blank">
                   <i aria-hidden="true" class="fa fa-google"></i>
@@ -821,7 +821,7 @@
               @else
                 <a
                 class="btn btn-xs btn-default"
-                href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($dataCustomer->email, 0, strpos($dataCustomer->email, '@')) . '+' . $dataCustomer->titulo . '+(' . $dataCustomer->consola .')'; ?>"
+                href="https://mail.google.com/mail/u/1/#search/<?php echo substr($dataCustomer->email, 0, strpos($dataCustomer->email, '@')) . '+' . $dataCustomer->titulo . '+(' . $dataCustomer->consola .')'; ?>"
                 title="filtrar guia de descarga en gmail"
                 target="_blank">
                   <i aria-hidden="true" class="fa fa-google"></i>

@@ -1358,7 +1358,7 @@
 				@endif
 			</td>
 
-            <td id="<?php echo $sc->clientes_id; ?>"><a title="Ir a Cliente" href="{{ url('clientes', $sc->clientes_id) }}"><?php echo $sc->email; ?></a> <a class="btn btn-xs btn-default" style="opacity:0.6;" href="https://mail.google.com/a/dixgamer.com/#search/<?php echo substr($sc->email, 0, strpos($sc->email, '@')) . '+' . str_replace("-"," ",$sc->titulo); ?>" title="filtrar guia de descarga en gmail" target="_blank"><i aria-hidden="true" class="fa fa-google"></i>mail</a>
+            <td id="<?php echo $sc->clientes_id; ?>"><a title="Ir a Cliente" href="{{ url('clientes', $sc->clientes_id) }}"><?php echo $sc->email; ?></a> <a class="btn btn-xs btn-default" style="opacity:0.6;" href="https://mail.google.com/mail/u/1/#search/<?php echo substr($sc->email, 0, strpos($sc->email, '@')) . '+' . str_replace("-"," ",$sc->titulo); ?>" title="filtrar guia de descarga en gmail" target="_blank"><i aria-hidden="true" class="fa fa-google"></i>mail</a>
 
 				<!--- Mensajes predefinidos con guia de re activar o cambio de contraseña -->
 				<!--
