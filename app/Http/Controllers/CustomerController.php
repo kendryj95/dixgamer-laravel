@@ -541,6 +541,17 @@ class CustomerController extends Controller
                                 )
                                 ->leftjoin('ventas AS v', 's.ID', '=', 'v.stock_id')
                                 ->where('v.ID',$request->ID)->first();
+
+            $stock = Stock::find($request->stock);
+
+            if ($stock) {
+              $validate_stock = DB::table('ventas')->where('stock_id',$request->stock)->first();
+
+              if ($validate_stock)
+                return redirect()->back()->withErrors(['Opps! El Stock ID ya está relacionado a una venta.']);
+            } else {
+              return redirect()->back()->withErrors(['Opps! El Stock ID no existe.']);
+            }
             
             $data = [];
             $data['slot'] = $request->slot;
