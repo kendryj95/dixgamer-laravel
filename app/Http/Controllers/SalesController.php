@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Schema;
+use Mail;
 
 class SalesController extends Controller
 {
@@ -283,6 +284,11 @@ class SalesController extends Controller
 
 
            if (!is_array($row_rsSTK) && !$giftConStock) {
+                Mail::send('emails.sin_stock', [], function($message) use ($venta,$consola,$titulo,$slot)
+                {
+                    $message->to("admin@dixgamer.com", "Admin")->subject("Falta stock (sales/reasignar)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
+                });
+               
                return view('sales.salesInsertWeb', [
                    "row_rsSTK" => $row_rsSTK,
                    "venta" => $venta,

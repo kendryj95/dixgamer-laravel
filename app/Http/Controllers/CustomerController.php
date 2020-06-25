@@ -806,6 +806,11 @@ class CustomerController extends Controller
             $link_PS = $rsLink_PS->meta_value;
         }
 
+        Mail::send('emails.sin_stock', [], function($message) use ($venta,$consola,$titulo,$slot)
+        {
+            $message->to("admin@dixgamer.com", "Admin")->subject("Falta stock (sales/reasignar)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
+        });
+
         return view('sales.salesUpdateWeb', [
           "venta" => $venta,
           "consola" => $consola,
