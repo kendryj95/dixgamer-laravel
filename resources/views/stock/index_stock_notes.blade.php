@@ -1,12 +1,12 @@
 @extends('layouts.master-layouts')
 
-@section('title', 'Listar stock')
+@section('title', 'Listar Notas de Stock')
 
 @section('container')
 
 
 <div class="container">
-	<h1>Listar stock</h1>
+	<h1>Listar Notas de Stock</h1>
 <div class="row">
     @component('components/filters/column_word')
         @slot('columns',$columns);

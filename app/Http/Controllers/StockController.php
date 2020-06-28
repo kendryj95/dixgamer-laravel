@@ -54,7 +54,7 @@ class StockController extends Controller
         $obj->column = $request->column;
         $obj->word = $request->word;
 
-        $columns = Schema::getColumnListing('stock');
+        $columns = ["stock_id","titulo","consola","cuentas_id","code","Day","usuario"];
         $stocks_notes = Stock::stockNotesList($obj)->paginate(50);
 
         return view('stock.index_stock_notes',compact(
