@@ -6,7 +6,7 @@
 @endif
 <br><br>
 
-No olvides buscar stock disponible en la @if ($consola == "ps4") <a href="{{url('sales/recupero')}}?column=titulo&word={{$titulo}}&enviar=Buscar">lista de recuperos</a> @else <a href="{{url('home')}}#reset">lista de recuperos</a> @endif
+No olvides buscar stock disponible en la @if ($consola == "ps4") <a href="{{url('sales/recupero')}}?column=titulo&word={{$titulo}}&enviar=Buscar">lista de recuperos</a> @else <a href="{{url('home')}}#reset">lista de reseteos</a> @endif
 <br><br>
 
 @if ($tipo == "Reasignar")
