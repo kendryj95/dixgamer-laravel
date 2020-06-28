@@ -435,17 +435,20 @@ class SalesController extends Controller
     {
         $date = date('Y-m-d H:i:s');
         $clientes_id = $existEmailCliente->ID;
-        $stock_id = $row_rsSTK[0]->ID_stk;
         $order_item_id = $venta->order_item_id;
         $order_id_ml = '';
         $slot_def = '';
         $medio_venta = '';
+        $titulo = '';
 
-        $cons = $row_rsSTK[0]->consola;
 
         if ($deuda) {
             $stock_id = 1;
             $cons = "x";
+        } else {
+            $cons = $row_rsSTK[0]->consola;
+            $stock_id = $row_rsSTK[0]->ID_stk;
+            $titulo = $row_rsSTK[0]->titulo;
         }
 
         //Si es una vta de ps4 o plus slot por ML asigno el slot desde el parametro GET
@@ -453,7 +456,7 @@ class SalesController extends Controller
         //Si es una vta de ps4 o plus slot que NO ES de ML asigno el slot desde la consulta SQL
         //elseif --> antes de escapar el IF anterior que iba primero
 
-        if (($cons === "ps4") or ($row_rsSTK[0]->titulo === "plus-12-meses-slot")): $slot_def = ucwords($slot); $estado = "pendiente";
+        if (($cons === "ps4") or ($titulo === "plus-12-meses-slot")): $slot_def = ucwords($slot); $estado = "pendiente";
         elseif ($cons === "ps3"): $slot_def = "Primario"; $estado = "pendiente";
 
         //Si no cumple con ninguno de los parametros anteriores seguramente se trata de una venta de Gift Card y el slot se define en "No"
