@@ -182,6 +182,7 @@ class SalesController extends Controller
         $link_PS = '';
         $giftConStock = false;
         $data_gifts = [];
+        $deuda = false;
 
         $existe_OII = DB::table('ventas')
                         ->select(
@@ -282,8 +283,12 @@ class SalesController extends Controller
                return redirect()->back()->withErrors(["Este email no corresponde a ningún cliente de la base de datos: $email_pedido"]);
            }
 
+           if (strpos($titulo,"deuda" !== false && $consola == "deuda")) {
+               $deuda = true;
+           }
 
-           if (!is_array($row_rsSTK) && !$giftConStock) {
+
+           if (!is_array($row_rsSTK) && !$giftConStock && !$deuda) {
                if (!$request->previousUrl) {
                     $datos['consola'] = $consola;
                     $datos['titulo'] = $titulo;
@@ -365,7 +370,7 @@ class SalesController extends Controller
                    try {
 
                        if (!$giftConStock) { // Si el producto no es una gift quiere decir esa variable.
-                           $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente, $slot);
+                           $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente, $slot, $deuda);
                            DB::table('ventas')->insert($data);
                            $ventaid = DB::getPdo()->lastInsertId();
 
@@ -426,7 +431,7 @@ class SalesController extends Controller
 
     }
 
-    private function dataSale($venta, $row_rsSTK, $existEmailCliente, $slot = '')
+    private function dataSale($venta, $row_rsSTK, $existEmailCliente, $slot = '', $deuda = false)
     {
         $date = date('Y-m-d H:i:s');
         $clientes_id = $existEmailCliente->ID;
@@ -437,6 +442,11 @@ class SalesController extends Controller
         $medio_venta = '';
 
         $cons = $row_rsSTK[0]->consola;
+
+        if ($deuda) {
+            $stock_id = 1;
+            $cons = "x";
+        }
 
         //Si es una vta de ps4 o plus slot por ML asigno el slot desde el parametro GET
         //if ((($row_rsClient['user_id_ml']) && ($row_rsClient['user_id_ml'] != "")) && (($cons === "ps4") or ($row_rsClient['producto'] === "plus-12-meses-slot"))): $slot = ucwords($colname_rsSlot);
