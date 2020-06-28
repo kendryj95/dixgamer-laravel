@@ -806,10 +806,18 @@ class CustomerController extends Controller
             $link_PS = $rsLink_PS->meta_value;
         }
 
-        Mail::send('emails.sin_stock', [], function($message) use ($venta,$consola,$titulo,$slot)
-        {
-            $message->to("admin@dixgamer.com", "Admin")->subject("Falta stock (sales/reasignar)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
-        });
+        if (!$request->previousUrl) {
+          $datos['venta'] = $venta;
+          $datos['consola'] = $consola;
+          $datos['titulo'] = $titulo;
+          $datos['slot'] = $slot;
+          $datos['tipo'] = "Reasignar";
+          
+          Mail::send('emails.sin_stock', $datos, function($message) use ($venta,$consola,$titulo,$slot)
+          {
+              $message->to("contacto@dixgamer.com", "Contacto")->subject(session()->get('usuario')->Nombre.", falta stock (reasignar)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
+          });
+        }
 
         return view('sales.salesUpdateWeb', [
           "venta" => $venta,

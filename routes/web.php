@@ -55,7 +55,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('customer_ventas_modificar/{id}/{opt}', 'CustomerController@ventasModificar');
   Route::post('customer_ventas_modificar_store', 'CustomerController@ventasModificarStore');
   Route::get('customer_ventas_modificar_producto/{id}', 'CustomerController@ventasModificarProductos');
-  Route::get('customer_ventas_modificar_producto_store/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@ventasModificarProductosStore');
+  Route::get('customer_ventas_modificar_producto_store/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@ventasModificarProductosStore')->name('producto.modificar');
   Route::get('customer_duplicar_venta/{id}', 'CustomerController@duplicarVenta');
   Route::get('customer_duplicar_venta_store/{consola}/{titulo}/{slot}/{id_ventas}', 'CustomerController@duplicarVentaStore');
   Route::get('customer_ventas_eliminar/{id}', 'CustomerController@ventasEliminar');

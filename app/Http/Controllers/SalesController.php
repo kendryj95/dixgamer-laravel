@@ -284,10 +284,18 @@ class SalesController extends Controller
 
 
            if (!is_array($row_rsSTK) && !$giftConStock) {
-                Mail::send('emails.sin_stock', [], function($message) use ($venta,$consola,$titulo,$slot)
-                {
-                    $message->to("admin@dixgamer.com", "Admin")->subject("Falta stock (sales/reasignar)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
-                });
+               if (!$request->previousUrl) {
+                    $datos['consola'] = $consola;
+                    $datos['titulo'] = $titulo;
+                    $datos['slot'] = $slot;
+                    $datos['order'] = $oii;
+                    $datos['tipo'] = "Sales";
+                    $datos['cliente'] = $existEmailCliente;
+                    Mail::send('emails.sin_stock', $datos, function($message) use ($venta,$consola,$titulo,$slot)
+                    {
+                        $message->to("contacto@dixgamer.com", "Contacto")->subject(session()->get('usuario')->Nombre.", falta stock (sales)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
+                    });
+               }
                
                return view('sales.salesInsertWeb', [
                    "row_rsSTK" => $row_rsSTK,
