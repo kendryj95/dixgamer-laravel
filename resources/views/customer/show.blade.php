@@ -205,11 +205,22 @@
                   <i class="fa fa-snapchat-ghost fa-fw"></i> ML
               </button>
             @endif
+                <div class="dropdown pull-right" title="" style="display: inline-block;">
+                  <button class="btn @if ($customer->auto != 'bloq') btn-default @else btn-danger @endif btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    @if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif
+                  </button>
+                  <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li class="dropdown-header">¿@if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif cliente?</li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#!" id="bloq" data-customer="{{ $customer->ID }}" data-update="{{ $customer->auto != 'bloq' ? 'bloq' : 'no' }}" type="button" class="btn btn-danger btn-xs">Sí, @if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif</a></li>
+                  </ul>
+                </div>
+            
                 @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     @if($customer->auto != 're')
-                        <a href="#!" id="doreseller" data-customer="{{ $customer->ID }}" data-update="re" type="button" class="btn btn-default btn-xs pull-right">Hacer Revendedor</a>
+                        <a style="margin-right: 2px" href="#!" id="doreseller" data-customer="{{ $customer->ID }}" data-update="re" type="button" class="btn btn-default btn-xs pull-right">Hacer Revendedor</a>
                     @else
-                        <a href="#!" id="doseller" data-customer="{{ $customer->ID }}" data-update="no" type="button" class="btn btn-danger btn-xs pull-right">Revendedor</a>
+                        <a style="margin-right: 2px" href="#!" id="doseller" data-customer="{{ $customer->ID }}" data-update="no" type="button" class="btn btn-danger btn-xs pull-right">Revendedor</a>
                     @endif
                 @endif
                 @if(Helper::lessAdministrator(session()->get('usuario')->Level))
@@ -756,7 +767,7 @@
 
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Gift')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -770,7 +781,7 @@
               @elseif( ($dataCustomer->consola === "ps") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'plus-') !== false)))
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Plus')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -783,7 +794,7 @@
               @elseif ( ($dataCustomer->consola === "fifa-points") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'ps4') !== false)))
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'FifaPoints')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -797,7 +808,7 @@
 
                 <!--- aca entran los mails de juegos y ps plus slot pri y secu -->
                   <button
-                    class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2) disabled @endif"
+                    class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                     type="button"
                     onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}')">
                     <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
@@ -1492,6 +1503,23 @@
             var id = $('#doreseller').data('customer');
             var token = $('#token').val();
             var datos = $('#doreseller').data('update');
+            console.log(id);
+            $.ajax({
+                data: { '_token':token, 'id':id, 'datos':datos },
+                method: 'post',
+                dataType: 'json',
+                url: '{{url('updateStatusReseller')}}',
+                success: function(result){
+                    location.reload();
+                }
+            });
+        });
+        
+        $('#bloq').on('click', function (e) {
+
+            var id = $('#bloq').data('customer');
+            var token = $('#token').val();
+            var datos = $('#bloq').data('update');
             console.log(id);
             $.ajax({
                 data: { '_token':token, 'id':id, 'datos':datos },
