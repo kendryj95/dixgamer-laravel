@@ -283,9 +283,9 @@ class SalesController extends Controller
                return redirect()->back()->withErrors(["Este email no corresponde a ningún cliente de la base de datos: $email_pedido"]);
            }
 
-           if (strpos($titulo,"deuda" !== false && $consola == "deuda")) {
-               $deuda = true;
-           }
+            if (strpos($titulo,"deuda") !== false && $consola == "deuda") {
+                $deuda = true;
+            }
 
 
            if (!is_array($row_rsSTK) && !$giftConStock && !$deuda) {
