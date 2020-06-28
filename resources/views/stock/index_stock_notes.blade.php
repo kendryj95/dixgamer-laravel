@@ -20,7 +20,8 @@
               <thead>
                 <tr>
                   <th>Fecha</th>
-                  <th>Stock</th>
+                  <th>Stk ID</th>
+                  <th>Producto</th>
                   <th>Cta ID</th>
                   <th>Notas</th>
                   <th>Operador</th>
@@ -36,6 +37,10 @@
           
                         <td>
                             {{ $stock->Day }}
+                        </td>
+
+                        <td>
+                          {{ $stock->stock_id }}
                         </td>
 
                         <td>

@@ -1174,7 +1174,17 @@ class AccountController extends Controller
 
         try {
           $this->blc->storeBalanceAccount($data);
-          $stock = Stock::where('ID',$stock->ID)->delete();
+          Stock::where('ID',$stock->ID)->delete();
+
+          $nota = 'Agregado a cta <a href="'.url('cuentas',$account_id).'" class="alert-link">#'.$account_id.'</a> '.$stock->code;
+
+          $data = [];
+          $data['stock_id'] = $stock->ID;
+          $data['Notas'] = $nota;
+          $data['Day'] = date('Y-m-d H:i:s');
+          $data['usuario'] = session()->get('usuario')->Nombre;
+          DB::table('stock_notas')->insert($data);
+
           DB::commit();
 
           \Helper::messageFlash('Cuentas','Saldo Minimo agregado correctamente.','alert_cuenta');
