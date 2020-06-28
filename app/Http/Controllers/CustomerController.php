@@ -308,7 +308,20 @@ class CustomerController extends Controller
 
     public function updateStatusReseller(Request $request)
     {
-        $cliente = DB::table('clientes')->where('ID',$request->id)->update(['auto' => $request->datos]);
+        $data = null;
+        $cliente = DB::table('clientes')->where('ID',$request->id)->first();
+        if ($request->datos == "bloq" || $cliente->auto == "bloq") {
+          $data = [
+            "clientes_id" => $request->id,
+            "Notas" => $request->datos == "bloq" ? "El cliente fue bloqueado" : "El cliente fue desbloqueado",
+            "Day" => date('Y-m-d H:i:s'),
+            "usuario" => session()->get('usuario')->Nombre
+          ];
+        }
+        DB::table('clientes')->where('ID',$request->id)->update(['auto' => $request->datos]);
+
+        if ($data)
+          DB::table('clientes_notas')->insert($data);
 
         return Response()->json('ola k ase');
     }
