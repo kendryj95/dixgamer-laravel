@@ -19,10 +19,10 @@
           
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Stock</th>
-                  <th>Notas</th>
                   <th>Fecha</th>
+                  <th>Stock</th>
+                  <th>Cta ID</th>
+                  <th>Notas</th>
                   <th>Operador</th>
                 </tr>
               </thead>
@@ -35,29 +35,23 @@
                       <tr>
           
                         <td>
-                            {{ $stock->ID }}
+                            {{ $stock->Day }}
                         </td>
-          
+
                         <td>
-                            {{ $stock->stock_id }}
+                            {{ \Helper::strTitleStock($stock->titulo) }} ({{$stock->consola}})
                         </td>
+
+                        <td>
+                          <a href="{{url('cuentas',$stock->cuentas_id)}}"> {{$stock->cuentas_id}} </a>
+                        </td>
+                        
                         <td>
                           <div class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.9;"><i class="fa fa-comment fa-fw"></i> {!! $stock->Notas !!} </div>
                         </td>
-                        <td>
-                          @php
-                          $dia = date('d', strtotime($stock->Day));
-                          $mes = date('n', strtotime($stock->Day));
-                          $mes = \Helper::getMonthLetter($mes);
-                          $anio = date('Y', strtotime($stock->Day));
-                          $fecha = "$dia-$mes-$anio";
-                          @endphp
-                          
-                          {{ $fecha }}
-                        </td>
           
                         <td class="text-center">
-                          <span class="badge badge-{{ $stock->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$stock->usuario}}">{{ substr($stock->usuario,0 , 1) }}</span>
+                          <span class="badge badge-{{ $stock->color_user }}" style="opacity:0.7; font-weight:400;" title="{{$stock->usuario}}">{{ $stock->usuario }}</span>
                         </td>
           
           

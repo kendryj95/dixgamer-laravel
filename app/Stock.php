@@ -259,7 +259,7 @@ class Stock extends Model
     
     public function ScopeStockNotesList($query,$obj){
         $query = DB::table('stock_notas AS sn')
-        ->select('sn.*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = sn.usuario) AS color_user"))
+        ->select('sn.*','s.cuentas_id','s.titulo','s.consola', DB::raw("(SELECT color FROM usuarios WHERE Nombre = sn.usuario) AS color_user"))
         ->join('stock AS s','sn.stock_id','=','s.ID');
 
         if (!empty($obj->column) && !empty($obj->word)) {
