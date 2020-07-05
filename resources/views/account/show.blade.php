@@ -598,7 +598,7 @@
 												type="button">
 												Si, seguro!
 											</button>
-											@if (($account->days_from_reset === null) || ($account->days_from_reset > 180))
+											@if (($account->days_from_reset === null) || ($account->days_from_reset > 183))
 											<button
 												class="btn btn-success btn-block"
 												title="Recuperar secu con reseteo"
@@ -618,7 +618,7 @@
 								 
 							 @endif
 
-							  @if (($account->days_from_reset === null) || ($account->days_from_reset > 180))
+							  @if (($account->days_from_reset === null) || ($account->days_from_reset > 183))
 								@foreach ($btnRecup as $tipo => $item)
 									@if ($item['ver'] === true && $tipo != 'secu')
 										<div class="dropdown pull-left" style="margin-bottom: 2px">
