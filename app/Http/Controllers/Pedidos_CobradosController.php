@@ -21,6 +21,8 @@ class Pedidos_CobradosController extends Controller
                     if (intval($filtro)) {
                         $condicion = " and post_id=$filtro";
                         $cliente = $this->consultarPedido($filtro);
+                        if (count($cliente) > 0)
+                            return redirect("clientes/{$cliente[0]->clientes_id}?order=$filtro");
                     } else {
                         $condicion2 = " where clientes.email LIKE '%$filtro%'";
                     }

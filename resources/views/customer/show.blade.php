@@ -31,6 +31,12 @@
           </div>
     @endif
 
+    @if (isset($_GET['order']) && $_GET['order'] != '')
+        <div class="alert alert-success text-center">
+          Filtrando el Pedido #{{$_GET['order']}}
+        </div>
+    @endif
+
 
       <div class="row clientes_detalles">
 
@@ -628,8 +634,8 @@
               @endif
 
               @if($dataCustomer->order_id_web)
-                <span class="badge badge-normal" style="font-weight:400; font-size: 0.8em; color:#000">
-                  Ped #<?php echo $dataCustomer->order_id_web;?>
+                <span class="badge @if(isset($_GET['order']) && $_GET['order'] != '' && $_GET['order'] == $dataCustomer->order_id_web) badge-warning @else badge-normal @endif" style="font-weight:400; font-size: 0.8em; color:#000;">
+                  Ped #{{$dataCustomer->order_id_web}}
                   <a
                     target="_blank"
                     href="https://dixgamer.com/wp-admin/post.php?post=<?php echo $dataCustomer->order_id_web;?>&amp;action=edit"
