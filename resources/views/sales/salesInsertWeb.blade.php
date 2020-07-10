@@ -62,6 +62,13 @@
 				
 				<?php $insertGoTo = url('asignar_producto') . "?order_item_id=$venta->order_item_id";?>
 				<a title="Asignar" class="btn btn-default pull-right" type="button" data-target=".new-example-modal-lg" onClick='document.getElementById("ifr2").src="<?php echo $insertGoTo; ?>";'><i class="fa fa-gamepad" aria-hidden="true"></i> Asignar Otro Producto</a>
+
+				<br><br>
+
+				<span class="pull-right">No olvides buscar stock disponible en la @if ($consola == "ps4") <a href="{{url('sales/recupero')}}?column=titulo&word={{$titulo}}&enviar=Buscar">lista de recuperos</a> @elseif($consola == "ps3") <a href="{{url('home')}}#reset">lista de reseteos</a> @endif</span>
+
+				<br>
+
 				<div class="row">
 						<!-- Large modal -->
 						<div class="new-example-modal-lg" tabindex="-1" aria-labelledby="myLargeModalLabel">

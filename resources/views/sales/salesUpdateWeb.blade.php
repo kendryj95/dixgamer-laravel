@@ -47,6 +47,10 @@
 			
 			<?php $insertGoTo = url('customer_ventas_modificar_producto', $venta->ID); ?>
 			<a title="Asignar" class="btn btn-default pull-right" type="button" href="javascript:;" data-toggle="modal" data-target=".modalVentas" onclick='getPageAjax("{{ url('customer_ventas_modificar_producto') }}", "#modalVentas", {{ $venta->ID }})'><i class="fa fa-gamepad" aria-hidden="true"></i> Asignar Otro Producto</a>
+
+			<br><br>
+
+			<span class="pull-right">No olvides buscar stock disponible en la @if ($consola == "ps4") <a href="{{url('sales/recupero')}}?column=titulo&word={{$titulo}}&enviar=Buscar">lista de recuperos</a> @elseif($consola == "ps3") <a href="{{url('home')}}#reset">lista de reseteos</a> @endif</span>
 			
 			
 		</div>
