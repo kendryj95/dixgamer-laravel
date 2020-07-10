@@ -172,6 +172,8 @@ class CustomerController extends Controller
 
       $ventas_notas = $this->buildNotesSales($id_ventas);
 
+      $venta_plus_sec = $this->customerWithSalesPlusSecund($id);
+
       return view('customer.show',compact(
         'customer',
         'dataCustomers',
@@ -180,8 +182,22 @@ class CustomerController extends Controller
         'expensesIncome',
         'customerNotes',
         'ventas_notas',
-        'othersEmails'
+        'othersEmails',
+        'venta_plus_sec'
       ));
+    }
+
+    private function customerWithSalesPlusSecund($id_cliente)
+    {
+      return DB::table(DB::raw("(
+        SELECT v.clientes_id FROM ventas v INNER JOIN stock s ON s.ID = v.stock_id WHERE (`titulo` LIKE '%plus%' AND v.slot = 'Secundario' AND v.clientes_id = $id_cliente)
+        UNION ALL
+        SELECT v.clientes_id FROM ventas v INNER JOIN stock s ON s.ID = v.stock_id WHERE (`titulo` NOT LIKE '%plus%' AND v.slot = 'Secundario' AND v.clientes_id = $id_cliente)
+        ) as r"))
+        ->select(DB::raw("COUNT(*) as ventas"),"r.clientes_id")
+        ->groupBy("r.clientes_id")
+        ->having('ventas', '>', 1)
+        ->first();
     }
 
     private function buildNotesSales($idsVentas, $others = false) 
