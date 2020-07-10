@@ -1511,7 +1511,7 @@ class CustomerController extends Controller
                                 'cuentas_id',
                                 'c.*'
                               )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
                                 FROM ventas
                                 LEFT JOIN
                                 clientes
@@ -1523,7 +1523,7 @@ class CustomerController extends Controller
           $row_rsCuenta = DB::table('cuentas')->select('ID','mail_fake','pass')->where('ID',$cuentas_id)->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
@@ -1545,7 +1545,7 @@ class CustomerController extends Controller
                                 'cuentas_id',
                                 'c.*'
                               )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
                                 FROM ventas
                                 LEFT JOIN
                                 clientes
@@ -1555,7 +1555,7 @@ class CustomerController extends Controller
                               ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
@@ -1575,7 +1575,7 @@ class CustomerController extends Controller
                                 'cuentas_id',
                                 'c.*'
                               )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
                                 FROM ventas
                                 LEFT JOIN
                                 clientes
@@ -1585,7 +1585,7 @@ class CustomerController extends Controller
                               ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
@@ -1606,7 +1606,7 @@ class CustomerController extends Controller
                                 'cuentas_id',
                                 'c.*'
                               )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email
+                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
                                 FROM ventas
                                 LEFT JOIN
                                 clientes
@@ -1616,7 +1616,7 @@ class CustomerController extends Controller
                               ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') #' . $row_rsClient->clientes_id . '-' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
