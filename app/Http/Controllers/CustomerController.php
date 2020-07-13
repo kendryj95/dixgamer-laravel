@@ -190,9 +190,9 @@ class CustomerController extends Controller
     private function customerWithSalesPlusSecund($id_cliente)
     {
       return DB::table(DB::raw("(
-        SELECT v.clientes_id FROM ventas v INNER JOIN stock s ON s.ID = v.stock_id WHERE (`titulo` LIKE '%plus%' AND v.slot = 'Secundario' AND v.clientes_id = $id_cliente)
+        (SELECT v.clientes_id FROM ventas v INNER JOIN stock s ON s.ID = v.stock_id WHERE (`titulo` LIKE '%plus%' AND v.slot = 'Secundario' AND v.clientes_id = $id_cliente) LIMIT 1)
         UNION ALL
-        SELECT v.clientes_id FROM ventas v INNER JOIN stock s ON s.ID = v.stock_id WHERE (`titulo` NOT LIKE '%plus%' AND v.slot = 'Secundario' AND v.clientes_id = $id_cliente)
+        (SELECT v.clientes_id FROM ventas v INNER JOIN stock s ON s.ID = v.stock_id WHERE (`titulo` NOT LIKE '%plus%' AND v.slot = 'Secundario' AND v.clientes_id = $id_cliente) LIMIT 1)
         ) as r"))
         ->select(DB::raw("COUNT(*) as ventas"),"r.clientes_id")
         ->groupBy("r.clientes_id")
@@ -1539,7 +1539,7 @@ class CustomerController extends Controller
           $row_rsCuenta = DB::table('cuentas')->select('ID','mail_fake','pass')->where('ID',$cuentas_id)->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
@@ -1571,7 +1571,7 @@ class CustomerController extends Controller
                               ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
@@ -1601,7 +1601,7 @@ class CustomerController extends Controller
                               ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;
@@ -1632,7 +1632,7 @@ class CustomerController extends Controller
                               ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
-          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock;
+          $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
 
           $correo = $row_rsClient->email;
           $nombre = $row_rsClient->nombre . ' ' . $row_rsClient->apellido;

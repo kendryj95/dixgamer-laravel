@@ -779,7 +779,7 @@
 
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq" || $venta_plus_sec) disabled @endif"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Gift')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -793,7 +793,7 @@
               @elseif( ($dataCustomer->consola === "ps") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'plus-') !== false)))
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq" || $venta_plus_sec) disabled @endif"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Plus')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -806,7 +806,7 @@
               @elseif ( ($dataCustomer->consola === "fifa-points") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'ps4') !== false)))
 
                 <button
-                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq" || $venta_plus_sec) disabled @endif"
+                  class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
                   onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'FifaPoints')">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
@@ -820,7 +820,7 @@
 
                 <!--- aca entran los mails de juegos y ps plus slot pri y secu -->
                   <button
-                    class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq" || $venta_plus_sec) disabled @endif"
+                    class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                     type="button"
                     onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}')">
                     <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
