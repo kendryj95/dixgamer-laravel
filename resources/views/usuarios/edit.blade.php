@@ -45,6 +45,11 @@
             </select>
           </div>
 
+          <div class="input-group form-group">
+            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+            <input class="form-control" type="text" name="nombre_visible" id="nombre_visible" autocomplete="off" spellcheck="false" placeholder="Nombre Visible" value="{{$usuarios->nombre_visible}}">
+          </div>
+
           <label for="color">Asignar color</label>
           <div class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-paint-brush fa-fw"></i></span>

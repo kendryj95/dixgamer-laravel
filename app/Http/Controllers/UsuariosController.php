@@ -36,7 +36,7 @@ class UsuariosController extends Controller
     	DB::beginTransaction();
 
     	try {
-    		DB::insert("INSERT INTO usuarios VALUES (null,?,?,?,null,?)", [$request->nombre, \Hash::make($request->password), $request->level, $request->color]);
+    		DB::insert("INSERT INTO usuarios VALUES (null,?,?,?,?,null,?)", [$request->nombre, \Hash::make($request->password), $request->level, $request->nombre_visible, $request->color]);
     		DB::commit();
 
     		// Mensaje de notificacion
@@ -95,7 +95,7 @@ class UsuariosController extends Controller
 
         if ($request->password == $request->old_pass) {
             try {
-                DB::update("UPDATE usuarios SET Level=?, color=? WHERE ID=?", [$level, $color, $id]);
+                DB::update("UPDATE usuarios SET Level=?, color=?, nombre_visible=? WHERE ID=?", [$level, $color, $request->nombre_visible, $id]);
                 DB::commit();
 
                 // Mensaje de notificacion
@@ -108,7 +108,7 @@ class UsuariosController extends Controller
             }
         } else {
             try {
-                DB::update("UPDATE usuarios SET Contra=?, Level=?, color=? WHERE ID=?", [$password, $level, $color, $id]);
+                DB::update("UPDATE usuarios SET Contra=?, Level=?, color=?, nombre_visible=? WHERE ID=?", [$password, $level, $color, $request->nombre_visible, $id]);
                 DB::commit();
 
                 // Mensaje de notificacion

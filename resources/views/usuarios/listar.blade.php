@@ -25,6 +25,7 @@
         <tr>
           <th>#</th>
           <th>Nombre</th>
+          <th>Nombre Visible</th>
           <th>Level</th>
           <th>Acción</th>
         </tr>
@@ -44,6 +45,10 @@
               <td>
                   <span class="label label-{{$usuario->color}}">{{ $usuario->Nombre }}</span>
               </td>
+              
+              <td>
+                  <span class="label label-{{$usuario->color}}">{{ $usuario->nombre_visible }}</span>
+              </td>
 
               <td>
                   {{ $usuario->Level }}
@@ -59,7 +64,7 @@
 
         @else
           <tr>
-            <td colspan = '10' class="text-center">No se encontraron datos</td>
+            <td colspan = '5' class="text-center">No se encontraron datos</td>
           </tr>
         @endif
 
