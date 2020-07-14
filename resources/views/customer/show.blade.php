@@ -217,16 +217,16 @@
                   <i class="fa fa-snapchat-ghost fa-fw"></i> ML
               </button>
             @endif
-                <div class="dropdown pull-right" title="" style="display: inline-block;">
-                  <button class="btn @if ($customer->auto != 'bloq') btn-default @else btn-danger @endif btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    @if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif
-                  </button>
-                  <ul style="" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li class="dropdown-header">¿@if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif cliente?</li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#!" id="bloq" data-customer="{{ $customer->ID }}" data-update="{{ $customer->auto != 'bloq' ? 'bloq' : 'no' }}" type="button" class="btn btn-danger btn-xs">Sí, @if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif</a></li>
-                  </ul>
-                </div>
+
+                <button
+                  id="addNotesBloqueo"
+                  data-customer="{{ $customer->ID }}"
+                  class="btn btn-xs @if ($customer->auto != 'bloq') btn-default @else btn-danger @endif pull-right"
+                  type="button"
+                  data-toggle="modal"
+                  data-target="#agregarNotaBloqueoModal">
+                  @if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif
+                </button>
             
                 @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                     @if($customer->auto != 're')
@@ -1325,6 +1325,32 @@
                 </div>
             </div>
         </div>
+        
+        <div class="modal fade" id="agregarNotaBloqueoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document" style="top:40px;">
+                <div class="modal-content">
+                    
+                    <div class="modal-body" style="color: black !important;text-align:center;padding:10px;">
+
+                      <div class="container">
+                        <h1 style="color:#000">@if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif - Cliente #{{$customer->ID}}</h1>
+                        <div class="row">
+
+                            <div class="input-group form-group">
+                              <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
+                              <textarea class="form-control" autofocus rows="4" id="notaClienteBloqueo" style="font-size: 22px;" placeholder="Explique brevemente porqué va a @if ($customer->auto != "bloq") bloquear @else desbloquear @endif a este cliente"></textarea>
+
+                            </div>
+                            <input type="hidden" id="idcustomer" value="">
+                            <button class="btn btn-block @if ($customer->auto != 'bloq') btn-default @else btn-danger @endif" id="bloq" data-update="{{ $customer->auto != 'bloq' ? 'bloq' : 'no' }}" type="button">@if ($customer->auto != "bloq") Bloquear @else Desbloquear @endif</button>
+
+                        </div>
+                      </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="editarCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document" style="top:40px;">
@@ -1529,12 +1555,12 @@
         
         $('#bloq').on('click', function (e) {
 
-            var id = $('#bloq').data('customer');
+            var id = $('#idcustomer').val();
+            var nota = $('#notaClienteBloqueo').val();
             var token = $('#token').val();
             var datos = $('#bloq').data('update');
-            console.log(id);
             $.ajax({
-                data: { '_token':token, 'id':id, 'datos':datos },
+                data: { '_token':token, 'id':id, 'datos':datos, 'nota': nota },
                 method: 'post',
                 dataType: 'json',
                 url: '{{url('updateStatusReseller')}}',
@@ -1756,6 +1782,12 @@
                     location.reload();
                 }
             });
+        });
+        
+        $('#addNotesBloqueo').on('click',function (e) {
+            var ID = $('#addNotesBloqueo').data('customer');
+            $('.modal-body #idcustomer').val(ID);
+
         });
 
        $('#agregaFacebook').on('click',function(e){

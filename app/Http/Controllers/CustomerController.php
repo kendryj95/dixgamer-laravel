@@ -329,7 +329,7 @@ class CustomerController extends Controller
         if ($request->datos == "bloq" || $cliente->auto == "bloq") {
           $data = [
             "clientes_id" => $request->id,
-            "Notas" => $request->datos == "bloq" ? "El cliente fue bloqueado" : "El cliente fue desbloqueado",
+            "Notas" => $request->datos == "bloq" ? "El cliente fue bloqueado porque ".$request->nota : "El cliente fue desbloqueado porque ".$request->nota,
             "Day" => date('Y-m-d H:i:s'),
             "usuario" => session()->get('usuario')->Nombre
           ];
