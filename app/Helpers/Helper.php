@@ -270,7 +270,7 @@ class Helper
 
     public static function operatorsRecoverSecu($usuario)
     {
-      $operators = ['Javier','Marcelo','Enzo','Roman','Alfredo', 'Hector', 'Luis', 'Saul','Kesler'];
+      $operators = ['Euge_2','Enri_2','Fran_2','Leo_2','Fran_1', 'Leo_1', 'Enri_1', 'Euge_1','Beti_1'];
 
       if (in_array($usuario, $operators)) {
         return true;
@@ -281,7 +281,7 @@ class Helper
 
     public static function operatorsRecoverPri($usuario)
     {
-      $operators = ['Kendry','Alfredo', 'Hector', 'Luis', 'Saul','Kesler'];
+      $operators = ['Kendry','Fran_1', 'Leo_1', 'Enri_1', 'Euge_1','Beti_1'];
 
       if (in_array($usuario, $operators)) {
         return true;
@@ -295,9 +295,9 @@ class Helper
       $operators = [];
 
       if ($tipo == 'Secu') {
-        $operators = ['Kendry','Javier','Marcelo','Enzo','Roman','Alfredo', 'Hector', 'Luis', 'Saul','Kesler'];
+        $operators = ['Kendry','Euge_2','Enri_2','Fran_2','Leo_2','Fran_1', 'Leo_1', 'Enri_1', 'Euge_1','Beti_1'];
       } elseif($tipo == 'Pri') {
-        $operators = ['Kendry','Alfredo', 'Hector', 'Luis', 'Saul','Kesler'];
+        $operators = ['Kendry','Fran_1', 'Leo_1', 'Enri_1', 'Euge_1','Beti_1'];
       }
 
       return $operators;

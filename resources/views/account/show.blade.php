@@ -1402,7 +1402,7 @@
 						Contraseña: {{ $account->pass }} <br><br>
 
 						{!! html_entity_decode($oferta_fortnite) !!} <br>
-						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
+						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/></p>
 					</span>
 					</div>
 					
@@ -1416,7 +1416,7 @@
 						Contraseña: <?php echo $account->pass;?><br /><br />						
 						<!-- Aprovecho para contarte que nuestros paVos de Fortnite bajaron de precio, <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/">ver paVos baratos</a><br /><br /> -->
 						{!! html_entity_decode($oferta_fortnite) !!} <br>
-						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
+						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/></p>
 					</span>
 					</div>
 				</div>
