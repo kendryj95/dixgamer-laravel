@@ -1664,7 +1664,7 @@ class ControlsController extends Controller
                             $Q_Vta = $value->Q_Vta;
                             $costoxU = $value->costoxU;
                             
-							$costoxU = $costoxU * 1.25; //le recargo 25% por las dudas
+							$costoxU = $costoxU * 2; //le recargo 100% por las dudas
 							
                             $multiplier = 1;
                             if($Q_Vta > 0) { 
