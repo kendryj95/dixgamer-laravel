@@ -76,10 +76,17 @@ class AccountController extends Controller
       // Traer la lista de cuentas
       $accounts = Account::accountAmounts($request->console, $orderBy, $range)->paginate(50);
 
+      $dominios_excluidos = DB::table('configuraciones')->where('ID',1)->value('dominios_excluidos');
+      $dominios_excluidos = explode(",",$dominios_excluidos);
+      $dominios_excluidos = array_map(function($val) {
+        return str_replace('"','',$val);
+      }, $dominios_excluidos);
+
       return view('account.index_amount',
                   compact(
                     'accounts',
-                    'range'
+                    'range',
+                    'dominios_excluidos'
                   ));
     }
 

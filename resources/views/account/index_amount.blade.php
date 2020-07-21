@@ -1,10 +1,10 @@
 @extends('layouts.master-layouts')
 
-@section('title', 'Cuentas on Saldo libre')
+@section('title', 'Listar Cuentas con Saldo libre')
 
 @section('container')
 <div class="container">
-  <h1>Listar cuentas</h1>
+  <h1>Listar Cuentas con Saldo libre</h1>
 
   @php
 
@@ -17,6 +17,15 @@
   @endphp
   
   <div class="row">
+    <div class="col-md-12">
+      <h4>Dominios Excluidos</h4>
+      @foreach ($dominios_excluidos as $i => $value)
+        <span class="label label-normal">{{($i+1)}}. {{$value}}</span>
+      @endforeach
+
+    <hr>
+
+    </div>
     <div class="col-md-3">
       <a class="btn @if(!isset($_GET['console'])) btn-success @else btn-default @endif btn-sm" href="cuentas_con_saldo" title="Todos" style="margin:5px 0 0 0;">Todos</a>
       <a class="btn @if(isset($_GET['console']) && $_GET['console'] == 'ps3') btn-success @else btn-default @endif btn-sm" href="cuentas_con_saldo?console=ps3{{$queryParams}}" title="Libres para PS4" style="margin:5px 0 0 0;">Libres para PS4</a>

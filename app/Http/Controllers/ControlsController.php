@@ -805,7 +805,7 @@ class ControlsController extends Controller
             "menu6" => "Productos Excluidos",
             "menu7" => "Dominios para Ctas",
             "menu8" => "Productos Excluidos Recupero",
-            "menu9" => "Dominios excluidos para GC"
+            "menu9" => "Dominios excluidos para TC"
         ];
         asort($options);
 
