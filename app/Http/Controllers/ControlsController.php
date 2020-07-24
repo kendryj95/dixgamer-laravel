@@ -1683,6 +1683,8 @@ class ControlsController extends Controller
 							if($new_price < 1.5) { $new_price = 1.5;}
                             
                             if($new_price > ($precio_base * 1.1)) { $new_price = ($precio_base * 1.1);} 
+							
+							$new_price = round($new_price,2); // 2020-07-22 redondeo new price
                             
 							//redondeo resultado
                             //$new_price = (round($new_price, 0)/5); 
