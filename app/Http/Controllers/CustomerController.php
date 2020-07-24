@@ -792,7 +792,7 @@ class CustomerController extends Controller
       }
     }
 
-    public function ventasModificarProductosStore($consola, $titulo, $slot, $id_ventas)
+    public function ventasModificarProductosStore(Request $request, $consola, $titulo, $slot, $id_ventas)
     {
       
       $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
@@ -841,6 +841,7 @@ class CustomerController extends Controller
           $datos['titulo'] = $titulo;
           $datos['slot'] = $slot;
           $datos['tipo'] = "Reasignar";
+          $datos['cliente'] = $existEmailCliente;
           
           Mail::send('emails.sin_stock', $datos, function($message) use ($venta,$consola,$titulo,$slot)
           {
