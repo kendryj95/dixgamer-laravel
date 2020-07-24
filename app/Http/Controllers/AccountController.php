@@ -1321,10 +1321,15 @@ class AccountController extends Controller
           $mensaje = 'Intento recuperar pri satisfactoriamente.';
           $this->intentoRecuperarPri($id);
           $this->updatePassRecu($id, "pri");
-        } elseif ($recup == 'secu' || $recup == 'secu_reset') {
+        } elseif ($recup == 'secu' || $recup == 'secu_reset' || $recup == 'secu_domexclu') {
           $mensaje = 'Intento recuperar secu satisfactoriamente.';
           $this->intentoRecuperarSecu($id);
-          $this->updatePassRecu($id, "recu");
+          if ($recup == 'secu' || $recup == 'secu_reset') {
+            $this->updatePassRecu($id, "secu");
+          } else {
+            $this->changeEmailFakeDomain($id);
+          }
+          
         } elseif ($recup == 'conj') {
           $mensaje = 'Intento recuperar pri y secu satisfactoriamente.';
           $this->intentoRecuperarPri($id);
@@ -1344,7 +1349,32 @@ class AccountController extends Controller
 
     }
 
+    private function changeEmailFakeDomain($account_id)
+    {
+      $email_fake = DB::table('cuentas')->where('ID',$account_id)->value('mail_fake');
+      $dominio_hab = DB::table('dominios')->where('indicador_habilitado',1)->value('dominio');
+      list($user_mail, $dominio) = explode("@",$email_fake);
+      $new_email_fake = $user_mail . "@" . $dominio_hab;
 
+      DB::beginTransaction();
+
+      try {
+        DB::table('cuentas')->where('ID',$account_id)->update(['mail_fake' => $new_email_fake]);
+
+        $nota = "Email Fake ha cambiado de $email_fake a $new_email_fake";
+
+        $data['cuentas_id'] = $account_id;
+        $data['Notas'] = $nota;
+        $data['Day'] = date('Y-m-d H:i:s');
+        $data['usuario'] = session()->get('usuario')->Nombre;
+
+        DB::table('cuentas_notas')->insert($data);
+
+        DB::commit();
+      } catch (\Exception $th) {
+        DB::rollback();
+      }
+    }
 
     public function rollbackBalance(Request $request){
       // Mensajes de alerta

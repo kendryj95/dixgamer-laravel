@@ -608,6 +608,16 @@
 												Si, con reseteo!
 											</button>
 											@endif
+											@if ($dom_excluido)
+											<button
+												class="btn btn-default btn-block"
+												title="Recuperar secu con cambio dominio"
+												id="resetear_domexclu"
+												onclick="reset_recup('secu_domexclu', this)"
+												type="button">
+												Cambio Dominio
+											</button>
+											@endif
 										</form>
 									</li>
 								</ul>
@@ -1550,7 +1560,10 @@
 			if (tipo == 'secu_reset') {
 				tipo_recu = 'secu';
 				$('#form_resetear_secu').attr('action',"{{url('resetear_cuenta',[$account->ID,'secu_reset'])}}")
-			} else if (tipo == 'reset_pass') {
+			} else if (tipo == 'secu_domexclu') {
+				tipo_recu = 'secu';
+				$('#form_resetear_secu').attr('action',"{{url('resetear_cuenta',[$account->ID,'secu_domexclu'])}}")
+			}  else if (tipo == 'reset_pass') {
 				tipo_recu = 'reset';
 				$('#form_resetear_reset').attr('action',"{{url('resetear_cuenta',[$account->ID,'reset_pass'])}}")
 			} else {
