@@ -991,6 +991,15 @@ ORDER BY libre DESC";
       return view('stock.index_list_cm_detail',compact('datos','code','total','control'));
     }
 
+    public function deleteCM(Request $request)
+    {
+      DB::table($request->tabla)->delete(['ID' => $request->id]);
+
+      \Helper::messageFlash('Stock',"El registro se ha eliminado correctamente.");
+
+      return redirect()->back();
+    }
+
     public function controlarCode(Request $request) 
     {
       // Mensajes de alerta

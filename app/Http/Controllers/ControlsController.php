@@ -997,11 +997,11 @@ class ControlsController extends Controller
         $cantidad = 0;
         foreach ($datos as $i => $value) {
             $cantidad += $value->Q;
-            $precio += $value->precio;
+            $precio += $value->precio_total;
         }
         $data['grafica'] = $datos;
         $data['total_qty'] = $cantidad;
-        $data['total_price'] = number_format($precio,2,".","");
+        $data['total_price'] = number_format(($precio/$cantidad),2,".","");
 
         echo json_encode($data);
     }
@@ -1013,6 +1013,7 @@ class ControlsController extends Controller
             DB::raw("COUNT(*) AS Q"),
             DB::raw("DATE(ventas.Day) as Day"),
             DB::raw('(SUM(precio)/COUNT(*)) as precio'),
+            DB::raw('(SUM(precio)) as precio_total'),
             'ventas.slot',
             'stock.titulo',
             'stock.consola'

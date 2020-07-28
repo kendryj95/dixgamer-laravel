@@ -38,6 +38,15 @@
                      <option value="mes">Mes</option>
                  </select>
              </div>
+             
+             <div class="form-group col-md-2">
+                 <label for="fecha_ejex">Fechas eje X por:</label>
+                 <select name="fecha_ejex" id="fecha_ejex" onchange="getData()" class="form-control input-sm">
+                     <option value="dia" selected>Día</option>
+                     <option value="semana">Semana</option>
+                     <option value="mes">Mes</option>
+                 </select>
+             </div>
 
              <div class="form-group col-md-2">
                  <label for="agrupar">Fecha Inicio:</label>
@@ -121,6 +130,17 @@
       max_cant: max_cant
     };
 
+    var stepUnit = 1;
+    var fecha_ejex = $('#fecha_ejex').val();
+
+    if (fecha_ejex == 'dia') {
+      stepUnit = 1;
+    } else if (fecha_ejex == 'semana') {
+      stepUnit = 7;
+    } else if (fecha_ejex == 'mes') {
+      stepUnit = 30;
+    }
+
     var myChart = new Chart(elem, {
         type: 'line',
         data: {
@@ -174,7 +194,7 @@
                         displayFormats: {
                           'day': 'DD-MM-YYYY',
                         },
-                        stepSize: 1,
+                        stepSize: stepUnit,
                         unit: 'day',
                     },
                     gridLines : {

@@ -76,6 +76,7 @@
           
               <thead>
                 <tr>
+                  <th></th>
                   <th>Stk ID</th>
                   <th>Titulo</th>
                   <th>Costo USD</th>
@@ -95,6 +96,33 @@
           
                       <tr>
           
+                        <td>
+                          <div class="dropdown" style="display:inline;">
+                            <button
+                              class="btn btn-danger dropdown-toggle btn-xs"
+                              type="button"
+                              id="dropdownMenu4"
+                              data-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false">
+                              <i class="fa fa-fw fa-trash-o"></i>
+                            </button>
+        
+                            <ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu4">
+                              <li class="dropdown-header">¿Eliminar?</li>
+                              <li role="separator" class="divider"></li>
+                              <li>
+                                <form action="{{ url('delete_cm') }}" method="post">
+                                  {{ csrf_field() }}
+                                  <input type="hidden" name="id" value="{{$stock->ID_key}}">
+                                  <input type="hidden" name="tabla" value="{{$stock->tabla}}">
+                                  <button type="submit" class="btn btn-danger btn-block">Si, seguro!</button>
+                                </form>
+        
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
                         <td>
                             {{ $stock->stk_ID }}
                         </td>
