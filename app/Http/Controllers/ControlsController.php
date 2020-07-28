@@ -993,7 +993,17 @@ class ControlsController extends Controller
 
         $datos = $this->getDatosEvolucion($filters)->get();
 
-        echo json_encode($datos);
+        $precio = 0;
+        $cantidad = 0;
+        foreach ($datos as $i => $value) {
+            $cantidad += $value->Q;
+            $precio += $value->precio;
+        }
+        $data['grafica'] = $datos;
+        $data['total_qty'] = $cantidad;
+        $data['total_price'] = number_format($precio,2,".","");
+
+        echo json_encode($data);
     }
 
     private function getDatosEvolucion($filter)

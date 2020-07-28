@@ -73,6 +73,11 @@
 
      <div style="margin-top: 20px" class="row">
       {{-- <div class="col-lg-1"></div> --}}
+      <div class="col-md-12">
+        <span class="pull-right">Precio promedio: <span id="total_price" class="label label-danger">0</span></span>
+        <br>
+        <span class="pull-right">Cantidad total: <span id="total_qty" class="label label-info">0</span></span>
+      </div>
        <div id="graph-container" class="col-lg-12">
          <canvas id="myChart" width="200" height="120"></canvas>
        </div>
@@ -86,7 +91,8 @@
 
 @section('scripts')
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.bundle.min.js"></script>
 <script type="text/javascript">
   var ctx = document.getElementById('myChart');
   var resetCanvas = function(){
@@ -163,25 +169,12 @@
                   }
                 ],
                 xAxes: [{
-                    ticks: {
-                        /*min: '2017-07-01',
-                        max: '2020-07-31',
-                        source: 'data'*/
-                        autoSkip : true,
-                    },
+                    type: 'time',
                     time: {
                         displayFormats: {
-                          'millisecond': 'DD MMM',
-                          'second': 'DD MMM',
-                          'minute': 'DD MMM',
-                          'hour': 'DD MMM',
-                          'day': 'DD MMM',
-                          'week': 'DD MMM',
-                          'month': 'DD MMM',
-                          'quarter': 'DD MMM',
-                          'year': 'DD MMM',
+                          'day': 'DD-MM-YYYY',
                         },
-                        unitStepSize: 1,
+                        stepSize: 1,
                         unit: 'day',
                     },
                     gridLines : {
@@ -203,10 +196,12 @@
       dataType: 'json',
       data: params,
       success: function (response){
-        var datos = response;
+        var datos = response.grafica;
         var labels = [];
         var data = [];
         var data2 = [];
+        $('#total_qty').text(response.total_qty);
+        $('#total_price').text("$"+response.total_price);
 
         datos.forEach(function(value){
           let l = value.Day;
