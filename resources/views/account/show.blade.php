@@ -1394,14 +1394,14 @@
 
 						{!! html_entity_decode($oferta_fortnite) !!} <br>
 						
-						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
+						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/></p>
 					</span>
 					
 					<span id="avisopri-copy{{$sc->clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>{{ $sc->nombre }}, necesitamos que nos confirme si está usando su juego {{ strtoupper(str_replace("-"," ",$sc->titulo)) }} y si puede usarlo con normalidad. Tuvimos un error de sistema y si no puede jugar queremos ayudarle a solucionar.<br /><br />
 
 						{!! html_entity_decode($oferta_fortnite) !!} <br>
 						
-						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
+						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/></p>
 					</span>
 					</div>
 
