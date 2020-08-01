@@ -14,6 +14,7 @@ use DB;
 use Validator;
 use Auth;
 use Schema;
+use Mail;
 
 class AccountController extends Controller
 {
@@ -2748,6 +2749,41 @@ class AccountController extends Controller
       \Helper::messageFlash('Cuentas',"Nota de Fornite comprado agregada.",'alert_cuenta');
 
       return redirect()->back();
+    }
+
+    public function emailMsjReactPass($type, $cliente_id, $account_id, $id_venta, $id_stock)
+    {
+      $cliente = DB::table('clientes')->where('ID',$cliente_id)->first();
+      $account = DB::table('cuentas')->where('ID',$account_id)->first();
+      $sales = DB::table('ventas')->where('ID',$id_venta)->first();
+      $stock = DB::table('stock')->where('ID',$id_stock)->first();
+
+      $correo = $cliente->email;
+      $nombre = $cliente->nombre . " " . $cliente->apellido;
+      $subject = "";
+      
+      if (strpos($type,"msj") !== false) {
+        $subject = "🔥 [Nuevos Datos] ".\Helper::strTitleStock($stock->titulo)." ({$stock->consola}) (wc-{$sales->order_id_web}-s$id_stock)";
+      } elseif (strpos($type,"btns") !== false) {
+        $subject = "🔥 [Información Importante] ".\Helper::strTitleStock($stock->titulo)." ({$stock->consola}) (wc-{$sales->order_id_web}-s$id_stock)";
+      }
+
+      $data = [
+        "cliente" => $cliente,
+        "account" => $account,
+        "oferta_fortnite" => DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite')
+        ];
+
+      try {
+        Mail::send("emails.$type", $data, function($message) use ($correo,$nombre,$subject)
+        {
+            $message->to($correo, $nombre)->subject($subject);
+        });
+
+        return response()->json(["status" => "success"]);
+      } catch (\Exception $e) {
+        return response()->json(["status" => "error", "message" => $e->getMessage()]);
+      }
     }
 
 }
