@@ -2763,14 +2763,15 @@ class AccountController extends Controller
       $subject = "";
       
       if (strpos($type,"msj") !== false) {
-        $subject = "🔥 [Nuevos Datos] ".\Helper::strTitleStock($stock->titulo)." ({$stock->consola}) (wc-{$sales->order_id_web}-s$id_stock)";
+        $subject = "🔥 [Nuevos Datos] ".ucwords(\Helper::strTitleStock($stock->titulo))." ({$stock->consola}) (wc-{$sales->order_id_web}-s$id_stock)";
       } elseif (strpos($type,"btns") !== false) {
-        $subject = "🔥 [Información Importante] ".\Helper::strTitleStock($stock->titulo)." ({$stock->consola}) (wc-{$sales->order_id_web}-s$id_stock)";
+        $subject = "🔥 [Información Importante] ".ucwords(\Helper::strTitleStock($stock->titulo))." ({$stock->consola}) (wc-{$sales->order_id_web}-s$id_stock)";
       }
 
       $data = [
         "cliente" => $cliente,
         "account" => $account,
+        "stock" => $stock,
         "oferta_fortnite" => DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite')
         ];
 

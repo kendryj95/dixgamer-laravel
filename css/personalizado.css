@@ -163,3 +163,8 @@ top: 40%;
 color: white;
 }
 .modal-dialog{ margin: 60px auto;}
+
+.email-info {
+	border: none !important;
+	padding: 4px !important;
+}
