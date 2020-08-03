@@ -574,9 +574,9 @@ class CustomerController extends Controller
             $stock = Stock::find($request->stock);
 
             if ($stock) {
-              $validate_stock = DB::table('ventas')->where('stock_id',$request->stock)->where('slot',$request->slot)->first();
+              $validate_stock = Stock::StockDisponible($stock->consola,$stock->titulo, $request->slot);
 
-              if ($validate_stock)
+              if (!is_array($validate_stock))
                 return redirect()->back()->withErrors(['Opps! El Stock ID ya está relacionado a una venta.']);
             } else {
               return redirect()->back()->withErrors(['Opps! El Stock ID no existe.']);
