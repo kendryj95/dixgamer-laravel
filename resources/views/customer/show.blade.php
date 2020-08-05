@@ -1183,37 +1183,31 @@
         <div class="modal fade" id="modificarEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header" style="margin-left: auto; margin-right: auto; width: 300px;">
-                        <h5 class="modal-title" id="exampleModalLabel">Modificar Email</h5>
+                    <div class="modal-body" style="color: black !important;text-align:center;padding:10px">
 
-                    </div>
-                    <div class="modal-body" style="color: black !important;">
+                        <div class="container">
+                          <div class="row" style="margin-left: auto; margin-right: auto">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
+                              <h1>Modificar Email</h1>
 
-                        <div class="row" style="margin-left: auto; margin-right: auto; width: 300px;">
-                            <div class="card">
-                                <div class="card-header">
-                                </div>
-                                <div class="card-body">
+                              <div class="alert alert-danger" style="display:none" id="alert-email">
+                                <p>Correo electronico no valido.</p>
+                              </div>
+                              
+                              <label>Correo electrónico</label>
+                              {{-- <input type="text" class="form-control" id="correo_cliente" value=""> --}}
+                              <input type="hidden" id="idcustomer" value="">
 
-                                    <div class="alert alert-danger" style="display:none" id="alert-email">
-                                      <p>Correo electronico no valido.</p>
-                                    </div>
-
-                                    <div>
-                                        <label>Correo electrónico</label>
-                                        {{-- <input type="text" class="form-control" id="correo_cliente" value=""> --}}
-                                        <input type="hidden" id="idcustomer" value="">
-
-                                        <div id="user-result-div2" class="input-group form-group">
-                                          <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-                                          <input class="form-control" style="text-transform: lowercase;" type="text" name="correo_cliente" id="correo_cliente" autocomplete="off" spellcheck="false" placeholder="Email" autofocus>
-                                          <span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
-                                        </div>
-                                    </div>
-
-                                </div>
+                              <div id="user-result-div2" class="input-group form-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                                <input class="form-control" style="text-transform: lowercase;" type="text" name="correo_cliente" id="correo_cliente" autocomplete="off" spellcheck="false" placeholder="Email" autofocus>
+                                <span class="input-group-addon"><i id="user-result" class="fa fa-pencil" aria-hidden="true"></i></span>
+                              </div>
                             </div>
+                            <div class="col-md-3"></div>
 
+                        </div>
                         </div>
 
                     </div>
@@ -1682,7 +1676,7 @@
                       } else if(data.status == 505) {
                         $('#alert-email').html('<p>Este email ya lo estás usando como primario.</p>').fadeIn();
                       } else {
-                        $('#alert-email').html('<p>Este email ya existe.</p>').fadeIn();
+                        $('#alert-email').html('<p>Este email ya existe. Pertenece a #<a href="{{url("clientes")}}/'+data.id_cliente+'" class="alert-link">'+data.id_cliente+'</a></p>').fadeIn();
                       }
                   }
               });

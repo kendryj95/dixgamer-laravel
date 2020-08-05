@@ -36,6 +36,7 @@ class EditButtonsController extends Controller
     public function saveDataEmail(Request $request){
 
         $status = '';
+        $id_cliente = '';
 
         $prevName = DB::table('clientes')
             ->where('ID',$request->id)->first();
@@ -51,6 +52,7 @@ class EditButtonsController extends Controller
                     $status = 200;
                 } else {
                     $status = 500;
+                    $id_cliente = $check->clientes_id;
                 }
             } else {
                 DB::table('clientes')
@@ -75,7 +77,7 @@ class EditButtonsController extends Controller
             DB::table('clientes_email')->insert($data);
         }
 
-        echo json_encode(["status" => $status]);
+        echo json_encode(["status" => $status,"id_cliente" => $id_cliente]);
     }
 
     public function saveDataML(Request $request){
