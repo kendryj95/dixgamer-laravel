@@ -219,9 +219,11 @@
                             <span style="color: #e74c3c;">Si borras nuestro usuario perdés tu PS PLUS para jugar On-line.</span><br />
                             <span style="color:#999;font-size:12px;"><em>&#191;Soluci&#243;n? Volver a agregar el usuario a tu consola.</em></span>
                             <p style="color:#e74c3c;">RECORDAR QUE PARA JUGAR VAS A USAR TU USUARIO PERSONAL</p><p><strong>---</strong></p>
-                            <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga de un juego abr&#237; tu usuario</strong> &gt; Notificaciones &gt; Descargas. Hasta que no termine el total de la barra de descargar no vas a poder jugarlo completo.</p>
-                            <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
-                          <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu juego para siempre.</strong></p>
+                            @if (strpos($row_rsClient,'plus') === false)
+                                <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga de un juego abr&#237; tu usuario</strong> &gt; Notificaciones &gt; Descargas. Hasta que no termine el total de la barra de descargar no vas a poder jugarlo completo.</p>
+                                <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
+                            @endif
+                          <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu {{(strpos($row_rsClient,'plus') === false) 'juego' : 'Ps Plus'}} para siempre.</strong></p>
                           <p>&gt; &#191;Puedo activar m&#225;s de una cuenta principal en mi consola? Si podes tener hasta 16 cuentas principales al mismo tiempo.</p>
                           <p>&gt; &#191;Que significa activar como "Primario"? Que las descargas realizadas desde esta cuenta se van a poder utilizar desde todos los usuarios en tu PS4.</p>
                           <br />

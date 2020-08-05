@@ -220,9 +220,12 @@
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top:2px solid #efefef;">
                     	<tr>
                           <td align="justify" style="padding: 20px 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #666;">
-                                                        <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu juego para siempre.</strong></p>
-                            <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga de un juego abr&#237; tu usuario</strong> &gt; Notificaciones &gt; Descargas. Hasta que no termine el total de la barra de descargar no vas a poder jugarlo completo.</p>
-                            <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
+                                                        <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu {{(strpos($row_rsClient,'plus') === false) 'juego' : 'Ps Plus'}} para siempre.</strong></p>
+                            @if (strpos($row_rsClient,'plus') === false)
+                                <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga de un juego abr&#237; tu usuario</strong> &gt; Notificaciones &gt; Descargas. Hasta que no termine el total de la barra de descargar no vas a poder jugarlo completo.</p>
+                                <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
+                            @endif
+                            
                           </td>
 					  </tr>
                            
