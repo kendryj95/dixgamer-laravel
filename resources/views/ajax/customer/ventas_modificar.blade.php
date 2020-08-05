@@ -260,6 +260,8 @@ foreach ($data as $value) {
             </select>
             <span class="input-group-addon">Slot (actual: {{ $clientes->slot }})</span>
           </div>
+
+          <span id="detail-stock" class="label label-danger pull-left" style="display:none;margin-bottom:10px"></span>
           
           <input type="hidden" name="ID" value="{{ $clientes->ID }}">
           <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
@@ -308,6 +310,19 @@ foreach ($data as $value) {
 
         break;
     }
+
+    $('#stock, #slot').on('change', function() {
+      var stock = $('#stock').val(),
+          slot = $('#slot').val();
+      $.ajax({
+        url: `{{url('detail_stock')}}/${stock}/${slot}`,
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+          $('#detail-stock').text(response.message).show();
+        }
+      });
+    });
 
     $('#addNote').on('click', function(){
       $(this).prop('disabled', true);

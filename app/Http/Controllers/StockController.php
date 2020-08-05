@@ -1031,4 +1031,20 @@ ORDER BY libre DESC";
         return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso de insercion. Por favor vuelve a intentarlo']);
       }
     }
+
+    public function detailStock($id_stock, $slot)
+    {
+      $stock = DB::table('stock')->where('ID',$id_stock)->first();
+      $message = "El ID Stock no está registrado en nuestra Base de Datos.";
+      if ($stock) {
+        $titulo = ucwords(\Helper::strTitleStock($stock->titulo));
+        $message = "$titulo ({$stock->consola})";
+        $available = Stock::StockDisponible($stock->consola,$stock->titulo, $slot);
+        if (!is_array($available)) {
+          $message .= " - Sin Stock Disponible";
+        }
+      }
+
+      return response()->json(['message' => $message]);
+    }
 }

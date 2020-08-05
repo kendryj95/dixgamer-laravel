@@ -190,6 +190,7 @@ Route::group(['middleware' => ['login']], function()
     Route::get('stock_cm', 'StockController@listCM');
     Route::get('stock_cm/{code}', 'StockController@listCMByCode');
     Route::post('delete_cm', 'StockController@deleteCM');
+    Route::get('detail_stock/{id_stock}/{slot}', 'StockController@detailStock');
 
 
     // Gastos
