@@ -802,7 +802,6 @@
                       <?php echo '('.$dataCustomer->datos1.')'; ?>
                     @endif
                 </button>
-,this
               @elseif ( ($dataCustomer->consola === "fifa-points") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'ps4') !== false)))
 
                 <button
