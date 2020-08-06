@@ -308,7 +308,7 @@
 									<div class="dropdown pull-right">
 										<button
 										class="btn btn-primary dropdown-toggle btn-xs"
-										type="button" id="dropdownMenu1"
+										type="button" id="priSigueJugando"
 										data-toggle="dropdown"
 										aria-haspopup="true"
 										aria-expanded="false">
@@ -316,7 +316,7 @@
 											Pri Sigue jugando
 										</button>
 				
-										<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+										<ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando">
 										<li class="dropdown-header">¿Seguro deseas</li>
 										<li class="dropdown-header">Ejecutarlo?</li>
 										<li role="separator" class="divider"></li>
@@ -634,7 +634,7 @@
 										<div class="dropdown pull-left" style="margin-bottom: 2px">
 											<button
 												class="btn btn-{{$item['color']}} dropdown-toggle btn-xs"
-												type="button" id="dropdown{{ str_replace(' ','',$btnRecup['secu']['texto_btn']) }}"
+												type="button" id="dropdown{{ str_replace(' ','',$btnRecup[$tipo]['texto_btn']) }}"
 												data-toggle="dropdown"
 												aria-haspopup="true"
 												aria-expanded="false">
@@ -643,7 +643,7 @@
 													<span class="caret"></span>
 											</button>
 
-											<ul class="dropdown-menu bg-info" aria-labelledby="dropdown{{ str_replace(' ','',$btnRecup['secu']['texto_btn']) }}">
+											<ul class="dropdown-menu bg-info" aria-labelledby="dropdown{{ str_replace(' ','',$btnRecup[$tipo]['texto_btn']) }}">
 												<li class="dropdown-header">¿Seguro deseas</li>
 												<li class="dropdown-header">{{ $item['texto_msj'] }}?</li>
 												<li role="separator" class="divider"></li>

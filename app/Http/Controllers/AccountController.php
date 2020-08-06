@@ -1301,7 +1301,7 @@ class AccountController extends Controller
 
       $date = date('Y-m-d H:i:s', time());
       try {
-        if($recup != 'secu') {
+        if($recup != 'secu' && $recup != 'secu_domexclu') {
           $data = [];
           $data['cuentas_id']=$id;
           $data['Day']=$date;
