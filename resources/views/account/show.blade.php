@@ -780,7 +780,7 @@
 			<?php
               $color = $stock->color_user;
             ?>
-    	<div class="col-xs-12 col-sm-6 col-md-5">
+    	<div class="col-xs-12 col-sm-6 col-md-5" id="{{$stock->consola}}-game">
 				<div class="thumbnail">
 					<span class="pull-right" style="width: 45%;">
 						<p>
