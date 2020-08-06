@@ -1036,15 +1036,19 @@ ORDER BY libre DESC";
     {
       $stock = DB::table('stock')->where('ID',$id_stock)->first();
       $message = "El ID Stock no está registrado en nuestra Base de Datos.";
+      $cons = '';
+      $disp = true;
       if ($stock) {
         $titulo = ucwords(\Helper::strTitleStock($stock->titulo));
+        $cons = $stock->consola;
         $message = "$titulo ({$stock->consola})";
         $available = Stock::StockDisponible($stock->consola,$stock->titulo, $slot);
-        if (!is_array($available)) {
+        if (!is_array($available) || (is_array($available) && $available[0]->ID_stk != $id_stock)) {
+          $disp = false;
           $message .= " - Sin Stock Disponible";
         }
       }
 
-      return response()->json(['message' => $message]);
+      return response()->json(['message' => $message,'console' => $cons,'available'=>$disp]);
     }
 }

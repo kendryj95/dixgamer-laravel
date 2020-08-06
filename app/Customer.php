@@ -182,6 +182,7 @@ class Customer extends Model
                 'ventas.ID',
                 'clientes_id',
                 'stock_id',
+                'cons',
                 'slot',
                 'order_item_id',
                 'order_id_web',

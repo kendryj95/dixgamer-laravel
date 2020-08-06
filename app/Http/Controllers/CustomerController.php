@@ -585,6 +585,7 @@ class CustomerController extends Controller
             $data = [];
             $data['slot'] = $request->slot;
             $data['stock_id'] = $request->stock;
+            $data['cons'] = $stock->consola;
             $data['Day_modif'] = date('Y-m-d H:i:s');
             $data['recup'] = 1;
 
@@ -1053,7 +1054,7 @@ class CustomerController extends Controller
               $data = [];
               $data['stock_id'] = 1;
               $data['recup'] = 1;
-              $data['cons'] = 'ps';
+              $data['cons'] = 'x';
               $data['slot'] = 'No';
               $data['Day_modif'] = date('Y-m-d H:i:s');
 

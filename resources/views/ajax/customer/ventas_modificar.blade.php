@@ -250,19 +250,25 @@ foreach ($data as $value) {
             <span class="input-group-addon">Nro. Stock (actual: {{ $clientes->stock_id }})</span>
           </div>
 
+          <span id="detail-stock" class="label label-danger pull-left" style="display:none;margin-bottom:10px"></span>
+          <div class="clearfix"></div>
+          
           <div class="input-group form-group">
             <span class="input-group-addon"><i class="fa fa-bookmark"></i></span>
             <select name="slot" id="slot" class="form-control">
               <option value="">Seleccione Slot</option>
-              <option value="No" @if($clientes->slot == 'No') selected @endif>No</option>
-              <option value="Primario" @if($clientes->slot == 'Primario') selected @endif>Primario</option>
-              <option value="Secundario" @if($clientes->slot == 'Secundario') selected @endif>Secundario</option>
+              @if ($clientes->cons != "ps3" && $clientes->cons != "ps4")
+                <option value="No" @if($clientes->slot == 'No') selected @endif>No</option>
+              @elseif ($clientes->cons == "ps3")
+                <option value="Primario" @if($clientes->slot == 'Primario') selected @endif>Primario</option>
+              @elseif ($clientes->cons == "ps4")
+                <option value="Primario" @if($clientes->slot == 'Primario') selected @endif>Primario</option>
+                <option value="Secundario" @if($clientes->slot == 'Secundario') selected @endif>Secundario</option>
+              @endif
             </select>
             <span class="input-group-addon">Slot (actual: {{ $clientes->slot }})</span>
           </div>
 
-          <span id="detail-stock" class="label label-danger pull-left" style="display:none;margin-bottom:10px"></span>
-          
           <input type="hidden" name="ID" value="{{ $clientes->ID }}">
           <input type="hidden" name="clientes_id" value="{{ $clientes->clientes_id }}">
 
@@ -320,6 +326,29 @@ foreach ($data as $value) {
         dataType: 'json',
         success: function (response) {
           $('#detail-stock').text(response.message).show();
+          var options = '';
+          if (response.available) {
+            $('#btnModManual').removeClass('disabled');
+          } else {
+            $('#btnModManual').addClass('disabled');
+          }
+          if (response.console == 'ps3') {
+            options = `
+            <option value="Primario">Primario</option>
+            `;
+          } else if (response.console == 'ps4') {
+            options = `
+            <option value="Primario">Primario</option>
+            <option value="Secundario">Secundario</option>
+            `;
+          } else {
+            options = `
+            <option value="No">No</option>
+            `;
+          }
+          setTimeout(() => {
+            $('#slot').html(options);
+          }, 500);
         }
       });
     });
