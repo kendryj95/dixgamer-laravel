@@ -1653,15 +1653,19 @@ class CustomerController extends Controller
           'usuario' => session()->get('usuario')->Nombre
         ]);
 
+        $qtyEmail = DB::table('mailer')->where('ventas_id',$ventas_id)->count();
+
         Mail::send('emails.'.$vista, $data, function($message) use ($correo, $nombre, $subject)
         {
             $message->to($correo, $nombre)->subject($subject);
         });
 
-        \Helper::messageFlash('Clientes','Correo electronico enviado.', 'alert_cliente');
-        return redirect()->back();
+        return response()->json(['status' => 'success', 'qty' => $qtyEmail]);
+        // \Helper::messageFlash('Clientes','Correo electronico enviado.', 'alert_cliente');
+        // return redirect()->back();
       } catch (Exception $e) {
-        return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el envío del email.']);
+        return response()->json(['status' => 'error']);
+        // return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el envío del email.']);
       }
 
       

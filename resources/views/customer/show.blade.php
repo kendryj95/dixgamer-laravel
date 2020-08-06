@@ -781,7 +781,7 @@
                 <button
                   class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
-                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Gift')">
+                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Gift',null,null,null,this)">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
                   <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                   @if($dataCustomer->datos1 > 0)
@@ -795,20 +795,20 @@
                 <button
                   class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
-                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Plus')">
+                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Plus',null,null,null,this)">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
                   <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                     @if($dataCustomer->datos1 > 0)
                       <?php echo '('.$dataCustomer->datos1.')'; ?>
                     @endif
                 </button>
-
+,this
               @elseif ( ($dataCustomer->consola === "fifa-points") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'ps4') !== false)))
 
                 <button
                   class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
-                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'FifaPoints')">
+                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'FifaPoints',null,null,null,this)">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
                   <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                     @if($dataCustomer->datos1 > 0)
@@ -830,7 +830,7 @@
                       <li class="dropdown-header">Por favor confirmar</li>
                       <li class="dropdown-header">si desea enviar este {{$dataCustomer->titulo}}</li>
                       <li role="separator" class="divider"></li>
-                      <li><a href="javascript:;" onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}')">Sí, Enviar</a></li>
+                      <li><a href="javascript:;" onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}',this)">Sí, Enviar</a></li>
                     </ul>
                   </div>
                 @else
@@ -838,7 +838,7 @@
                   <button
                   class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
                   type="button"
-                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}')">
+                  onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}',this)">
                   <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                   @if($dataCustomer->datos1 > 0)
                   <?php echo '('.$dataCustomer->datos1.')';  ?>
@@ -905,6 +905,10 @@
         
                 </div>
               @endif
+
+              <span id="email_sale_success_{{$dataCustomer->ID_ventas}}" class="label label-success pull-right" style="display:none; margin: 5px 5px;">Email enviado</span>
+              <span id="email_sale_error_{{$dataCustomer->ID_ventas}}" class="label label-danger pull-right" style="display:none; margin: 5px 5px;">Error al enviar email</span>
+              <div class="clearfix"></div>
             </div>
 
             @if ($dataCustomer->cuentas_id != '' && $dataCustomer->recup == 2)
@@ -1889,13 +1893,43 @@
           return regex.test(fb);
         }
 
-        function enviarEmailVenta(ventas_id, tipo, consola=null, slot=null, cuentas_id=null){
+        function enviarEmailVenta(ventas_id, tipo, consola=null, slot=null, cuentas_id=null, ele){
 
+          $(ele).addClass('disabled')
+          var url = '';
           if (consola != null) {
-            window.location.assign("{{ url('enviar_email_venta') }}/"+ventas_id+"/"+tipo+"/"+consola+"/"+slot+"/"+cuentas_id);
+            url = "{{ url('enviar_email_venta') }}/"+ventas_id+"/"+tipo+"/"+consola+"/"+slot+"/"+cuentas_id;
           } else {
-            window.location.assign("{{ url('enviar_email_venta') }}/"+ventas_id+"/"+tipo);
+            url = "{{ url('enviar_email_venta') }}/"+ventas_id+"/"+tipo;
           }
+
+          $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+              if (response) {
+                switch (response.status) {
+                  case "success": {
+                    $(`#email_sale_success_${ventas_id}`).fadeIn();
+                    $(ele).removeClass('disabled')
+                    $(ele).html(`
+                    <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i> (${response.qty})
+                    `);
+                  }
+                  break;
+                  case "error": {
+                    $(`#email_sale_error_${ventas_id}`).fadeIn();
+                    $(ele).removeClass('disabled')
+                  }
+                  break;
+                }
+              }
+            },
+            error: function (error) {
+              console.log(error)
+            }
+          })
           
         }
 
