@@ -574,7 +574,7 @@
 							 <div class="dropdown pull-left" style="margin-bottom: 2px">
 								<button
 									class="btn btn-{{$btnRecup['secu']['color']}} dropdown-toggle btn-xs"
-									type="button" id="dropdownMenu1"
+									type="button" id="dropdown{{ str_replace(' ','',$btnRecup['secu']['texto_btn']) }}"
 									data-toggle="dropdown"
 									aria-haspopup="true"
 									aria-expanded="false">
@@ -583,7 +583,7 @@
 										<span class="caret"></span>
 								</button>
 
-								<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+								<ul class="dropdown-menu bg-info" aria-labelledby="dropdown{{ str_replace(' ','',$btnRecup['secu']['texto_btn']) }}">
 									<li class="dropdown-header">¿Seguro deseas</li>
 									<li class="dropdown-header">{{ $btnRecup['secu']['texto_msj'] }}?</li>
 									<li role="separator" class="divider"></li>
@@ -634,7 +634,7 @@
 										<div class="dropdown pull-left" style="margin-bottom: 2px">
 											<button
 												class="btn btn-{{$item['color']}} dropdown-toggle btn-xs"
-												type="button" id="dropdownMenu1"
+												type="button" id="dropdown{{ str_replace(' ','',$btnRecup['secu']['texto_btn']) }}"
 												data-toggle="dropdown"
 												aria-haspopup="true"
 												aria-expanded="false">
@@ -643,7 +643,7 @@
 													<span class="caret"></span>
 											</button>
 
-											<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+											<ul class="dropdown-menu bg-info" aria-labelledby="dropdown{{ str_replace(' ','',$btnRecup['secu']['texto_btn']) }}">
 												<li class="dropdown-header">¿Seguro deseas</li>
 												<li class="dropdown-header">{{ $item['texto_msj'] }}?</li>
 												<li role="separator" class="divider"></li>
@@ -670,7 +670,7 @@
 								<div class="dropdown pull-left" style="margin-bottom: 2px">
 									<button
 										class="btn btn-default dropdown-toggle btn-xs"
-										type="button" id="dropdownMenu1"
+										type="button" id="dropdownReset"
 										data-toggle="dropdown"
 										aria-haspopup="true"
 										aria-expanded="false">
@@ -679,7 +679,7 @@
 											<span class="caret"></span>
 									</button>
 	
-									<ul class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+									<ul class="dropdown-menu bg-info" aria-labelledby="dropdownReset">
 										<li class="dropdown-header">¿Seguro deseas</li>
 										<li class="dropdown-header">Resetear?</li>
 										<li role="separator" class="divider"></li>
@@ -727,7 +727,7 @@
 					<div class="dropdown">
 							<button
 							class="btn btn-success btn-xs dropdown-toggle pull-right"
-							type="button"
+							type="button" id="dropdownRecuperada"
 							data-toggle="dropdown"
 							aria-haspopup="true"
 							aria-expanded="false">
@@ -735,7 +735,7 @@
 								¿Recuperada?
 							</button>
 
-							<ul style="left:355px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+							<ul style="left:355px" class="dropdown-menu bg-info" aria-labelledby="dropdownRecuperada">
 								<li class="dropdown-header">¿Se recuperó</li>
 								<li class="dropdown-header">la cuenta?</li>
 								<li role="separator" class="divider"></li>
