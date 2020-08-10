@@ -412,7 +412,8 @@
 									@endif
 									@php $colorLabel = $balance->Day > $hoy ? 'success' : 'default' @endphp
 										<em>
-			                <small
+							<small
+												title="{{$balance->Day}}"
 												class="label label-{{$colorLabel}}">
 												{{ str_replace('-', '', $balance->code) }}
 											</small>
