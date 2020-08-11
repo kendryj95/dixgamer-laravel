@@ -1439,14 +1439,14 @@
 
 						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
 
-						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('btns_recu_pri','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('btns_recu_pri','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">enviar datos <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 						<span style="display: none" id="btns_recu_pri_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 						<span style="display: none" id="btns_recu_pri_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
 						@endif
 					@else
 						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
-						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">enviar datos <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 						<span style="display: none" id="msj_react_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 						<span style="display: none" id="msj_react_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
@@ -1459,7 +1459,7 @@
 						
 						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a>
 
-						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('btns_recu_secu','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('btns_recu_secu','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">enviar datos <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 						<span style="display: none" id="btns_recu_secu_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 						<span style="display: none" id="btns_recu_secu_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
@@ -1467,7 +1467,7 @@
 					@else
 						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a>
 
-					<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('msj_pass','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+					<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('msj_pass','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">enviar datos <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 					<span style="display: none" id="msj_pass_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 					<span style="display: none" id="msj_pass_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>

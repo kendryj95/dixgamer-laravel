@@ -137,7 +137,8 @@ class EditButtonsController extends Controller
         DB::table('clientes_notas')->insert([
             'clientes_id' => $request->id,
             'Notas' => $request->notes,
-            'Day' => \Carbon\Carbon::now('America/New_York')
+            'Day' => \Carbon\Carbon::now('America/New_York'),
+            'usuario' => session()->get('usuario')->Nombre
         ]);
 
         return Response()->json('Variables  Insertadas con exito');
