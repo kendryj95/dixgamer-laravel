@@ -1042,8 +1042,12 @@ ORDER BY libre DESC";
         $titulo = ucwords(\Helper::strTitleStock($stock->titulo));
         $cons = $stock->consola;
         $message = "$titulo ({$stock->consola})";
-        $available = Stock::StockDisponible($stock->consola,$stock->titulo, $slot);
-        if (!is_array($available) || (is_array($available) && $available[0]->ID_stk != $id_stock)) {
+
+        if (($stock->consola == "ps4" || $stock->consola == "ps3") && $slot == "No")
+            $slot = "Primario";
+
+        $available = Stock::StockDisponibleWithIdStock($stock->consola,$stock->titulo, $slot, $id_stock);
+        if (!is_array($available)) {
           $disp = false;
           $message .= " - Sin Stock Disponible";
         }
