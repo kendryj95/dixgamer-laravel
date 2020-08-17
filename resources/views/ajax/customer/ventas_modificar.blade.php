@@ -334,16 +334,16 @@ foreach ($data as $value) {
           }
           if (response.console == 'ps3') {
             options = `
-            <option value="Primario">Primario</option>
+            <option value="Primario" ${slot == 'Primario' ? 'selected' : ''}>Primario</option>
             `;
           } else if (response.console == 'ps4') {
             options = `
-            <option value="Primario">Primario</option>
-            <option value="Secundario">Secundario</option>
+            <option value="Primario" ${slot == 'Primario' ? 'selected' : ''}>Primario</option>
+            <option value="Secundario" ${slot == 'Secundario' ? 'selected' : ''}>Secundario</option>
             `;
           } else {
             options = `
-            <option value="No">No</option>
+            <option value="No" ${slot == 'No' ? 'selected' : ''}>No</option>
             `;
           }
           setTimeout(() => {
