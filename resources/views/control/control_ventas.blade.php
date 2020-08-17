@@ -49,15 +49,8 @@
 			@endphp
 
 	        @php 
-	        	$color2 = '';
-	        	$text2 = '';
-				if (strpos($row_rsClientes->medio_cobro, 'Banco') !== false): $text2 = 'Bco'; $color2 = 'default';
-				elseif (strpos($row_rsClientes->medio_cobro, 'Ticket') !== false): $text2 = 'Cash'; $color2 = 'success';
-				elseif (strpos($row_rsClientes->medio_cobro, 'MP') !== false): $text2 = 'MP'; $color2 = 'primary';
-				elseif (strpos($row_rsClientes->medio_cobro, 'MP - Saldo') !== false): $text2 = 'MP'; $color2 = 'primary';
-				elseif (strpos($row_rsClientes->medio_cobro, 'MP - Tarjeta') !== false): $text2 = 'MP'; $color2 = 'primary';
-				elseif (strpos($row_rsClientes->medio_cobro, 'Fondo') !== false): $text2 = 'F'; $color2 = 'normal';
-	        	endif;
+	        	$color2 = $row_rsClientes->color_medio_cobro;
+	        	$text2 = $row_rsClientes->abbrev_medio_cobro;
 
 				$persona = $row_rsClientes->ventas_usuario;
 

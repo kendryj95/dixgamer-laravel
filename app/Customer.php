@@ -81,7 +81,9 @@ class Customer extends Model
                   'q_reset',
                   'max_Day',
                   'client.*',
-                  'cuentas.*'
+                  'cuentas.*',
+                  'mc.abbreviation AS abbrev_medio_cobro',
+                  'mc.color AS color_medio_cobro'
                   )
                 ->leftjoin(DB::raw("
                   (SELECT cuentas_id, COUNT(*) AS q_reset, MAX(Day) as max_Day FROM reseteo GROUP BY cuentas_id) AS ctas_reseteadas
@@ -100,6 +102,7 @@ class Customer extends Model
                     clientes
                     ON ventas.clientes_id = clientes.ID) AS client
                   "),'stock.ID','client.stock_id')
+                ->leftjoin(DB::raw("(SELECT name, color, abbreviation FROM medios_cobros) as mc"),'client.medio_cobro','=',DB::raw('mc.name COLLATE utf8_unicode_ci'))
                 ->where('clientes_id',$id)
                 ->orderBy('client.Day','DESC');
     }

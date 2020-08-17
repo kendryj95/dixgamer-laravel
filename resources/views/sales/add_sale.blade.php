@@ -55,22 +55,10 @@
                     <div class="input-group form-group">
                         <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
                         <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
-                            <option  value="MP"
-                                    data-content="<span class='label label-primary'>MP</span>">MP
-                            </option>
-                            <option  value="MP - Banco"
-                                    data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco
-                            </option>
-                            <option value="MP - Tarjeta"
-                                    data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta
-                            </option>
-                            <option value="MP - Ticket"
-                                    data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket
-                            </option>
-                            <option selected value="Banco"
-                                    data-content="<span class='label label-info'>Banco</span>">
-                                Banco
-                            </option>
+                            @foreach($medios_cobros as $data)
+                                <option @if($data == 'Banco') selected @endif data-commission="{{$data->commission}}" data-content="<span class='label label-{{$data->color}}'>{{$data->name}}</span>">{{$data->name}}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="input-group form-group" id="n_cobro">
@@ -257,32 +245,35 @@
             $("form :input").change(function() {
                 var val = $('#medio_venta').val();
                 var val2 = $('#medio_cobro').val();
-                //alert(val2);
+                var commission = $("#medio_cobro option:selected").data('commission');
+                var commissionTxt = Math.ceil((parseFloat(commission) * 100));
                 if (val == "MercadoLibre") {
                     $("#porcentaje").html("<option value='0.13'>13 %</option>");
                     $('#order_ml').show();
                     $('#order_item').hide().val('');
                     $('#order_web').hide().val('');
                 } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
-                    $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+                    $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
                     $('#order_ml').hide().val('');
                     $('#order_item').hide().val('');
                     $('#order_web').hide().val('');
                 } else if (val == "Mail" && val2 == "Banco") {
-                    $("#porcentaje").html("<option value='0.00'>0 %</option>");
+                    $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
                     $('#order_ml').hide().val('');
                     $('#order_item').hide().val('');
                     $('#order_web').hide().val('');
                 } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
-                    $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+                    $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
                     $('#order_ml').hide().val('');
                     $('#order_item').show();
                     $('#order_web').show();
                 } else if (val == "Web" && val2 == "Banco") {
-                    $("#porcentaje").html("<option value='0.00'>0 %</option>");
+                    $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
                     $('#order_ml').hide().val('');
                     $('#order_item').show();
                     $('#order_web').show();
+                } else {
+                    $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
                 }
             });
         });

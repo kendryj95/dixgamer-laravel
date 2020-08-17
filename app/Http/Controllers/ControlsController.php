@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use Zipper;
 use App\Sales;
 use App\Expenses;
@@ -789,9 +789,11 @@ class ControlsController extends Controller
             }
         }
 
+        $medios_cobros = DB::table('medios_cobros')->get();
+
         $options = $this->optionsConfig();
 
-        return view('config.general', compact('options','oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios','titulos_pri','titulos_secu','dominios_exclu'));
+        return view('config.general', compact('options','oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios','titulos_pri','titulos_secu','dominios_exclu','medios_cobros'));
     }
 
     private function optionsConfig()
@@ -805,7 +807,8 @@ class ControlsController extends Controller
             "menu6" => "Productos Excluidos",
             "menu7" => "Dominios para Ctas",
             "menu8" => "Productos Excluidos Recupero",
-            "menu9" => "Dominios excluidos para TC"
+            "menu9" => "Dominios excluidos para TC",
+            "menu10" => "Medios de Cobros"
         ];
         asort($options);
 
@@ -972,6 +975,28 @@ class ControlsController extends Controller
                 \Helper::messageFlash('Configuraciones','Dominios excluidos registrados.');
                 return redirect()->back();
                 break;
+            case 10:
+                if ($request->accion == 'create-edit') {
+
+                    $data = $request->all();
+                    unset($data['_token'], $data['opt'], $data['id_medio_cobro'], $data['accion']);
+
+                    $accion = "";
+
+                    if ($request->id_medio_cobro != 0) {
+                        $accion = "editado";
+                        DB::table('medios_cobros')->where('ID',$request->id_medio_cobro)->update($data);
+                    } else {
+                        $accion = "creado";
+                        DB::table('medios_cobros')->insert($data);
+                    }
+                } elseif ($request->accion == 'delete') {
+                    $accion = "eliminado";
+                    DB::table('medios_cobros')->where('ID',$request->id_medio_cobro)->delete();
+                }
+
+                \Helper::messageFlash('Configuraciones','El medio de cobro ha sido ' . $accion . ' exitosamente');
+                return redirect()->back();
         }
     }
 

@@ -145,12 +145,16 @@ class Sales extends Model
             'cuentas_id',
             'costo_usd',
             'q_vta',
-            DB::raw("(SELECT IFNULL(color, 'secondary') FROM usuarios WHERE Nombre = ventas.usuario) AS color_user")
+            DB::raw("(SELECT IFNULL(color, 'secondary') FROM usuarios WHERE Nombre = ventas.usuario) AS color_user"),
+            'mc.abbreviation AS abbrev_medio_cobro',
+            'mc.color AS color_medio_cobro'
         )
         ->leftJoin(DB::raw("(select ventas_id, medio_cobro, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro"),'ventas.ID','=','ventas_cobro.ventas_id')
         ->leftJoin('clientes','ventas.clientes_id','=','clientes.ID')
         ->leftJoin(DB::raw("(select ID, titulo, consola, cuentas_id, costo_usd, q_vta FROM stock LEFT JOIN (select count(*) as q_vta, stock_id from ventas group by stock_id) as vendido ON stock.ID = vendido.stock_id) as stock"),'ventas.stock_id','=','stock.ID')
-        ->orderBy('ventas.ID','DESC');
+            ->leftjoin(DB::raw("(SELECT name, color, abbreviation FROM medios_cobros) as mc"),'medio_cobro','=',DB::raw('mc.name COLLATE utf8_unicode_ci'))
+
+            ->orderBy('ventas.ID','DESC');
     }
 
     public function totalVentas()

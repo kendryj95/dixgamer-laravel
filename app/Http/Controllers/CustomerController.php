@@ -1271,8 +1271,10 @@ class CustomerController extends Controller
                         ->leftjoin('ventas AS v', 'vc.ventas_id', '=', 'v.ID')
                         ->where('vc.ID',$id)
                         ->first();
+        $medios_cobros = DB::table('medios_cobros')->where('habilitado',1)->groupBy('name')->get();
 
-      return view('ajax.customer.ventas_modificar_cobro', compact('ventas_cobro'));
+
+        return view('ajax.customer.ventas_modificar_cobro', compact('ventas_cobro','medios_cobros'));
     }
 
     public function ventasCobroModificarStore(Request $request)
@@ -1341,8 +1343,10 @@ class CustomerController extends Controller
                       ->first();
 
       $cliente = DB::table('clientes')->where('ID',$id_cliente)->first();
+      $medios_cobros = DB::table('medios_cobros')->where('habilitado',1)->groupBy('name')->get();
 
-      return view('ajax.customer.ventas_cobro_insertar', compact('venta_stock', 'cliente'));
+
+      return view('ajax.customer.ventas_cobro_insertar', compact('venta_stock', 'cliente','medios_cobros'));
     }
 
     public function addVentasCobroStore(Request $request)

@@ -91,6 +91,8 @@ class SalesController extends Controller
                     GROUP BY ventas_id
                     ORDER BY ventas_ID DESC"));
 
+        $medios_cobros = DB::table('medios_cobros')->where('habilitado',1)->groupBy('name')->get();
+
         $stock_id = $row_rsSTK[0]->ID_stk;
 
 
@@ -101,7 +103,8 @@ class SalesController extends Controller
             'row_rsClientes'    => $row_rsClientes,
             'rowsAA'            => $rowsAA,
             'row_rsStock2'      => $row_rsStock2,
-            'stk_ID'            => $stk_ID
+            'stk_ID'            => $stk_ID,
+            'medios_cobros'     => $medios_cobros
         ]);
     }
 
@@ -322,31 +325,15 @@ class SalesController extends Controller
 
                    // Defino el multiplo de la comisión por defecto de MP que es 5,38 %
                    $multiplo = "0.0538";
-                   
-                   // DEFINO EL MEDIO DE COBRO CON LAS OPCIONES PREDEFINIDAS 14/12/2018
-                   if (strpos($venta->_payment_method, 'card') !== false): $medio_cobro = "MP - Tarjeta";
-                   elseif (strpos($venta->_payment_method, 'account') !== false): $medio_cobro = "MP - Saldo";
-                   elseif (strpos($venta->_payment_method, 'basic') !== false): $medio_cobro = "MP";
-                   elseif (strpos($venta->_payment_method, 'ticket') !== false): $medio_cobro = "MP - Ticket";
-                   elseif (strpos($venta->_payment_method, 'atm') !== false): $medio_cobro = "MP - Ticket";
-                   elseif (strpos($venta->_payment_method, 'digital') !== false): $medio_cobro = "MP"; // mercado credito
-                       
-                   // si es por banco cambio multiplo de comisión a 0%
-                   elseif (strpos($venta->_payment_method, 'bacs') !== false): $medio_cobro = "Banco"; $multiplo = "0.00";
-                   elseif (strpos($venta->_payment_method, 'yith') !== false): $medio_cobro = "Fondos"; $multiplo = "0.00";
-                   // si es paypal va 7%
-				   elseif (strpos($venta->_payment_method, 'paypal') !== false): $medio_cobro = "PayPal"; $multiplo = "0.07";
 
-				   
-				   // 2020-05-05 agrego cuentadigital y dlocal
-				   elseif (strpos($venta->_payment_method, 'cuentaDigitalPaymentGateway') !== false): $medio_cobro = "CD - Ticket"; $multiplo = "0.05";
-				   elseif (strpos($venta->_payment_method, 'cuentaDigitalTarjetaPaymentGateway') !== false): $medio_cobro = "CD - Tarjeta"; $multiplo = "0.05";
-				   
-				   elseif (strpos($venta->_payment_method, 'dlocal') !== false): $medio_cobro = "dLocal"; $multiplo = "0.05";
+                   $payment_method = DB::table('medios_cobros')->where('payment_method',$venta->_payment_method)->where('habilitado',1)->first();
 
-                   else: $medio_cobro = "No encontrado";
-                   endif;
-                   
+                   if ($payment_method) {
+                       $medio_cobro = $payment_method->name;
+                       $multiplo = $payment_method->commission;
+                   } else {
+                       $medio_cobro = "No encontrado";
+                   }
 
                    // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
                    if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 

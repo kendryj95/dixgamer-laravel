@@ -343,12 +343,9 @@
             ?>
 
             <?php
-              if (strpos($dataCustomer->medio_cobro,'Banco') !== false): $text2 = 'Bco'; $color2 = 'default';
-              elseif (strpos($dataCustomer->medio_cobro,'Ticket') !== false): $text2 = 'Cash'; $color2 = 'success';
-              elseif (strpos($dataCustomer->medio_cobro,'MP') !== false): $text2 = 'MP'; $color2 = 'primary';
-              elseif (strpos($dataCustomer->medio_cobro,'PayPal') !== false): $text2 = 'PP'; $color2 = 'primary';
-              elseif (strpos($dataCustomer->medio_cobro,'Fondo') !== false): $text2 = 'F'; $color2 = 'normal';
-              endif;
+                  // MEDIO DE COBRO ADMINISTRABLE
+                  $text2 = $dataCustomer->abbrev_medio_cobro;
+                  $color2 = $dataCustomer->color_medio_cobro;
             ?>
 
 

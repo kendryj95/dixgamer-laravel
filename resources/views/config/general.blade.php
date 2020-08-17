@@ -294,6 +294,98 @@
 				</div>
 			</div>
 		</div>
+			<div class="tab-pane fade" id="menu10" role="tabpanel">
+				<div class="row">
+					<div class="col-md-12">
+						<form action="{{ url('config/general') }}" id="form_medios_cobros" method="post">
+							{{ csrf_field() }}
+							<input type="hidden" name="opt" value="10">
+							<input type="hidden" id="id_medio_cobro" name="id_medio_cobro">
+							<input type="hidden" id="med_name" name="name">
+							<input type="hidden" id="med_payment_method" name="payment_method">
+							<input type="hidden" id="med_commission" name="commission">
+							<input type="hidden" id="med_abbreviation" name="abbreviation">
+							<input type="hidden" id="med_color" name="color">
+							<input type="hidden" id="hab_med" name="habilitado">
+							<input type="hidden" name="accion" id="accion_med" value="create-edit">
+
+							<table class="table table-striped">
+								<thead>
+								<tr>
+									<th>#</th>
+									<th>Nombre</th>
+									<th>Medio</th>
+									<th>Comisión</th>
+									<th>Abreviación</th>
+									<th>Color</th>
+									<th>Habilitado</th>
+									<th style="width: 70px"></th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td></td>
+									<td>
+										<input type="text" id="name0" data-id="0" placeholder="Nombre" class="form-control input-sm" autocomplete="off">
+									</td>
+									<td>
+										<input type="text" id="medio0" data-id="0" placeholder="Medio" class="form-control input-sm" autocomplete="off">
+									</td>
+									<td>
+										<input type="number" id="comision0" data-id="0" placeholder="Comision" class="form-control input-sm" autocomplete="off">
+									</td>
+									<td>
+										<input type="text" id="abrev0" data-id="0" placeholder="Abreviacion" class="form-control input-sm" autocomplete="off">
+									</td>
+									<td colspan="2">
+										<select id="color0" data-id="0" class="form-control input-sm">
+											<option value="primary">primary</option>
+											<option value="success">success</option>
+											<option value="warning">warning</option>
+											<option value="info">info</option>
+											<option value="danger">danger</option>
+											<option value="default">default</option>
+											<option value="normal">normal</option>
+										</select>
+									</td>
+									<td style="width: 70px" class="text-center">
+										<button type="button" class="btn btn-primary btn-xs" onclick="guardarMedioCobro('0')"><i class="fa fa-save"></i></button>
+									</td>
+								</tr>
+								@foreach($medios_cobros as $i => $data)
+									<tr>
+										<td>{{($i+1)}}</td>
+										<td><input type="text" class="form-control input-sm" id="name{{$i}}" data-id="{{$data->ID}}" value="{{$data->name}}" style="background: transparent; border: none;"></td>
+										<td><input type="text" class="form-control input-sm" id="medio{{$i}}" value="{{$data->payment_method}}" style="background: transparent; border: none;"></td>
+										<td><input type="number" class="form-control input-sm" id="comision{{$i}}" value="{{$data->commission}}" style="background: transparent; border: none;"></td>
+										<td><input type="text" class="form-control input-sm" id="abrev{{$i}}" value="{{$data->abbreviation}}" style="background: transparent; border: none;"></td>
+										<td>
+											<select class="form-control input-sm" id="color{{$i}}">
+												<option value="primary" @if($data->color == 'primary') selected @endif>primary</option>
+												<option value="success" @if($data->color == 'success') selected @endif>success</option>
+												<option value="warning" @if($data->color == 'warning') selected @endif>warning</option>
+												<option value="info" @if($data->color == 'info') selected @endif>info</option>
+												<option value="danger" @if($data->color == 'danger') selected @endif>danger</option>
+												<option value="default" @if($data->color == 'default') selected @endif>default</option>
+												<option value="normal" @if($data->color == 'normal') selected @endif>normal</option>
+											</select>
+										</td>
+										<td>
+											<input type="checkbox" id="med_hab{{$i}}" @if($data->habilitado) checked @endif>
+
+										</td>
+										<td class="text-center">
+											<button type="button" class="btn btn-success btn-xs" onclick="guardarMedioCobro({{ $i }})" title="Editar MedioCobro"><i class="fa fa-pencil"></i></button>
+											<button type="button" class="btn btn-danger btn-xs" onclick="eliminarMedioCobro({{ $i }})"><i class="fa fa-trash"></i></button>
+										</td>
+									</tr>
+								@endforeach
+								</tbody>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
 	    </div>
 	  </div>
 	</div>
@@ -370,6 +462,29 @@
 
 		setTimeout(() => {
 			$('#form_dominios').submit();
+		}, 300);
+	}
+
+	function guardarMedioCobro(pos) {
+		$('#id_medio_cobro').val($(`#name${pos}`).data('id'));
+		$('#med_name').val($(`#name${pos}`).val());
+		$('#med_payment_method').val($(`#medio${pos}`).val());
+		$('#med_commission').val($(`#comision${pos}`).val());
+		$('#med_abbreviation').val($(`#abrev${pos}`).val());
+		$('#med_color').val($(`#color${pos}`).val());
+		$('#hab_med').val(($(`#med_hab${pos}`).is(':checked') ? 1 : 0));
+
+		setTimeout(() => {
+			$('#form_medios_cobros').submit();
+		}, 300)
+	}
+
+	function eliminarMedioCobro(pos) {
+		$('#accion_med').val('delete');
+		$('#id_medio_cobro').val($('#name'+pos).data('id'));
+
+		setTimeout(() => {
+			$('#form_medios_cobros').submit();
 		}, 300);
 	}
 </script>

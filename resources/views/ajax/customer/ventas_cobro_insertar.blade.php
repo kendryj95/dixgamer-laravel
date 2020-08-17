@@ -26,17 +26,13 @@
              <input type="hidden" id="medio_venta" value="{{ $venta_stock->medio_venta }}">
              <select id="medio_cobro" name="medio_cobro" class="selectpicker form-control">
               @if ($venta_stock->medio_venta == 'Web' || $venta_stock->medio_venta == 'Mail')
-                <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
-                <option value="MP - Banco" data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco</option>
-                <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
-                <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
-                <option value="Banco" data-content="<span class='label label-info'>Banco</span>">Banco</option>
-                <option value="PayPal" data-content="<span class='label label-secondary'>PayPal</span>">PayPal</option>
+                @foreach($medios_cobros as $data)
+                         <option data-commission="{{$data->commission}}" data-content="<span class='label label-{{$data->color}}'>{{$data->name}}</span>">{{$data->name}}</option>
+                @endforeach
               @else
-                <option value="MP" data-content="<span class='label label-primary'>MP</span>">MP</option>
-                <option value="MP - Banco" data-content="<span class='label label-warning'>MP - Banco</span>">MP - Banco</option>
-                <option value="MP - Tarjeta" data-content="<span class='label label-primary'>MP - Tarjeta</span>">MP - Tarjeta</option>
-                <option value="MP - Ticket" data-content="<span class='label label-success'>MP - Ticket</span>">MP - Ticket</option>
+                @if(strpos($data->name,"MP") !== false)
+                         <option data-commission="{{$data->commission}}" data-content="<span class='label label-{{$data->color}}'>{{$data->name}}</span>">{{$data->name}}</option>
+                @endif
               @endif
               </select>                
               </div> 
@@ -106,17 +102,20 @@
       } */
       var val = $('#medio_venta').val();
       var val2 = $('#medio_cobro').val();
-      //alert(val2);
+      var commission = $("#medio_cobro option:selected").data('commission');
+      var commissionTxt = Math.ceil((parseFloat(commission) * 100));
       if (val == "MercadoLibre") {
           $("#porcentaje").html("<option value='0.13'>13 %</option>");
       } else if (val == "Mail" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
-          $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+          $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
       } else if (val == "Mail" && val2 == "Banco") {
-          $("#porcentaje").html("<option value='0.00'>0 %</option>");
+          $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
       } else if (val == "Web" && (val2 == "MP" || val2 == "MP - Tarjeta" || val2 == "MP - Ticket" || val2 == "MP - Banco")) {
-          $("#porcentaje").html("<option value='0.0538'>6 %</option>");
+          $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
       } else if (val == "Web" && val2 == "Banco") {
-          $("#porcentaje").html("<option value='0.00'>0 %</option>");
+          $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
+      } else {
+          $("#porcentaje").html("<option value='"+commission+"'>"+commissionTxt+" %</option>");
       }
     });
 
