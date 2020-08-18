@@ -1312,7 +1312,7 @@ class AccountController extends Controller
           } else {
             $data['usuario']= session()->get('usuario')->Nombre;
           }
-          
+          $data['usuario_real'] = session()->get('usuario')->nombre_visible;
           $this->rst->storeResetAccount($data);
 
           $mensaje = 'Cuenta reseteada';
@@ -1813,9 +1813,10 @@ class AccountController extends Controller
       $usuario = isset($request->usuario) ? $request->usuario : '';
 
       $reseteados = Reset::getDatosReseteados($fecha_ini, $fecha_fin, $usuario)->paginate(50);
+      $total_reseteados = Reset::getDatosReseteados($fecha_ini, $fecha_fin, $usuario)->count();
       $usuarios = Reset::getUsersReset()->get();
 
-      return view('account.index_reseteados', compact('reseteados','fecha_fin','fecha_ini','usuarios'));
+      return view('account.index_reseteados', compact('reseteados','fecha_fin','fecha_ini','usuarios','total_reseteados'));
     }
 
     private function defaultFechaIni()

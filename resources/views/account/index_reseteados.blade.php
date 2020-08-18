@@ -37,6 +37,9 @@
     </form>
 </div>
 	<div class="row">
+        <span style="font-weight: bold" class="pull-right">
+            Total: <span class="label label-success">{{$total_reseteados}}</span>
+        </span>
         <div class="table-responsive">
             <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
                 <thead>
@@ -78,7 +81,7 @@
                             {{ $value->Q }}
                         </td>
                         <td style="vertical-align: middle;">
-                            <span class="label label-{{\Helper::userColor($value->usuario)}}" title="{{ $value->usuario }}"><strong>{{strtoupper(substr($value->usuario,0,1))}}</strong></span>
+                            <span class="label label-{{\Helper::userColor($value->usuario_real)}}" title="{{ $value->usuario_real }}"><strong>{{strtoupper(substr($value->usuario_real,0,1))}}</strong></span>
                         </td>
                     </tr>
                     @endforeach

@@ -27,12 +27,13 @@ class Reset extends Model
           DB::raw('GROUP_CONCAT(cuentas_id) AS cuentas_id'),
           'Day',
           'usuario',
+          'usuario_real',
           DB::raw('COUNT(cuentas_id) AS Q')
         )
-        ->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)->where(DB::raw('DATE(Day)'),'<=',$fecha_fin)->groupBy(DB::raw('DATE(Day), usuario'));
+        ->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)->where(DB::raw('DATE(Day)'),'<=',$fecha_fin)->groupBy(DB::raw('DATE(Day), usuario_real'));
 
         if (!empty($usuario)) {
-           $sql = $sql->where('usuario','=',$usuario);
+           $sql = $sql->where('usuario_real','=',$usuario);
         }
 
         return $sql;
@@ -40,6 +41,6 @@ class Reset extends Model
 
     public function ScopeGetUsersReset($query)
     {
-      return $query->select('usuario')->groupBy('usuario');
+      return $query->select('usuario_real AS usuario')->groupBy('usuario_real');
     }
 }
