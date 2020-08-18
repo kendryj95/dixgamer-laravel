@@ -594,7 +594,7 @@
 											<button
 												class="btn btn-{{$btnRecup['secu']['color']}} btn-block"
 												title="{{ $btnRecup['secu']['texto_msj'] }}"
-												id="resetear_secu"
+												id="recup_secu"
 												onclick="reset_recup('secu', this)"
 												type="button">
 												Si, seguro!
@@ -603,7 +603,7 @@
 											<button
 												class="btn btn-success btn-block"
 												title="Recuperar secu con reseteo"
-												id="resetear_secu_reset"
+												id="recup_secu_reset"
 												onclick="reset_recup('secu_reset', this)"
 												type="button">
 												Si, con reseteo!
@@ -613,7 +613,7 @@
 											<button
 												class="btn btn-default btn-block"
 												title="Recuperar secu con cambio dominio"
-												id="resetear_domexclu"
+												id="recup_dom_exclu"
 												onclick="reset_recup('secu_domexclu', this)"
 												type="button">
 												Cambio Dominio
@@ -654,7 +654,7 @@
 														<button
 															class="btn btn-{{$item['color']}} btn-block"
 															title="{{ $item['texto_msj'] }}"
-															id="resetear_{{$tipo}}"
+															id="recup_{{$tipo}}"
 															onclick="reset_recup('{{$tipo}}', this)"
 															type="button">
 															Si, seguro!
@@ -690,7 +690,7 @@
 												<button
 													class="btn btn-default btn-block"
 													title="Resetear"
-													id="resetear_secu"
+													id="reset_solo"
 													onclick="reset_recup('reset', this)"
 													type="button">
 													Si, seguro!
@@ -698,7 +698,7 @@
 												<button
 													class="btn btn-danger btn-block"
 													title="Resetear con cambio pass"
-													id="resetear_reset_pass"
+													id="reset_pass"
 													onclick="reset_recup('reset_pass', this)"
 													type="button">
 													Si, con cambio pass!
