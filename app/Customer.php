@@ -102,7 +102,7 @@ class Customer extends Model
                     clientes
                     ON ventas.clientes_id = clientes.ID) AS client
                   "),'stock.ID','client.stock_id')
-                ->leftjoin(DB::raw("(SELECT name, color, abbreviation FROM medios_cobros) as mc"),'client.medio_cobro','=',DB::raw('mc.name COLLATE utf8_unicode_ci'))
+                ->leftjoin(DB::raw("(SELECT name, color, abbreviation FROM medios_cobros GROUP BY name) as mc"),'client.medio_cobro','=','mc.name')
                 ->where('clientes_id',$id)
                 ->orderBy('client.Day','DESC');
     }
