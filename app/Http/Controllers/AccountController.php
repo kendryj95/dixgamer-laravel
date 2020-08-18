@@ -2301,7 +2301,7 @@ class AccountController extends Controller
       if ($stocks) {
         $stocks = explode(",", $stocks);
 
-        $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')
+        $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Primario')->where('cons','ps4')->where('auto','!=','re')
         ->join('clientes AS c','c.ID','=','ventas.clientes_id')
         ->first();
 
@@ -2331,7 +2331,7 @@ class AccountController extends Controller
       if ($stocks) {
         $stocks = explode(",", $stocks);
         
-        $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')->where('cons','ps4')
+        $venta = DB::table('ventas')->select('ventas.*','c.nombre','c.apellido')->whereIn('stock_id',$stocks)->where('slot','Secundario')->where('cons','ps4')->where('auto','!=','re')
         ->join('clientes AS c','c.ID','=','ventas.clientes_id')
         ->first();
 
