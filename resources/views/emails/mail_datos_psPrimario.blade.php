@@ -213,7 +213,7 @@
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top:2px solid #efefef;">
                     	<tr>
                           <td align="justify" style="padding: 20px 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #666;"><p style="color: #e74c3c; font-size:22px;">IMPORTANTE</p>
-                            <p style="color: #e74c3c;">Compraste PS PLUS PRIMARIO luego de activar como "Primario" no tenes que abrir nuestra cuenta nunca mas. Excepto una vez al mes para descargar los juegos gratuitos. Abrir, iniciar la descarga y salir inmediatamente.</p>
+                            <p style="color: #e74c3c;">Compraste PS PLUS PRIMARIO luego de activar como "Primario" no tenes que abrir nuestra cuenta nunca mas. Abrir, iniciar la descarga y salir inmediatamente. Al finalizar el año se cancela la suscripción y sus beneficios.</p>
                             <p style="color:#999;font-size:12px;"><em>Para evitar abrirla por error pod&#233;s poner contrase&#241;a &#191;C&#243;mo?<br />
                               Abrir nuestro Usuario &gt; Ajustes / Configuraci&#243;n &gt; Usuarios &gt; Configuracion de entrada al sistema &gt; Administracion de claves &gt; Colocar clave &gt; Reiniciar PS4</em></p>
                             <span style="color: #e74c3c;">Si borras nuestro usuario perdés tu PS PLUS para jugar On-line.</span><br />
