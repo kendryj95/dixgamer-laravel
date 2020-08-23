@@ -139,6 +139,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('cuentas_vacias/{usuario?}', 'AccountController@ctasVacias');
   Route::get('cuentas/fornite/{id_account}', 'AccountController@ctaFornite')->name('cuenta-fornite');
   Route::get('cuentas/sendEmail/{type}/{cliente_id}/{account_id}/{id_venta}/{id_stock}', 'AccountController@emailMsjReactPass')->name('email-info');
+  Route::get('cuentas/activa/{id_account}/{valor_activa}', 'AccountController@activaCuenta')->name('activa-cuenta');
 
   Route::get('balance/{page}', 'ControlsController@balanceProductosDiasCondicionado'); // Acceso solo para BETINA
 

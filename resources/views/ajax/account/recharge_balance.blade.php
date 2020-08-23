@@ -161,6 +161,7 @@
               <a
                 title="cargar saldo"
                 onclick="request(event)"
+                id="cargar_saldo_{{ $gift['costo_usd'] }}"
                 href="{{url('crear_saldo_cuenta',[$gift['account_id'],$gift['titulo'],$gift['consola']])}}">
               
                 <div style="color: #000">

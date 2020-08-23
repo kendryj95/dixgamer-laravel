@@ -2788,4 +2788,22 @@ class AccountController extends Controller
       }
     }
 
+    public function activaCuenta($id_account, $valor_activa) {
+        $account = Account::find($id_account);
+
+        if ($account) {
+            DB::table('cuentas')->where('ID',$id_account)->update(['activa' => $valor_activa]);
+
+            $accion = $valor_activa == 1 ? "restaurado" : "descartado";
+            $mensaje = "La cuenta se ha $accion exitosamente";
+
+            \Helper::messageFlash('Cuentas',$mensaje,'alert_cuenta');
+
+            return redirect()->back();
+        }
+
+        return redirect()->back()->withErrors(['Ha ocurrido un error al obtener la cuenta']);
+
+    }
+
 }

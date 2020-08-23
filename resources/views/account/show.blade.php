@@ -414,6 +414,7 @@
 										<em>
 							<small
 												title="{{$balance->Day}}"
+												id="saldo_{{$balance->ID}}"
 												class="label label-{{$colorLabel}}">
 												{{ str_replace('-', '', $balance->code) }}
 											</small>
@@ -479,6 +480,45 @@
 
 
           <ul class="list-group">
+
+			  @if ($account->activa == 2)
+				  <li class="list-group-item" style="background-color: #efefef;">
+					  <div class="dropdown">
+						  <button
+								  class="btn btn-success btn-xs dropdown-toggle pull-right"
+								  type="button" id="dropdownRestaurar"
+								  data-toggle="dropdown"
+								  aria-haspopup="true"
+								  aria-expanded="false">
+							  <i class="fa fa-fw fa-recycle"></i>
+							  ¿Restaurar?
+						  </button>
+
+						  <ul style="left:355px" class="dropdown-menu bg-info" aria-labelledby="dropdownRestaurar">
+							  <li class="dropdown-header">¿Restaurar</li>
+							  <li class="dropdown-header">la cuenta?</li>
+							  <li role="separator" class="divider"></li>
+							  <li>
+								  <a
+										  href="{{route('activa-cuenta',[$account->ID,1])}}"
+										  class="btn btn-success btn-block"
+										  title="Restaurar"
+										  id="si_restaurar">
+									  Si, restaurar!
+								  </a>
+							  </li>
+						  </ul>
+					  </div>
+
+
+					  <span class="badge badge-warning pull-left"><i class="fa fa-fw fa-trash"></i> Cuenta Descartada</span>
+
+					  <div class="clearfix"></div>
+
+				  </li>
+
+			  @else
+
 			  @if (!$cuenta_robada)
               <li class="list-group-item" style="background-color: #efefef;">
               	@php
@@ -721,7 +761,7 @@
 							@endif
 
 			   </li>
-			   
+
 			   @else
 			  
 			   <li class="list-group-item" style="background-color: #efefef;">
@@ -764,6 +804,8 @@
 			   </li>
 			   
 			   @endif
+
+				  @endif
             </ul>
         </div>
      </div>
@@ -772,33 +814,35 @@
   	$cant_productos = 0;
   @endphp
 
-  @if(count($stocks) > 0)
-  	<div class="col-xs-12 col-sm-6 col-md-6">
-		<div style="margin-left: 0 !important" class="row">
-		@foreach($stocks as $i => $stock)
-			@php $cant_productos++; @endphp
+		@if($account->activa == 1)
 
-			<?php
-              $color = $stock->color_user;
-            ?>
-    	<div class="col-xs-12 col-sm-6 col-md-5" id="{{$stock->consola}}-game">
-				<div class="thumbnail">
+			@if(count($stocks) > 0)
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<div style="margin-left: 0 !important" class="row">
+						@foreach($stocks as $i => $stock)
+							@php $cant_productos++; @endphp
+
+							<?php
+							$color = $stock->color_user;
+							?>
+							<div class="col-xs-12 col-sm-6 col-md-5" id="{{$stock->consola}}-game">
+								<div class="thumbnail">
 					<span class="pull-right" style="width: 45%;">
 						<p>
 							<span class="btn-group pull-right">
 								<button
-								class="btn btn-xs btn-default"
-								type="button"
-								data-toggle="modal"
-								data-target=".bs-example-modal-lg"
-								onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}/1","#modal-container");'>
+										class="btn btn-xs btn-default"
+										type="button"
+										data-toggle="modal"
+										data-target=".bs-example-modal-lg"
+										onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}/1","#modal-container");'>
 									<i class="fa fa-pencil"></i>
 								</button>
 							</span>
 
 							<small
-								style="color:#CFCFCF;"
-								title="{{$stock->daystock}}">
+									style="color:#CFCFCF;"
+									title="{{$stock->daystock}}">
 									<i class="fa fa-calendar-o fa-xs fa-fw" aria-hidden="true"></i>
 									{{ date("d M 'y", strtotime($stock->daystock)) }}
 							</small>
@@ -811,14 +855,14 @@
 										{{ $stock->ID_stock}}
 
 										@if(!empty($stock->stock_Notas))
-						        	<a
-												href="#"
-												data-toggle="popover"
-												data-placement="bottom"
-												data-trigger="focus"
-												title="Notas de Stock"
-												data-content="{{$stock->stock_Notas}}"
-												style="color: #555555;">
+											<a
+													href="#"
+													data-toggle="popover"
+													data-placement="bottom"
+													data-trigger="focus"
+													title="Notas de Stock"
+													data-content="{{$stock->stock_Notas}}"
+													style="color: #555555;">
 													<i class="fa fa-comment fa-fw"></i>
 												</a>
 										@endif
@@ -830,9 +874,9 @@
 									</small>
 
 									<span
-									  class="badge badge-<?php echo $color;?> pull-right"
-									  style="opacity:0.7; font-weight:400;"
-									  title="<?php echo $stock->usuario; ?>">
+											class="badge badge-<?php echo $color;?> pull-right"
+											style="opacity:0.7; font-weight:400;"
+											title="<?php echo $stock->usuario; ?>">
 									  <?php echo substr($stock->usuario, 0, 1); ?>
 									</span>
             		</p>
@@ -840,27 +884,27 @@
             		<p>
 			            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
 
-									<small class="text-success">
+							<small class="text-success">
 										<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>
 										{{ round($stock->total_ing) }}
 									</small>
-            			<br />
+							<br />
 
-									<small class="text-danger">
+							<small class="text-danger">
 										<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>
 										{{ round($stock->total_com) }}
 									</small>
-									<br />
+							<br />
 
 
-				            @php
-											$gtoestimado = round($expensesIncome->gto_x_ing * $stock->total_ing);
-					            $iibbestimado = round($stock->total_ing * 0.035);
-											$resultado = round($stock->total_ing - $stock->total_com - $stock->costo - $iibbestimado - $gtoestimado);
+							@php
+								$gtoestimado = round($expensesIncome->gto_x_ing * $stock->total_ing);
+                    $iibbestimado = round($stock->total_ing * 0.035);
+                                $resultado = round($stock->total_ing - $stock->total_com - $stock->costo - $iibbestimado - $gtoestimado);
 
-				            @endphp
+							@endphp
 
-										<small class="text-danger">
+							<small class="text-danger">
 											<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>
 											{{$iibbestimado}}, {{$gtoestimado}}, {{round($stock->costo)}}
 										</small>
@@ -873,13 +917,13 @@
 											{{$resultado}}
 										</small>
 
-            			@endif
-            		</p>
+						@endif
+						</p>
 
 
             		@if(!empty($hasBalance->costo_usd) or Helper::validateAdministrator(session()->get('usuario')->Level))
 
-			            <p style="opacity:0.7">
+							<p style="opacity:0.7">
 										<img src="https://exur-exur.netdna-ssl.com/realskin/images/usa.png" style="opacity:0.7">
 
 										<small>
@@ -888,226 +932,257 @@
 												@if (Helper::validateAdministrator(session()->get('usuario')->Level))
 													({{empty($stock->costo_usd_modif) ? '0.00' : $stock->costo_usd_modif}})
 												@endif
-											</strong> 
+											</strong>
 											<!-- <a href="javascript:;" title="Modificar Costo"><i class="fa fa-pencil"></i></a> -->
 										</small>
 
 										{{-- @if(!$quantityStock->Q > 1 ) --}}
 											<a
-												title="Modificar Costo"
-												class="btn-xs text-muted"
-												style="opacity: 0.7;"
-												type="button"
-												data-toggle="modal"
-												data-target=".bs-example-modal-lg"
-												onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}/2","#modal-container");'>
+													title="Modificar Costo"
+													class="btn-xs text-muted"
+													style="opacity: 0.7;"
+													type="button"
+													data-toggle="modal"
+													data-target=".bs-example-modal-lg"
+													onClick='getPageAjax("{{url('actualizar_stock_cuenta')}}/{{$stock->ID_stock}}/{{$stock->stock_cuentas_id}}/2","#modal-container");'>
 												<i aria-hidden="true" class="fa fa-pencil"></i>
 											</a>
 										{{-- @endif --}}
 
 									</p>
 
-            		@endif
+						@endif
             	</span>
 
-            <img
-							class="img img-responsive img-rounded full-width"
-							style="width:54%; margin:0;"
-							alt="{{$stock->titulo}}"
-							src='{{asset("img/productos/".$stock->consola."/".$stock->titulo.".jpg")}}'>
+									<img
+											class="img img-responsive img-rounded full-width"
+											style="width:54%; margin:0;"
+											alt="{{$stock->titulo}}"
+											src='{{asset("img/productos/".$stock->consola."/".$stock->titulo.".jpg")}}'>
 
-						<div class="caption text-center"></div>
+									<div class="caption text-center"></div>
 
-						@if ($stock->consola == 'ps3')
+									@if ($stock->consola == 'ps3')
 
-						<div class="dropdown text-left">
-						  <button
-							class="btn btn-link dropdown-toggle btn-xs"
-							type="button" id="vender_cli2"
-							data-toggle="dropdown"
-							aria-haspopup="true"
-							aria-expanded="false">
-							  Vender a Cliente #2
-							  {{-- <span class="caret"></span> --}}
-						  </button>
-		
-						  <ul class="dropdown-menu bg-info" aria-labelledby="vender_cli2">
-							<li class="dropdown-header">¿Estas seguro?</li>
-							<li role="separator" class="divider"></li>
-							<li>
-							  <a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
-							</li>
-						  </ul>
-		
-						</div>
-		
-					@elseif ($stock->consola == 'ps4')
-		
-					  <div class="dropdown text-left">
-						<button
-						  class="btn btn-link dropdown-toggle btn-xs"
-						  type="button" id="vender_pri_cli1"
-						  data-toggle="dropdown"
-						  aria-haspopup="true"
-						  aria-expanded="false">
-							Vender Primario a Cliente #1
-							{{-- <span class="caret"></span> --}}
-						</button>
-		
-						<ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli1">
-						  <li class="dropdown-header">¿Estas seguro?</li>
-						  <li role="separator" class="divider"></li>
-						  <li>
-							<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
-						  </li>
-						</ul>
-		
-					  </div>
-					  <div class="dropdown text-left">
-						<button
-						  class="btn btn-link dropdown-toggle btn-xs"
-						  type="button" id="vender_secu_cli2"
-						  data-toggle="dropdown"
-						  aria-haspopup="true"
-						  aria-expanded="false">
-							Vender Secundario a Cliente #1
-							{{-- <span class="caret"></span> --}}
-						</button>
-		
-						<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
-						  <li class="dropdown-header">¿Estas seguro?</li>
-						  <li role="separator" class="divider"></li>
-						  <li>
-							<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Secundario']) }}" class="btn btn-danger">Sí, Seguro!</a>
-						  </li>
-						</ul>
-		
-					  </div>
-		
-					@endif
+										<div class="dropdown text-left">
+											<button
+													class="btn btn-link dropdown-toggle btn-xs"
+													type="button" id="vender_cli2"
+													data-toggle="dropdown"
+													aria-haspopup="true"
+													aria-expanded="false">
+												Vender a Cliente #2
+												{{-- <span class="caret"></span> --}}
+											</button>
 
-					@php $texto_x = strpos($stock->titulo,"xx-") !== false ? "Quitar" : "Agregar" @endphp
+											<ul class="dropdown-menu bg-info" aria-labelledby="vender_cli2">
+												<li class="dropdown-header">¿Estas seguro?</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+												</li>
+											</ul>
 
-					<div class="dropdown text-left">
-						<button
-						  class="btn btn-link dropdown-toggle btn-xs"
-						  type="button" id="vender_secu_cli2"
-						  data-toggle="dropdown"
-						  aria-haspopup="true"
-						  aria-expanded="false">
-							{{ $texto_x }} doble x
-							{{-- <span class="caret"></span> --}}
-						</button>
-		
-						<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
-						  <li class="dropdown-header">¿Estas seguro?</li>
-						  <li role="separator" class="divider"></li>
-						  <li>
-							<a href="{{ url('update_product_x', [$stock->ID_stock, strtolower($texto_x)]) }}" class="btn btn-danger">Sí, Seguro!</a>
-						  </li>
-						</ul>
-		
-					  </div>
-					
-				@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
-					  
-				  <div class="dropdown text-left">
-						<button
-						  class="btn btn-link dropdown-toggle btn-xs"
-						  type="button" id="vender_secu_cli2"
-						  data-toggle="dropdown"
-						  aria-haspopup="true"
-						  aria-expanded="false">
-							Eliminar juego
-							{{-- <span class="caret"></span> --}}
-						</button>
-		
-						<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
-						  <li class="dropdown-header">¿Estas seguro?</li>
-						  <li role="separator" class="divider"></li>
-						  <li>
-							<a href="{{ url('delete_product', $stock->ID_stock) }}" class="btn btn-danger">Sí, Seguro!</a>
-						  </li>
-						</ul>
-		
+										</div>
+
+									@elseif ($stock->consola == 'ps4')
+
+										<div class="dropdown text-left">
+											<button
+													class="btn btn-link dropdown-toggle btn-xs"
+													type="button" id="vender_pri_cli1"
+													data-toggle="dropdown"
+													aria-haspopup="true"
+													aria-expanded="false">
+												Vender Primario a Cliente #1
+												{{-- <span class="caret"></span> --}}
+											</button>
+
+											<ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli1">
+												<li class="dropdown-header">¿Estas seguro?</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+												</li>
+											</ul>
+
+										</div>
+										<div class="dropdown text-left">
+											<button
+													class="btn btn-link dropdown-toggle btn-xs"
+													type="button" id="vender_secu_cli2"
+													data-toggle="dropdown"
+													aria-haspopup="true"
+													aria-expanded="false">
+												Vender Secundario a Cliente #1
+												{{-- <span class="caret"></span> --}}
+											</button>
+
+											<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+												<li class="dropdown-header">¿Estas seguro?</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Secundario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+												</li>
+											</ul>
+
+										</div>
+
+									@endif
+
+									@php $texto_x = strpos($stock->titulo,"xx-") !== false ? "Quitar" : "Agregar" @endphp
+
+									<div class="dropdown text-left">
+										<button
+												class="btn btn-link dropdown-toggle btn-xs"
+												type="button" id="vender_secu_cli2"
+												data-toggle="dropdown"
+												aria-haspopup="true"
+												aria-expanded="false">
+											{{ $texto_x }} doble x
+											{{-- <span class="caret"></span> --}}
+										</button>
+
+										<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+											<li class="dropdown-header">¿Estas seguro?</li>
+											<li role="separator" class="divider"></li>
+											<li>
+												<a href="{{ url('update_product_x', [$stock->ID_stock, strtolower($texto_x)]) }}" class="btn btn-danger">Sí, Seguro!</a>
+											</li>
+										</ul>
+
+									</div>
+
+									@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+
+										<div class="dropdown text-left">
+											<button
+													class="btn btn-link dropdown-toggle btn-xs"
+													type="button" id="vender_secu_cli2"
+													data-toggle="dropdown"
+													aria-haspopup="true"
+													aria-expanded="false">
+												Eliminar juego
+												{{-- <span class="caret"></span> --}}
+											</button>
+
+											<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+												<li class="dropdown-header">¿Estas seguro?</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<a href="{{ url('delete_product', $stock->ID_stock) }}" class="btn btn-danger">Sí, Seguro!</a>
+												</li>
+											</ul>
+
+										</div>
+
+									@endif
+
+								</div>
+							</div>
+							@if ($i === 1)
+								<div class="clearfix"></div>
+							@endif
+						@endforeach
+						@if (count($stocks) == 1 && !$fornite)
+							<div class="col-xs-12 col-sm-6 col-md-5">
+								<div class="alert alert-danger text-center">
+									<h4>¿Ya compraste el Fortnite?</h4>
+									<br>
+									{{-- <button class="btn btn-danger btn-xl" type="button" id="fortnite">Si, ya compre!</button> --}}
+
+									<div class="dropdown">
+										<button
+												class="btn btn-danger btn-xl dropdown-toggle"
+												type="button"
+												data-toggle="dropdown"
+												aria-haspopup="true"
+												aria-expanded="false">
+											Si, ya compre!
+										</button>
+
+										<ul class="dropdown-menu bg-info" aria-labelledby="dropdownFornite">
+											<li class="dropdown-header">¿Estas seguro?</li>
+											<li role="separator" class="divider"></li>
+											<li>
+												<a href="{{route('cuenta-fornite', $account->ID)}}" class="btn btn-danger btn-block">Sí, seguro</a>
+											</li>
+										</ul>
+									</div>
+
+								</div>
+							</div>
+						@endif
+					</div>
 				</div>
-
-				@endif
-
-          </div>
-		</div>
-			@if ($i === 1)
-				<div class="clearfix"></div>
-			@endif
-			@endforeach
-			@if (count($stocks) == 1 && !$fornite)
+			@else
 				<div class="col-xs-12 col-sm-6 col-md-5">
-					<div class="alert alert-danger text-center">
-						<h4>¿Ya compraste el Fortnite?</h4>
-						<br>
-						{{-- <button class="btn btn-danger btn-xl" type="button" id="fortnite">Si, ya compre!</button> --}}
+					<div style="margin-left: 0 !important" class="row">
+						@if(!$fornite)
+							<div class="col-xs-12 col-sm-6 col-md-5">
+								<div class="alert alert-danger text-center">
+									<h4>¿Ya compraste el Fortnite?</h4>
+									<br>
+									{{-- <button class="btn btn-danger btn-xl" type="button" id="fortnite">Si, ya compre!</button> --}}
 
-						<div class="dropdown">
-							<button
-							class="btn btn-danger btn-xl dropdown-toggle"
-							type="button"
-							data-toggle="dropdown"
-							aria-haspopup="true"
-							aria-expanded="false">
-								Si, ya compre!
-							</button>
+									<div class="dropdown">
+										<button
+												class="btn btn-danger btn-xl dropdown-toggle"
+												type="button"
+												data-toggle="dropdown"
+												aria-haspopup="true"
+												aria-expanded="false">
+											Si, ya compre!
+										</button>
 
-							<ul class="dropdown-menu bg-info" aria-labelledby="dropdownFornite">
-								<li class="dropdown-header">¿Estas seguro?</li>
-								<li role="separator" class="divider"></li>
-								<li>
-									<a href="{{route('cuenta-fornite', $account->ID)}}" class="btn btn-danger btn-block">Sí, seguro</a>
-								</li>
-							</ul>
+										<ul class="dropdown-menu bg-info" aria-labelledby="dropdownFornite">
+											<li class="dropdown-header">¿Estas seguro?</li>
+											<li role="separator" class="divider"></li>
+											<li>
+												<a href="{{route('cuenta-fornite', $account->ID)}}" class="btn btn-danger btn-block">Sí, seguro</a>
+											</li>
+										</ul>
+									</div>
+
+								</div>
+							</div>
+						@endif
+						<div class="col-xs-12 col-sm-6 col-md-5">
+							<div class="alert alert-warning text-center">
+								<h4>¿Descartar Cuenta?</h4>
+								<br>
+
+								<div class="dropdown">
+									<button
+											class="btn btn-warning btn-xl dropdown-toggle"
+											type="button"
+											id="si_descartar"
+											data-toggle="dropdown"
+											aria-haspopup="true"
+											aria-expanded="false">
+										Si, descartar!
+									</button>
+
+									<ul class="dropdown-menu bg-info" aria-labelledby="dropdownDescartar">
+										<li class="dropdown-header">¿Estas seguro?</li>
+										<li role="separator" class="divider"></li>
+										<li>
+											<a href="{{route('activa-cuenta', [$account->ID, 2])}}" class="btn btn-danger btn-block">Sí, seguro</a>
+										</li>
+									</ul>
+								</div>
+
+							</div>
 						</div>
-
 					</div>
 				</div>
+
 			@endif
-		</div>
-	  </div>
-	@elseif (count($stocks) == 0 && !$fornite)
-	<div class="col-xs-12 col-sm-6 col-md-6">
-		<div style="margin-left: 0 !important" class="row">
-			<div class="col-xs-12 col-sm-6 col-md-5">
-				<div class="alert alert-danger text-center">
-					<h4>¿Ya compraste el Fortnite?</h4>
-					<br>
-					{{-- <button class="btn btn-danger btn-xl" type="button" id="fortnite">Si, ya compre!</button> --}}
 
-					<div class="dropdown">
-						<button
-						class="btn btn-danger btn-xl dropdown-toggle"
-						type="button"
-						data-toggle="dropdown"
-						aria-haspopup="true"
-						aria-expanded="false">
-							Si, ya compre!
-						</button>
-
-						<ul class="dropdown-menu bg-info" aria-labelledby="dropdownFornite">
-							<li class="dropdown-header">¿Estas seguro?</li>
-							<li role="separator" class="divider"></li>
-							<li>
-								<a href="{{route('cuenta-fornite', $account->ID)}}" class="btn btn-danger btn-block">Sí, seguro</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</div>
-    @endif
+		@endif
 
 
-
-
+	@if($account->activa == 1)
 
     <div class="col-md-2 pull-right">
     	@if ($cant_productos < 3)
@@ -1115,6 +1190,7 @@
 				<button
 					class="btn btn-default btn-lg"
 					type="button"
+					id="cargar_saldo"
 					data-toggle="modal"
 					data-target=".bs-example-modal-lg"
 					onClick='getPageAjax("{{url('recharge_account')}}","#modal-container",{{$account->ID}});'>
@@ -1130,6 +1206,7 @@
 				<button
 					class="btn btn-info btn-lg"
 					type="button"
+					id="cargar_minim"
 					data-toggle="modal"
 					data-target=".bs-example-modal-lg"
 					onClick='getPageAjax("{{url('recharge_minim_account')}}","#modal-container",{{$account->ID}});'>
@@ -1215,7 +1292,7 @@
 		@if(count($stocks) == 0)
 
 		<p>
-			<a href="{{ url('repetir_gift_juego', $account->ID) }}" class="btn btn-default btn-lg"><i class="fa fa-gamepad"></i> Repetir Juego</a>
+			<a href="{{ url('repetir_gift_juego', $account->ID) }}" id="repetir_juego" class="btn btn-default btn-lg"><i class="fa fa-gamepad"></i> Repetir Juego</a>
 		</p>
 
 		@if($lastGame)
@@ -1230,12 +1307,15 @@
      	<?php endif;?>
      </div>
 
+	@endif
+
 
 
   </div>
 
   @if (count($soldConcept)>0)
 
+	  @if($account->activa == 1)
     <div class="">
     <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
     <thead>
@@ -1437,16 +1517,16 @@
 					@if ($sc->recup == 2)
 						@if($operador_reset)
 
-						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" id="msj_recupero_pri" data-clipboard-target="#avisopri-copy{{$sc->clientes_id}}"> RECUPERO PRI <i aria-hidden="true" class="fa fa-clone"></i></a>
 
-						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('btns_recu_pri','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+						<button class="btn-xs btn-info label email-info" id="enviar_email_pri" onclick="envioEmailInfo('btns_recu_pri','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 						<span style="display: none" id="btns_recu_pri_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 						<span style="display: none" id="btns_recu_pri_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
 						@endif
 					@else
-						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
-						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_react_pri" data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
+						<button class="btn-xs btn-info label email-info" id="enviar_email_pri" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 						<span style="display: none" id="msj_react_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 						<span style="display: none" id="msj_react_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
@@ -1457,17 +1537,17 @@
 					@if ($sc->recup == 2)
 						@if($operador_pass)
 						
-						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a>
+						<a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-info label" id="msj_recupero_secu" data-clipboard-target="#avisosecu-copy{{$sc->clientes_id}}"> RECUPERO SECU <i aria-hidden="true" class="fa fa-clone"></i></a>
 
-						<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('btns_recu_secu','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+						<button class="btn-xs btn-info label email-info" id="enviar_email_secu" onclick="envioEmailInfo('btns_recu_secu','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 						<span style="display: none" id="btns_recu_secu_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 						<span style="display: none" id="btns_recu_secu_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
 						@endif
 					@else
-						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a>
+						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_pass_secu" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a>
 
-					<button class="btn-xs btn-info label email-info" onclick="envioEmailInfo('msj_pass','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+					<button class="btn-xs btn-info label email-info" id="enviar_email_secu" onclick="envioEmailInfo('msj_pass','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 					<span style="display: none" id="msj_pass_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
 					<span style="display: none" id="msj_pass_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
@@ -1502,6 +1582,8 @@
         </tbody>
         </table>
         </div>
+
+		@endif
     @else
 			<h3 class="text-center">Datos no encontrados</h3>
     @endif

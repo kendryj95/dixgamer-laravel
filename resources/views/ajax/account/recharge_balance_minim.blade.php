@@ -35,13 +35,14 @@
                 <a
                   title="cargar saldo"
                   onclick="request(event)"
+                  id="cargar_minim_{{str_replace(['.',','],['',''],$gift->costo_usd)}}"
                   href="{{url('crear_saldo_minimo_cuenta',[$account_id,$gift->ID_stk])}}">
                 
                   <div class="colorText">
                       <br>
                       <br>
                       
-                      <h2>{{ number_format($gift->costo_usd,0,"","") }}</h2>
+                      <h2>{{ number_format($gift->costo_usd,2,".","") }}</h2>
                       
                   </div> 
                 </a>
