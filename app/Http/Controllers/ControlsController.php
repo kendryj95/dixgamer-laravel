@@ -1687,6 +1687,8 @@ class ControlsController extends Controller
 
                 $mensajes = '';
 
+                $valor_oferta_sugerida_ps3 = DB::table('configuraciones')->where('ID',1)->value('oferta_sugerida_automatizar_ps3');
+
                 DB::beginTransaction();
 
                 try {
@@ -1700,7 +1702,7 @@ class ControlsController extends Controller
                             $Q_Vta = $value->Q_Vta;
                             $costoxU = $value->costoxU;
                             
-							$costoxU = $costoxU * 1.25; //le recargo 25% por las dudas
+							$costoxU = $costoxU * $valor_oferta_sugerida_ps3;
 							
                             $multiplier = 1;
                             if($Q_Vta > 0) { 

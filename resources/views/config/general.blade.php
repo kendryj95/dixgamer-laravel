@@ -141,6 +141,12 @@
 	      					<input type="number" name="dias_modo_continuo" id="dias_modo_continuo" class="form-control" value="{{ $configuraciones->dias_modo_continuo }}" >
 	      				</div>
 	      			</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="valor_oferta_sugerida">Valor Oferta Sugerida - Automatizar Web ps3</label>
+							<input style="text-align: right" type="number" name="oferta_sugerida_automatizar_ps3" id="oferta_sugerida_automatizar_ps3" class="form-control" value="{{ number_format($configuraciones->oferta_sugerida_automatizar_ps3,2,".","") }}" step="0.01">
+						</div>
+					</div>
 	      			<div class="col-md-12">
 	      				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i> Guardar</button>
 	      			</div>
