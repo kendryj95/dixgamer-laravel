@@ -12,6 +12,7 @@ use App\Expenses;
 use App\Stock;
 use App\Balance;
 use App\WpPost;
+use Validator;
 
 class ControlsController extends Controller
 {
@@ -2165,5 +2166,37 @@ class ControlsController extends Controller
 
     private function getConfiguraciones() {
         return DB::table('configuraciones')->where('ID',1)->first();
+    }
+
+    public function enviarEmail(Request $request) {
+        // Mensajes de alerta
+        $msgs = [
+            'name.required' => 'Nombre es obligatorio',
+            'name.string' => 'Nombre solo debe ser texto.',
+            'email.required' => 'Email es obligatorio',
+            'email.email' => 'El email no es valido',
+            'subject.required' => 'Asunto obligatorio',
+            'description.required' => 'Descripcion obligatorio.'
+        ];
+        // Validamos
+        $v = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'subject' => 'required',
+            'description' => 'required'
+        ], $msgs);
+
+        try {
+            Mail::send('emails.email_custom', ['description' => $request->description], function($message) use ($request)
+            {
+                $message->to($request->email, $request->name)->subject($request->subject);
+            });
+
+            \Helper::messageFlash('Configuraciones',"Email enviado correctamente.");
+
+            return redirect('home');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors([$e->getMessage()]);
+        }
     }
 }

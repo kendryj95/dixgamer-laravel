@@ -231,6 +231,10 @@ Route::group(['middleware' => ['login']], function()
         Route::get('balance', 'ControlsController@balance');
         Route::get('balance_productos', 'ControlsController@balanceProductos');
         Route::get('balance_productos_dias', 'ControlsController@balanceProductosDias');
+        Route::get('control/enviar_email', function () {
+            return view('control.enviar_email');
+        })->name('enviar-email');
+        Route::post('control/enviar_email', 'ControlsController@enviarEmail')->name('enviar-email-post');
     });
 
 

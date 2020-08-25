@@ -227,6 +227,7 @@
                   <li><a href="{{ url('carga_gc') }}"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
                   <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
                   <li class="divider" role="separator"></li>
+                  <li><a href="{{ route('enviar-email') }}"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i> Enviar Email</a></li>
                   <li><a href="{{ url('control_mp') }}"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
                   <li><a href="{{ url('control_mp','v2') }}"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP2</a></li>
                   <li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
