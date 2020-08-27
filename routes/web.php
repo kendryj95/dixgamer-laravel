@@ -38,6 +38,11 @@ Route::get('logout', 'Auth\LoginController@logout');
 Route::get('getDataPaginaAnt','AccountController@previo')->name('getDataPaginaAnt');
 Route::get('getDataPaginaSig','AccountController@siguiente')->name('getDataPaginaSig');
 
+Route::get('control/enviar_email', function () {
+    return view('control.enviar_email');
+})->name('enviar-email');
+Route::post('control/enviar_email', 'ControlsController@enviarEmail')->name('enviar-email-post');
+
 
 // Solo usuarios logueados
 Route::group(['middleware' => ['login']], function()
@@ -140,6 +145,8 @@ Route::group(['middleware' => ['login']], function()
   Route::get('cuentas/fornite/{id_account}', 'AccountController@ctaFornite')->name('cuenta-fornite');
   Route::get('cuentas/sendEmail/{type}/{cliente_id}/{account_id}/{id_venta}/{id_stock}', 'AccountController@emailMsjReactPass')->name('email-info');
   Route::get('cuentas/activa/{id_account}/{valor_activa}', 'AccountController@activaCuenta')->name('activa-cuenta');
+  Route::get('cuentas/balance_sony/{id_account}', 'AccountController@balanceSony')->name('balance-sony');
+  Route::post('cuentas/balance_sony', 'AccountController@balanceSonyStore')->name('balance-sony-store');
 
   Route::get('balance/{page}', 'ControlsController@balanceProductosDiasCondicionado'); // Acceso solo para BETINA
 
@@ -231,10 +238,6 @@ Route::group(['middleware' => ['login']], function()
         Route::get('balance', 'ControlsController@balance');
         Route::get('balance_productos', 'ControlsController@balanceProductos');
         Route::get('balance_productos_dias', 'ControlsController@balanceProductosDias');
-        Route::get('control/enviar_email', function () {
-            return view('control.enviar_email');
-        })->name('enviar-email');
-        Route::post('control/enviar_email', 'ControlsController@enviarEmail')->name('enviar-email-post');
     });
 
 

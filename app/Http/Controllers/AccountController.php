@@ -426,6 +426,8 @@ class AccountController extends Controller
       $fornite = false;
       $accountNotes = DB::table('cuentas_notas')->where('cuentas_id', $id)->get();
 
+      $balance_sony = DB::table('cuentas_balance_sony')->select(DB::raw("DATE_FORMAT(Day,'%d/%m/%Y') as Day"),'balance','usuario')->where('cuentas_id',$id)->orderBy('Day','DESC')->first();
+
       foreach ($accountNotes as $value) {
         if ($value->Notas == "Fortnite comprado") {
           $fornite = true;
@@ -458,7 +460,8 @@ class AccountController extends Controller
                 'ventaPs4Pri',
                 'ventaPs4Secu',
                 'dom_excluido',
-                'fornite'
+                'fornite',
+                'balance_sony'
       ));
 
     }
@@ -2804,6 +2807,40 @@ class AccountController extends Controller
 
         return redirect()->back()->withErrors(['Ha ocurrido un error al obtener la cuenta']);
 
+    }
+
+    public function balanceSony($account_id) {
+        return view('ajax.account.balance_sony',compact('account_id'));
+    }
+
+    public function balanceSonyStore(Request $request) {
+
+        // Mensajes de alerta
+        $msgs = [
+            'balance.required' => 'El balance es obligatorio',
+            'balance.numeric' => 'El valor del balance debe ser numerico',
+        ];
+        // Validamos
+        $v = Validator::make($request->all(), [
+            'balance' => 'required|numeric'
+        ], $msgs);
+
+        // Si hay errores retornamos a la pantalla anterior con los mensajes
+        if ($v->fails())
+        {
+            return redirect()->back()->withErrors($v->errors());
+        }
+
+        $data['cuentas_id'] = $request->cuenta_id;
+        $data['balance'] = $request->balance;
+        $data['usuario'] = session()->get('usuario')->Nombre;
+        $data['Day'] = date('Y-m-d H:i:s');
+
+        DB::table('cuentas_balance_sony')->insert($data);
+
+        \Helper::messageFlash('Cuentas','Balance sony insertado exitosamente','alert_cuenta');
+
+        return redirect()->back();
     }
 
 }

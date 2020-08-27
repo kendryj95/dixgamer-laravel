@@ -471,13 +471,28 @@
 										</em>
 									</small>
 									<br />
+
+									<a
+											href="javascript:;"
+											data-toggle="modal"
+											data-target=".bs-example-modal-lg"
+											onClick='getPageAjax("{{ route('balance-sony', $account->ID) }}","#modal-container");'
+											id="add_saldo_sony" class="btn btn-xs btn-default text-muted" style="opacity:0.5" href="">saldo sony</a>
+
+									@if($balance_sony)
+										<small class="pull-right" style="font-weight:bold;">
+											{{$balance_sony->Day}} en sony
+											<em id="saldo-sony" style="border: 2px dashed #ddd; padding: 0 10px;" title="{{$balance_sony->usuario}}">
+												{{$balance_sony->balance}}
+											</em>
+										</small>
+									@endif
 							</li>
 
 	          </ul>
 
           @endif
 					<!-- END IF $hasBalance  -->
-
 
           <ul class="list-group">
 
