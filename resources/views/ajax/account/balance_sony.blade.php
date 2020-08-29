@@ -11,7 +11,7 @@
 
                 <div class="input-group form-group">
                     <span class="input-group-addon"><i class="fa fa-dollar fa-fw"></i></span>
-                    <input type="number" class="form-control" name="balance" id="balance" placeholder="Ingrese Balance Sony">
+                    <input type="number" class="form-control" name="balance" step="0.01" id="balance" placeholder="Ingrese Balance Sony">
                 </div>
 
                 <button class="btn btn-primary btn-block btn-lg" type="submit">Insertar</button>

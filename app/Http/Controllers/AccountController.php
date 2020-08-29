@@ -435,6 +435,18 @@ class AccountController extends Controller
         }
       }
 
+      $ventasPs3 = 0;
+      $ventasPs3Arr = [];
+      foreach ($soldConcept as $item) {
+          if ($item->consola == 'ps3') {
+              $ventasPs3++;
+              $ventasPs3Arr[] = $item;
+          }
+      }
+      $lastVentaPs3 = null;
+      if (count($ventasPs3Arr) > 0)
+          $lastVentaPs3 = $ventasPs3Arr[count($ventasPs3Arr)-1];
+
 
       return view('account.show',compact(
                 'account',
@@ -461,7 +473,9 @@ class AccountController extends Controller
                 'ventaPs4Secu',
                 'dom_excluido',
                 'fornite',
-                'balance_sony'
+                'balance_sony',
+                'ventasPs3',
+                'lastVentaPs3'
       ));
 
     }

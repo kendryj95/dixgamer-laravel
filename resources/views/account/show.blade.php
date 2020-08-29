@@ -458,10 +458,7 @@
 									class="pull-right"
 									style="font-weight:bold;">
 										saldo
-										<img
-											src="https://exur-exur.netdna-ssl.com/realskin/images/usa.png"
-											style="opacity:0.7">
-										<em style="border-top: 2px solid #cccccc; padding: 0 10px;">
+										<em style="border-top: 2px solid #ccc; padding: 0 10px;">
 											{{number_format($saldo , 2, '.', '')}}
 											@if(Helper::validateAdministrator(session()->get('usuario')->Level))
 												<span style="font-size:0.8em;">
@@ -471,6 +468,12 @@
 										</em>
 									</small>
 									<br />
+				</li>
+
+	          </ul>
+					
+				<ul class="list-group">
+	          		<li class="list-group-item" style="background-color: #efefef;">
 
 									<a
 											href="javascript:;"
@@ -481,8 +484,8 @@
 
 									@if($balance_sony)
 										<small class="pull-right" style="font-weight:bold;">
-											{{$balance_sony->Day}} en sony
-											<em id="saldo-sony" style="border: 2px dashed #ddd; padding: 0 10px;" title="{{$balance_sony->usuario}}">
+											en sony
+											<em id="saldo-sony" style="padding: 0 10px;" title="{{$balance_sony->Day}} por {{$balance_sony->usuario}}">
 												{{$balance_sony->balance}}
 											</em>
 										</small>
@@ -723,6 +726,7 @@
 										<div class="clearfix"></div>
 									@endif
 								@endforeach
+
 								<div class="dropdown pull-left" style="margin-bottom: 2px">
 									<button
 										class="btn btn-default dropdown-toggle btn-xs"
@@ -763,13 +767,65 @@
 									</ul>
 	
 								</div>
-	
+
 								<div class="clearfix"></div>
+							@endif
+							  @php
+								  $ventasPs3Impar = $ventasPs3 > 0 ? ($ventasPs3 % 2 != 0) : false;
+								  $dateMinus7days = date('Y-m-d', strtotime('-7 days', time()));
+								  $now = date('Y-m-d');
+								  $reseteo_manual = $ventasPs3Impar || ($lastVentaPs3 && $lastVentaPs3->Day >= $dateMinus7days && $lastVentaPs3 <= $now);
+							  @endphp
+
+				  			@if ($reseteo_manual)
+								  <div class="dropdown pull-left" style="margin-bottom: 2px">
+									  <button
+											  class="btn btn-default dropdown-toggle btn-xs"
+											  type="button" id="dropdownReset_manual"
+											  data-toggle="dropdown"
+											  aria-haspopup="true"
+											  aria-expanded="false">
+										  <i class="fa fa-fw fa-power-off"></i>
+										  Resetear Manual
+										  <span class="caret"></span>
+									  </button>
+
+									  <ul class="dropdown-menu bg-info" aria-labelledby="dropdownReset_manual">
+										  <li class="dropdown-header">¿Seguro deseas</li>
+										  <li class="dropdown-header">Resetear?</li>
+										  <li role="separator" class="divider"></li>
+										  <li>
+											  <form class="text-center" id="form_resetear_reset" action="{{url('resetear_cuenta',[$account->ID, null])}}" method="post">
+												  {{ csrf_field() }}
+												  <button
+														  class="btn btn-default btn-block"
+														  title="Resetear"
+														  id="reset_solo"
+														  onclick="reset_recup('reset', this)"
+														  type="button">
+													  Si, seguro!
+												  </button>
+												  <button
+														  class="btn btn-danger btn-block"
+														  title="Resetear con cambio pass"
+														  id="reset_pass"
+														  onclick="reset_recup('reset_pass', this)"
+														  type="button">
+													  Si, con cambio pass!
+												  </button>
+											  </form>
+										  </li>
+									  </ul>
+
+								  </div>
+
+								  <div class="clearfix"></div>
 							@endif
 
 							@if ($account->Q_reseteado)
 								<em class="small" style="color:#BBB;">
-									({{$account->Q_reseteado}}reset)
+									@if($ventasPs3 > 0) [{{$ventasPs3}} vtas ps3] @endif
+									({{$account->Q_reseteado}} reset)
 									hace {{$account->days_from_reset}}
 									días
 								</em>
