@@ -624,7 +624,12 @@
 								if ($ventaPs4Secu) {
 									$btnRecup["secu"]["ver"] = true;
 								}
-							} 
+							}
+
+							  $ventasPs3Impar = $ventasPs3 > 0 ? ($ventasPs3 % 2 != 0) : false;
+							  $dateMinus7days = date('Y-m-d', strtotime('-7 days', time()));
+							  $now = date('Y-m-d');
+							  $reseteo_manual = $ventasPs3Impar || ($lastVentaPs3 && $lastVentaPs3->Day >= $dateMinus7days && $lastVentaPs3 <= $now) || ($account->Q_reseteado != (($ventasPs3-2) / 2));
 
 							 @endphp
 							 
@@ -727,55 +732,51 @@
 									@endif
 								@endforeach
 
-								<div class="dropdown pull-left" style="margin-bottom: 2px">
-									<button
-										class="btn btn-default dropdown-toggle btn-xs"
-										type="button" id="dropdownReset"
-										data-toggle="dropdown"
-										aria-haspopup="true"
-										aria-expanded="false">
-											<i class="fa fa-fw fa-power-off"></i>
-											Resetear
-											<span class="caret"></span>
-									</button>
-	
-									<ul class="dropdown-menu bg-info" aria-labelledby="dropdownReset">
-										<li class="dropdown-header">¿Seguro deseas</li>
-										<li class="dropdown-header">Resetear?</li>
-										<li role="separator" class="divider"></li>
-										<li>
-											<form class="text-center" id="form_resetear_reset" action="{{url('resetear_cuenta',[$account->ID, null])}}" method="post">
-												{{ csrf_field() }}
-												<button
-													class="btn btn-default btn-block"
-													title="Resetear"
-													id="reset_solo"
-													onclick="reset_recup('reset', this)"
-													type="button">
-													Si, seguro!
-												</button>
-												<button
-													class="btn btn-danger btn-block"
-													title="Resetear con cambio pass"
-													id="reset_pass"
-													onclick="reset_recup('reset_pass', this)"
-													type="button">
-													Si, con cambio pass!
-												</button>
-											</form>
-										</li>
-									</ul>
-	
-								</div>
+								@if(!$reseteo_manual)
+										<div class="dropdown pull-left" style="margin-bottom: 2px">
+											<button
+													class="btn btn-default dropdown-toggle btn-xs"
+													type="button" id="dropdownReset"
+													data-toggle="dropdown"
+													aria-haspopup="true"
+													aria-expanded="false">
+												<i class="fa fa-fw fa-power-off"></i>
+												Resetear
+												<span class="caret"></span>
+											</button>
 
-								<div class="clearfix"></div>
+											<ul class="dropdown-menu bg-info" aria-labelledby="dropdownReset">
+												<li class="dropdown-header">¿Seguro deseas</li>
+												<li class="dropdown-header">Resetear?</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<form class="text-center" id="form_resetear_reset" action="{{url('resetear_cuenta',[$account->ID, null])}}" method="post">
+														{{ csrf_field() }}
+														<button
+																class="btn btn-default btn-block"
+																title="Resetear"
+																id="reset_solo"
+																onclick="reset_recup('reset', this)"
+																type="button">
+															Si, seguro!
+														</button>
+														<button
+																class="btn btn-danger btn-block"
+																title="Resetear con cambio pass"
+																id="reset_pass"
+																onclick="reset_recup('reset_pass', this)"
+																type="button">
+															Si, con cambio pass!
+														</button>
+													</form>
+												</li>
+											</ul>
+
+										</div>
+
+										<div class="clearfix"></div>
+								@endif
 							@endif
-							  @php
-								  $ventasPs3Impar = $ventasPs3 > 0 ? ($ventasPs3 % 2 != 0) : false;
-								  $dateMinus7days = date('Y-m-d', strtotime('-7 days', time()));
-								  $now = date('Y-m-d');
-								  $reseteo_manual = $ventasPs3Impar || ($lastVentaPs3 && $lastVentaPs3->Day >= $dateMinus7days && $lastVentaPs3 <= $now);
-							  @endphp
 
 				  			@if ($reseteo_manual)
 								  <div class="dropdown pull-left" style="margin-bottom: 2px">
