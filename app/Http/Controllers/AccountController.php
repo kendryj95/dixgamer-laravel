@@ -1525,7 +1525,7 @@ class AccountController extends Controller
       }
     }
 
-    private function buildNoteBeforeUpdate($values,$id_account) 
+    private function buildNoteBeforeUpdate($values,$id_account)
     {
       $notas = [];
       $account = DB::table('cuentas')->where('ID',$id_account)->first();
@@ -1535,6 +1535,12 @@ class AccountController extends Controller
       }
       if ($values->mail_fake != $account->mail_fake) {
         $notas[] = "Email Fake ha cambiado de {$account->mail_fake} a {$values->mail_fake}";
+      }
+      if ($values->name != $account->name) {
+        $notas[] = "Nombre ha cambiado de {$account->name} a {$values->name}";
+      }
+      if ($values->surname != $account->surname) {
+        $notas[] = "Apellido ha cambiado de {$account->surname} a {$values->surname}";
       }
       if ($values->pass != $account->pass) {
         $notas[] = "Contraseña ha cambiado de {$account->pass} a {$values->pass}";

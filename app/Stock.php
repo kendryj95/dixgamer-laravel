@@ -196,10 +196,10 @@ class Stock extends Model
         return DB::select(DB::raw("
               SELECT *
               FROM
-              (SELECT client.ID_ventas AS id, 'venta' as concepto, client.Day, ID AS ID_stock, titulo, consola, cuentas_id, clientes_id, slot, ventas_Notas, apellido, nombre, email,  NULL as new_pass, NULL as usuario, client.auto, client.recup
+              (SELECT client.ID_ventas AS id, 'venta' as concepto, client.Day, client.Day_orig, ID AS ID_stock, titulo, consola, cuentas_id, clientes_id, slot, ventas_Notas, apellido, nombre, email,  NULL as new_pass, NULL as usuario, client.auto, client.recup
               FROM stock
               RIGHT JOIN
-              (SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, medio_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day_modif AS Day, clientes.ID AS ID_clientes, apellido, nombre, email, clientes.auto, ventas.recup
+              (SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, medio_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day_modif AS Day, ventas.Day AS Day_orig, clientes.ID AS ID_clientes, apellido, nombre, email, clientes.auto, ventas.recup
               FROM ventas
               LEFT JOIN (select ventas_id, medio_cobro, ref_cobro, sum(precio) as precio, sum(comision) as comision FROM ventas_cobro GROUP BY ventas_id) as ventas_cobro ON ventas.ID = ventas_cobro.ventas_id
               LEFT JOIN
@@ -208,15 +208,15 @@ class Stock extends Model
               ON stock.ID = client.stock_id
               WHERE cuentas_id = $id
               UNION ALL
-              SELECT ID AS id, 'contra' as concepto, Day, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, new_pass, usuario, NULL AS auto, NULL AS recup FROM cta_pass WHERE cuentas_id =$id
+              SELECT ID AS id, 'contra' as concepto, Day, NULL AS Day_orig, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, new_pass, usuario, NULL AS auto, NULL AS recup FROM cta_pass WHERE cuentas_id =$id
               UNION ALL
-              SELECT ID AS id, 'reset' as concepto, Day, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, usuario, NULL AS auto, NULL AS recup FROM reseteo WHERE cuentas_id = $id
+              SELECT ID AS id, 'reset' as concepto, Day, NULL AS Day_orig, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, usuario, NULL AS auto, NULL AS recup FROM reseteo WHERE cuentas_id = $id
               UNION ALL
-              SELECT ID AS id, 'resetear' as concepto, Day, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, usuario, NULL AS auto, NULL AS recup FROM resetear WHERE cuentas_id = $id
+              SELECT ID AS id, 'resetear' as concepto, Day, NULL AS Day_orig, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, usuario, NULL AS auto, NULL AS recup FROM resetear WHERE cuentas_id = $id
               UNION ALL
-              SELECT ID AS id, 'notas' as concepto, Day, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, Notas as new_pass, usuario, NULL AS auto, NULL AS recup FROM cuentas_notas WHERE cuentas_id = $id
+              SELECT ID AS id, 'notas' as concepto, Day, NULL AS Day_orig, NULL as ID_stock, NULL as titulo, NULL as consola, cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, Notas as new_pass, usuario, NULL AS auto, NULL AS recup FROM cuentas_notas WHERE cuentas_id = $id
               UNION ALL
-              (SELECT NULL AS id, 'referencia' as concepto, (SELECT fecha_referencia FROM configuraciones WHERE ID = 1) AS Day, NULL as ID_stock, NULL as titulo, NULL as consola, NULL AS cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, NULL AS usuario, NULL AS auto, NULL AS recup)
+              (SELECT NULL AS id, 'referencia' as concepto, (SELECT fecha_referencia FROM configuraciones WHERE ID = 1) AS Day, NULL AS Day_orig, NULL as ID_stock, NULL as titulo, NULL as consola, NULL AS cuentas_id, NULL as clientes_id, NULL as slot, NULL as ventas_Notas, NULL as apellido, NULL as nombre, NULL as email, NULL as new_pass, NULL AS usuario, NULL AS auto, NULL AS recup)
               ) AS listado
               ORDER BY Day DESC
         "));

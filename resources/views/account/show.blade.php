@@ -458,7 +458,7 @@
 									class="pull-right"
 									style="font-weight:bold;">
 										saldo
-										<em style="border-top: 2px solid #ccc; padding: 0 10px;">
+										<em id="saldo-db" style="border-top: 2px solid #ccc; padding: 0 10px;">
 											{{number_format($saldo , 2, '.', '')}}
 											@if(Helper::validateAdministrator(session()->get('usuario')->Level))
 												<span style="font-size:0.8em;">
@@ -1434,6 +1434,10 @@
 				</div>
 				@endif
 			@endif
+
+				@if($sc->concepto == 'venta' && $sc->Day != $sc->Day_orig)
+					<br><em class="small" style="color:#BBB;">- {{date("d M 'y", strtotime($sc->Day_orig))}}</em>
+				@endif
 			</td>
             <?php if ($sc->concepto == 'contra'):?>
             <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;"><i class="fa fa-key fa-fw"></i> Nueva contra: <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
