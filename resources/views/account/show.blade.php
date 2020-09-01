@@ -629,7 +629,7 @@
 							  $ventasPs3Impar = $ventasPs3 > 0 ? ($ventasPs3 % 2 != 0) : false;
 							  $dateMinus7days = date('Y-m-d', strtotime('-7 days', time()));
 							  $now = date('Y-m-d');
-							  $reseteo_manual = $ventasPs3Impar || ($lastVentaPs3 && $lastVentaPs3->Day >= $dateMinus7days && $lastVentaPs3 <= $now) || ($account->Q_reseteado != (($ventasPs3-2) / 2));
+							  $reseteo_manual = $ventasPs3 > 0 ? ($ventasPs3Impar || ($lastVentaPs3 && $lastVentaPs3->Day >= $dateMinus7days && $lastVentaPs3 <= $now) || ($account->Q_reseteado != (($ventasPs3-2) / 2))) : false;
 
 							 @endphp
 							 
