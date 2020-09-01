@@ -30,6 +30,7 @@ class Account extends Model
                   $query->where($obj->column,'like','%'.$obj->word.'%');
                 }
               })
+            ->where('cuentas.activa',1)
             ->orderBy('cuentas.id','DESC');
     }
     

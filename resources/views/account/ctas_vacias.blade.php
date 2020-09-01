@@ -7,36 +7,34 @@
         <h1>Lista Cuentas Vacias</h1>
         <!-- InstanceBeginEditable name="body" -->
 
-        @if (\Helper::validateAdministrator(session()->get('usuario')->Level))
-            <div class="row" style="margin-bottom: 20px">
-                <div class="col-md-12">
+        <div class="row" style="margin-bottom: 20px">
+            <div class="col-md-12">
 
-                    <a
-                        class="btn @if($user == '') btn-success @else btn-default @endif btn-sm"
-                        href="{{ url('cuentas_vacias') }}"
-                        title="Filtrar Todos"
-                        style="margin:5px 0 0 0;">
+                <a
+                    class="btn @if($user == '') btn-success @else btn-default @endif btn-sm"
+                    href="{{ url('cuentas_vacias') }}"
+                    title="Filtrar Todos"
+                    style="margin:5px 0 0 0;">
 
-                        Todos
+                    Todos
 
-                    </a>
+                </a>
 
-                    @foreach($usuarios as $value)
-        
-                    <a
-                        class="btn @if($user == $value) btn-success @else btn-default @endif btn-sm"
-                        href="{{ url('cuentas_vacias', $value) }}"
-                        title="Filtrar {{$value}}"
-                        style="margin:5px 0 0 0;">
-        
-                        {{$value}}
-        
-                    </a>
-        
-                    @endforeach
-                </div>
+                @foreach($usuarios as $value)
+
+                <a
+                    class="btn @if($user == $value) btn-success @else btn-default @endif btn-sm"
+                    href="{{ url('cuentas_vacias', $value) }}"
+                    title="Filtrar {{$value}}"
+                    style="margin:5px 0 0 0;">
+
+                    {{$value}}
+
+                </a>
+
+                @endforeach
             </div>
-        @endif
+        </div>
 
         <div class="row">
             <div class="col-md-12">
