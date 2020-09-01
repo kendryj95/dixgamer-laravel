@@ -1411,7 +1411,7 @@
             	<a class="btn btn-default btn-xs" type="button"
 					data-toggle="modal"
 					data-target=".bs-example-modal-lg"
-					onClick='getPageAjax("{{url('modify_date_operations',[$sc->id,$sc->concepto])}}","#modal-container")'><i aria-hidden="true" class="fa fa-pencil text-muted"></i></a>
+					onClick='getPageAjax("{{url('modify_date_operations',[$sc->id,$sc->concepto, $account->ID])}}","#modal-container")'><i aria-hidden="true" class="fa fa-pencil text-muted"></i></a>
 				<div class="dropdown" style="display: inline-block;">
 					<button
 					class="btn btn-default btn-xs dropdown-toggle"

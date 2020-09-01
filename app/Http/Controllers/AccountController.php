@@ -1733,7 +1733,7 @@ class AccountController extends Controller
       }
     }
 
-    public function modifyDateOperations($id, $tipo)
+    public function modifyDateOperations($id, $tipo, $account_id)
     {
       $id = $id;
       $tipo = $tipo;
@@ -1760,32 +1760,45 @@ class AccountController extends Controller
 
       $day = date('Y-m-d', strtotime($day));
 
-      return view('ajax.account.modificar_fecha_operaciones',compact('id','tipo', 'day'));
+      return view('ajax.account.modificar_fecha_operaciones',compact('id','tipo', 'day', 'account_id'));
     }
 
     public function modifyDateOperationsStore(Request $request)
     {
       DB::beginTransaction();
-
+      $nota = '';
       try {
         switch ($request->tipo) {
           case 'contra':
+            $nota = "Se modificó cta_pass #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('cta_pass')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           
           case 'reset':
+            $nota = "Se modificó reseteo #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('reseteo')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           case 'resetear':
+            $nota = "Se modificó resetear #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('resetear')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           case 'notas':
+            $nota = "Se modificó cuentas_notas #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('cuentas_notas')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           case 'venta':
+            $nota = "Se modificó ventas #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('ventas')->where('ID',$request->id)->update(['Day_modif' => $request->Day]);
             break;
         }
+
+        DB::table('cuentas_notas')->insert([
+            "cuentas_id" => $request->account_id,
+            "Notas" => $nota,
+            "Day" => date('Y-m-d H:i:s'),
+            "usuario" => session()->get('usuario')->Nombre
+        ]);
+
         DB::commit();
 
         \Helper::messageFlash('Cuentas','Fecha de la operación modificada','alert_cuenta');
