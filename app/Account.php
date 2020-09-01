@@ -382,7 +382,8 @@ class Account extends Model
       $response = $query
             ->select('cuentas.*', DB::raw("(SELECT color FROM usuarios WHERE Nombre = cuentas.usuario) AS color_user"))
             ->leftjoin("stock","cuentas.ID","=","stock.cuentas_id")
-            ->whereNull("stock.cuentas_id");
+            ->whereNull("stock.cuentas_id")
+            ->where('activa',1);
 
       if ($usuario != null) {
         $response = $query->where("cuentas.usuario", $usuario);

@@ -26,6 +26,7 @@
            <a href="{{ url('cuentas/') . '/' . $data->stk_ctas_id }}"
              title="Ir a Cuenta"
              role="button"
+             id="{{ ($data->days_from_vta > 6) ? 'listo-para-reset-'.$data->stk_ctas_id : 'casi-para-reset-'.$data->stk_ctas_id  }}"
              class="btn btn-xs btn-{{ ($data->days_from_vta > 6) ? 'success' : 'normal'  }}">
              <i class="fa fa-link fa-fw" aria-hidden="true"></i>
              {{ $data->stk_ctas_id }}

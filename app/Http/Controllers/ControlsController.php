@@ -2194,7 +2194,7 @@ class ControlsController extends Controller
 
             \Helper::messageFlash('Configuraciones',"Email enviado correctamente.");
 
-            return redirect('home');
+            return redirect()->back();
         } catch (\Exception $e) {
             return redirect()->back()->withErrors([$e->getMessage()]);
         }
