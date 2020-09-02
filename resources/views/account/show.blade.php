@@ -1406,7 +1406,7 @@
 
             @if($sc->concepto != 'referencia') 
 
-            	@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+            	@if(\Helper::validateAdministrator(session()->get('usuario')->Level) || strpos(session()->get('usuario')->Nombre,"Leo") !== false)
 
             	<a class="btn btn-default btn-xs" type="button"
 					data-toggle="modal"
