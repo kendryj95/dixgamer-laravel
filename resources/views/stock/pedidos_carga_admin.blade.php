@@ -88,10 +88,7 @@
                                 <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />
                             </td>
                             <td>
-                                {{ \Helper::strTitleStock($pedido->titulo) }}
-                                <span class="label label-default {{$pedido->consola}}">
-                                    {{$pedido->consola}}
-                                </span>
+                                {{ \Helper::strTitleStock($pedido->titulo) }} ({{$pedido->consola}})
                             </td>
                             <td>
                                 @php

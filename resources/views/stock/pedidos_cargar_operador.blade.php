@@ -71,10 +71,7 @@
                                 <img class="img-rounded" width="50" id="image-swap" src="{{asset('img/productos')}}/{{ $pedido->consola }}/{{ $pedido->titulo.'.jpg' }} "alt="" />
                             </td>
                             <td>
-                                {{ ucwords(str_replace('-',' ',$pedido->titulo)) }}
-                                <span class="label label-default {{$pedido->consola}}">
-                                    {{$pedido->consola}}
-                                </span>
+                                {{ ucwords(str_replace('-',' ',$pedido->titulo)) }} ({{$pedido->consola}})
                             </td>
                             <td title="{{ $pedido->link_ps }}">
                               @if(($pedido->link_ps) && $pedido->link_ps !== "")
