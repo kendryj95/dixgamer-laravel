@@ -662,7 +662,7 @@
 												type="button">
 												Si, seguro!
 											</button>
-											@if (($account->days_from_reset === null) || ($account->days_from_reset > 183))
+											@if (($account->days_from_reset === null) || ($account->days_from_reset > 185))
 											<button
 												class="btn btn-success btn-block"
 												title="Recuperar secu con reseteo"
@@ -692,7 +692,7 @@
 								 
 							 @endif
 
-							  @if (($account->days_from_reset === null) || ($account->days_from_reset > 183))
+							  @if (($account->days_from_reset === null) || ($account->days_from_reset > 185))
 								@foreach ($btnRecup as $tipo => $item)
 									@if ($item['ver'] === true && $tipo != 'secu')
 										<div class="dropdown pull-left" style="margin-bottom: 2px">
@@ -1412,126 +1412,129 @@
 					data-toggle="modal"
 					data-target=".bs-example-modal-lg"
 					onClick='getPageAjax("{{url('modify_date_operations',[$sc->id,$sc->concepto, $account->ID])}}","#modal-container")'><i aria-hidden="true" class="fa fa-pencil text-muted"></i></a>
-				<div class="dropdown" style="display: inline-block;">
-					<button
-					class="btn btn-default btn-xs dropdown-toggle"
-					style="opacity: 0.5;"
-					type="button"
-					data-toggle="dropdown"
-					aria-haspopup="true"
-					aria-expanded="false">
-						<i class="fa fa-fw fa-close text-muted"></i>
-					</button>
 
-					<ul style="top: -79px; left: 40px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
-						<li class="dropdown-header">¿Seguro deseas eliminar</li>
-						<li class="dropdown-header">este registro?</li>
-						<li role="separator" class="divider"></li>
-						<li>
-							<a href="{{ url('delete_operations',[$sc->id,$sc->concepto]) }}">Sí, Eliminar</a>
-						</li>
-					</ul>
-				</div>
-				@endif
-			@endif
+						@if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+							<div class="dropdown" style="display: inline-block;">
+								<button
+								class="btn btn-default btn-xs dropdown-toggle"
+								style="opacity: 0.5;"
+								type="button"
+								data-toggle="dropdown"
+								aria-haspopup="true"
+								aria-expanded="false">
+									<i class="fa fa-fw fa-close text-muted"></i>
+								</button>
 
-				@if($sc->concepto == 'venta' && $sc->Day != $sc->Day_orig)
-					<br><em class="small" style="color:#BBB;">- {{date("d M 'y", strtotime($sc->Day_orig))}}</em>
-				@endif
-			</td>
-            <?php if ($sc->concepto == 'contra'):?>
-            <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;"><i class="fa fa-key fa-fw"></i> Nueva contra: <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
-			<?php elseif ($sc->concepto == 'notas'):?>
-			<td colspan="4"><em class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.8;"><i class="fa fa-comment fa-fw"></i> {!! html_entity_decode($sc->new_pass) !!} (<?php echo $sc->usuario;?>)</em></td>
-			<?php elseif ($sc->concepto == 'reset'):?>
-            <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Reseteado por <?php echo $sc->usuario;?></em></td>
-			<?php elseif ($sc->concepto == 'resetear'):?>
-            <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;color:red"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Solicitud de Reseteo por <?php echo $sc->usuario;?></em></td>
-            <?php elseif ($sc->concepto == 'referencia'):?>
-            <td colspan="3"><em class="badge badge-success" style="font-weight:normal; opacity:0.8; width: 100%"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA {{ \Helper::formatFechaReferencia($sc->Day) }}</em></td>
-      		<td></td>
-            <?php else:?>
-            <td>
-				<span class="text-muted small">#<?php echo $sc->clientes_id; ?> <?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span> @if($sc->auto == 're') <label for="" class="label label-danger" style="padding: 6px; margin-left: 20px">Revendedor</label> @endif
-				<?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?>
+								<ul style="top: -79px; left: 40px" class="dropdown-menu bg-info" aria-labelledby="dropdownMenu1">
+									<li class="dropdown-header">¿Seguro deseas eliminar</li>
+									<li class="dropdown-header">este registro?</li>
+									<li role="separator" class="divider"></li>
+									<li>
+										<a href="{{ url('delete_operations',[$sc->id,$sc->concepto]) }}">Sí, Eliminar</a>
+									</li>
+								</ul>
+							</div>
+						@endif
+                    @endif
+                @endif
 
-				
-				@if ($sc->recup == 2)
-					@if($sc->slot == 'Primario' && $operador_reset)
+                    @if($sc->concepto == 'venta' && $sc->Day != $sc->Day_orig)
+                        <br><em class="small" style="color:#BBB;">- {{date("d M 'y", strtotime($sc->Day_orig))}}</em>
+                    @endif
+                </td>
+                <?php if ($sc->concepto == 'contra'):?>
+                <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;"><i class="fa fa-key fa-fw"></i> Nueva contra: <?php echo $sc->new_pass;?> (<?php echo $sc->usuario;?>)</em></td>
+                <?php elseif ($sc->concepto == 'notas'):?>
+                <td colspan="4"><em class="alert alert-warning" style="color: #8a6d3b; background-color:#FFDD87; padding: 4px 7px; font-size: 12px; font-style:italic; margin:0px; opacity: 0.8;"><i class="fa fa-comment fa-fw"></i> {!! html_entity_decode($sc->new_pass) !!} (<?php echo $sc->usuario;?>)</em></td>
+                <?php elseif ($sc->concepto == 'reset'):?>
+                <td colspan="4"><em class="badge badge-danger" style="font-weight:normal; opacity:0.8;"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Reseteado por <?php echo $sc->usuario;?></em></td>
+                <?php elseif ($sc->concepto == 'resetear'):?>
+                <td colspan="4"><em class="badge badge-default" style="font-weight:normal; opacity:0.8;color:red"><i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Solicitud de Reseteo por <?php echo $sc->usuario;?></em></td>
+                <?php elseif ($sc->concepto == 'referencia'):?>
+                <td colspan="3"><em class="badge badge-success" style="font-weight:normal; opacity:0.8; width: 100%"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> FECHA DE REFERENCIA {{ \Helper::formatFechaReferencia($sc->Day) }}</em></td>
+                  <td></td>
+                <?php else:?>
+                <td>
+                    <span class="text-muted small">#<?php echo $sc->clientes_id; ?> <?php echo $sc->nombre; ?> <?php echo $sc->apellido; ?></span> @if($sc->auto == 're') <label for="" class="label label-danger" style="padding: 6px; margin-left: 20px">Revendedor</label> @endif
+                    <?php if ($sc->ventas_Notas):?><a href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="Notas de Cliente" data-content="<?php echo $sc->ventas_Notas; ?>" style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php endif; ?>
 
-					<div style="margin-top: 5px; display:inline-block" class="dropdown">
-						<button
-						class="btn btn-primary dropdown-toggle btn-xs"
-						type="button" id="priSigueJugando2"
-						data-toggle="dropdown"
-						aria-haspopup="true"
-						aria-expanded="false">
-						<i class="fa fa-fw fa-gamepad"></i>
-							Pri Sigue jugando
-						</button>
 
-						<ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
-						<li class="dropdown-header">¿Seguro deseas</li>
-						<li class="dropdown-header">Ejecutarlo?</li>
-						<li role="separator" class="divider"></li>
-						<li>
-											
-							<a
-							href="{{ url('nota_siguejugandopri', $account->ID) }}"
-								class="btn btn-danger"
-								title="Primario Sigue jugando"
-								id="pri_sigue_jugando"
-								>
-								Si, seguro!
-							</a>
-						</li>
-						</ul>
+                    @if ($sc->recup == 2)
+                        @if($sc->slot == 'Primario' && $operador_reset)
 
-					</div>
-					@endif
+                        <div style="margin-top: 5px; display:inline-block" class="dropdown">
+                            <button
+                            class="btn btn-primary dropdown-toggle btn-xs"
+                            type="button" id="priSigueJugando2"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fa fa-fw fa-gamepad"></i>
+                                Pri Sigue jugando
+                            </button>
 
-					@if($sc->slot == 'Secundario' && $operador_pass)
-						
-						<div style="margin-top: 5px; display:inline-block" class="dropdown">
-							<button
-							class="btn btn-danger dropdown-toggle btn-xs"
-							type="button" id="secusiguejugando2"
-							data-toggle="dropdown"
-							aria-haspopup="true"
-							aria-expanded="false">
-							<i class="fa fa-fw fa-gamepad"></i>
-								Secu Sigue jugando
-							</button>
-	
-							<ul class="dropdown-menu bg-info" aria-labelledby="secusiguejugando2">
-							<li class="dropdown-header">¿Seguro deseas</li>
-							<li class="dropdown-header">Ejecutarlo?</li>
-							<li role="separator" class="divider"></li>
-							<li>
-												
-								<a
-								href="{{ url('nota_siguejugando', $account->ID) }}"
-									class="btn btn-danger"
-									title="Secu Sigue jugando"
-									id="secu_sigue_jugando"
-									>
-									Si, seguro!
-								</a>
-							</li>
-							</ul>
-	
-						</div>
-					@endif
-				@endif
-			</td>
+                            <ul class="dropdown-menu bg-info" aria-labelledby="priSigueJugando2">
+                            <li class="dropdown-header">¿Seguro deseas</li>
+                            <li class="dropdown-header">Ejecutarlo?</li>
+                            <li role="separator" class="divider"></li>
+                            <li>
 
-            <td id="<?php echo $sc->clientes_id; ?>"><a title="Ir a Cliente" href="{{ url('clientes', $sc->clientes_id) }}"><?php echo $sc->email; ?></a> <a class="btn btn-xs btn-default" style="opacity:0.6;" href="https://mail.google.com/mail/u/1/#search/<?php echo substr($sc->email, 0, strpos($sc->email, '@')) . '+' . str_replace("-"," ",$sc->titulo); ?>" title="filtrar guia de descarga en gmail" target="_blank"><i aria-hidden="true" class="fa fa-google"></i>mail</a>
+                                <a
+                                href="{{ url('nota_siguejugandopri', $account->ID) }}"
+                                    class="btn btn-danger"
+                                    title="Primario Sigue jugando"
+                                    id="pri_sigue_jugando"
+                                    >
+                                    Si, seguro!
+                                </a>
+                            </li>
+                            </ul>
 
-				<!--- Mensajes predefinidos con guia de re activar o cambio de contraseña -->
-				<!--
-				<div style="position:absolute; top:0; left:-500px;">
-					<textarea id="newpass-copy" type="text" rows="1" cols="2"><?php // echo "Actualizamos la contraseña de ésta Cuenta/Usuario: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
-					<textarea id="reactivar-copy" type="text" rows="1" cols="2"><?php // echo "Por favor ingresá a nuestra cuenta/usuario una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:\r\n\r\n1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar\r\n2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar\r\n3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.\r\n\r\nContraseña: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
+                        </div>
+                        @endif
+
+                        @if($sc->slot == 'Secundario' && $operador_pass)
+
+                            <div style="margin-top: 5px; display:inline-block" class="dropdown">
+                                <button
+                                class="btn btn-danger dropdown-toggle btn-xs"
+                                type="button" id="secusiguejugando2"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="fa fa-fw fa-gamepad"></i>
+                                    Secu Sigue jugando
+                                </button>
+
+                                <ul class="dropdown-menu bg-info" aria-labelledby="secusiguejugando2">
+                                <li class="dropdown-header">¿Seguro deseas</li>
+                                <li class="dropdown-header">Ejecutarlo?</li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+
+                                    <a
+                                    href="{{ url('nota_siguejugando', $account->ID) }}"
+                                        class="btn btn-danger"
+                                        title="Secu Sigue jugando"
+                                        id="secu_sigue_jugando"
+                                        >
+                                        Si, seguro!
+                                    </a>
+                                </li>
+                                </ul>
+
+                            </div>
+                        @endif
+                    @endif
+                </td>
+
+                <td id="<?php echo $sc->clientes_id; ?>"><a title="Ir a Cliente" href="{{ url('clientes', $sc->clientes_id) }}"><?php echo $sc->email; ?></a> <a class="btn btn-xs btn-default" style="opacity:0.6;" href="https://mail.google.com/mail/u/1/#search/<?php echo substr($sc->email, 0, strpos($sc->email, '@')) . '+' . str_replace("-"," ",$sc->titulo); ?>" title="filtrar guia de descarga en gmail" target="_blank"><i aria-hidden="true" class="fa fa-google"></i>mail</a>
+
+                    <!--- Mensajes predefinidos con guia de re activar o cambio de contraseña -->
+                    <!--
+                    <div style="position:absolute; top:0; left:-500px;">
+                        <textarea id="newpass-copy" type="text" rows="1" cols="2"><?php // echo "Actualizamos la contraseña de ésta Cuenta/Usuario: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
+                        <textarea id="reactivar-copy" type="text" rows="1" cols="2"><?php // echo "Por favor ingresá a nuestra cuenta/usuario una vez más para RE ACTIVAR tu slot primario, una vez dentro de nuestro usuario:\r\n\r\n1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar\r\n2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar\r\n3) Reiniciar tu consola y acceder con tu usuario personal, recordá no volver a abrir nuestro usuario.\r\n\r\nContraseña: " . $account->pass . "\r\n\r\nSaludos, " . $vendedor. " de DixGamer.";?></textarea>
 				</div>
 1
 				-->

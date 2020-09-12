@@ -424,7 +424,7 @@ class Stock extends Model
         FROM ventas
         GROUP BY stock_id) AS vendido
         ON ID = stock_id
-        WHERE (consola = 'ps3') AND ((Q_vta >= '2' AND ID_reseteo IS NULL) OR (((Q_vta >= '2') AND ((Q_reseteado + 1) = FLOOR(Q_vta/2))) AND DATEDIFF(NOW(), dayreseteo) > '183')) AND cuentas_id NOT IN ($cuentas_excluidas)
+        WHERE (consola = 'ps3') AND ((Q_vta >= '2' AND ID_reseteo IS NULL) OR (((Q_vta >= '2') AND ((Q_reseteado + 1) = FLOOR(Q_vta/2))) AND DATEDIFF(NOW(), dayreseteo) > '185')) AND cuentas_id NOT IN ($cuentas_excluidas)
         ORDER BY consola, titulo, ID DESC"));
 
     }
