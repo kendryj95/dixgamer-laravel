@@ -1435,7 +1435,7 @@ class AccountController extends Controller
         $data['Day'] = $balance->ex_Day_stock;
         $data['usuario'] = $balance->ex_usuario;
         $saving = $this->tks->storeCodes($data);
-        $nota = "Devuelto de cta #$request->c_id";
+        $nota = "Devuelto de cta <a class=\"alert-link\" href=\"".url('cuentas',$request->c_id)."\">#$request->c_id</a> {$balance->code}";
         $this->tks->storeNotesStock($request->id,$nota);
 
         // Eliminando saldo actual
