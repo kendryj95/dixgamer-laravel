@@ -827,146 +827,240 @@ class AccountController extends Controller
         $band = false;
         if ($title == 'gift-card-60-usd-org') {
 
-          $titles = ['gift-card-10-usd', 'gift-card-50-usd'];
+            $titles = ['gift-card-10-usd', 'gift-card-50-usd'];
+            $valido = true;
 
-          foreach ($titles as $title) {
-            $stock_valido = \Helper::availableStock($account,$title,$console);
-
-            if (is_array($stock_valido)) { 
-              $stock_valido_id = $stock_valido[0]->ID_stk;
-              $stock = Stock::stockDetail($stock_valido_id)->first();
-
-              $date = date('Y-m-d H:i:s');
-              $data = [
-                'cuentas_id'=>$account,
-                'ex_stock_id'=>$stock->ID,
-                'titulo'=>$title,
-                'consola'=>$console,
-                'medio_pago'=>$stock->medio_pago,
-                'costo_usd'=>$stock->costo_usd,
-                'costo'=>$stock->costo,
-                'code'=>$stock->code,
-                'code_prov'=>$stock->code_prov,
-                'n_order'=>$stock->n_order,
-                'Day'=>$date,
-                'ex_Day_stock'=>$stock->Day,
-                'usuario'=>session()->get('usuario')->Nombre,
-                'ex_usuario'=>$stock->usuario
-              ];
-
-              try {
-                $this->blc->storeBalanceAccount($data);
-
-                // Eliminando stock
-                $stock = Stock::where('ID',$stock->ID)->delete();
-                // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                // return redirect('cuentas/'.$account);
-                $band = true;
-              } catch (\Exception $e) {
-                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                $band = false;
-              }
-            
-            } else {
-              return redirect()->back()->withErrors(['No hay stock de la gift']);
+            foreach ($titles as $title) {
+                $stock_valido = \Helper::availableStock($account,$title,$console);
+                if (!is_array($stock_valido)) {
+                    $valido = false;
+                    break;
+                }
             }
+
+            if (!$valido) {
+
+                $title = 'gift-card-10-usd';
+                $titles = [];
+                for ($i=0;$i<6;$i++) {
+                    $titles[$i] = $title;
+                }
+                $stock_valido = \Helper::availableStock($account,$title,$console);
+                $valido = true;
+                if (is_array($stock_valido)) {
+                    if ($stock_valido[0]->Q_Stock < 6) {
+                        $valido = false;
+                    }
+                } else {
+                    $valido = false;
+                }
+            }
+
+          if ($valido) {
+              foreach ($titles as $title) {
+                  $stock_valido = \Helper::availableStock($account,$title,$console);
+
+                  if (is_array($stock_valido)) {
+                      $stock_valido_id = $stock_valido[0]->ID_stk;
+                      $stock = Stock::stockDetail($stock_valido_id)->first();
+
+                      $date = date('Y-m-d H:i:s');
+                      $data = [
+                          'cuentas_id'=>$account,
+                          'ex_stock_id'=>$stock->ID,
+                          'titulo'=>$title,
+                          'consola'=>$console,
+                          'medio_pago'=>$stock->medio_pago,
+                          'costo_usd'=>$stock->costo_usd,
+                          'costo'=>$stock->costo,
+                          'code'=>$stock->code,
+                          'code_prov'=>$stock->code_prov,
+                          'n_order'=>$stock->n_order,
+                          'Day'=>$date,
+                          'ex_Day_stock'=>$stock->Day,
+                          'usuario'=>session()->get('usuario')->Nombre,
+                          'ex_usuario'=>$stock->usuario
+                      ];
+
+                      try {
+                          $this->blc->storeBalanceAccount($data);
+
+                          // Eliminando stock
+                          $stock = Stock::where('ID',$stock->ID)->delete();
+                          // Mensaje de notificacion
+                          // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                          // return redirect('cuentas/'.$account);
+                          $band = true;
+                      } catch (\Exception $e) {
+                          // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                          $band = false;
+                      }
+
+                  } else {
+                      return redirect()->back()->withErrors(['No hay stock de la gift']);
+                  }
+              }
+          } else {
+              return redirect()->back()->withErrors(['No hay stocks disponibles para combinar']);
           }
           
-        } elseif ($title == 'gift-card-30-usd-org'){
+        } elseif ($title == 'gift-card-30-usd-org') {
 
           $titles = ['gift-card-10-usd', 'gift-card-20-usd'];
+          $valido = true;
 
           foreach ($titles as $title) {
-            $stock_valido = \Helper::availableStock($account,$title,$console);
-
-            if (is_array($stock_valido)) { 
-              $stock_valido_id = $stock_valido[0]->ID_stk;
-              $stock = Stock::stockDetail($stock_valido_id)->first();
-
-              $date = date('Y-m-d H:i:s');
-              $data = [
-                'cuentas_id'=>$account,
-                'ex_stock_id'=>$stock->ID,
-                'titulo'=>$title,
-                'consola'=>$console,
-                'medio_pago'=>$stock->medio_pago,
-                'costo_usd'=>$stock->costo_usd,
-                'costo'=>$stock->costo,
-                'code'=>$stock->code,
-                'code_prov'=>$stock->code_prov,
-                'n_order'=>$stock->n_order,
-                'Day'=>$date,
-                'ex_Day_stock'=>$stock->Day,
-                'usuario'=>session()->get('usuario')->Nombre,
-                'ex_usuario'=>$stock->usuario
-              ];
-
-              try {
-                $this->blc->storeBalanceAccount($data);
-
-                // Eliminando stock
-                $stock = Stock::where('ID',$stock->ID)->delete();
-                // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                // return redirect('cuentas/'.$account);
-                $band = true;
-              } catch (\Exception $e) {
-                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                $band = false;
+              $stock_valido = \Helper::availableStock($account,$title,$console);
+              if (!is_array($stock_valido)) {
+                  $valido = false;
+                  break;
               }
-            
-            } else {
-              return redirect()->back()->withErrors(['No hay stock de la gift']);
+          }
+
+            if (!$valido) {
+
+                $title = 'gift-card-10-usd';
+                $titles = [];
+                for ($i=0;$i<3;$i++) {
+                    $titles[$i] = $title;
+                }
+                $stock_valido = \Helper::availableStock($account,$title,$console);
+                $valido = true;
+                if (is_array($stock_valido)) {
+                    if ($stock_valido[0]->Q_Stock < 3) {
+                        $valido = false;
+                    }
+                } else {
+                    $valido = false;
+                }
             }
+
+          if ($valido) {
+              foreach ($titles as $title) {
+                  $stock_valido = \Helper::availableStock($account,$title,$console);
+
+                  if (is_array($stock_valido)) {
+                      $stock_valido_id = $stock_valido[0]->ID_stk;
+                      $stock = Stock::stockDetail($stock_valido_id)->first();
+
+                      $date = date('Y-m-d H:i:s');
+                      $data = [
+                          'cuentas_id'=>$account,
+                          'ex_stock_id'=>$stock->ID,
+                          'titulo'=>$title,
+                          'consola'=>$console,
+                          'medio_pago'=>$stock->medio_pago,
+                          'costo_usd'=>$stock->costo_usd,
+                          'costo'=>$stock->costo,
+                          'code'=>$stock->code,
+                          'code_prov'=>$stock->code_prov,
+                          'n_order'=>$stock->n_order,
+                          'Day'=>$date,
+                          'ex_Day_stock'=>$stock->Day,
+                          'usuario'=>session()->get('usuario')->Nombre,
+                          'ex_usuario'=>$stock->usuario
+                      ];
+
+                      try {
+                          $this->blc->storeBalanceAccount($data);
+
+                          // Eliminando stock
+                          $stock = Stock::where('ID',$stock->ID)->delete();
+                          // Mensaje de notificacion
+                          // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                          // return redirect('cuentas/'.$account);
+                          $band = true;
+                      } catch (\Exception $e) {
+                          // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                          $band = false;
+                      }
+
+                  } else {
+                      return redirect()->back()->withErrors(['No hay stock de la gift']);
+                  }
+              }
+          } else {
+              return redirect()->back()->withErrors(['No hay stock disponibles para combinar']);
           }
 
         } elseif($title == 'gift-card-40-usd-org'){
           $titles = ['gift-card-20-usd', 'gift-card-20-usd'];
+            $valido = true;
 
-          foreach ($titles as $title) {
-            $stock_valido = \Helper::availableStock($account,$title,$console);
-
-            if (is_array($stock_valido)) { 
-              $stock_valido_id = $stock_valido[0]->ID_stk;
-              $stock = Stock::stockDetail($stock_valido_id)->first();
-
-              $date = date('Y-m-d H:i:s');
-              $data = [
-                'cuentas_id'=>$account,
-                'ex_stock_id'=>$stock->ID,
-                'titulo'=>$title,
-                'consola'=>$console,
-                'medio_pago'=>$stock->medio_pago,
-                'costo_usd'=>$stock->costo_usd,
-                'costo'=>$stock->costo,
-                'code'=>$stock->code,
-                'code_prov'=>$stock->code_prov,
-                'n_order'=>$stock->n_order,
-                'Day'=>$date,
-                'ex_Day_stock'=>$stock->Day,
-                'usuario'=>session()->get('usuario')->Nombre,
-                'ex_usuario'=>$stock->usuario
-              ];
-
-              try {
-                $this->blc->storeBalanceAccount($data);
-
-                // Eliminando stock
-                $stock = Stock::where('ID',$stock->ID)->delete();
-                // Mensaje de notificacion
-                // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
-                // return redirect('cuentas/'.$account);
-                $band = true;
-              } catch (\Exception $e) {
-                // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
-                $band = false;
-              }
-            
-            } else {
-              return redirect()->back()->withErrors(['No hay stock de la gift']);
+            foreach ($titles as $title) {
+                $stock_valido = \Helper::availableStock($account,$title,$console);
+                if (!is_array($stock_valido)) {
+                    $valido = false;
+                    break;
+                }
             }
-          }
+
+            if (!$valido) {
+
+                $title = 'gift-card-10-usd';
+                $titles = [];
+                for ($i=0;$i<4;$i++) {
+                    $titles[$i] = $title;
+                }
+                $stock_valido = \Helper::availableStock($account,$title,$console);
+                $valido = true;
+                if (is_array($stock_valido)) {
+                    if ($stock_valido[0]->Q_Stock < 4) {
+                        $valido = false;
+                    }
+                } else {
+                    $valido = false;
+                }
+            }
+
+            if ($valido) {
+                foreach ($titles as $title) {
+                    $stock_valido = \Helper::availableStock($account,$title,$console);
+
+                    if (is_array($stock_valido)) {
+                        $stock_valido_id = $stock_valido[0]->ID_stk;
+                        $stock = Stock::stockDetail($stock_valido_id)->first();
+
+                        $date = date('Y-m-d H:i:s');
+                        $data = [
+                            'cuentas_id'=>$account,
+                            'ex_stock_id'=>$stock->ID,
+                            'titulo'=>$title,
+                            'consola'=>$console,
+                            'medio_pago'=>$stock->medio_pago,
+                            'costo_usd'=>$stock->costo_usd,
+                            'costo'=>$stock->costo,
+                            'code'=>$stock->code,
+                            'code_prov'=>$stock->code_prov,
+                            'n_order'=>$stock->n_order,
+                            'Day'=>$date,
+                            'ex_Day_stock'=>$stock->Day,
+                            'usuario'=>session()->get('usuario')->Nombre,
+                            'ex_usuario'=>$stock->usuario
+                        ];
+
+                        try {
+                            $this->blc->storeBalanceAccount($data);
+
+                            // Eliminando stock
+                            $stock = Stock::where('ID',$stock->ID)->delete();
+                            // Mensaje de notificacion
+                            // \Helper::messageFlash('Cuentas','Saldo agregado','alert_cuenta');
+                            // return redirect('cuentas/'.$account);
+                            $band = true;
+                        } catch (\Exception $e) {
+                            // return redirect('/cuentas')->withErrors('Intentelo nuevamente');
+                            $band = false;
+                        }
+
+                    } else {
+                        return redirect()->back()->withErrors(['No hay stock de la gift']);
+                    }
+                }
+            } else {
+                return redirect()->back()->withErrors(['No hay stock para combinar']);
+            }
+
         } elseif ($title == 'gift-card-55-usd-org') {
 
           $titles = ['gift-card-10-usd', 'gift-card-20-usd', 'gift-card-25-usd'];
