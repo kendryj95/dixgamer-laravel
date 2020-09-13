@@ -111,7 +111,7 @@ class Pedidos_CobradosController extends Controller
                 return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => true, "cliente" => $cliente]);
     }
 
-    public function salesNoFifa($filtro = null)
+    public function salesPes21($filtro = null)
     {
 
         $condicion = " and post_id!=''";
@@ -166,7 +166,7 @@ SELECT pedido.*, clientes.ID as cliente_ID, clientes.email as cliente_email, cli
                             LEFT JOIN cbgw_postmeta as pm ON wco.order_id = pm.post_id
                             LEFT JOIN cbgw_woocommerce_order_itemmeta as wcom ON wco.order_item_id = wcom.order_item_id
                             where 
-                            p.post_status = 'wc-processing' " . $condicion . " and wco.order_item_name NOT LIKE '%fifa 20%' group by 
+                            p.post_status = 'wc-processing' " . $condicion . " and wco.order_item_name LIKE '%pes 2021%' group by 
                             wco.order_item_id
                             ORDER BY order_item_id DESC) as primer
                 LEFT JOIN
@@ -210,7 +210,7 @@ ORDER BY order_item_id DESC");
         return view('sales.web_sales')->with(['row_rsAsignarVta' => $passdata, 'paginas' => $paginas, 'paginaAct' => $paginaAct, "mostrar" => true, "cliente" => $cliente]);
     }
 
-    public function salesFifa($filtro = null)
+    public function salesFifa21($filtro = null)
     {
 
         $condicion = " and post_id!=''";
@@ -265,7 +265,7 @@ SELECT pedido.*, clientes.ID as cliente_ID, clientes.email as cliente_email, cli
                             LEFT JOIN cbgw_postmeta as pm ON wco.order_id = pm.post_id
                             LEFT JOIN cbgw_woocommerce_order_itemmeta as wcom ON wco.order_item_id = wcom.order_item_id
                             where 
-                            p.post_status = 'wc-processing' " . $condicion . " and wco.order_item_name LIKE '%fifa 20%' group by 
+                            p.post_status = 'wc-processing' " . $condicion . " and wco.order_item_name LIKE '%fifa 21%' group by 
                             wco.order_item_id
                             ORDER BY order_item_id DESC) as primer
                 LEFT JOIN

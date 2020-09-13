@@ -263,8 +263,8 @@ Route::group(['middleware' => ['login']], function()
   //Route::get('web/sales','Pedidos_CobradosController@index')->name('web/sales');
     // Route::get('web/sales','Pedidos_CobradosController@test')->name('web/sales');
     Route::get('web/sales/{filtro?}','Pedidos_CobradosController@index')->name('web/sales');
-    Route::get('web/sales_nofifa/{filtro?}','Pedidos_CobradosController@salesNoFifa')->name('web/sales_nofifa');
-    Route::get('web/sales_fifa/{filtro?}','Pedidos_CobradosController@salesFifa')->name('web/sales_fifa');
+    Route::get('web/sales_fifa_21/{filtro?}','Pedidos_CobradosController@salesFifa21');
+    Route::get('web/sales_pes_21/{filtro?}','Pedidos_CobradosController@salesPes21');
     //Route::get('/web/sales', function() { return redirect('web/sales/list'); });
     Route::post('getDataClientWebSales','Pedidos_CobradosController@getDataClientWebSales')->name('getDataClientWebSales');
     Route::get('salesInsertWeb/{oii}/{titulo}/{consola}/{slot?}','SalesController@salesInsertWeb');
