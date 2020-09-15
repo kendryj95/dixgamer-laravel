@@ -979,18 +979,17 @@
                   <div class="clearfix"></div>
                 @endif
               @endif
+                  @component('components.clipboards.account')
+                      @slot('clientes_id', $customer->ID)
+                      @slot('pass', $dataCustomer->pass)
+                      @slot('nombre_cliente', $customer->nombre)
+                      @slot('titulo', $dataCustomer->titulo)
+                      @slot('mail_fake', $dataCustomer->mail_cta)
+                      @slot('account_name', $dataCustomer->name_cta)
+                      @slot('account_surname', $dataCustomer->surname_cta)
+                      @slot('oferta_fortnite', $oferta_fortnite)
+                  @endcomponent
             @endif
-
-                @component('components.clipboards.account')
-                    @slot('clientes_id', $customer->ID)
-                    @slot('pass', $dataCustomer->pass)
-                    @slot('nombre_cliente', $customer->nombre)
-                    @slot('titulo', $dataCustomer->titulo)
-                    @slot('mail_fake', $dataCustomer->mail_cta)
-                    @slot('account_name', $dataCustomer->name_cta)
-                    @slot('account_surname', $dataCustomer->surname_cta)
-                    @slot('oferta_fortnite', $oferta_fortnite)
-                @endcomponent
 
             @if ($ventas_notas)
               @foreach ($ventas_notas as $id_venta => $notas)

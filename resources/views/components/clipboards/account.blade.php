@@ -1,4 +1,4 @@
-<div style="position:absolute; top:-1000; left:-1000px;">
+<div style="position:absolute; top:-1000px; left:-1000px;">
     <div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
 					<span id="newpass-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por mantenimiento de los servidores actualizamos la contraseña de ésta Cuenta/Usuario,<br /><br />
 						La nueva contraseña es: <?php echo $pass;?><br /><br />

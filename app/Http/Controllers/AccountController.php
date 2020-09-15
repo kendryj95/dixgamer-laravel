@@ -510,7 +510,7 @@ class AccountController extends Controller
         ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL CAMBIO DE CONTRASEÑA
 
         if ($venta->Day_modif < $cuenta_pass->Day) {
-          $show = true;
+          return $venta;
         }
         
       }
@@ -539,7 +539,7 @@ class AccountController extends Controller
         ## VALIDANDO QUE LA VENTA SE HAYA HECHO ANTES DEL RESETEO
 
         if ($venta->Day_modif < $cuenta_reset->Day) {
-          $show = true;
+          return $venta;
         }
         
       }

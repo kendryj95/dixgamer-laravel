@@ -273,10 +273,11 @@
 									
 									<div class="dropdown pull-right">
 										<button
-										class="btn btn-danger dropdown-toggle btn-xs"
+										class="btn-copiador btn btn-danger dropdown-toggle btn-xs"
 										type="button" id="secusiguejugando"
 										data-toggle="dropdown"
 										aria-haspopup="true"
+										data-clipboard-target="#avisonewemail-copy{{$operador_pass->clientes_id}}"
 										aria-expanded="false">
 										<i class="fa fa-fw fa-gamepad"></i>
 											Secu Sigue jugando
@@ -307,10 +308,11 @@
 
 									<div class="dropdown pull-right">
 										<button
-										class="btn btn-primary dropdown-toggle btn-xs"
+										class="btn-copiador btn btn-primary dropdown-toggle btn-xs"
 										type="button" id="priSigueJugando"
 										data-toggle="dropdown"
 										aria-haspopup="true"
+										data-clipboard-target="#reactivar-copy{{$operador_reset->clientes_id}}"
 										aria-expanded="false">
 										<i class="fa fa-fw fa-gamepad"></i>
 											Pri Sigue jugando
@@ -1464,10 +1466,11 @@
 
                         <div style="margin-top: 5px; display:inline-block" class="dropdown">
                             <button
-                            class="btn btn-primary dropdown-toggle btn-xs"
+                            class="btn-copiador btn btn-primary dropdown-toggle btn-xs"
                             type="button" id="priSigueJugando2"
                             data-toggle="dropdown"
                             aria-haspopup="true"
+							data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}"
                             aria-expanded="false">
                             <i class="fa fa-fw fa-gamepad"></i>
                                 Pri Sigue jugando
@@ -1497,10 +1500,11 @@
 
                             <div style="margin-top: 5px; display:inline-block" class="dropdown">
                                 <button
-                                class="btn btn-danger dropdown-toggle btn-xs"
+                                class="btn-copiador btn btn-danger dropdown-toggle btn-xs"
                                 type="button" id="secusiguejugando2"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
+								data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"
                                 aria-expanded="false">
                                 <i class="fa fa-fw fa-gamepad"></i>
                                     Secu Sigue jugando
