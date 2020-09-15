@@ -159,8 +159,10 @@ class CustomerController extends Controller
       $lowSalesByCustomerIds= Customer::salesLowByCustomerId($id)->get();
       $expensesIncome = Expenses::expensesIncome();
       $customerNotes = Customer::customerNotesByCustomerId($id)->get();
+      $oferta_fortnite = DB::table('configuraciones')->where('ID',1)->value('oferta_fortnite');
 
-      $id_ventas = [];
+
+        $id_ventas = [];
       foreach ($dataCustomers as $data) {
         $id_ventas[] = $data->ID_ventas;
       }
@@ -183,7 +185,8 @@ class CustomerController extends Controller
         'customerNotes',
         'ventas_notas',
         'othersEmails',
-        'venta_plus_sec'
+        'venta_plus_sec',
+          'oferta_fortnite'
       ));
     }
 

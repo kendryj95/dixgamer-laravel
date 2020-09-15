@@ -89,7 +89,7 @@ class Customer extends Model
                   (SELECT cuentas_id, COUNT(*) AS q_reset, MAX(Day) as max_Day FROM reseteo GROUP BY cuentas_id) AS ctas_reseteadas
                 "),'stock.cuentas_id','=','ctas_reseteadas.cuentas_id')
                 ->leftjoin(DB::raw("
-                  (SELECT ID AS cta_id, mail_fake AS mail_cta, pass FROM cuentas) AS cuentas"),'stock.cuentas_id','=','cuentas.cta_id')
+                  (SELECT ID AS cta_id, name AS name_cta, surname AS surname_cta, mail_fake AS mail_cta, pass FROM cuentas) AS cuentas"),'stock.cuentas_id','=','cuentas.cta_id')
                 ->rightjoin(
                   DB::raw("
                     (SELECT ventas.ID AS ID_ventas, ID_cobro, clientes_id, stock_id, slot, medio_venta, order_item_id, order_id_web, order_id_ml, medio_cobro, ref_cobro, precio, comision, estado, ventas.Notas AS ventas_Notas, ventas.Day, ventas.usuario as usuario, ventas.recup, (SELECT color FROM usuarios WHERE Nombre = ventas.usuario) AS color_user, clientes.ID AS ID_clientes, apellido, nombre, email, mail.*

@@ -912,10 +912,11 @@
                   @if (\Helper::showBtnPriSigueJugando($dataCustomer->cuentas_id,$dataCustomer->ID_ventas))
                     <div style="margin-bottom: 5px" class="dropdown pull-right">
                       <button
-                      class="btn btn-primary dropdown-toggle btn-xs"
+                      class="btn-copiador btn btn-primary dropdown-toggle btn-xs"
                       type="button" id="priSigueJugando2"
                       data-toggle="dropdown"
                       aria-haspopup="true"
+                      data-clipboard-target="#reactivar-copy{{$customer->ID}}"
                       aria-expanded="false">
                       <i class="fa fa-fw fa-gamepad"></i>
                         Pri Sigue jugando
@@ -946,10 +947,11 @@
                 @if (\Helper::showBtnSecuSigueJugando($dataCustomer->cuentas_id,$dataCustomer->ID_ventas))
                   <div style="margin-bottom: 5px" class="dropdown pull-right">
                     <button
-                    class="btn btn-danger dropdown-toggle btn-xs"
+                    class="btn-copiador btn btn-danger dropdown-toggle btn-xs"
                     type="button" id="secusiguejugando2"
                     data-toggle="dropdown"
                     aria-haspopup="true"
+                    data-clipboard-target="#avisonewemail-copy{{$customer->ID}}"
                     aria-expanded="false">
                     <i class="fa fa-fw fa-gamepad"></i>
                       Secu Sigue jugando
@@ -978,6 +980,17 @@
                 @endif
               @endif
             @endif
+
+                @component('components.clipboards.account')
+                    @slot('clientes_id', $customer->ID)
+                    @slot('pass', $dataCustomer->pass)
+                    @slot('nombre_cliente', $customer->nombre)
+                    @slot('titulo', $dataCustomer->titulo)
+                    @slot('mail_fake', $dataCustomer->mail_cta)
+                    @slot('account_name', $dataCustomer->name_cta)
+                    @slot('account_surname', $dataCustomer->surname_cta)
+                    @slot('oferta_fortnite', $oferta_fortnite)
+                @endcomponent
 
             @if ($ventas_notas)
               @foreach ($ventas_notas as $id_venta => $notas)
