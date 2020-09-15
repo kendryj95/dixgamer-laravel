@@ -163,7 +163,8 @@
 
                 <li><a href="{{ url('web/sales_fifa_21') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Fifa 21</a></li>
                 <li><a href="{{ url('web/sales_pes_21') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pes 21</a></li>
-                <li><a href="{{ url('web/sales') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Ambos</a></li>
+                <li><a href="{{ url('web/sales_sin_pes_fifa_21') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin Fifa y Pes 21</a></li>
+                <li><a href="{{ url('web/sales') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Todos</a></li>
 
               </ul>
 

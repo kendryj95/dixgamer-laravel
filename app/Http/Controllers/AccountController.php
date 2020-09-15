@@ -884,6 +884,14 @@ class AccountController extends Controller
 
                       try {
                           $this->blc->storeBalanceAccount($data);
+                          $nota = 'Agregado a cta <a href="'.url('cuentas',$account).'" class="alert-link">#'.$account.'</a> '.$stock->code;
+
+                          $data = [];
+                          $data['stock_id'] = $stock->ID;
+                          $data['Notas'] = $nota;
+                          $data['Day'] = date('Y-m-d H:i:s');
+                          $data['usuario'] = session()->get('usuario')->Nombre;
+                          DB::table('stock_notas')->insert($data);
 
                           // Eliminando stock
                           $stock = Stock::where('ID',$stock->ID)->delete();
@@ -963,6 +971,14 @@ class AccountController extends Controller
 
                       try {
                           $this->blc->storeBalanceAccount($data);
+                          $nota = 'Agregado a cta <a href="'.url('cuentas',$account).'" class="alert-link">#'.$account.'</a> '.$stock->code;
+
+                          $data = [];
+                          $data['stock_id'] = $stock->ID;
+                          $data['Notas'] = $nota;
+                          $data['Day'] = date('Y-m-d H:i:s');
+                          $data['usuario'] = session()->get('usuario')->Nombre;
+                          DB::table('stock_notas')->insert($data);
 
                           // Eliminando stock
                           $stock = Stock::where('ID',$stock->ID)->delete();
@@ -1041,6 +1057,14 @@ class AccountController extends Controller
 
                         try {
                             $this->blc->storeBalanceAccount($data);
+                            $nota = 'Agregado a cta <a href="'.url('cuentas',$account).'" class="alert-link">#'.$account.'</a> '.$stock->code;
+
+                            $data = [];
+                            $data['stock_id'] = $stock->ID;
+                            $data['Notas'] = $nota;
+                            $data['Day'] = date('Y-m-d H:i:s');
+                            $data['usuario'] = session()->get('usuario')->Nombre;
+                            DB::table('stock_notas')->insert($data);
 
                             // Eliminando stock
                             $stock = Stock::where('ID',$stock->ID)->delete();
@@ -1092,6 +1116,14 @@ class AccountController extends Controller
 
               try {
                 $this->blc->storeBalanceAccount($data);
+                $nota = 'Agregado a cta <a href="'.url('cuentas',$account).'" class="alert-link">#'.$account.'</a> '.$stock->code;
+
+                $data = [];
+                $data['stock_id'] = $stock->ID;
+                $data['Notas'] = $nota;
+                $data['Day'] = date('Y-m-d H:i:s');
+                $data['usuario'] = session()->get('usuario')->Nombre;
+                DB::table('stock_notas')->insert($data);
 
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
@@ -1140,6 +1172,14 @@ class AccountController extends Controller
 
               try {
                 $this->blc->storeBalanceAccount($data);
+                $nota = 'Agregado a cta <a href="'.url('cuentas',$account).'" class="alert-link">#'.$account.'</a> '.$stock->code;
+
+                $data = [];
+                $data['stock_id'] = $stock->ID;
+                $data['Notas'] = $nota;
+                $data['Day'] = date('Y-m-d H:i:s');
+                $data['usuario'] = session()->get('usuario')->Nombre;
+                DB::table('stock_notas')->insert($data);
 
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
@@ -1188,6 +1228,14 @@ class AccountController extends Controller
 
               try {
                 $this->blc->storeBalanceAccount($data);
+                $nota = 'Agregado a cta <a href="'.url('cuentas',$account).'" class="alert-link">#'.$account.'</a> '.$stock->code;
+
+                $data = [];
+                $data['stock_id'] = $stock->ID;
+                $data['Notas'] = $nota;
+                $data['Day'] = date('Y-m-d H:i:s');
+                $data['usuario'] = session()->get('usuario')->Nombre;
+                DB::table('stock_notas')->insert($data);
 
                 // Eliminando stock
                 $stock = Stock::where('ID',$stock->ID)->delete();
@@ -1232,6 +1280,14 @@ class AccountController extends Controller
 
             try {
               $this->blc->storeBalanceAccount($data);
+              $nota = 'Agregado a cta <a href="'.url('cuentas',$account).'" class="alert-link">#'.$account.'</a> '.$stock->code;
+
+              $data = [];
+              $data['stock_id'] = $stock->ID;
+              $data['Notas'] = $nota;
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
+              DB::table('stock_notas')->insert($data);
 
               // Eliminando stock
               $stock = Stock::where('ID',$stock->ID)->delete();
