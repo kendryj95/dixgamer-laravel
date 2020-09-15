@@ -236,7 +236,7 @@
             </li>
           @endif
 
-          @if(session()->get('usuario')->Nombre == 'Betina' || session()->get('usuario')->Nombre == 'Beti_1' || session()->get('usuario')->Nombre == 'Brian_1' || session()->get('usuario')->Nombre == 'Giuli_1')
+          @if(session()->get('usuario')->Nombre == 'Betina' || session()->get('usuario')->Nombre == 'Beti_1')
 
           <li class="dropdown">
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Balances<span class="caret"></span></a>
