@@ -1611,7 +1611,31 @@
 				<?php endif; ?>
 			</td>
 
-			<td style="text-align:right;">
+			<td class="text-center">
+				@if($sc->concepto === "venta")
+					@if ($sc->ID_stock != 1)
+						<div class="dropdown" style="display: inline-block;">
+							<button class="btn btn-default btn-xs dropdown-toggle" type="button" id="removeProduct_{{$sc->ID_stock}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
+								<i aria-hidden="true" class="fa fa-remove text-muted"></i>
+							</button>
+							<ul style="left:-120px" class="dropdown-menu" aria-labelledby="removeProduct_{{$sc->ID_stock}}">
+								<li class="dropdown-header">¿Deseas quitar producto?</li>
+								<li role="separator" class="divider"></li>
+								<li><a href="{{ url('customer_ventas_quitar_producto',$sc->id) }}">Sí, no merece</a></li>
+								@if($sc->consola == 'ps4')
+									@if($sc->slot == 'Secundario')
+										<li><a href="{{ url('customer_ventas_quitar_producto',$sc->id) }}?slot={{$sc->slot}}">Sí, tal vez no usa</a></li>
+									@elseif($sc->slot == 'Primario')
+										<li><a href="{{ url('customer_ventas_quitar_producto',$sc->id) }}?slot={{$sc->slot}}">Sí, ps4 no activa</a></li>
+									@endif
+
+								{{--@elseif($sc->consola == 'ps3')
+									<li><a href="{{ url('customer_ventas_quitar_producto',$sc->ID_ventas) }}?cons={{$sc->consola}}">Sí, no descargó</a></li>--}}
+								@endif
+							</ul>
+						</div>
+					@endif
+				@endif
 			</td>
             <?php endif;?>
           </tr>
