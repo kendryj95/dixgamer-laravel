@@ -916,7 +916,7 @@
                       type="button" id="priSigueJugando2"
                       data-toggle="dropdown"
                       aria-haspopup="true"
-                      data-clipboard-target="#reactivar-copy{{$customer->ID}}"
+                      data-clipboard-target="#reactivar-copy{{$dataCustomer->ID_ventas}}"
                       aria-expanded="false">
                       <i class="fa fa-fw fa-gamepad"></i>
                         Pri Sigue jugando
@@ -951,7 +951,7 @@
                     type="button" id="secusiguejugando2"
                     data-toggle="dropdown"
                     aria-haspopup="true"
-                    data-clipboard-target="#avisonewemail-copy{{$customer->ID}}"
+                    data-clipboard-target="#avisonewemail-copy{{$dataCustomer->ID_ventas}}"
                     aria-expanded="false">
                     <i class="fa fa-fw fa-gamepad"></i>
                       Secu Sigue jugando
@@ -980,7 +980,7 @@
                 @endif
               @endif
                   @component('components.clipboards.account')
-                      @slot('clientes_id', $customer->ID)
+                      @slot('clientes_id', $dataCustomer->ID_ventas)
                       @slot('pass', $dataCustomer->pass)
                       @slot('nombre_cliente', $customer->nombre)
                       @slot('titulo', $dataCustomer->titulo)
