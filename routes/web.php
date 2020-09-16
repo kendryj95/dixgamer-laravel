@@ -107,6 +107,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('nota_intentorecuperar/{account_id}', 'AccountController@intentoRecuperar');
   Route::get('agregar_20_off/{account}/{title}/{console}', 'AccountController@product20off');
   Route::get('cuentas_con_saldo', 'AccountController@accountAmount');
+  Route::get('cuentas_con_saldo_sony', 'AccountController@saldoLibreSony')->name('saldo-libre-sony');
   Route::get('cuentas_para_ps3', 'AccountController@accountGamePs3');
   Route::get('cuentas_para_ps4', 'AccountController@accountGamePs4');
   Route::post('account_ctrl_column', 'AccountController@accountCtrlColumn');

@@ -3026,4 +3026,11 @@ class AccountController extends Controller
         return redirect()->back();
     }
 
+    public function saldoLibreSony(Request $request)
+    {
+        $rows = Account::getSaldoLibreSony()->paginate(50);
+
+        return view('account.index_amount_sony',compact('rows'));
+    }
+
 }

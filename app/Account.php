@@ -394,5 +394,13 @@ class Account extends Model
       return $response;
     }
 
+    public function ScopeGetSaldoLibreSony($query)
+    {
+        return DB::table('cuentas_balance_sony as t1')
+            ->select('t1.*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = t1.usuario) as color_user"))
+            ->join(DB::raw("(SELECT MAX(ID) as ID, cuentas_id FROM cuentas_balance_sony GROUP BY cuentas_id) as t2"),"t1.ID","t2.ID")
+            ->whereRaw("t1.cuentas_id = t2.cuentas_id");
+    }
+
 
 }
