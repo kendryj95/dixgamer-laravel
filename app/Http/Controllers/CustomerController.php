@@ -1116,7 +1116,6 @@ class CustomerController extends Controller
     public function ventarQuitarProducto(Request $request, $id)
     {
       DB::beginTransaction();
-
       $slot = isset($request->slot) ? $request->slot : '';
       $consola = isset($request->cons) ? $request->cons : '';
 
@@ -1162,9 +1161,12 @@ class CustomerController extends Controller
           $data['usuario'] = session()->get('usuario')->Nombre;
 
           DB::table('ventas_notas')->insert($data);
+          $message = "Venta a cliente " . strtolower($stock_anterior->slot) . " removida";
+          $accion = " (no merece)";
 
           if ($slot != '') {
             if ($slot == 'Primario') {
+              $accion = " (ps4 no activa)";
               $data = [];
               $data['id_ventas'] = $id;
               $data['Notas'] = 'PS4 no estaba activa';
@@ -1173,6 +1175,7 @@ class CustomerController extends Controller
 
               DB::table('ventas_notas')->insert($data);
             } elseif($slot == 'Secundario') {
+              $accion = " (tal vez no usa)";
               $data = [];
               $data['id_ventas'] = $id;
               $data['Notas'] = 'Posiblemente no está usando';
@@ -1194,7 +1197,12 @@ class CustomerController extends Controller
 
         DB::commit();
 
-        \Helper::messageFlash('Clientes','Producto removido.', 'alert_cliente');
+        $message = $message . $accion;
+
+        if (strpos(url()->previous(),"cuentas") !== false)
+            \Helper::messageFlash('Clientes',$message, 'alert_cuenta');
+        else
+            \Helper::messageFlash('Clientes','Producto removido.', 'alert_cliente');
 
         return redirect()->back();
       } catch (Exception $e) {
