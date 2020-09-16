@@ -396,10 +396,11 @@ class Account extends Model
 
     public function ScopeGetSaldoLibreSony($query)
     {
-        return DB::table('cuentas_balance_sony as t1')
-            ->select('t1.*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = t1.usuario) as color_user"))
-            ->join(DB::raw("(SELECT MAX(ID) as ID, cuentas_id FROM cuentas_balance_sony GROUP BY cuentas_id) as t2"),"t1.ID","t2.ID")
-            ->whereRaw("t1.cuentas_id = t2.cuentas_id");
+        return DB::table(DB::raw("(SELECT t1.* FROM cuentas_balance_sony t1 JOIN (SELECT MAX(ID) as ID, cuentas_id FROM cuentas_balance_sony GROUP BY cuentas_id) t2 ON t1.ID = t2.ID AND t1.cuentas_id = t2.cuentas_id) as r1"))
+            ->select('r1.ID','r1.cuentas_id','r1.balance','s1.consolas','rt.reseteos','r1.Day','r1.usuario',DB::raw("(SELECT color FROM usuarios WHERE Nombre = r1.usuario) as color_user"))
+            ->leftjoin(DB::raw("(SELECT cuentas_id, GROUP_CONCAT(consola) as consolas FROM stock GROUP BY cuentas_id) as s1"),"r1.cuentas_id","s1.cuentas_id")
+            ->leftjoin(DB::raw("(SELECT cuentas_id, count(*) as reseteos FROM reseteo GROUP BY cuentas_id) as rt"),"r1.cuentas_id","rt.cuentas_id")
+            ->orderBy("balance","DESC");
     }
 
 

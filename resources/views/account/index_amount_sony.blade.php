@@ -14,6 +14,8 @@
           <th>#</th>
           <th>Cta ID</th>
           <th>Balance</th>
+          <th>Consolas</th>
+          <th>Reseteos</th>
           <th>Day</th>
           <th>Usuario</th>
         </tr>
@@ -47,6 +49,18 @@
 
                 <td>
                   <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
+                    {{ $account->consolas }}
+                  </a>
+                </td>
+
+                <td>
+                  <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
+                    {{ $account->reseteos }}
+                  </a>
+                </td>
+
+                <td>
+                  <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                     {{ $account->Day }}
                   </a>
                 </td>
@@ -60,7 +74,7 @@
 
           @else
             <tr>
-              <td colspan = '5' class="text-center">No se encontraron datos</td>
+              <td colspan = '7' class="text-center">No se encontraron datos</td>
             </tr>
           @endif
 
