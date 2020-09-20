@@ -1567,11 +1567,15 @@
 						<span style="display: none" id="btns_recu_pri_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
 						@endif
 					@else
-						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_react_pri" data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
-						<button class="btn-xs btn-info label email-info" id="enviar_email_pri" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+						@if ($sc->auto === "bloq")
+							<span class="badge badge-danger"><i class="fa fa-times-circle"></i> Cliente bloqueado</span>
+						@else
+							<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_react_pri" data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
+							<button class="btn-xs btn-info label email-info" id="enviar_email_pri" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
-						<span style="display: none" id="msj_react_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
-						<span style="display: none" id="msj_react_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
+							<span style="display: none" id="msj_react_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
+							<span style="display: none" id="msj_react_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
+						@endif
 
 					@endif 
 					<?php else: ?>
@@ -1587,14 +1591,16 @@
 						<span style="display: none" id="btns_recu_secu_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
 						@endif
 					@else
-						<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_pass_secu" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a>
+						@if ($sc->auto === "bloq")
+							<span class="badge badge-danger"><i class="fa fa-times-circle"></i> Cliente bloqueado</span>
+						@else
+							<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_pass_secu" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> msj pass <i aria-hidden="true" class="fa fa-clone"></i></a>
 
-					<button class="btn-xs btn-info label email-info" id="enviar_email_secu" onclick="envioEmailInfo('msj_pass','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
+							<button class="btn-xs btn-info label email-info" id="enviar_email_secu" onclick="envioEmailInfo('msj_pass','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
-					<span style="display: none" id="msj_pass_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
-					<span style="display: none" id="msj_pass_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
-						
-						{{-- <a href="#{{$sc->clientes_id}}" class="btn-copiador btn-xs btn-default label" data-clipboard-target="#avisonewemail-copy{{$sc->clientes_id}}"> NUEVO EMAIL <i aria-hidden="true" class="fa fa-clone"></i></a>  --}}
+							<span style="display: none" id="msj_pass_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>
+							<span style="display: none" id="msj_pass_email_error{{$sc->clientes_id}}" class="label label-danger">error al enviar email</span>
+						@endif
 					@endif
 					<?php endif;?>
 				<?php endif;?>
