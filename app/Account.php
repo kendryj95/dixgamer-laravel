@@ -376,7 +376,7 @@ class Account extends Model
       return DB::table(DB::raw("(SELECT resetear.ID, resetear.cuentas_id, DATEDIFF(NOW(), MAX(resetear.Day)) as Day_pedido FROM resetear GROUP BY resetear.cuentas_id) as resetear"))
       ->select("resetear.ID","resetear.cuentas_id","Day_pedido","Day_reset")
       ->leftjoin(DB::raw("(SELECT reseteo.cuentas_id, DATEDIFF(NOW(), MAX(reseteo.Day)) as Day_reset FROM reseteo GROUP BY reseteo.cuentas_id) as reseteado"),"resetear.cuentas_id","reseteado.cuentas_id")
-      ->where("Day_reset",">","Day_pedido")
+      ->whereRaw("Day_reset > Day_pedido")
       ->orWhereRaw("Day_reset IS NULL")
       ->orderBy("Day_reset","DESC");
     }
