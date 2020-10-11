@@ -46,6 +46,20 @@
                 <input type="hidden" name="clientes_id" value="{{ $ventas->clientes_id }}">
             </form><!-- <br /><br /> -->
 
+            @if(session()->get('usuario')->Nombre === "Leo")
+                    <br><br>
+                    <form method="post" name="form2" action="{{ url('customer_ventas_eliminar') }}">
+                        {{csrf_field()}}
+
+                        <p style="color: #000">¿Está seguro de que quiere eliminar los cobros?</p>
+
+                        <button class="btn btn-normal" type="submit" ><i class="fa fa-frown-o fa-fw"></i>Sí, Eliminar solo cobros</button>
+                        <input type="hidden" name="opt" value="5">
+                        <input type="hidden" name="ID" value="{{ $ventas->ID }}">
+                        <input type="hidden" name="clientes_id" value="{{ $ventas->clientes_id }}">
+                    </form><!-- <br /><br /> -->
+            @endif
+
 
         @else
             <form method="post" name="form3" action="{{ url('customer_ventas_eliminar') }}">

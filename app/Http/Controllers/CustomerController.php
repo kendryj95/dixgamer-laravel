@@ -1110,6 +1110,44 @@ class CustomerController extends Controller
           }
 
           break;
+      case 5:
+          try {
+
+              ## ELIMINANDO COBROS
+
+              $cobros = DB::table('ventas_cobro')->where('ventas_id', $request->ID)->get();
+
+              foreach ($cobros as $cobro) {
+
+                  if ($cobro->precio != 0 && $cobro->comision != 0) {
+                      $data = [];
+                      $data['precio']='0';
+                      $data['comision']='0';
+                      DB::table('ventas_cobro')->where('ID', $cobro->ID)->update($data);
+
+                      $notas = "Cobro eliminado #$cobro->ID ($cobro->medio_cobro), ref #$cobro->ref_cobro, +$cobro->precio - $cobro->comision";
+
+                      $data = [];
+                      $data['id_ventas'] = $cobro->ventas_id;
+                      $data['Notas'] = $notas;
+                      $data['Day'] = date('Y-m-d H:i:s');
+                      $data['usuario'] = session()->get('usuario')->Nombre;
+
+                      DB::table('ventas_notas')->insert($data);
+                  }
+              }
+
+              DB::commit();
+
+              \Helper::messageFlash('Clientes','Cobros eliminados.', 'alert_cliente');
+
+              return redirect()->back();
+          } catch (Exception $e) {
+              DB::rollback();
+
+              return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor.']);
+          }
+          break;
       }
     }
 
