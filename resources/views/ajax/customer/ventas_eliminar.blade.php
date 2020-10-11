@@ -1,5 +1,5 @@
 <div class="container">
-	<h1 style="color: #000">Eliminar Venta y Cobro</h1>
+	<h1 style="color: #000">{{$type === "contracargo" ? 'Contracargo' : 'Eliminar Venta y Cobro'}}</h1>
     <div class="row">
         <div class="col-sm-3">
         </div>
@@ -39,8 +39,13 @@
                 {{csrf_field()}}
 
     			<p style="color: #000">¿Está seguro de que quiere eliminar la venta y cobro?</p>
-                
-                <button class="btn btn-danger" type="submit" ><i class="fa fa-frown-o fa-fw"></i> Sí, Eliminar Venta y Cobro</button>
+
+                @if($type === "contracargo" && (session()->get('usuario')->Nombre === "Kendry" || session()->get('usuario')->Nombre === "Leo"))
+                    <button class="btn btn-danger" type="submit" ><i class="fa fa-frown-o fa-fw"></i> Sí, hacer contracargo</button>
+                    <input type="hidden" name="type" value="contracargo">
+                @else
+                    <button class="btn btn-danger" type="submit" ><i class="fa fa-frown-o fa-fw"></i> Sí, Eliminar Venta y Cobro</button>
+                @endif
                 <input type="hidden" name="opt" value="4">
                 <input type="hidden" name="ID" value="{{ $ventas->ID }}">
                 <input type="hidden" name="clientes_id" value="{{ $ventas->clientes_id }}">

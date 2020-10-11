@@ -934,13 +934,14 @@ class CustomerController extends Controller
       }
     }
 
-    public function ventasEliminar($id)
+    public function ventasEliminar(Request $request, $id)
     {
+      $type = $request->type;
       $ventas = DB::table('ventas')->select('ID','clientes_id')->where('ID',$id)->first();
 
       $ventasBaja = DB::table('ventas_baja')->select('ID')->where('ventas_id',$id)->first();
 
-      return view('ajax.customer.ventas_eliminar', compact('ventas', 'ventasBaja'));
+      return view('ajax.customer.ventas_eliminar', compact('ventas', 'ventasBaja', 'type'));
     }
 
     public function ventas_delete(Request $request)
@@ -1055,7 +1056,7 @@ class CustomerController extends Controller
 
             if ($this->isNotStockDefault($stock_anterior->stock_id)) {
               $data = [];
-              $data['stock_id'] = 1;
+              $data['stock_id'] = $request->type && $request->type === "contracargo" ? 5 : 1;
               $data['recup'] = 1;
               $data['cons'] = 'x';
               $data['slot'] = 'No';
@@ -1100,7 +1101,8 @@ class CustomerController extends Controller
 
             DB::commit();
 
-            \Helper::messageFlash('Clientes','Venta y cobros eliminados.', 'alert_cliente');
+            $message = $request->type && $request->type === "contracargo" ? "Contracargo realizado." : 'Venta y cobros eliminados.';
+            \Helper::messageFlash('Clientes',$message, 'alert_cliente');
 
             return redirect()->back();
           } catch (Exception $e) {
@@ -1156,6 +1158,7 @@ class CustomerController extends Controller
       DB::beginTransaction();
       $slot = isset($request->slot) ? $request->slot : '';
       $consola = isset($request->cons) ? $request->cons : '';
+      $type = isset($request->type) ? $request->type : '';
 
       try {
 
@@ -1181,6 +1184,8 @@ class CustomerController extends Controller
         $data = [];
         if ($slot != '' || $consola != '') {
           $data['stock_id'] = 2;
+        } elseif($type != "" && $type === "devolution") {
+          $data['stock_id'] = 4;
         } else {
           $data['stock_id'] = 1;
         }
@@ -1230,6 +1235,31 @@ class CustomerController extends Controller
             $data['usuario'] = session()->get('usuario')->Nombre;
 
             DB::table('ventas_notas')->insert($data);
+          } elseif($type != "" && $type === "devolution") {
+              ## ELIMINANDO COBROS
+
+              $accion = " (devolución)";
+              $cobros = DB::table('ventas_cobro')->where('ventas_id', $id)->get();
+
+              foreach ($cobros as $cobro) {
+
+                  if ($cobro->precio != 0 && $cobro->comision != 0) {
+                      $data = [];
+                      $data['precio']='0';
+                      $data['comision']='0';
+                      DB::table('ventas_cobro')->where('ID', $cobro->ID)->update($data);
+
+                      $notas = "Cobro eliminado #$cobro->ID ($cobro->medio_cobro), ref #$cobro->ref_cobro, +$cobro->precio - $cobro->comision";
+
+                      $data = [];
+                      $data['id_ventas'] = $cobro->ventas_id;
+                      $data['Notas'] = $notas;
+                      $data['Day'] = date('Y-m-d H:i:s');
+                      $data['usuario'] = session()->get('usuario')->Nombre;
+
+                      DB::table('ventas_notas')->insert($data);
+                  }
+              }
           }
 
 
@@ -1958,5 +1988,66 @@ class CustomerController extends Controller
       $notas = $this->buildNotesSales($ids,true);
 
       echo json_encode(["notas"=>$notas]);
+    }
+
+    public function cambiarProductoVta(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $stock_anterior = DB::table('stock AS s')
+                ->select(
+                    'v.stock_id',
+                    's.titulo',
+                    's.cuentas_id',
+                    'v.cons',
+                    'v.slot'
+                )
+                ->leftjoin('ventas AS v', 's.ID', '=', 'v.stock_id')
+                ->where('v.ID',$request->vta_id)->first();
+
+            $nota = '';
+
+            if ($stock_anterior->cons == "ps4") {
+                $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
+            } else {
+                $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
+            }
+
+            if ($this->isNotStockDefault($stock_anterior->stock_id)) {
+                $data = [];
+                $data['stock_id'] = 3;
+                $data['Day_modif'] = date('Y-m-d H:i:s');
+
+                DB::table('ventas')->where('ID',$request->vta_id)->update($data);
+
+
+                $data = [];
+                $data['id_ventas'] = $request->vta_id;
+                $data['Notas'] = $nota;
+                $data['Day'] = date('Y-m-d H:i:s');
+                $data['usuario'] = session()->get('usuario')->Nombre;
+
+                DB::table('ventas_notas')->insert($data);
+
+                $data = [];
+                $data['id_ventas'] = $request->vta_id;
+                $data['Notas'] = $request->nota;
+                $data['Day'] = date('Y-m-d H:i:s');
+                $data['usuario'] = session()->get('usuario')->Nombre;
+
+                DB::table('ventas_notas')->insert($data);
+            }
+
+            DB::commit();
+
+            $message = "Venta a cliente " . strtolower($stock_anterior->slot) . " removida (cambio)";
+
+            \Helper::messageFlash('Clientes',"Se realizó el cambio del producto correctamente.", 'alert_cliente');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor intentalo de nuevo.']);
+        }
     }
 }

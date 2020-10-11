@@ -367,9 +367,9 @@
                       {{-- <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/2','#modalVentas')">Modificar medio venta</a></li> --}}
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/3','#modalVentas')">Modificar order</a></li>
                       {{--<li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/5','#modalVentas')">Modificar manual</a></li> --}}
-                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/4','#modalVentas')">Agregar nota</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_duplicar_venta")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Duplicar venta</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar venta y cobros</a></li>
+                      <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_eliminar", $dataCustomer->ID_ventas)}}?type=contracargo','#modalVentas')">Contracargo</a></li>
                     </ul>
                   </div>
                 <p>
@@ -622,6 +622,8 @@
                   @endif
                 </p>
               @endif
+
+                  <button class="btn btn-xs btn-default pull-right" title="Agregar nota a la venta" data-toggle="modal" data-target=".modalVentas" onclick="getPageAjax('{{url("customer_ventas_modificar")}}/{{$dataCustomer->ID_ventas}}/4','#modalVentas')"><i class="fa fa-comment"></i></button>
             </span>
 
             <img
@@ -714,8 +716,8 @@
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                       <i aria-hidden="true" class="fa fa-remove text-muted"></i>
                     </button>
-                    <ul style="top:-65px;left:25px" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                      <li class="dropdown-header">¿Deseas quitar producto?</li>
+                    <ul style="top:-160px;left:25px" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <li class="dropdown-header">¿Quitar producto?</li>
                       <li role="separator" class="divider"></li>
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí, no merece</a></li>
                       @if($dataCustomer->consola == 'ps4')
@@ -728,6 +730,8 @@
                       @elseif($dataCustomer->consola == 'ps3')
                       <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?cons={{$dataCustomer->consola}}">Sí, no descargó</a></li>
                       @endif
+                        <li><a href="javascript:void(0)" onclick="modalCambioProd('{{$dataCustomer->ID_ventas}}')">Sí, cambio</a></li>
+                        <li><a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?type=devolution">Sí, devolución</a></li>
                     </ul>
                   </div>
                   @endif
@@ -1375,6 +1379,35 @@
             </div>
         </div>
 
+        <div class="modal fade" id="agregarNotaCambio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document" style="top:40px;">
+                <div class="modal-content">
+
+                    <div class="modal-body" style="color: black !important;text-align:center;padding:10px;">
+
+                      <div class="container">
+                        <h1 style="color:#000">Cambio producto - Venta #<span id="vta_id_text"></span></h1>
+                        <div class="row">
+
+                            <form action="{{route('cambio-prod')}}" method="post">
+                                {{ csrf_field() }}
+                                <div class="input-group form-group">
+                                    <span class="input-group-addon"><i class="fa fa-comment fa-fw"></i></span>
+                                    <textarea class="form-control" autofocus rows="4" name="nota" style="font-size: 22px;" placeholder="Explique brevemente porqué va a cambiar el producto a esta venta"></textarea>
+
+                                </div>
+                                <input type="hidden" name="vta_id" id="vta_id">
+                                <button class="btn btn-block btn-primary" type="submit">Realizar cambio</button>
+                            </form>
+
+                        </div>
+                      </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="editarCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document" style="top:40px;">
                 <div class="modal-content">
@@ -1961,6 +1994,13 @@
           window.location.href = url;
 
           e.preventDefault();
+        }
+
+        function modalCambioProd(vta_id) {
+            console.log("evento modal")
+            $('#vta_id_text').text(vta_id);
+            $('#vta_id').val(vta_id);
+            $('#agregarNotaCambio').modal('show')
         }
 
         function cargar_notas(id_ventas)
