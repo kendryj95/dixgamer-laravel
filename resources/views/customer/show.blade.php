@@ -442,12 +442,12 @@
                           </div>
                         @endforeach
                       @else
-                        {{$dataCustomer->ID_cobro}}
+                          <span style="color:#CFCFCF; padding:0px 2px; font-size:0.8em;">{{$dataCustomer->ID_cobro}}</span>
                       @endif
 
                   </small>
 
-                  <span class="btn-group pull-right">
+                  <span @if(!Helper::validateAdminAnalystAsistent(session()->get('usuario')->Level)) style="margin-left: 40px;" @endif class="btn-group pull-right">
                     <button
                       title="Agregar Cobro"
                       class="btn btn-xs btn-default"
