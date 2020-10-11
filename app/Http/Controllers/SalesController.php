@@ -374,17 +374,6 @@ class SalesController extends Controller
 
                            DB::table('ventas_cobro')->insert($data);
 
-                           
-                           if ($deuda) {
-                                $data = [
-                                    "id_ventas" => $ventaid,
-                                    "Notas" => "Corresponde a pago de deuda",
-                                    "Day" => date('Y-m-d H:i:s'),
-                                    "usuario" => session()->get('usuario')->Nombre
-                                ];
-                                
-                                DB::table('ventas_notas')->insert($data);
-                            }
                        } else {
                            foreach ($data_gifts as $value) { // Varias gifts se van a registrar
 
@@ -442,7 +431,7 @@ class SalesController extends Controller
 
 
         if ($deuda) {
-            $stock_id = 1;
+            $stock_id = 6;
             $cons = "x";
         } else {
             $cons = $row_rsSTK[0]->consola;
