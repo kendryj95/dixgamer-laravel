@@ -840,19 +840,33 @@ class AccountController extends Controller
 
             if (!$valido) {
 
-                $title = 'gift-card-10-usd';
-                $titles = [];
-                for ($i=0;$i<6;$i++) {
-                    $titles[$i] = $title;
-                }
-                $stock_valido = \Helper::availableStock($account,$title,$console);
+                $t3 = 'gift-card-20-usd';
+                $t3_val = \Helper::availableStock($account,$t3,$console);
                 $valido = true;
-                if (is_array($stock_valido)) {
-                    if ($stock_valido[0]->Q_Stock < 6) {
+                if (is_array($t3_val)) { // Combinacion 3x20
+                    $titles = [];
+                    for ($i=0;$i<3;$i++) {
+                        $titles[$i] = $t3;
+                    }
+                    if ($t3_val[0]->Q_Stock < 3)
+                        $valido = false;
+                }
+
+                if (!$valido) {// Combinacion 6x10
+                    $title = 'gift-card-10-usd';
+                    $titles = [];
+                    for ($i=0;$i<6;$i++) {
+                        $titles[$i] = $title;
+                    }
+                    $stock_valido = \Helper::availableStock($account,$title,$console);
+                    $valido = true;
+                    if (is_array($stock_valido)) {
+                        if ($stock_valido[0]->Q_Stock < 6) {
+                            $valido = false;
+                        }
+                    } else {
                         $valido = false;
                     }
-                } else {
-                    $valido = false;
                 }
             }
 
