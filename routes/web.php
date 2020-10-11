@@ -42,6 +42,8 @@ Route::get('control/enviar_email', function () {
     return view('control.enviar_email');
 })->name('enviar-email');
 Route::post('control/enviar_email', 'ControlsController@enviarEmail')->name('enviar-email-post');
+Route::get('detail_stock/{id_stock}/{slot}', 'StockController@detailStock');
+
 
 
 // Solo usuarios logueados
@@ -200,7 +202,6 @@ Route::group(['middleware' => ['login']], function()
     Route::get('stock_cm', 'StockController@listCM');
     Route::get('stock_cm/{code}', 'StockController@listCMByCode');
     Route::post('delete_cm', 'StockController@deleteCM');
-    Route::get('detail_stock/{id_stock}/{slot}', 'StockController@detailStock');
 
 
     // Gastos
