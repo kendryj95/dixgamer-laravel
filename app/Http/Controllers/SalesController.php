@@ -216,7 +216,7 @@ class SalesController extends Controller
                                 (SELECT 
                                 meta_value 
                                 FROM cbgw_postmeta 
-                                WHERE meta_key='_payment_method' AND post_id=p.ID) AS _payment_method"),
+                                WHERE meta_key='_payment_method_title' AND post_id=p.ID) AS _payment_method"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_Mercado_Pago_Payment_IDs' AND post_id=p.ID LIMIT 1) AS ref_cobro"),
                               DB::raw("(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(meta_value, 'payment_id=', -1),'&',1) FROM cbgw_postmeta WHERE meta_key='_transaction_details_ticket' AND post_id=p.ID LIMIT 1) AS ref_cobro_2"),
                               DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id=p.ID LIMIT 1) AS ref_cobro_3"),
