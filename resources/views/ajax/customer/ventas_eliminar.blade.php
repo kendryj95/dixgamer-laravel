@@ -40,7 +40,7 @@
 
     			<p style="color: #000">¿Está seguro de que quiere eliminar la venta y cobro?</p>
 
-                @if($type === "contracargo" && (session()->get('usuario')->Nombre === "Kendry" || session()->get('usuario')->Nombre === "Leo"))
+                @if($type === "contracargo" && (session()->get('usuario')->Nombre === "Victor" || session()->get('usuario')->Nombre === "Leo"))
                     <button class="btn btn-danger" type="submit" ><i class="fa fa-frown-o fa-fw"></i> Sí, hacer contracargo</button>
                     <input type="hidden" name="type" value="contracargo">
                 @else

@@ -205,7 +205,7 @@ class CustomerController extends Controller
 
     private function buildNotesSales($idsVentas, $others = false) 
     {
-      $ventas_notas = DB::table('ventas_notas')->whereIn('id_ventas',$idsVentas)->orderBy('Day','DESC');
+      $ventas_notas = DB::table('ventas_notas')->whereIn('id_ventas',$idsVentas)->orderBy('ID','DESC');
       if ($others) {
         $ventas_notas = $ventas_notas->offset(3)->limit(20);
       }
