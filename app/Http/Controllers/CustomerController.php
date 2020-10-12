@@ -1081,7 +1081,8 @@ class CustomerController extends Controller
 
             foreach ($cobros as $cobro) {
 
-              if ($cobro->precio != 0 && $cobro->comision != 0) {
+//              if ($cobro->precio != 0 && $cobro->comision != 0) {
+              if ($cobro->precio != 0) { // Se quita validación de comision != 0 para permitir eliminación de cobros bancarizados 11/10/2020
                 $data = [];
                 $data['precio']='0';
                 $data['comision']='0';
@@ -1121,7 +1122,8 @@ class CustomerController extends Controller
 
               foreach ($cobros as $cobro) {
 
-                  if ($cobro->precio != 0 && $cobro->comision != 0) {
+//                  if ($cobro->precio != 0 && $cobro->comision != 0) {
+                  if ($cobro->precio != 0) { // Se quita validación de comision != 0 para permitir eliminación de cobros bancarizados 11/10/2020
                       $data = [];
                       $data['precio']='0';
                       $data['comision']='0';
@@ -1243,7 +1245,8 @@ class CustomerController extends Controller
 
               foreach ($cobros as $cobro) {
 
-                  if ($cobro->precio != 0 && $cobro->comision != 0) {
+//                  if ($cobro->precio != 0 && $cobro->comision != 0) {
+                  if ($cobro->precio != 0) { // Se quita validación de comision != 0 para permitir eliminación de cobros bancarizados 11/10/2020
                       $data = [];
                       $data['precio']='0';
                       $data['comision']='0';
