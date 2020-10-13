@@ -474,7 +474,7 @@ class SalesController extends Controller
             $data['order_id_ml'] = $order_id_ml;
         }
         $data['order_id_web'] = $order_id_web;
-        $data['estado'] = $estado;
+        $data['estado'] = $stock_id == 6 ? "pago-deuda" : $estado;
         $data['Day'] = $date;
         $data['Day_modif'] = $date;
         $data['usuario'] = session()->get('usuario')->Nombre;

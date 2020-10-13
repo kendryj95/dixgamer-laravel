@@ -588,6 +588,7 @@ class CustomerController extends Controller
             $data = [];
             $data['slot'] = $request->slot;
             $data['stock_id'] = $request->stock;
+            $data['estado'] = "pendiente";
             $data['cons'] = $stock->consola;
             $data['Day_modif'] = date('Y-m-d H:i:s');
             $data['recup'] = 1;
@@ -906,6 +907,7 @@ class CustomerController extends Controller
         $data = [];
         $data['stock_id'] = $stk_ID;
         $data['cons'] = $consola;
+        $data['estado'] = "pendiente";
         $data['slot'] = $slot;
         $data['recup'] = 1;
         $data['Day_modif'] = date('Y-m-d H:i:s');
@@ -1056,7 +1058,15 @@ class CustomerController extends Controller
 
             if ($this->isNotStockDefault($stock_anterior->stock_id)) {
               $data = [];
-              $data['stock_id'] = $request->type && $request->type === "contracargo" ? 5 : 1;
+              if ($request->type && $request->type === "contracargo") { // Si es de contracargo se valida si se quita o no el producto
+                  if ($request->quitar_producto == 1) {
+                      $data['stock_id'] = 5;
+                      $data['estado'] = "contracargo";
+                  }
+              } else { // Si se elimina la venta y el cobro de manera natural, se cambia el producto a 1
+                  $data['stock_id'] = 1;
+                  $data['estado'] = "no-merece";
+              }
               $data['recup'] = 1;
               $data['cons'] = 'x';
               $data['slot'] = 'No';
@@ -1072,6 +1082,16 @@ class CustomerController extends Controller
               $data['usuario'] = session()->get('usuario')->Nombre;
 
               DB::table('ventas_notas')->insert($data);
+
+              if ($request->type && $request->type === "contracargo") {
+                  $data = [];
+                  $data['id_ventas'] = $request->ID;
+                  $data['Notas'] = "Llegó contracargo";
+                  $data['Day'] = date('Y-m-d H:i:s');
+                  $data['usuario'] = session()->get('usuario')->Nombre;
+
+                  DB::table('ventas_notas')->insert($data);
+              }
             }
 
 
@@ -1186,10 +1206,13 @@ class CustomerController extends Controller
         $data = [];
         if ($slot != '' || $consola != '') {
           $data['stock_id'] = 2;
+          $data['estado'] = "reciclado";
         } elseif($type != "" && $type === "devolution") {
           $data['stock_id'] = 4;
+          $data['estado'] = "devolucion";
         } else {
           $data['stock_id'] = 1;
+          $data['estado'] = "no-merece";
         }
         $data['cons'] = 'x';
         $data['slot'] = 'No';
@@ -2019,6 +2042,7 @@ class CustomerController extends Controller
             if ($this->isNotStockDefault($stock_anterior->stock_id)) {
                 $data = [];
                 $data['stock_id'] = 3;
+                $data['estado'] = "cambio";
                 $data['Day_modif'] = date('Y-m-d H:i:s');
 
                 DB::table('ventas')->where('ID',$request->vta_id)->update($data);
