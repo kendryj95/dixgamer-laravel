@@ -209,7 +209,8 @@
                   5) Guardar la contrase&#241;a y <strong>continuar.</strong><br >
 				6) Volvemos al <strong>menÃº principal del usuario creado > PSN</strong> > Iniciar Sesi&oacute;n > Administraci&oacute;n de Cuentas > Transaction Management > <strong>Download List</strong><br/>
 7) Iniciamos la descarga de <strong>todos los items</strong> poniendo en <strong>segundo plano.</strong><br />
-                  8) <strong>Salimos del usuario creado</strong> abriendo tu usuario personal (el que usas siempre).
+                  8) <strong>Salimos del usuario creado</strong> abriendo tu usuario personal (el que usas siempre).<br />
+				9) Subí una foto a IG, etiquetanos @dixgamer.ok y ganá un cupón.
                 <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=2534001146657963" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
   {{-- <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br /><br/>
   <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br /><br /> --}}
@@ -290,7 +291,14 @@
 													<th class="tfoot" width="400" align="left" style="vertical-align:top; padding:0;">
 														<table width="100%" cellpadding="0" cellspacing="0">
 															<tr>
-																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;"> dixgamer.com, {{date('Y')}}. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a></td>
+																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;"> dixgamer.com, 2017. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a></td>
+															</tr>
+														</table>
+													</th>
+													<th class="thead" width="150" align="left" style="vertical-align:top; padding:0;">
+														<table class="center" align="right" cellpadding="0" cellspacing="0">
+															<tr>
+																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;"><a style="text-decoration:none; color:#797c82;" target="_blank" href="https://facebook.com/dixgamer.arg/"> encontranos en facebook > </a></td>
 															</tr>
 														</table>
 													</th>
