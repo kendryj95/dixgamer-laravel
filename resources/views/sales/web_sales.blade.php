@@ -60,6 +60,8 @@
                             @endif
                             @if ($ventasweb->cliente_auto == "si")
                                 <a type="button" class="text-muted btn-xs text-danger" title="tiene historial favorable"><i class="fa fa-star" aria-hidden="true"></i></a>
+                            @elseif ($ventasweb->cliente_auto == "3ps4")
+                                <a type="button" class="text-muted btn-xs text-danger"><i class="fa fa-star" aria-hidden="true"></i></a> <a type="button" class="text-muted btn-xs text-danger"><i class="fa fa-star" aria-hidden="true"></i></a>
                             @endif
 
                             <br /><br />
