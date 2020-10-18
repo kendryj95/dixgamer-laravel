@@ -33,37 +33,37 @@ class ControlsController extends Controller
     public function ventasPerBancos()
     {
         $ventas = DB::table('ventas_cobro')
-                    ->select(
-                        'ventas.ID AS ID_ventas',
-                        'ventas_cobro.ID AS cobro_ID',
-                        'clientes_id',
-                        'stock_id',
-                        'slot',
-                        'medio_venta',
-                        'medio_cobro',
-                        'precio',
-                        'comision',
-                        'ventas.Notas AS ventas_Notas',
-                        'ventas.Day as ventas_Day',
-                        'ventas.usuario as ventas_usuario',
-                        'apellido',
-                        'nombre',
-                        'titulo',
-                        'consola',
-                        'cuentas_id',
-                        'costo',
-                        'verificado'
-                    )
-                    ->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
-                    ->leftjoin('clientes','ventas.clientes_id','=','clientes.ID')
-                    ->leftjoin('stock','ventas.stock_id','=','stock.ID')
-                    ->leftjoin('ventas_cobro_bancos AS vcb','ventas_cobro.ID','=','vcb.cobros_id')
-                    ->where('medio_cobro','Banco')
-                    ->get();
+            ->select(
+                'ventas.ID AS ID_ventas',
+                'ventas_cobro.ID AS cobro_ID',
+                'clientes_id',
+                'stock_id',
+                'slot',
+                'medio_venta',
+                'medio_cobro',
+                'precio',
+                'comision',
+                'ventas.Notas AS ventas_Notas',
+                'ventas.Day as ventas_Day',
+                'ventas.usuario as ventas_usuario',
+                'apellido',
+                'nombre',
+                'titulo',
+                'consola',
+                'cuentas_id',
+                'costo',
+                'verificado'
+            )
+            ->leftjoin('ventas', 'ventas_cobro.ventas_id', '=', 'ventas.ID')
+            ->leftjoin('clientes', 'ventas.clientes_id', '=', 'clientes.ID')
+            ->leftjoin('stock', 'ventas.stock_id', '=', 'stock.ID')
+            ->leftjoin('ventas_cobro_bancos AS vcb', 'ventas_cobro.ID', '=', 'vcb.cobros_id')
+            ->where('medio_cobro', 'Banco')
+            ->get();
 
         $tamPag = 50;
         $numReg = count($ventas);
-        $paginas = ceil($numReg/$tamPag);
+        $paginas = ceil($numReg / $tamPag);
         $limit = "";
         $paginaAct = "";
         if (!isset($_GET['pag'])) {
@@ -71,7 +71,7 @@ class ControlsController extends Controller
             $limit = 0;
         } else {
             $paginaAct = $_GET['pag'];
-            $limit = ($paginaAct-1) * $tamPag;
+            $limit = ($paginaAct - 1) * $tamPag;
         }
 
         $ventas = $this->consultaPagination($limit, $tamPag);
@@ -79,38 +79,38 @@ class ControlsController extends Controller
         return view('control.control_ventas_bancos', compact('ventas', 'paginas', 'paginaAct'));
     }
 
-    private function consultaPagination($inicio,$fin)
+    private function consultaPagination($inicio, $fin)
     {
         $ventas = DB::table('ventas_cobro')
-                    ->select(
-                        'ventas.ID AS ID_ventas',
-                        'ventas_cobro.ID AS cobro_ID',
-                        'clientes_id',
-                        'stock_id',
-                        'slot',
-                        'medio_venta',
-                        'medio_cobro',
-                        'precio',
-                        'comision',
-                        'ventas.Notas AS ventas_Notas',
-                        'ventas.Day as ventas_Day',
-                        'ventas.usuario as ventas_usuario',
-                        'apellido',
-                        'nombre',
-                        'titulo',
-                        'consola',
-                        'cuentas_id',
-                        'costo',
-                        'verificado'
-                    )
-                    ->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
-                    ->leftjoin('clientes','ventas.clientes_id','=','clientes.ID')
-                    ->leftjoin('stock','ventas.stock_id','=','stock.ID')
-                    ->leftjoin('ventas_cobro_bancos AS vcb','ventas_cobro.ID','=','vcb.cobros_id')
-                    ->where('medio_cobro','Banco')
-                    ->offset($inicio)
-                    ->limit($fin)
-                    ->get();
+            ->select(
+                'ventas.ID AS ID_ventas',
+                'ventas_cobro.ID AS cobro_ID',
+                'clientes_id',
+                'stock_id',
+                'slot',
+                'medio_venta',
+                'medio_cobro',
+                'precio',
+                'comision',
+                'ventas.Notas AS ventas_Notas',
+                'ventas.Day as ventas_Day',
+                'ventas.usuario as ventas_usuario',
+                'apellido',
+                'nombre',
+                'titulo',
+                'consola',
+                'cuentas_id',
+                'costo',
+                'verificado'
+            )
+            ->leftjoin('ventas', 'ventas_cobro.ventas_id', '=', 'ventas.ID')
+            ->leftjoin('clientes', 'ventas.clientes_id', '=', 'clientes.ID')
+            ->leftjoin('stock', 'ventas.stock_id', '=', 'stock.ID')
+            ->leftjoin('ventas_cobro_bancos AS vcb', 'ventas_cobro.ID', '=', 'vcb.cobros_id')
+            ->where('medio_cobro', 'Banco')
+            ->offset($inicio)
+            ->limit($fin)
+            ->get();
 
         return $ventas;
     }
@@ -120,10 +120,10 @@ class ControlsController extends Controller
         DB::beginTransaction();
 
         try {
-            DB::table('ventas_cobro_bancos')->where('cobros_id',$id)->update(['verificado' => 1]);
+            DB::table('ventas_cobro_bancos')->where('cobros_id', $id)->update(['verificado' => 1]);
             DB::commit();
 
-            \Helper::messageFlash('Ventas Cobro','Venta verificada.');
+            \Helper::messageFlash('Ventas Cobro', 'Venta verificada.');
 
             return redirect()->back();
         } catch (Exception $e) {
@@ -226,14 +226,14 @@ class ControlsController extends Controller
 
         $users = $this->usersGC();
 
-        return view('control.carga_gc', compact('fecha_ini','fecha_fin','row_Total', 'row_SaldoP', 'vendedor','users','conFiltro','row_saldo_prov'));
+        return view('control.carga_gc', compact('fecha_ini', 'fecha_fin', 'row_Total', 'row_SaldoP', 'vendedor', 'users', 'conFiltro', 'row_saldo_prov'));
     }
 
     public function getDatosSaldoProv($id)
     {
-        $datos = DB::table('saldo_prov')->where('ID',$id)->first();
+        $datos = DB::table('saldo_prov')->where('ID', $id)->first();
 
-        return view('control.edit_saldo_prov',compact('datos'));
+        return view('control.edit_saldo_prov', compact('datos'));
     }
 
     public function editSaldoProv(Request $request)
@@ -246,25 +246,25 @@ class ControlsController extends Controller
         $data['ars'] = $request->ars;
         $data['Day'] = $request->Day;
 
-        DB::table('saldo_prov')->where('ID',$id)->update($data);
+        DB::table('saldo_prov')->where('ID', $id)->update($data);
 
-        \Helper::messageFlash('Carga GC','Saldo prov editado correctamente.');
+        \Helper::messageFlash('Carga GC', 'Saldo prov editado correctamente.');
 
         return redirect()->back();
     }
 
     private function defaultFechaIni()
     {
-      $hoy = strtotime(date('Y-m-d'));
-      $fecha_ini = strtotime('-7 days', $hoy);
-      $fecha_ini = date('Y-m-d', $fecha_ini);
+        $hoy = strtotime(date('Y-m-d'));
+        $fecha_ini = strtotime('-7 days', $hoy);
+        $fecha_ini = date('Y-m-d', $fecha_ini);
 
-      return $fecha_ini;
+        return $fecha_ini;
     }
 
     private function usersGC()
     {
-        $users = DB::table('saldo')->select('ex_usuario')->where('ex_usuario','LIKE',"%-GC")->groupBy('ex_usuario')->get();
+        $users = DB::table('saldo')->select('ex_usuario')->where('ex_usuario', 'LIKE', "%-GC")->groupBy('ex_usuario')->get();
 
         return $users;
     }
@@ -285,7 +285,7 @@ class ControlsController extends Controller
 
             DB::commit();
 
-            \Helper::messageFlash('Carga GC','Carga GC agregada a '.$request->usuario);
+            \Helper::messageFlash('Carga GC', 'Carga GC agregada a ' . $request->usuario);
 
             return redirect()->back();
         } catch (Exception $e) {
@@ -306,7 +306,7 @@ class ControlsController extends Controller
 
         $cobros_mp_sin_pareja = $this->getCobrosMPSinPareja($version2);
 
-        return view('control.control_mp', compact('conceptos','cobros_mp_pareja','cobros_bd_pareja','cobros_bd_sin_pareja','cobros_mp_sin_pareja'));
+        return view('control.control_mp', compact('conceptos', 'cobros_mp_pareja', 'cobros_bd_pareja', 'cobros_bd_sin_pareja', 'cobros_mp_sin_pareja'));
 
     }
 
@@ -351,7 +351,7 @@ class ControlsController extends Controller
 
                 DB::commit();
 
-                \Helper::messageFlash('Cobros MP','Anulación de Ingreso por envío aplicada correctamente.');
+                \Helper::messageFlash('Cobros MP', 'Anulación de Ingreso por envío aplicada correctamente.');
 
                 return redirect()->back();
             } catch (Exception $e) {
@@ -381,16 +381,16 @@ class ControlsController extends Controller
 
                 $importeTotal = ($importe / 0.9446);
                 $comision = ($importeTotal * 0.0538);
-                
+
                 $insertSQL222 = "INSERT INTO ventas_cobro (ventas_id, medio_cobro, ref_cobro, precio, comision, Day, usuario) VALUES ('$ventaid', 'MercadoPago', '$ref_cobro', '$importeTotal', '$comision', '$date', '$vendedor')";
 
                 DB::insert($insertSQL222);
 
                 DB::commit();
 
-                \Helper::messageFlash('Cobros MP','Proceso aplicado correctamente.');
+                \Helper::messageFlash('Cobros MP', 'Proceso aplicado correctamente.');
 
-                return redirect('clientes/'.$colname_rsCliente);
+                return redirect('clientes/' . $colname_rsCliente);
             } catch (Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withErrors(['Ha ocurrido un error en el proceso. Por favor vuelva a intentarlo']);
@@ -404,9 +404,9 @@ class ControlsController extends Controller
         $ref_op = isset($request->ref_op) ? $request->ref_op : false;
 
         if ($ref_op) {
-            $cobro = DB::table('mercadopago')->where('ref_op', $ref_op)->where('importe','>',0)->first();
+            $cobro = DB::table('mercadopago')->where('ref_op', $ref_op)->where('importe', '>', 0)->first();
 
-            $comis = DB::table('mercadopago')->where('ref_op', $ref_op)->where('importe','<',0.00)->whereIn('concepto', ['Cargo Mercado Pago','Costo de Mercado Pago','Comisión por venta de Mercado Libre'])->first();
+            $comis = DB::table('mercadopago')->where('ref_op', $ref_op)->where('importe', '<', 0.00)->whereIn('concepto', ['Cargo Mercado Pago', 'Costo de Mercado Pago', 'Comisión por venta de Mercado Libre'])->first();
 
             $actual = DB::table('ventas_cobro')->where('ref_cobro', $ref_op)->first();
 
@@ -430,7 +430,7 @@ class ControlsController extends Controller
                 }
             }
 
-            \Helper::messageFlash('Cobros MP',$mensaje);
+            \Helper::messageFlash('Cobros MP', $mensaje);
 
             return redirect()->back();
         }
@@ -443,7 +443,7 @@ class ControlsController extends Controller
 
             DB::insert($insert, [$request->dif, $request->ref_cobro]);
 
-            \Helper::messageFlash('Cobros MP','Proceso aplicado correctamente.');
+            \Helper::messageFlash('Cobros MP', 'Proceso aplicado correctamente.');
 
             return redirect('/');
         }
@@ -452,82 +452,82 @@ class ControlsController extends Controller
     private function getConceptos()
     {
         $words = array("Percepción RG 4240 IVA Servicios Digitales Internacionales",
-                                    "Anulación de percepción RG 4240 IVA Servicios Digitales Internacionales",
-        "Anulación de comisión por venta de MercadoLibre",
-        "Anulación de cargo MercadoPago",
-                       "Anulación de cargo Mercado Pago",
-        "Anulación de costo de envío por MercadoEnvíos",
-                       "Anulación de cargo por envío",
-        "Anulación de costo de MercadoPago",
-                       "Anulación de costo de Mercado Pago",
-                       "Anulación de comisión por venta de Mercado Libre",
-        "Anulación de dinero retenido por contracargo",
-        "Anulación de retiro de dinero a cuenta bancaria",
-                                    "Anulación de devolución por Compra Protegida",
-                                    "Anulación de retención de ingresos brutos de Entre Ríos",
-                                    "Anulación de retención de ingresos brutos de Santa Fe",
-                                    "Anulación parcial de retención de ingresos brutos de Santa Fe",
-                                    "Anulación de retención de ingresos brutos de Santiago del Estero",
-                                    "Anulación parcial de retención de ingresos brutos de Córdoba",
-        "Anulación de retención de ingresos brutos de Córdoba",
-                       "Anulación de retención de ingresos brutos de Catamarca",
-        "Anulación parcial de costo de MercadoPago",
-                       "Anulación parcial de costo de Mercado Pago",
-        "Cargo MercadoPago",
-                       "Cargo Mercado Pago",
-                       "Cargo por envío",
-        "Cobro",
-        "Cobro Adicional",
-        "Cobro por descuento a tu contraparte",
-        "Comisión por venta de MercadoLibre",
-                       "Comisión por venta de Mercado Libre",
-        "Costo de envío por MercadoEnvíos",
-        "Costo de MercadoPago",
-                       "Costo de Mercado Pago",
-        "Devolución de cobro",
-        "Devolución de cobro Adicional",
-        "Devolución de cobro por descuento a tu contraparte",
-        "Devolución de dinero recibido",
-        "Devolución parcial de cobro",
-                       "Devolución parcial de ingreso de dinero",
-                       "Devolución parcial de pago",
-                       "Devolución de pago",
-        "Devolución por Compra Protegida",
-        "Dinero recibido",
-        "Dinero retenido por contracargo",
-                       "Dinero retenido",
-                       "Ingreso de dinero",
-                       "Movimiento General",
-                                                "Anulación de movimiento General",
-                                                "Descuento recibido",
-                                                "Pago con descuento recibido",
-        "Pago",
-        "Pago adicional",
-        "Percepción Ing. Brutos CAP. FED.",
-        "Percepción Ing. Brutos Pcia. Bs. As.",
-        "Recarga de celular",
-                                    "Retención de ingresos brutos de Mendoza",
-                                    "Retención de ingresos brutos de Neuquén",
-                                    "Retención de ingresos brutos de Santiago del Estero",
-                                    "Retención de ingresos brutos de Tucumán",
-                                    "Retención de Ingresos brutos de Río Negro",
-                                    "Retención de Ingresos brutos de Jujuy",
-        "Retención de ingresos brutos de Catamarca",
-        "Retención de ingresos brutos de Entre Ríos",
-        "Retención de ingresos brutos de La Pampa",
-        "Retención de ingresos brutos de Santa Fe",
-        "Retención de ingresos brutos de Córdoba",
-        "Retiro de dinero a cuenta bancaria" );
+            "Anulación de percepción RG 4240 IVA Servicios Digitales Internacionales",
+            "Anulación de comisión por venta de MercadoLibre",
+            "Anulación de cargo MercadoPago",
+            "Anulación de cargo Mercado Pago",
+            "Anulación de costo de envío por MercadoEnvíos",
+            "Anulación de cargo por envío",
+            "Anulación de costo de MercadoPago",
+            "Anulación de costo de Mercado Pago",
+            "Anulación de comisión por venta de Mercado Libre",
+            "Anulación de dinero retenido por contracargo",
+            "Anulación de retiro de dinero a cuenta bancaria",
+            "Anulación de devolución por Compra Protegida",
+            "Anulación de retención de ingresos brutos de Entre Ríos",
+            "Anulación de retención de ingresos brutos de Santa Fe",
+            "Anulación parcial de retención de ingresos brutos de Santa Fe",
+            "Anulación de retención de ingresos brutos de Santiago del Estero",
+            "Anulación parcial de retención de ingresos brutos de Córdoba",
+            "Anulación de retención de ingresos brutos de Córdoba",
+            "Anulación de retención de ingresos brutos de Catamarca",
+            "Anulación parcial de costo de MercadoPago",
+            "Anulación parcial de costo de Mercado Pago",
+            "Cargo MercadoPago",
+            "Cargo Mercado Pago",
+            "Cargo por envío",
+            "Cobro",
+            "Cobro Adicional",
+            "Cobro por descuento a tu contraparte",
+            "Comisión por venta de MercadoLibre",
+            "Comisión por venta de Mercado Libre",
+            "Costo de envío por MercadoEnvíos",
+            "Costo de MercadoPago",
+            "Costo de Mercado Pago",
+            "Devolución de cobro",
+            "Devolución de cobro Adicional",
+            "Devolución de cobro por descuento a tu contraparte",
+            "Devolución de dinero recibido",
+            "Devolución parcial de cobro",
+            "Devolución parcial de ingreso de dinero",
+            "Devolución parcial de pago",
+            "Devolución de pago",
+            "Devolución por Compra Protegida",
+            "Dinero recibido",
+            "Dinero retenido por contracargo",
+            "Dinero retenido",
+            "Ingreso de dinero",
+            "Movimiento General",
+            "Anulación de movimiento General",
+            "Descuento recibido",
+            "Pago con descuento recibido",
+            "Pago",
+            "Pago adicional",
+            "Percepción Ing. Brutos CAP. FED.",
+            "Percepción Ing. Brutos Pcia. Bs. As.",
+            "Recarga de celular",
+            "Retención de ingresos brutos de Mendoza",
+            "Retención de ingresos brutos de Neuquén",
+            "Retención de ingresos brutos de Santiago del Estero",
+            "Retención de ingresos brutos de Tucumán",
+            "Retención de Ingresos brutos de Río Negro",
+            "Retención de Ingresos brutos de Jujuy",
+            "Retención de ingresos brutos de Catamarca",
+            "Retención de ingresos brutos de Entre Ríos",
+            "Retención de ingresos brutos de La Pampa",
+            "Retención de ingresos brutos de Santa Fe",
+            "Retención de ingresos brutos de Córdoba",
+            "Retiro de dinero a cuenta bancaria");
 
         $whereClause = "";
-        foreach( $words as $word) {
-           $whereClause .= " concepto != '" . $word . "' AND";
+        foreach ($words as $word) {
+            $whereClause .= " concepto != '" . $word . "' AND";
         }
 
         // Remove last 'and'
         $whereClause = substr($whereClause, 0, -3);
         /**** query para descubrir si hay nuevo concepto de operación en mercadopago cargado a la base de datos y por ende no tenido en cuenta en los querys al momento de incorporarlo */
-        
+
         $query_rsNewConcept = "SELECT concepto FROM mercadopago WHERE $whereClause GROUP BY concepto";
 
         $conceptos = DB::select($query_rsNewConcept);
@@ -543,10 +543,10 @@ class ControlsController extends Controller
         $condicion = '';
 
         if ($version2 == null) {
-             $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
-         } else {
+            $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
+        } else {
             $condicion .= "AND ref_op>=4629477059";
-         } 
+        }
 
         $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
         AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
@@ -560,8 +560,7 @@ class ControlsController extends Controller
         AND concepto != 'Retiro de dinero a cuenta bancaria' 
         AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' 
         AND concepto != 'Percepción RG 4240 IVA Servicios Digitales Internacionales'
-                                    AND concepto != 'Anulación de percepción RG 4240 IVA Servicios Digitales Internacionales'"
-        ;
+                                    AND concepto != 'Anulación de percepción RG 4240 IVA Servicios Digitales Internacionales'";
 
         $query_rsGRAL = "SELECT mp.*, cobro.*, (imp_mp - imp_db) as dif # SACO LA DIFERENCIA ENTRE MP Y LA DB
         FROM 
@@ -671,7 +670,8 @@ class ControlsController extends Controller
             WHERE concepto NOT LIKE '%Percepción Ing. Brutos%' AND concepto NOT LIKE '%Retención de ingresos brutos de%' AND concepto != 'Recarga de celular' AND concepto != 'Pago' AND concepto != 'Pago adicional' AND concepto != 'Anulación de retención de ingresos brutos de Córdoba' AND concepto != 'Retiro de dinero a cuenta bancaria' AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' AND concepto != 'Anulación de retención de ingresos brutos de Catamarca' GROUP BY ref_op) as mp
         ON db.ref_cobro = mp.ref_op # No necesito mas esto -> COLLATE utf8_spanish_ci";
 
-        $query_rsCobrosDB2 = $query_rsGRAL2; /*** es la misma tabla QUE ARRIBA pero le hago distinto filtro */
+        $query_rsCobrosDB2 = $query_rsGRAL2;
+        /*** es la misma tabla QUE ARRIBA pero le hago distinto filtro */
         $query_rsCobrosDB2 .= "
         WHERE ref_op IS NULL and imp_db != '0.00' # filtro las op. de DB que no tienen pareja en MP y que tienen importe distinto a 0
         ORDER BY imp_db DESC";
@@ -684,15 +684,15 @@ class ControlsController extends Controller
     private function getCobrosMPSinPareja($version2 = null)
     {
 
-        /*** SI AGREGO CONCEPTO QUE NO ES VENTA O COBRO (serían percepciones, retiros, pagos de mis compras, etc) AGREGARLO TMB EN "WHERE NOT LIKE" variable $wherenotlike   */ 
+        /*** SI AGREGO CONCEPTO QUE NO ES VENTA O COBRO (serían percepciones, retiros, pagos de mis compras, etc) AGREGARLO TMB EN "WHERE NOT LIKE" variable $wherenotlike   */
 
         $condicion = '';
 
         if ($version2 == null) {
-             $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
-         } else {
+            $condicion .= "AND ref_op<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana";
+        } else {
             $condicion .= "AND ref_op>=4629477059";
-         }
+        }
 
         $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
         AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
@@ -728,7 +728,8 @@ class ControlsController extends Controller
                 ) as cobro
         ON mp.ref_op = cobro.ref_cobro # No necesito mas esto -> COLLATE utf8_spanish_ci uno la tabla de mercadopago a la table de cobros";
 
-        $query_rsCXP2 = $query_rsGRAL; /*** es la misma tabla QUE ARRIBA pero le hago distinto filtro */
+        $query_rsCXP2 = $query_rsGRAL;
+        /*** es la misma tabla QUE ARRIBA pero le hago distinto filtro */
         $query_rsCXP2 .= "
         WHERE ref_cobro IS NULL and imp_mp != '0.00' # filtro las op. de mp que no tienen pareja en bd y que tienen importe distinto a 0
         ORDER BY imp_mp ASC";
@@ -744,14 +745,14 @@ class ControlsController extends Controller
             'titulo',
             'consola'
         )
-        ->groupBy(DB::raw("titulo, consola"))
-        ->orderBy(DB::raw("consola, titulo"))
-        ->get();
+            ->groupBy(DB::raw("titulo, consola"))
+            ->orderBy(DB::raw("consola, titulo"))
+            ->get();
 
         $dominios = DB::table('dominios')->get();
 
         $cantidadStock = count($cantidadStock);
-        $configuraciones = DB::table('configuraciones')->where('ID',1)->first();
+        $configuraciones = DB::table('configuraciones')->where('ID', 1)->first();
         $oferta_fortnite = $configuraciones->oferta_fortnite;
         $cuentas_excluidas = $configuraciones->cuentas_excluidas;
         $titles = $this->wp_p->lastGameStockTitles();
@@ -794,7 +795,7 @@ class ControlsController extends Controller
 
         $options = $this->optionsConfig();
 
-        return view('config.general', compact('options','oferta_fortnite','cuentas_excluidas','cantidadStock','configuraciones','titles','titulos','dominios','titulos_pri','titulos_secu','dominios_exclu','medios_cobros'));
+        return view('config.general', compact('options', 'oferta_fortnite', 'cuentas_excluidas', 'cantidadStock', 'configuraciones', 'titles', 'titulos', 'dominios', 'titulos_pri', 'titulos_secu', 'dominios_exclu', 'medios_cobros'));
     }
 
     private function optionsConfig()
@@ -824,29 +825,29 @@ class ControlsController extends Controller
                 $data['oferta_fortnite'] = $request->oferta_fortnite;
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Texto para ofertas fortnite actualizado.');
+                \Helper::messageFlash('Configuraciones', 'Texto para ofertas fortnite actualizado.');
                 return redirect()->back();
                 break;
-            
+
             case 2: // Cuentas Excluidas
                 $data = [];
-                $cuentas_excluidas = explode(",",$request->cuentas_excluidas);
+                $cuentas_excluidas = explode(",", $request->cuentas_excluidas);
 
-                $cuentas_excluidas = array_map(function($ele) {
+                $cuentas_excluidas = array_map(function ($ele) {
                     return trim($ele);
                 }, $cuentas_excluidas);
 
-                $data['cuentas_excluidas'] = implode(",",$cuentas_excluidas);
+                $data['cuentas_excluidas'] = implode(",", $cuentas_excluidas);
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Cuentas excluidas en PS3 Resetear actualizada.');
+                \Helper::messageFlash('Configuraciones', 'Cuentas excluidas en PS3 Resetear actualizada.');
                 return redirect()->back();
                 break;
             case 3: // Parametros
                 $inputs = $request->all();
 
                 $data = [];
-                
+
                 foreach ($inputs as $index => $value) {
                     if ($index != '_token' && $index != 'opt') {
                         $data[$index] = $value;
@@ -854,14 +855,14 @@ class ControlsController extends Controller
                 }
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Parametros actualizados correctamente.');
+                \Helper::messageFlash('Configuraciones', 'Parametros actualizados correctamente.');
                 return redirect()->back();
                 break;
             case 4:
                 $titulos = $request->productos_excluidos;
                 $titles = [];
                 foreach ($titulos as $value) {
-                    $titles[] = '"'.$value.'"';
+                    $titles[] = '"' . $value . '"';
                 }
 
                 $titulos = implode(",", $titles);
@@ -869,21 +870,21 @@ class ControlsController extends Controller
                 $data['productos_excluidos'] = $titulos;
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Productos excluidos registrados.');
+                \Helper::messageFlash('Configuraciones', 'Productos excluidos registrados.');
                 return redirect()->back();
                 break;
             case 5: // Cuentas Robadas Excluidas
                 $data = [];
-                $cuentas_excluidas = explode(",",$request->cuentas_excluidas);
+                $cuentas_excluidas = explode(",", $request->cuentas_excluidas);
 
-                $cuentas_excluidas = array_map(function($ele) {
+                $cuentas_excluidas = array_map(function ($ele) {
                     return trim($ele);
                 }, $cuentas_excluidas);
 
-                $data['cuentas_robadas_excluidas'] = implode(",",$cuentas_excluidas);
+                $data['cuentas_robadas_excluidas'] = implode(",", $cuentas_excluidas);
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Cuentas robadas excluidas satisfactoriamente.');
+                \Helper::messageFlash('Configuraciones', 'Cuentas robadas excluidas satisfactoriamente.');
                 return redirect()->back();
                 break;
             case 6:
@@ -893,46 +894,46 @@ class ControlsController extends Controller
                     $data['indicador_habilitado'] = $request->habilitado;
                     $data['usuario'] = session()->get('usuario')->Nombre;
                     $data['update_at'] = date('Y-m-d H:i:s');
-    
+
                     $accion = '';
-    
+
                     if ($request->id_dominio != 0) {
                         $accion = 'editado';
-                        DB::table('dominios')->where('ID',$request->id_dominio)->update($data);
+                        DB::table('dominios')->where('ID', $request->id_dominio)->update($data);
                     } else {
                         $data['create_at'] = date('Y-m-d H:i:s');
                         $accion = 'creado';
                         DB::table('dominios')->insert($data);
                     }
-                    
-                    \Helper::messageFlash('Configuraciones',"Dominio $accion satisfactoriamente.");
+
+                    \Helper::messageFlash('Configuraciones', "Dominio $accion satisfactoriamente.");
                     return redirect()->back();
                 } elseif ($request->accion == 'delete') {
-                    DB::table('dominios')->where('ID',$request->id_dominio)->delete();
-                    \Helper::messageFlash('Configuraciones',"Dominio eliminado satisfactoriamente.");
+                    DB::table('dominios')->where('ID', $request->id_dominio)->delete();
+                    \Helper::messageFlash('Configuraciones', "Dominio eliminado satisfactoriamente.");
                 }
 
                 return redirect()->back()->withErrors(["El dominio no puede ser vacío"]);
-                
+
                 break;
             case 7: // Ventas sin entregar Excluidas
                 $data = [];
-                $ventas_excluidas = explode(",",$request->ventas_excluidas);
-                $clientes_excluidos = explode(",",$request->clientes_excluidos);
+                $ventas_excluidas = explode(",", $request->ventas_excluidas);
+                $clientes_excluidos = explode(",", $request->clientes_excluidos);
 
-                $ventas_excluidas = array_map(function($ele) {
+                $ventas_excluidas = array_map(function ($ele) {
                     return trim($ele);
                 }, $ventas_excluidas);
-                
-                $clientes_excluidos = array_map(function($ele) {
+
+                $clientes_excluidos = array_map(function ($ele) {
                     return trim($ele);
                 }, $clientes_excluidos);
 
-                $data['ventas_sinentregar'] = implode(",",$ventas_excluidas);
-                $data['clientes_sinentregar'] = implode(",",$clientes_excluidos);
+                $data['ventas_sinentregar'] = implode(",", $ventas_excluidas);
+                $data['clientes_sinentregar'] = implode(",", $clientes_excluidos);
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Ventas sin entregar excluidas satisfactoriamente.');
+                \Helper::messageFlash('Configuraciones', 'Ventas sin entregar excluidas satisfactoriamente.');
                 return redirect()->back();
                 break;
             case 8:
@@ -941,7 +942,7 @@ class ControlsController extends Controller
                 $titles = [];
                 if ($titulos_pri) {
                     foreach ($titulos_pri as $value) {
-                        $titles[] = '"'.$value.'"';
+                        $titles[] = '"' . $value . '"';
                     }
                 }
                 $titulos_pri = implode(",", $titles);
@@ -950,22 +951,22 @@ class ControlsController extends Controller
                 $titles = [];
                 if ($titulos_secu) {
                     foreach ($titulos_secu as $value) {
-                        $titles[] = '"'.$value.'"';
+                        $titles[] = '"' . $value . '"';
                     }
                 }
                 $titulos_secu = implode(",", $titles);
-    
+
                 $data['prod_excluidos_secu'] = $titulos_secu;
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Productos excluidos recupero registrados.');
+                \Helper::messageFlash('Configuraciones', 'Productos excluidos recupero registrados.');
                 return redirect()->back();
                 break;
             case 9:
                 $dominios = $request->dominios_excluidos;
                 $domains = [];
                 foreach ($dominios as $value) {
-                    $domains[] = '"'.$value.'"';
+                    $domains[] = '"' . $value . '"';
                 }
 
                 $dominios = implode(",", $domains);
@@ -973,7 +974,7 @@ class ControlsController extends Controller
                 $data['dominios_excluidos'] = $dominios;
 
                 DB::table('configuraciones')->where('ID', 1)->update($data);
-                \Helper::messageFlash('Configuraciones','Dominios excluidos registrados.');
+                \Helper::messageFlash('Configuraciones', 'Dominios excluidos registrados.');
                 return redirect()->back();
                 break;
             case 10:
@@ -986,17 +987,17 @@ class ControlsController extends Controller
 
                     if ($request->id_medio_cobro != 0) {
                         $accion = "editado";
-                        DB::table('medios_cobros')->where('ID',$request->id_medio_cobro)->update($data);
+                        DB::table('medios_cobros')->where('ID', $request->id_medio_cobro)->update($data);
                     } else {
                         $accion = "creado";
                         DB::table('medios_cobros')->insert($data);
                     }
                 } elseif ($request->accion == 'delete') {
                     $accion = "eliminado";
-                    DB::table('medios_cobros')->where('ID',$request->id_medio_cobro)->delete();
+                    DB::table('medios_cobros')->where('ID', $request->id_medio_cobro)->delete();
                 }
 
-                \Helper::messageFlash('Configuraciones','El medio de cobro ha sido ' . $accion . ' exitosamente');
+                \Helper::messageFlash('Configuraciones', 'El medio de cobro ha sido ' . $accion . ' exitosamente');
                 return redirect()->back();
         }
     }
@@ -1005,7 +1006,7 @@ class ControlsController extends Controller
     {
         $titulos = $this->getTitulosEvolucion()->get();
 
-        return view('control.evolucion',compact('titulos'));
+        return view('control.evolucion', compact('titulos'));
     }
 
     public function dataEvolucion(Request $request)
@@ -1027,7 +1028,7 @@ class ControlsController extends Controller
         }
         $data['grafica'] = $datos;
         $data['total_qty'] = $cantidad;
-        $data['total_price'] = number_format(($precio/$cantidad),2,".","");
+        $data['total_price'] = number_format(($precio / $cantidad), 2, ".", "");
 
         echo json_encode($data);
     }
@@ -1035,29 +1036,29 @@ class ControlsController extends Controller
     private function getDatosEvolucion($filter)
     {
         $datos = DB::table('ventas')
-        ->select(
-            DB::raw("COUNT(*) AS Q"),
-            DB::raw("DATE(ventas.Day) as Day"),
-            DB::raw('(SUM(precio)/COUNT(*)) as precio'),
-            DB::raw('(SUM(precio)) as precio_total'),
-            'ventas.slot',
-            'stock.titulo',
-            'stock.consola'
-        )
-        ->leftjoin('stock','ventas.stock_id','=','stock.ID')
-        ->leftjoin(DB::raw("(SELECT ventas_id, SUM(precio) AS precio FROM ventas_cobro GROUP BY ventas_id) AS ventas_cob"),'ventas_cob.ventas_id','=','ventas.ID');
+            ->select(
+                DB::raw("COUNT(*) AS Q"),
+                DB::raw("DATE(ventas.Day) as Day"),
+                DB::raw('(SUM(precio)/COUNT(*)) as precio'),
+                DB::raw('(SUM(precio)) as precio_total'),
+                'ventas.slot',
+                'stock.titulo',
+                'stock.consola'
+            )
+            ->leftjoin('stock', 'ventas.stock_id', '=', 'stock.ID')
+            ->leftjoin(DB::raw("(SELECT ventas_id, SUM(precio) AS precio FROM ventas_cobro GROUP BY ventas_id) AS ventas_cob"), 'ventas_cob.ventas_id', '=', 'ventas.ID');
 
         $groupBy = '';
-        
+
 
         if ($filter['titulo'] != '') {
-            $datos->where('stock.titulo',$filter['titulo']);
+            $datos->where('stock.titulo', $filter['titulo']);
         }
         if ($filter['consola'] != '') {
-            $datos->where('stock.consola',$filter['consola']);
+            $datos->where('stock.consola', $filter['consola']);
         }
         if ($filter['slot'] != '') {
-            $datos->where('ventas.slot',$filter['slot']);
+            $datos->where('ventas.slot', $filter['slot']);
         }
         if ($filter['fecha_inicio'] != "" && $filter['fecha_fin'] != "") {
             $datos->whereBetween(DB::raw("DATE(ventas.Day)"), [$filter['fecha_inicio'], $filter['fecha_fin']]);
@@ -1072,7 +1073,7 @@ class ControlsController extends Controller
         }
 
         $datos->groupBy(DB::raw($groupBy))
-        ->orderBy(DB::raw($groupBy));
+            ->orderBy(DB::raw($groupBy));
 
         return $datos;
     }
@@ -1080,14 +1081,14 @@ class ControlsController extends Controller
     private function getTitulosEvolucion()
     {
         $titulos = DB::table('ventas_cobro')
-        ->select(
-            DB::raw("CONCAT(stock.titulo,' (',stock.consola,')') AS titulo")
-        )
-        ->leftjoin('ventas','ventas_cobro.ventas_id','=','ventas.ID')
-        ->leftjoin('stock','ventas.stock_id','=','stock.ID')
-        ->groupBy('stock.titulo')
-        ->groupBy('stock.consola')
-        ->orderBy('stock.titulo','ASC');
+            ->select(
+                DB::raw("CONCAT(stock.titulo,' (',stock.consola,')') AS titulo")
+            )
+            ->leftjoin('ventas', 'ventas_cobro.ventas_id', '=', 'ventas.ID')
+            ->leftjoin('stock', 'ventas.stock_id', '=', 'stock.ID')
+            ->groupBy('stock.titulo')
+            ->groupBy('stock.consola')
+            ->orderBy('stock.titulo', 'ASC');
 
         return $titulos;
     }
@@ -1100,78 +1101,78 @@ class ControlsController extends Controller
             'titulo',
             'consola'
         )
-        ->groupBy(DB::raw("titulo, consola"))
-        ->orderBy(DB::raw("consola, titulo"))
-        ->get();
+            ->groupBy(DB::raw("titulo, consola"))
+            ->orderBy(DB::raw("consola, titulo"))
+            ->get();
 
         foreach ($stocks as $stock) {
             $data_excel = $this->getVentaStock($stock->titulo, $stock->consola);
 
             if (count($data_excel) > 0) { // Se arma el excel siempre y cuando haya datos.
 
-                $cabecera = ["Vta_id","Cte_id","Titulo","Consola","Apellido","Nombre","Email"];
+                $cabecera = ["Vta_id", "Cte_id", "Titulo", "Consola", "Apellido", "Nombre", "Email"];
 
                 array_unshift($data_excel, $cabecera); // Agregar elemento a la primera posicion del array.
 
                 $excel_title = "DB-$stock->titulo-$stock->consola-" . date('Y-m');
 
                 $file = Excel::create($excel_title,
-                        function ($excel) use ($data_excel) {
-                            $excel->sheet("Reporte", function ($sheet) use ($data_excel) {
-                                $sheet->fromArray($data_excel, null, 'A1', false, false);
-                            });
+                    function ($excel) use ($data_excel) {
+                        $excel->sheet("Reporte", function ($sheet) use ($data_excel) {
+                            $sheet->fromArray($data_excel, null, 'A1', false, false);
                         });
+                    });
 
-                $path_files_excel[] = $file->store("csv",false,true)['full'];
+                $path_files_excel[] = $file->store("csv", false, true)['full'];
             }
 
         }
 
         $zipTitle = 'Reports-' . date('Y-m') . '.zip';
-        $path_zip = storage_path('app/public/'.$zipTitle);
+        $path_zip = storage_path('app/public/' . $zipTitle);
 
         Zipper::make($path_zip)->add($path_files_excel)->close();
 
         try {
-            Mail::send('emails.excel', [], function($message) use ($path_zip)
-            {
+            Mail::send('emails.excel', [], function ($message) use ($path_zip) {
                 $message->to("victor.ross.04@gmail.com", "Victor Ross")->subject("Reportes");
                 // $message->to("victor.ross.04@gmail.com", "Victor Ross")->cc("ortizkendry95@gmail.com", "Kendry Ortiz")->subject("Reportes");
                 $message->attach($path_zip);
             });
 
-            \Helper::messageFlash('Configuraciones','Se ha generado el reporte y ha sido enviado a su correo satisfactoriamente.');
+            \Helper::messageFlash('Configuraciones', 'Se ha generado el reporte y ha sido enviado a su correo satisfactoriamente.');
 
             return redirect()->back();
-            
+
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['Ha ocurrido un error al intentar enviar el correo']);
         }
     }
+
     private function getVentaStock($titulo, $consola)
     {
         $result = DB::table('ventas AS v')
-        ->select(
-            'v.ID AS vta_id',
-            'c.ID AS cte_id',
-            's.titulo',
-            's.consola',
-            'c.apellido',
-            'c.nombre',
-            'c.email'
-        ) 
-        ->leftjoin('stock AS s','v.stock_id','=','s.ID')
-        ->leftjoin('clientes AS c','v.clientes_id','=','c.ID')
-        ->where('titulo',$titulo)
-        ->where('consola',$consola)
-        ->get();
+            ->select(
+                'v.ID AS vta_id',
+                'c.ID AS cte_id',
+                's.titulo',
+                's.consola',
+                'c.apellido',
+                'c.nombre',
+                'c.email'
+            )
+            ->leftjoin('stock AS s', 'v.stock_id', '=', 's.ID')
+            ->leftjoin('clientes AS c', 'v.clientes_id', '=', 'c.ID')
+            ->where('titulo', $titulo)
+            ->where('consola', $consola)
+            ->get();
 
         $data_excel = [];
 
         foreach ($result as $i => $value) {
             $data_excel[$i] = [];
             foreach ($value as $key => $value) {
-                 $data_excel[$i][] = $value;
+                $data_excel[$i][] = $value;
             }
         }
 
@@ -1184,7 +1185,7 @@ class ControlsController extends Controller
         $gasto = $this->expenses->gastosControlVentas()->first();
         $gto_x_ing = $gasto->gasto / $gasto->ingreso;
 
-        return view('control.control_ventas', compact('ventas','gto_x_ing'));
+        return view('control.control_ventas', compact('ventas', 'gto_x_ing'));
     }
 
     public function balance()
@@ -1192,7 +1193,7 @@ class ControlsController extends Controller
         $row_rsVentas = $this->sales->totalVentas()->first();
         $row_rsGastos = Expenses::totalGastos()->first();
         $row_rsStock = Stock::totalesStock()->first();
-		$row_rsStock2019 = Stock::totalesStock2019()->first();
+        $row_rsStock2019 = Stock::totalesStock2019()->first();
         $row_rsStockVendido = $this->sales->stockVendido();
         $balance_mensual = $this->balance->balanceMensual();
         $row_rsCicloVtaGRAL = $this->sales->datosVentasBalance();
@@ -1201,7 +1202,7 @@ class ControlsController extends Controller
         $row_rsCicloVtaPS3 = $this->sales->datosVentasBalance('vta_ps3');
         $row_rsCicloVtaPS = $this->sales->datosVentasBalance('vta_ps');
 
-        return view('control.balance', compact('row_rsVentas','row_rsGastos','row_rsStock','row_rsStock2019','row_rsStockVendido','balance_mensual','row_rsCicloVtaGRAL','row_rsCicloVta','row_rsCicloVtaPS4','row_rsCicloVtaPS3','row_rsCicloVtaPS'));
+        return view('control.balance', compact('row_rsVentas', 'row_rsGastos', 'row_rsStock', 'row_rsStock2019', 'row_rsStockVendido', 'balance_mensual', 'row_rsCicloVtaGRAL', 'row_rsCicloVta', 'row_rsCicloVtaPS4', 'row_rsCicloVtaPS3', 'row_rsCicloVtaPS'));
     }
 
     public function balanceProductos()
@@ -1217,9 +1218,9 @@ class ControlsController extends Controller
 
         $rsCXP = Stock::getDatosBalanceProductosDias($dias);
 
-        $filtro_dias = [3,7,14,28,60,90,180,360]; // Array que se utiliza para filtrar por días.
+        $filtro_dias = [3, 7, 14, 28, 60, 90, 180, 360]; // Array que se utiliza para filtrar por días.
 
-        return view('control.balance_productos_dias', compact('dias','rsCXP','filtro_dias'));
+        return view('control.balance_productos_dias', compact('dias', 'rsCXP', 'filtro_dias'));
     }
 
     public function balanceProductosDiasCondicionado($page)
@@ -1233,7 +1234,7 @@ class ControlsController extends Controller
             case 'ventas_15_dias':
                 $dias = 15;
                 break;
-            
+
             case 'ventas_30_dias':
                 $dias = 30;
                 break;
@@ -1246,32 +1247,40 @@ class ControlsController extends Controller
 
         $acceso = 'usuario';
 
-        return view('control.balance_productos_dias', compact('dias','rsCXP','acceso'));
+        return view('control.balance_productos_dias', compact('dias', 'rsCXP', 'acceso'));
     }
 
     public function procesosAutomaticos($tipo)
     {
         switch ($tipo) {
             case 'automatizar_clientes':
-                
+
                 DB::table('clientes as a')
-                ->leftjoin(DB::raw("(SELECT 
+                    ->leftjoin(DB::raw("(SELECT 
                 clientes_id,
                 COUNT(*) as q_vtas,
                 DATEDIFF(NOW(), min( Day )) as dias_de_primer_venta
-                FROM ventas GROUP BY clientes_id) as b"),'a.ID','=','b.clientes_id')
-                ->where('a.auto','no')
-                ->where(DB::raw("(dias_de_primer_venta > 180) or ((dias_de_primer_venta > 120) and (q_vtas > 1))"))
-                ->update(['auto' => 'si']);
+                FROM ventas GROUP BY clientes_id) as b"), 'a.ID', '=', 'b.clientes_id')
+                    ->where('a.auto', 'no')
+                    ->where(DB::raw("(dias_de_primer_venta > 180) or ((dias_de_primer_venta > 120) and (q_vtas > 1))"))
+                    ->update(['auto' => 'si']);
 
-                \Helper::messageFlash('Configuraciones','Clientes automatizados correctamente.');
+                DB::table('clientes as a')
+                    ->select('ID', 'dias_de_primer_venta', 'q')
+                    ->leftjoin(DB::raw("(SELECT clientes_id, DATEDIFF(NOW(), min( Day )) as dias_de_primer_venta, count(*) as q FROM ventas where cons='ps4' group by clientes_id) as b"), 'a.ID', '=', 'b.clientes_id')
+                    ->where('a.auto', 'si')
+                    ->where('q', '>=', 3)
+                    ->where('dias_de_primer_venta ', '>', 120)
+                    ->update(['auto' => '3ps4']);
+
+                \Helper::messageFlash('Configuraciones', 'Clientes automatizados correctamente.');
 
                 return redirect()->back();
 
                 break;
-            
+
             case 'actualizar_estado_wc':
-                
+
                 $datos = DB::select("SELECT db.*, web.*, cbgw_posts.ID, cbgw_posts.post_status
                 FROM (SELECT COUNT(*) as q_db, order_id_web FROM (SELECT order_id_web FROM ventas GROUP BY order_item_id) as result GROUP BY order_id_web) as db
                 #primero agrupo por oii para evitar que cuente duplicado dos ventas de la base de datos correspondientes a un solo producto del pedido web ej(2 GC de 50usd por un producto GC 100usd)
@@ -1287,26 +1296,26 @@ class ControlsController extends Controller
                 try {
                     $pedidos = [];
                     foreach ($datos as $value) {
-                       if ($value->order_id) {
-                           DB::table('cbgw_posts')->where('ID', $value->order_id)->update(['post_status' => 'wc-completed']);
+                        if ($value->order_id) {
+                            DB::table('cbgw_posts')->where('ID', $value->order_id)->update(['post_status' => 'wc-completed']);
 
-                           $post_id = $value->order_id;
-                           $meta_key = "_completed_date";
-                           $date = date('Y-m-d H:i:s');
+                            $post_id = $value->order_id;
+                            $meta_key = "_completed_date";
+                            $date = date('Y-m-d H:i:s');
 
-                           $data['post_id'] = $post_id;
-                           $data['meta_key'] = $meta_key;
-                           $data['meta_value'] = $date;
+                            $data['post_id'] = $post_id;
+                            $data['meta_key'] = $meta_key;
+                            $data['meta_value'] = $date;
 
-                           DB::table('cbgw_postmeta')->insert($data);
+                            DB::table('cbgw_postmeta')->insert($data);
 
-                           $pedidos[] = $post_id;
-                       }
+                            $pedidos[] = $post_id;
+                        }
                     }
 
                     DB::commit();
 
-                    \Helper::messageFlash('Configuraciones',"Pedido(s) (".implode(",",$pedidos).") marcado(s) como entregado.");
+                    \Helper::messageFlash('Configuraciones', "Pedido(s) (" . implode(",", $pedidos) . ") marcado(s) como entregado.");
 
                     return redirect()->back();
                 } catch (Exception $e) {
@@ -1317,9 +1326,9 @@ class ControlsController extends Controller
                 break;
             case 'actualizar_ids_ventas':
 
-				///// 2019-12-06 agrego limit de 4800 order item id para que no tire abajo el servidor
+                ///// 2019-12-06 agrego limit de 4800 order item id para que no tire abajo el servidor
                 DB::table('ventas AS a')
-                ->leftjoin(DB::raw("(SELECT 
+                    ->leftjoin(DB::raw("(SELECT 
                 order_item_id,
                 order_id,
                 max( CASE WHEN cbgw_postmeta.meta_key='order_id_ml' and cbgw_woocommerce_order_items.order_id=cbgw_postmeta.post_id THEN cbgw_postmeta.meta_value END ) as order_id_ml
@@ -1328,16 +1337,16 @@ class ControlsController extends Controller
                 ON order_id = cbgw_postmeta.post_id
                 GROUP BY order_item_id
 				ORDER BY order_item_id desc
-                LIMIT 4800) as b"),'a.order_item_id','=','b.order_item_id')
-                ->whereNotNull('a.order_item_id')
-                ->whereNull('a.order_id_ml')
-                ->whereNotNull('b.order_id_ml')
-                ->update([
-                    'a.order_id_web' => 'b.order_id',
-                    'a.order_id_ml' => 'b.order_id_ml'
-                ]);
+                LIMIT 4800) as b"), 'a.order_item_id', '=', 'b.order_item_id')
+                    ->whereNotNull('a.order_item_id')
+                    ->whereNull('a.order_id_ml')
+                    ->whereNotNull('b.order_id_ml')
+                    ->update([
+                        'a.order_id_web' => 'b.order_id',
+                        'a.order_id_ml' => 'b.order_id_ml'
+                    ]);
 
-                \Helper::messageFlash('Configuraciones',"IDS de ventas actualizadas correctamente.");
+                \Helper::messageFlash('Configuraciones', "IDS de ventas actualizadas correctamente.");
 
                 return redirect()->back();
 
@@ -1345,19 +1354,19 @@ class ControlsController extends Controller
             case 'actualizar_costo_ps4':
 
                 $datos = DB::table(DB::raw("(SELECT cuentas_id as sa_cta_id, SUM(costo_usd) as sa_costo_usd, SUM(costo) as sa_costo FROM saldo GROUP BY cuentas_id) as saldo"))
-                ->select(
-                    'sa_cta_id as cuentas_id',
-                    DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0)) as libre_usd"),
-                    DB::raw("(sa_costo - COALESCE(st_costo,0)) as libre_ars"),
-                    'consola',
-                    'stock_id'
-                )
-                ->leftjoin(DB::raw("(SELECT cuentas_id as st_cta_id, SUM(costo_usd) as st_costo_usd, SUM(costo) as st_costo, GROUP_CONCAT(consola) as consola, GROUP_CONCAT(ID) as stock_id FROM stock GROUP BY cuentas_id) as stock"),'saldo.sa_cta_id','=','stock.st_cta_id')
-                ->where(DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0))"),'!=',0)
-                ->where('consola','ps4')
-                ->where('st_cta_id','>=',3786)
-                ->orderBy('stock.consola','DESC')
-                ->get();
+                    ->select(
+                        'sa_cta_id as cuentas_id',
+                        DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0)) as libre_usd"),
+                        DB::raw("(sa_costo - COALESCE(st_costo,0)) as libre_ars"),
+                        'consola',
+                        'stock_id'
+                    )
+                    ->leftjoin(DB::raw("(SELECT cuentas_id as st_cta_id, SUM(costo_usd) as st_costo_usd, SUM(costo) as st_costo, GROUP_CONCAT(consola) as consola, GROUP_CONCAT(ID) as stock_id FROM stock GROUP BY cuentas_id) as stock"), 'saldo.sa_cta_id', '=', 'stock.st_cta_id')
+                    ->where(DB::raw("(sa_costo_usd - COALESCE(st_costo_usd,0))"), '!=', 0)
+                    ->where('consola', 'ps4')
+                    ->where('st_cta_id', '>=', 3786)
+                    ->orderBy('stock.consola', 'DESC')
+                    ->get();
 
                 $mensajes = '';
 
@@ -1371,23 +1380,23 @@ class ControlsController extends Controller
                             $libre_usd = $value->libre_usd;
                             $libre_ars = $value->libre_ars;
 
-                            if(($libre_ars > 0.00) and ($libre_ars < 300.00)) {
+                            if (($libre_ars > 0.00) and ($libre_ars < 300.00)) {
 
-                                DB::table('stock')->where('ID',$stock_id)
-                                ->update([
+                                DB::table('stock')->where('ID', $stock_id)
+                                    ->update([
 
-                                    'costo' => "(costo + $libre_ars)"
+                                        'costo' => "(costo + $libre_ars)"
 
-                                ]);
+                                    ]);
 
                                 DB::table('cuentas_notas')
-                                ->insert([
+                                    ->insert([
 
-                                    'cuentas_id' => $cuentas_id,
-                                    'Notas' => 'nota atuomatica: actualizo costo en pesos',
-                                    'usuario' => 'Sistema'
+                                        'cuentas_id' => $cuentas_id,
+                                        'Notas' => 'nota atuomatica: actualizo costo en pesos',
+                                        'usuario' => 'Sistema'
 
-                                ]);
+                                    ]);
 
                                 $mensajes .= "[" . $cuentas_id . "] " . $stock_id . " actualizado en " . $libre_ars . " ARS<br>";
                                 $mensajes .= "[" . $cuentas_id . "] nota añadida<br>";
@@ -1395,28 +1404,28 @@ class ControlsController extends Controller
                             }
 
                             /****
-							if($libre_usd < 0.22) {
-
-                                DB::table('stock')->where('ID',$stock_id)
-                                ->update([
-
-                                    'costo_usd' => "(costo_usd + $libre_usd)"
-
-                                ]);
-
-                                DB::table('cuentas_notas')
-                                ->insert([
-
-                                    'cuentas_id' => $cuentas_id,
-                                    'Notas' => 'nota atuomatica: actualizo costo en dolares',
-                                    'usuario' => 'Sistema'
-
-                                ]);
-
-                                $mensajes .= "[" . $cuentas_id . "] " . $stock_id . " actualizado en " . $libre_usd . " USD<br>";
-                                $mensajes .= "[" . $cuentas_id . "] nota añadida<br>";
-
-                            }*/
+                             * if($libre_usd < 0.22) {
+                             *
+                             * DB::table('stock')->where('ID',$stock_id)
+                             * ->update([
+                             *
+                             * 'costo_usd' => "(costo_usd + $libre_usd)"
+                             *
+                             * ]);
+                             *
+                             * DB::table('cuentas_notas')
+                             * ->insert([
+                             *
+                             * 'cuentas_id' => $cuentas_id,
+                             * 'Notas' => 'nota atuomatica: actualizo costo en dolares',
+                             * 'usuario' => 'Sistema'
+                             *
+                             * ]);
+                             *
+                             * $mensajes .= "[" . $cuentas_id . "] " . $stock_id . " actualizado en " . $libre_usd . " USD<br>";
+                             * $mensajes .= "[" . $cuentas_id . "] nota añadida<br>";
+                             *
+                             * }*/
                         }
                     }
 
@@ -1500,107 +1509,118 @@ class ControlsController extends Controller
                             $precio_base = $value->_precio_base;
                             $antiguedad_juego = $value->antiguedad_juego;
 
-                            if($value->Q_vta_pri === "NULL"): $qvp = 0; else: $qvp = $value->Q_vta_pri; endif;
-                            if($value->Q_vta_sec === "NULL"): $qvs = 0; else: $qvs = $value->Q_vta_sec; endif;
-                            if($value->stock === "NULL"): $stock_Q = 0; else: $stock_Q = $value->stock; endif;
-                            if(($value->libre === "NULL") or ($value->libre < 0)): $libre = 0; else: $libre = $value->libre; endif;
+                            if ($value->Q_vta_pri === "NULL"): $qvp = 0;
+                            else: $qvp = $value->Q_vta_pri; endif;
+                            if ($value->Q_vta_sec === "NULL"): $qvs = 0;
+                            else: $qvs = $value->Q_vta_sec; endif;
+                            if ($value->stock === "NULL"): $stock_Q = 0;
+                            else: $stock_Q = $value->stock; endif;
+                            if (($value->libre === "NULL") or ($value->libre < 0)): $libre = 0;
+                            else: $libre = $value->libre; endif;
 
-                            if(strpos($value->producto, 'fifa-18') !== false): $margen = 0;
-                            elseif(strpos($value->producto, 'plus-12-meses-slot') !== false): $margen = 0;
+                            if (strpos($value->producto, 'fifa-18') !== false): $margen = 0;
+                            elseif (strpos($value->producto, 'plus-12-meses-slot') !== false): $margen = 0;
                             else: $margen = 5;
                             endif;
 
-                            if(($qvs * 0.1) > 10): $multi = 10; else: $multi = ($qvs * 0.1); endif;
+                            if (($qvs * 0.1) > 10): $multi = 10;
+                            else: $multi = ($qvs * 0.1); endif;
 
-                            if($slot == "primario"){
-                                $factorA = 0; $factorB = 0; $factorC = 0;           
-                                if ($libre > 0 && $qvp > 0){
-                                $factorA = ($libre / 500);
-                                    if ($antiguedad_juego > 30){ 
-                                        $factorB = (($libre / $qvp)*($libre / $qvp));
-                                    }   
+                            if ($slot == "primario") {
+                                $factorA = 0;
+                                $factorB = 0;
+                                $factorC = 0;
+                                if ($libre > 0 && $qvp > 0) {
+                                    $factorA = ($libre / 500);
+                                    if ($antiguedad_juego > 30) {
+                                        $factorB = (($libre / $qvp) * ($libre / $qvp));
+                                    }
                                 }
-                                
-                                if($antiguedad_juego > 0){
+
+                                if ($antiguedad_juego > 0) {
                                     $factorC = ($antiguedad_juego / 2000);
-                                    if($factorC > 0.08) {$factorC = 0.08;} 
+                                    if ($factorC > 0.08) {
+                                        $factorC = 0.08;
+                                    }
                                 }
-                                
-                                $multiplier = 1 + ($factorA + $factorB + $factorC); 
-                                if($multiplier > 1.30) {$multiplier = 1.30;}
-                                $new_price = ($precio_base * $multiplier); 
+
+                                $multiplier = 1 + ($factorA + $factorB + $factorC);
+                                if ($multiplier > 1.30) {
+                                    $multiplier = 1.30;
+                                }
+                                $new_price = ($precio_base * $multiplier);
                                 $new_price = round($new_price, 1);
                                 //$new_price = (ceil($new_price)*25);
-                                    
-                                    
-                                if((($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))) and $new_price > 1){  
-                                    DB::table('cbgw_postmeta')
-                                    ->where('post_id',$ID)
-                                    ->whereRaw("(meta_key='_price' or meta_key='_regular_price')")
-									//->where('meta_key','_price')
-                                    ->update([
-                                        'meta_value' => $new_price
-                                    ]);
-									
 
-                                    $mensajes .= "ID:" . $ID . " -multi:". round($multiplier,2) . " -qvp:" . $qvp . " -qvs:" . $qvs . " -lib:". $libre ." -ant:" . $antiguedad_juego . " //// " . $producto.  " " . $slot . " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ")<br>";
+
+                                if ((($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))) and $new_price > 1) {
+                                    DB::table('cbgw_postmeta')
+                                        ->where('post_id', $ID)
+                                        ->whereRaw("(meta_key='_price' or meta_key='_regular_price')")
+                                        //->where('meta_key','_price')
+                                        ->update([
+                                            'meta_value' => $new_price
+                                        ]);
+
+
+                                    $mensajes .= "ID:" . $ID . " -multi:" . round($multiplier, 2) . " -qvp:" . $qvp . " -qvs:" . $qvs . " -lib:" . $libre . " -ant:" . $antiguedad_juego . " //// " . $producto . " " . $slot . " -> de " . $precio_regular . " a " . $new_price . " (base " . $precio_base . ")<br>";
                                 }
-                                
-                                
-                                if(($qvp <= ($qvs + $multi + $margen)) && ($stock == "outofstock")){
+
+
+                                if (($qvp <= ($qvs + $multi + $margen)) && ($stock == "outofstock")) {
                                     DB::table('cbgw_postmeta')
-                                    ->where('post_id',$ID)
-                                    ->where('meta_key','_stock_status')
-                                    ->update([
-                                        'meta_value' => 'instock'
-                                    ]);
+                                        ->where('post_id', $ID)
+                                        ->where('meta_key', '_stock_status')
+                                        ->update([
+                                            'meta_value' => 'instock'
+                                        ]);
 
                                     DB::table('cbgw_postmeta')
-                                    ->where('post_id',$ID)
-                                    ->where('meta_key','_stock')
-                                    ->update([
-                                        'meta_value' => '999'
-                                    ]);
+                                        ->where('post_id', $ID)
+                                        ->where('meta_key', '_stock')
+                                        ->update([
+                                            'meta_value' => '999'
+                                        ]);
 
-                                    $mensajes .= $producto.  " " .$slot. " agregado a stock<br>";
+                                    $mensajes .= $producto . " " . $slot . " agregado a stock<br>";
                                 }
                             }
 
-                            if($slot == "secundario"){
-                                
-                                if($qvs >= $qvp){
-                                    if($stock == "instock"){
-                                        
-                                          DB::table('cbgw_postmeta')
-                                          ->where('post_id',$ID)
-                                          ->where('meta_key','_stock_status')
-                                          ->update([
-                                              'meta_value' => 'outofstock'
-                                          ]);
+                            if ($slot == "secundario") {
 
-                                          $mensajes .= $producto.  " " .$slot. " quitado de stock<br>";
+                                if ($qvs >= $qvp) {
+                                    if ($stock == "instock") {
+
+                                        DB::table('cbgw_postmeta')
+                                            ->where('post_id', $ID)
+                                            ->where('meta_key', '_stock_status')
+                                            ->update([
+                                                'meta_value' => 'outofstock'
+                                            ]);
+
+                                        $mensajes .= $producto . " " . $slot . " quitado de stock<br>";
                                     }
-								}
-                                if(($qvs < $qvp) && ($stock == "outofstock")){
-                                    DB::table('cbgw_postmeta')
-                                    ->where('post_id',$ID)
-                                    ->where('meta_key','_stock_status')
-                                    ->update([
-                                        'meta_value' => 'instock'
-                                    ]);
-
-                                    $mensajes .= $producto.  " " .$slot. " agregado a stock<br>";
                                 }
-                                if( ($libre > $stock_Q) or ($libre < $stock_Q) ) {
+                                if (($qvs < $qvp) && ($stock == "outofstock")) {
                                     DB::table('cbgw_postmeta')
-                                    ->where('post_id',$ID)
-                                    ->where('meta_key','_stock')
-                                    ->update([
-                                        'meta_value' => $libre
-                                    ]);
+                                        ->where('post_id', $ID)
+                                        ->where('meta_key', '_stock_status')
+                                        ->update([
+                                            'meta_value' => 'instock'
+                                        ]);
 
-                                    $mensajes .= '[' . $ID . '] ' . $producto .  " " .$slot. " cambiado a " . $libre . " stock<br>";
-                                      
+                                    $mensajes .= $producto . " " . $slot . " agregado a stock<br>";
+                                }
+                                if (($libre > $stock_Q) or ($libre < $stock_Q)) {
+                                    DB::table('cbgw_postmeta')
+                                        ->where('post_id', $ID)
+                                        ->where('meta_key', '_stock')
+                                        ->update([
+                                            'meta_value' => $libre
+                                        ]);
+
+                                    $mensajes .= '[' . $ID . '] ' . $producto . " " . $slot . " cambiado a " . $libre . " stock<br>";
+
                                 }
                             }
 
@@ -1688,7 +1708,7 @@ class ControlsController extends Controller
 
                 $mensajes = '';
 
-                $valor_oferta_sugerida_ps3 = DB::table('configuraciones')->where('ID',1)->value('oferta_sugerida_automatizar_ps3');
+                $valor_oferta_sugerida_ps3 = DB::table('configuraciones')->where('ID', 1)->value('oferta_sugerida_automatizar_ps3');
 
                 DB::beginTransaction();
 
@@ -1702,50 +1722,58 @@ class ControlsController extends Controller
                             $Q_Stock = $value->Q_Stock;
                             $Q_Vta = $value->Q_Vta;
                             $costoxU = $value->costoxU;
-                            
-							$costoxU = $costoxU * $valor_oferta_sugerida_ps3;
-							
+
+                            $costoxU = $costoxU * $valor_oferta_sugerida_ps3;
+
                             $multiplier = 1;
-                            if($Q_Vta > 0) { 
-                                $multiplier = ($Q_Stock / ($Q_Vta * 0.66)); 
-                                if($multiplier > 4){$multiplier = 4;}
-                                if($multiplier < 0.6){$multiplier = 0.6;}
+                            if ($Q_Vta > 0) {
+                                $multiplier = ($Q_Stock / ($Q_Vta * 0.66));
+                                if ($multiplier > 4) {
+                                    $multiplier = 4;
+                                }
+                                if ($multiplier < 0.6) {
+                                    $multiplier = 0.6;
+                                }
                             }
-                            
-                            $new_price = ($precio_base / $multiplier); 
-                            
-                            if($new_price < ($costoxU * 1.10)) { 
-                               $new_price = $costoxU * 1.10;
+
+                            $new_price = ($precio_base / $multiplier);
+
+                            if ($new_price < ($costoxU * 1.10)) {
+                                $new_price = $costoxU * 1.10;
                             }
                             // 2019-10-28 actualizado para pasar a usd
-							//if($new_price < 100) { $new_price = 100;}
-							if($new_price < 1.5) { $new_price = 1.5;}
-                            
-                            if($new_price > ($precio_base * 1.1)) { $new_price = ($precio_base * 1.1);} 
-							
-							$new_price = round($new_price,2); // 2020-07-22 redondeo new price
-                            
-							//redondeo resultado
+                            //if($new_price < 100) { $new_price = 100;}
+                            if ($new_price < 1.5) {
+                                $new_price = 1.5;
+                            }
+
+                            if ($new_price > ($precio_base * 1.1)) {
+                                $new_price = ($precio_base * 1.1);
+                            }
+
+                            $new_price = round($new_price, 2); // 2020-07-22 redondeo new price
+
+                            //redondeo resultado
                             //$new_price = (round($new_price, 0)/5); 
                             //$new_price = (ceil($new_price)*5);
                             // 2019-10-28 actualizado para usd
-							// $new_price = round($new_price, 0);
-							$si = "no";
-                            if(($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))){
+                            // $new_price = round($new_price, 0);
+                            $si = "no";
+                            if (($new_price > ($precio_regular * 1.025)) or ($new_price < ($precio_regular * 0.975))) {
                                 $si = "sii";
-                                
+
                                 $_sale_price = DB::table('cbgw_postmeta')
-                                ->where('post_id',$ID)
-                                ->where('meta_key','_sale_price')->first();
-                                
+                                    ->where('post_id', $ID)
+                                    ->where('meta_key', '_sale_price')->first();
+
                                 if ($_sale_price) {
                                     DB::table('cbgw_postmeta')
-                                    ->where('post_id',$ID)
-                                    ->where('meta_key','_sale_price')
-                                    //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
-                                    ->update([
-                                        'meta_value' => $new_price
-                                    ]);
+                                        ->where('post_id', $ID)
+                                        ->where('meta_key', '_sale_price')
+                                        //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                        ->update([
+                                            'meta_value' => $new_price
+                                        ]);
                                 } else {
                                     $data['post_id'] = $ID;
                                     $data['meta_key'] = '_sale_price';
@@ -1753,21 +1781,19 @@ class ControlsController extends Controller
 
                                     DB::table('cbgw_postmeta')->insert($data);
                                 }
-                                
-                                
-                                
-								
-								DB::table('cbgw_postmeta')
-                                ->where('post_id',$ID)
-								->where('meta_key','_price')
-                                //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
-                                ->update([
-                                    'meta_value' => $new_price
-                                ]);
 
-                                $mensajes .= " -s:". $Q_Stock . " -v:". $Q_Vta . " -divis:". round($multiplier,2) . " -costoxU:" . $costoxU . " //// " . $producto.  " -> de " . $precio_regular . " a " . $new_price. " (base " . $precio_base .  ") atacó db: " . $si . "<br>";
+
+                                DB::table('cbgw_postmeta')
+                                    ->where('post_id', $ID)
+                                    ->where('meta_key', '_price')
+                                    //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                    ->update([
+                                        'meta_value' => $new_price
+                                    ]);
+
+                                $mensajes .= " -s:" . $Q_Stock . " -v:" . $Q_Vta . " -divis:" . round($multiplier, 2) . " -costoxU:" . $costoxU . " //// " . $producto . " -> de " . $precio_regular . " a " . $new_price . " (base " . $precio_base . ") atacó db: " . $si . "<br>";
                             }
-                            
+
                         }
                     }
 
@@ -1864,8 +1890,8 @@ class ControlsController extends Controller
                     web.producto = stk.titulo and web.slot = stk.Stk_slot
                     WHERE producto!='plus-12-meses-slot' $condicion_prod_excl
                     ORDER BY producto ASC");
-				
-				$control_individual = '';
+
+                $control_individual = '';
                 $mensajes = '';
 
                 DB::beginTransaction();
@@ -1885,7 +1911,7 @@ class ControlsController extends Controller
                             $libre = $value->libre;
                             $qvp_45d = $value->Qvp_45d;
                             $qvs_45d = $value->Qvs_45d;
-							$costo_usd_original = $value->costo_usd;
+                            $costo_usd_original = $value->costo_usd;
                             $costo_usd = $value->costo_usd * $configuraciones->costo_automatizar_web_ps4;
                             $antiguedad = $value->ant_stk;
                             $Q_stk = $value->Q_stk;
@@ -1893,267 +1919,290 @@ class ControlsController extends Controller
                             $qv_45d = null;
                             $divi = null;
                             $valor_oferta_sugerida = $configuraciones->valor_oferta_sugerida;
-							
-							/***
-							if($costo_usd < 20) { // si es menor a 20 redondeo de a 10 usd
-								$x=10;
-							} else { // si es superior a 20 redondeo de a 5 usd
-								$x=5;
-							}*/
-							
-							/*** 2020-05-05 quito el redonde
-							$x=3; // redondeo de 3 en 3 el costo usd porque es un AVG y no siempre tiene sentido
-							$n = $costo_usd;
-							$costo_usd_redondo = (ceil($n)%$x === 0) ? ceil($n) : round(($n+$x/2)/$x)*$x;
-							*/
-                            
-							$costo_usd_redondo = $costo_usd;
-							
-					$control_individual .= " <strong>ID: " . $ID . " - ". str_replace('-', ' ', $producto) . " " . $slot ."</strong>";
-					$control_individual .= "<br />Reg: " . $precio_regular . " // Base: " . $precio_base . " // Sale: " . $sale_price . " // C_orig: " . $costo_usd_original . " // C_redondeo: " . $costo_usd_redondo . " // Q_Stk: " . $Q_stk . " // Ant: " . $antiguedad ;
-							
-							$costo_usd = $costo_usd_redondo; // cambio el costo usd al redondeado
-															
+
+                            /***
+                             * if($costo_usd < 20) { // si es menor a 20 redondeo de a 10 usd
+                             * $x=10;
+                             * } else { // si es superior a 20 redondeo de a 5 usd
+                             * $x=5;
+                             * }*/
+
+                            /*** 2020-05-05 quito el redonde
+                             * $x=3; // redondeo de 3 en 3 el costo usd porque es un AVG y no siempre tiene sentido
+                             * $n = $costo_usd;
+                             * $costo_usd_redondo = (ceil($n)%$x === 0) ? ceil($n) : round(($n+$x/2)/$x)*$x;
+                             */
+
+                            $costo_usd_redondo = $costo_usd;
+
+                            $control_individual .= " <strong>ID: " . $ID . " - " . str_replace('-', ' ', $producto) . " " . $slot . "</strong>";
+                            $control_individual .= "<br />Reg: " . $precio_regular . " // Base: " . $precio_base . " // Sale: " . $sale_price . " // C_orig: " . $costo_usd_original . " // C_redondeo: " . $costo_usd_redondo . " // Q_Stk: " . $Q_stk . " // Ant: " . $antiguedad;
+
+                            $costo_usd = $costo_usd_redondo; // cambio el costo usd al redondeado
+
                             // arreglo la variable qv y qv_45d
-                            if($slot == "primario"){
-                                $qv = $qvp; $qv_45d=$qvp_45d;
+                            if ($slot == "primario") {
+                                $qv = $qvp;
+                                $qv_45d = $qvp_45d;
                             }
-                            if($slot == "secundario"){
-                                $qv = $qvs; $qv_45d=$qvs_45d;
+                            if ($slot == "secundario") {
+                                $qv = $qvs;
+                                $qv_45d = $qvs_45d;
                             }
-                            
+
                             //Si la cantidad de venta es 0 las paso a 1
-                            if($qv<=1) {$qv=1;}
-							if($qv_45d<=1) {$qv_45d=1;} 
-							
-					$control_individual .= "<br />qvp_45d: " . $qvp_45d . " // qvs_45d: " . $qvs_45d . " // qvp: " . $qvp . " // qvs: " . $qvs . " // Libre: " . $libre . " // Q_Stk: " . $Q_stk;
-                                
+                            if ($qv <= 1) {
+                                $qv = 1;
+                            }
+                            if ($qv_45d <= 1) {
+                                $qv_45d = 1;
+                            }
+
+                            $control_individual .= "<br />qvp_45d: " . $qvp_45d . " // qvs_45d: " . $qvs_45d . " // qvp: " . $qvp . " // qvs: " . $qvs . " // Libre: " . $libre . " // Q_Stk: " . $Q_stk;
+
                             /****
-							////// 2020/05/03 aplico nueva columna de costo_usd_modif para evitarme este calculo de abajo... 
-			
-							// nueva formula para aplicar baja de precio a mayor antiguedad del stock
-							// 0.98 elevado a la 36 da 0.48, es decir que reduciría el costo a 48% del original
-							if ($antiguedad >= 720) { 
-								$elevado=36;
-							} 
-                            elseif ($antiguedad >= 360) { 
-								$elevado=($antiguedad/20);
-							} 
-							elseif ($antiguedad >= 45) { // si es < 45 va a ir reduciendo el costo original de a poco cuanto mas días pasan
-								$elevado=($antiguedad/30);
-							}
-							else {
-								$elevado=0.1;
-							}
-							
-							if ($antiguedad >= 180) { // 2019-12-03 : si ant prom es > 180d le bajo 10% mas
-								$extra_x_anti=0.9;
-							} 
-							else {
-								$extra_x_anti=1;
-							}
-                            //pow es la formula de exponente para PHP, no existe el ^
-							////// 2020-02-26 actualizo el elavo a 0.98 para aumentar precios debido a que muchos reciclados son reclamados por los clientes
-							$fn_exp = (pow(0.97, $elevado));
-                            $costo_usd = $costo_usd * $fn_exp * $extra_x_anti;
-							
-							***/
-                            
+                             * ////// 2020/05/03 aplico nueva columna de costo_usd_modif para evitarme este calculo de abajo...
+                             *
+                             * // nueva formula para aplicar baja de precio a mayor antiguedad del stock
+                             * // 0.98 elevado a la 36 da 0.48, es decir que reduciría el costo a 48% del original
+                             * if ($antiguedad >= 720) {
+                             * $elevado=36;
+                             * }
+                             * elseif ($antiguedad >= 360) {
+                             * $elevado=($antiguedad/20);
+                             * }
+                             * elseif ($antiguedad >= 45) { // si es < 45 va a ir reduciendo el costo original de a poco cuanto mas días pasan
+                             * $elevado=($antiguedad/30);
+                             * }
+                             * else {
+                             * $elevado=0.1;
+                             * }
+                             *
+                             * if ($antiguedad >= 180) { // 2019-12-03 : si ant prom es > 180d le bajo 10% mas
+                             * $extra_x_anti=0.9;
+                             * }
+                             * else {
+                             * $extra_x_anti=1;
+                             * }
+                             * //pow es la formula de exponente para PHP, no existe el ^
+                             * ////// 2020-02-26 actualizo el elavo a 0.98 para aumentar precios debido a que muchos reciclados son reclamados por los clientes
+                             * $fn_exp = (pow(0.97, $elevado));
+                             * $costo_usd = $costo_usd * $fn_exp * $extra_x_anti;
+                             ***/
+
                             // el precio de oferta sugerido tiene que ser X % mayor al costo para asegurar ganancia, configuro desde sistema en CONFIG > GENERAL
                             $oferta_sugerida = $costo_usd * $valor_oferta_sugerida;
-							
-					/**** 2020/05/03 modifico el texto que imprimo 
-					$control_individual .= "<br /><br /> costo x (0.97 ^" . round($elevado,2) . ") = C_modif: " . round($costo_usd,2) . " x (multi con gcia): " . $valor_oferta_sugerida . " * coef ant 180: " . $extra_x_anti . " queda en: " . round($oferta_sugerida,2);
-                    */
-                      
-					$control_individual .= "<br /><br /> C_modif: " . round($costo_usd,2) . " x (multi con gcia): " . $valor_oferta_sugerida . " queda en: " . round($oferta_sugerida,2);		
-							
+
+                            /**** 2020/05/03 modifico el texto que imprimo
+                             * $control_individual .= "<br /><br /> costo x (0.97 ^" . round($elevado,2) . ") = C_modif: " . round($costo_usd,2) . " x (multi con gcia): " . $valor_oferta_sugerida . " * coef ant 180: " . $extra_x_anti . " queda en: " . round($oferta_sugerida,2);
+                             */
+
+                            $control_individual .= "<br /><br /> C_modif: " . round($costo_usd, 2) . " x (multi con gcia): " . $valor_oferta_sugerida . " queda en: " . round($oferta_sugerida, 2);
+
                             // si hay muchas ventas y poco stock voy subiendo el precio de oferta
-                            if($Q_stk > 3){
-                                $divi = ($qv_45d/$Q_stk);
-                                $divi = round(pow($divi,0.8),2); // elevo a la 0,8 para suavizar el resultado a menos
-                                if($divi >= 3) {$divi = 3;}
-                                elseif($divi <= 0.85) {$divi = 0.85;}
-								else {$divi = $divi;}
+                            if ($Q_stk > 3) {
+                                $divi = ($qv_45d / $Q_stk);
+                                $divi = round(pow($divi, 0.8), 2); // elevo a la 0,8 para suavizar el resultado a menos
+                                if ($divi >= 3) {
+                                    $divi = 3;
+                                } elseif ($divi <= 0.85) {
+                                    $divi = 0.85;
+                                } else {
+                                    $divi = $divi;
+                                }
                                 $oferta_sugerida = $oferta_sugerida * $divi;
-					$control_individual .= "<br /> >3 Stk subo precio si hay mucha Vta_45 y poco Stk // el es multi es: " . round($divi,2) . " queda en " . round($oferta_sugerida,2);
+                                $control_individual .= "<br /> >3 Stk subo precio si hay mucha Vta_45 y poco Stk // el es multi es: " . round($divi, 2) . " queda en " . round($oferta_sugerida, 2);
                             }
-					
+
                             // si se vendió 2 o mas limito la oferta cuando queda poco stock
-							if($qv_45d >= 2) {
-								if($Q_stk == 5){$limite_Stk = $precio_base * 0.750;} 
-								elseif($Q_stk == 4){$limite_Stk = $precio_base * 0.800;}
-								elseif($Q_stk == 3){$limite_Stk = $precio_base * 0.850;}
-								elseif($Q_stk == 2){$limite_Stk = $precio_base * 0.900;} 
-								elseif($Q_stk == 1){$limite_Stk = $precio_base * 0.920;} 
-								else{$limite_Stk = $oferta_sugerida;} 
-								
-								if($oferta_sugerida < $limite_Stk) {
-								$oferta_sugerida = $limite_Stk;
-					$control_individual .= "<br /> > 1 Vta y < 6 stk -> precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida,2);
-							} 
-							}					             
-					
-                            
-                            if($qv_45d == 3){$estimulo_Vta45 = 0.94;} 
-                            elseif($qv_45d == 2){$estimulo_Vta45 = 0.90;} 
-                            elseif($qv_45d == 1){$estimulo_Vta45 = 0.86;}
-                            elseif($qv_45d == 0){$estimulo_Vta45 = 0.82;}
-                            else{$estimulo_Vta45 = 1;}
-							
-                    /**** 2019-11-27 quito esto porque no tiene tanta relación, mejoro oferta cuanto mas stock tengo en relación a mis ventas... mayor stk disponible mejor oferta traslado al público */
+                            if ($qv_45d >= 2) {
+                                if ($Q_stk == 5) {
+                                    $limite_Stk = $precio_base * 0.750;
+                                } elseif ($Q_stk == 4) {
+                                    $limite_Stk = $precio_base * 0.800;
+                                } elseif ($Q_stk == 3) {
+                                    $limite_Stk = $precio_base * 0.850;
+                                } elseif ($Q_stk == 2) {
+                                    $limite_Stk = $precio_base * 0.900;
+                                } elseif ($Q_stk == 1) {
+                                    $limite_Stk = $precio_base * 0.920;
+                                } else {
+                                    $limite_Stk = $oferta_sugerida;
+                                }
+
+                                if ($oferta_sugerida < $limite_Stk) {
+                                    $oferta_sugerida = $limite_Stk;
+                                    $control_individual .= "<br /> > 1 Vta y < 6 stk -> precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida, 2);
+                                }
+                            }
+
+
+                            if ($qv_45d == 3) {
+                                $estimulo_Vta45 = 0.94;
+                            } elseif ($qv_45d == 2) {
+                                $estimulo_Vta45 = 0.90;
+                            } elseif ($qv_45d == 1) {
+                                $estimulo_Vta45 = 0.86;
+                            } elseif ($qv_45d == 0) {
+                                $estimulo_Vta45 = 0.82;
+                            } else {
+                                $estimulo_Vta45 = 1;
+                            }
+
+                            /**** 2019-11-27 quito esto porque no tiene tanta relación, mejoro oferta cuanto mas stock tengo en relación a mis ventas... mayor stk disponible mejor oferta traslado al público */
                             //if(($Q_stk/$qv) > 0.30){$estimulo_Relacion = 0.925;} 
                             //elseif(($Q_stk/$qv) > 0.20){$estimulo_Relacion = 0.950;} 
                             //elseif(($Q_stk/$qv) > 0.10){$estimulo_Relacion = 0.975;} 
                             //else{$estimulo_Relacion = 1;} 
-							$estimulo_Relacion = 1; //COMENTAR ESTA LINEA SI HABILITO LA DE ARRIBA
-                            
+                            $estimulo_Relacion = 1; //COMENTAR ESTA LINEA SI HABILITO LA DE ARRIBA
+
                             $oferta_sugerida = $oferta_sugerida * $estimulo_Vta45 * $estimulo_Relacion;
-					$control_individual .= "<br /> < 3 vtas en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2) ;
+                            $control_individual .= "<br /> < 3 vtas en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2);
 
-                            
+
                             // límite inferior máximo: el precio de oferta no puede ser menor al 30% del "precio base"
-                            if($oferta_sugerida < ($precio_base * 0.30))  {
-								$oferta_sugerida = ($precio_base * 0.30);
-					$control_individual .= "<br /> oferta no puede ser < 35% de precio base // queda en : " . round($oferta_sugerida,2);
-							}
-                       
-                            // si no queda stock secundario quito oferta
-                            if(($slot == "secundario") and ($libre <= 1)) {
-								$oferta_sugerida = 0;
-					$control_individual .= "<br /> no queda STK secu quito oferta secu";
-							}
-                            
-                            // si la cantidad de venta histórica es menor o igual a 3 y además es igual a lo vendido en 45 días posiblemente es juego nuevo y no quiero bajar precio
-							/*** 2019-11-27 QUITO ESTO QUE NO ME PERMITIÓ VENDER EL NINJA GO DE LEGO CUANDO COMPRAMOS BARATO POR PRIMERA VEZ 
-                            if(($qv <= 3) and ($qv = $qv_45d)) {
-								$oferta_sugerida = 0;
-							}
-                            */
-							
-							// si hay mucho (secundario) -> libre en relación a las ventas de primario voy aumentando el precio
-							if($antiguedad <= 365) {
-								if(($slot == "primario") and ($libre >= 4) and ($libre <= 8)) {
-									$oferta_sugerida = $oferta_sugerida * (1+($libre/$qv));
-				$control_individual .= "<br /> ant < 365d, controlo libres: <br/> es pri y 4-8 libres, precio * " . round(1+(($libre/$qv)),2) . " queda en: " . round($oferta_sugerida,2);
-								}
-							/**** 2019-11-27 quito esto porque no le encuentro sentido, en la de arriba ya defino un aumento de precio al pri cuando hay mucho libre 
-								if($libre <= 10) {
-									$elev2=1;} 
-								else {
-									$elev2=($libre/10);
-								}*/
-								if(($slot == "primario") and ($libre > 8)) {
-									$oferta_sugerida = $oferta_sugerida * (pow(1.04,($libre/8)));
-				$control_individual .= "<br /> ant < 365d, controlo libres: <br/> es pri y +8 libres, precio * " . round((pow(1.04,($libre/10))),2) . " queda en: " . round($oferta_sugerida,2);
-									
-								}	
-								
-							}
+                            if ($oferta_sugerida < ($precio_base * 0.30)) {
+                                $oferta_sugerida = ($precio_base * 0.30);
+                                $control_individual .= "<br /> oferta no puede ser < 35% de precio base // queda en : " . round($oferta_sugerida, 2);
+                            }
 
-							// si hay mas de 10 secundarios libres voy aumentando el precio al primario exponencialmente                                         
-                            
+                            // si no queda stock secundario quito oferta
+                            if (($slot == "secundario") and ($libre <= 1)) {
+                                $oferta_sugerida = 0;
+                                $control_individual .= "<br /> no queda STK secu quito oferta secu";
+                            }
+
+                            // si la cantidad de venta histórica es menor o igual a 3 y además es igual a lo vendido en 45 días posiblemente es juego nuevo y no quiero bajar precio
+                            /*** 2019-11-27 QUITO ESTO QUE NO ME PERMITIÓ VENDER EL NINJA GO DE LEGO CUANDO COMPRAMOS BARATO POR PRIMERA VEZ
+                             * if(($qv <= 3) and ($qv = $qv_45d)) {
+                             * $oferta_sugerida = 0;
+                             * }
+                             */
+
+                            // si hay mucho (secundario) -> libre en relación a las ventas de primario voy aumentando el precio
+                            if ($antiguedad <= 365) {
+                                if (($slot == "primario") and ($libre >= 4) and ($libre <= 8)) {
+                                    $oferta_sugerida = $oferta_sugerida * (1 + ($libre / $qv));
+                                    $control_individual .= "<br /> ant < 365d, controlo libres: <br/> es pri y 4-8 libres, precio * " . round(1 + (($libre / $qv)), 2) . " queda en: " . round($oferta_sugerida, 2);
+                                }
+                                /**** 2019-11-27 quito esto porque no le encuentro sentido, en la de arriba ya defino un aumento de precio al pri cuando hay mucho libre
+                                 * if($libre <= 10) {
+                                 * $elev2=1;}
+                                 * else {
+                                 * $elev2=($libre/10);
+                                 * }*/
+                                if (($slot == "primario") and ($libre > 8)) {
+                                    $oferta_sugerida = $oferta_sugerida * (pow(1.04, ($libre / 8)));
+                                    $control_individual .= "<br /> ant < 365d, controlo libres: <br/> es pri y +8 libres, precio * " . round((pow(1.04, ($libre / 10))), 2) . " queda en: " . round($oferta_sugerida, 2);
+
+                                }
+
+                            }
+
+                            // si hay mas de 10 secundarios libres voy aumentando el precio al primario exponencialmente
+
                             // redondeo la oferta
                             // $oferta_sugerida = (round($oferta_sugerida, 0)/25);
                             // $oferta_sugerida = (ceil($oferta_sugerida)*25);
-							// actualizado para pasar a US
-							$oferta_sugerida = round($oferta_sugerida, 2);
-					$control_individual .= "<br /> Sug redondeado: " . $oferta_sugerida;
+                            // actualizado para pasar a US
+                            $oferta_sugerida = round($oferta_sugerida, 2);
+                            $control_individual .= "<br /> Sug redondeado: " . $oferta_sugerida;
 
-                            $mensajes .= "<tr><td>[" . $ID . "]</td><td>" . str_replace('-', ' ', $producto).  " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs ."</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:". round($costo_usd,2)  . " de " . round($costo_usd_original) ."</td><td>Ant:" . $antiguedad . "</td></tr>"; 
-                            
-                            
-                            if(($Q_stk <= 1) or (($Q_stk/$qv_45d) < 0.10)) {
-					$control_individual .= "<br /> stk <= 1 o < al 10% de lo vendido en 45d, quito oferta";
-								$oferta_sugerida = 0;
-							}
-					
-                            
+                            $mensajes .= "<tr><td>[" . $ID . "]</td><td>" . str_replace('-', ' ', $producto) . " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs . "</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:" . round($costo_usd, 2) . " de " . round($costo_usd_original) . "</td><td>Ant:" . $antiguedad . "</td></tr>";
 
-                            if($oferta_sugerida >= ($precio_base * 0.963)) {
-					$control_individual .= "<br /> Sug es casi lo mismo que precio base, quito oferta";
-								$oferta_sugerida = 0;
-							}
-							
-					
-                            if($oferta_sugerida == 0) { // si no hay precio de oferta 
-                                if($sale_price !== ""){  // y el producto tiene actualmente un precio de oferta, le quito
+
+                            if (($Q_stk <= 1) or (($Q_stk / $qv_45d) < 0.10)) {
+                                $control_individual .= "<br /> stk <= 1 o < al 10% de lo vendido en 45d, quito oferta";
+                                $oferta_sugerida = 0;
+                            }
+
+
+                            if ($oferta_sugerida >= ($precio_base * 0.963)) {
+                                $control_individual .= "<br /> Sug es casi lo mismo que precio base, quito oferta";
+                                $oferta_sugerida = 0;
+                            }
+
+
+                            if ($oferta_sugerida == 0) { // si no hay precio de oferta
+                                if ($sale_price !== "") {  // y el producto tiene actualmente un precio de oferta, le quito
                                     $_sale_price = DB::table('cbgw_postmeta')
-                                    ->where('post_id',$ID)
-                                    ->where('meta_key','_sale_price')->first(); //encuentro si existe el meta key sale_price
-                                    
+                                        ->where('post_id', $ID)
+                                        ->where('meta_key', '_sale_price')->first(); //encuentro si existe el meta key sale_price
+
                                     if ($_sale_price) {
                                         DB::table('cbgw_postmeta')
-                                        ->where('post_id',$ID)
-                                        ->where('meta_key','_sale_price')
-                                        //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
-                                        ->update([
-                                            'meta_value' => '' // quito el precio de oferta actual
-                                        ]);
+                                            ->where('post_id', $ID)
+                                            ->where('meta_key', '_sale_price')
+                                            //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                            ->update([
+                                                'meta_value' => '' // quito el precio de oferta actual
+                                            ]);
                                     } else {
                                         $data['post_id'] = $ID;
                                         $data['meta_key'] = '_sale_price';
                                         $data['meta_value'] = '';
-    
+
                                         DB::table('cbgw_postmeta')->insert($data); // si no existe el meta key sale_price lo creo
                                     }
 
-                                        $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " REMOVIDA<br><br>";
-                                    }
-                                
-                                } else {
+                                    $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto) . " " . $slot . " REMOVIDA<br><br>";
+                                }
 
-                                if(($oferta_sugerida <= ($precio_base * 0.963)) and ($Q_stk >= 1)) {
-                                    if($sale_price == "") { $sale_price = 1; }
-                                    if((($oferta_sugerida >= ($sale_price * 1.05)) or ($oferta_sugerida <= ($sale_price * 0.95))) and $oferta_sugerida > 1){
+                            } else {
+
+                                if (($oferta_sugerida <= ($precio_base * 0.963)) and ($Q_stk >= 1)) {
+                                    if ($sale_price == "") {
+                                        $sale_price = 1;
+                                    }
+                                    if ((($oferta_sugerida >= ($sale_price * 1.05)) or ($oferta_sugerida <= ($sale_price * 0.95))) and $oferta_sugerida > 1) {
                                         $_sale_price = DB::table('cbgw_postmeta')
-                                        ->where('post_id',$ID)
-                                        ->where('meta_key','_sale_price')->first();
-                                        
+                                            ->where('post_id', $ID)
+                                            ->where('meta_key', '_sale_price')->first();
+
                                         if ($_sale_price) { // si existe el sale_price lo actualizo
                                             DB::table('cbgw_postmeta')
-                                            ->where('post_id',$ID)
-                                            ->where('meta_key','_sale_price')
-                                            //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
-                                            ->update([
-                                                'meta_value' => $oferta_sugerida
-                                            ]);
+                                                ->where('post_id', $ID)
+                                                ->where('meta_key', '_sale_price')
+                                                //->where(DB::raw("(meta_key='_price' or meta_key='_regular_price')"))
+                                                ->update([
+                                                    'meta_value' => $oferta_sugerida
+                                                ]);
                                         } else { // si no existe lo creo
                                             $data['post_id'] = $ID;
                                             $data['meta_key'] = '_sale_price';
                                             $data['meta_value'] = $oferta_sugerida;
-        
+
                                             DB::table('cbgw_postmeta')->insert($data);
                                         }
-										
-										$variacion = round((($oferta_sugerida / $sale_price) - 1) * 100,2);
-										
-										if ($variacion >= 0) {
-											$color= "green";
-										} else {
-											$color= "red";
-										}
-										
-										$mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto).  " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <span id='" . $ID . "' style='color:" . $color . ";'> (" . $variacion . " %)</span> " . " <br><br>";
 
+                                        $variacion = round((($oferta_sugerida / $sale_price) - 1) * 100, 2);
+
+                                        if ($variacion >= 0) {
+                                            $color = "green";
+                                        } else {
+                                            $color = "red";
                                         }
+
+                                        $mensajes .= "[" . $ID . "] " . str_replace('-', ' ', $producto) . " " . $slot . " APLICADO de " . $sale_price . " a " . $oferta_sugerida . " <span id='" . $ID . "' style='color:" . $color . ";'> (" . $variacion . " %)</span> " . " <br><br>";
+
                                     }
                                 }
                             }
-						$control_individual .= "<p> .... </p>";
+                        }
+                        $control_individual .= "<p> .... </p>";
                     }
-					
-					$control_individual .= "<p>..............fin che</p>";
-					
+
+                    $control_individual .= "<p>..............fin che</p>";
+
                     $mensajes .= "</table>" . $control_individual;
-					
+
 
                     DB::commit();
 
                     /*\Helper::messageFlash('Configuraciones',"Stock web PS4 automatizados correctamente.");
 
                     return redirect()->back();*/
-                    return $mensajes ;
+                    return $mensajes;
                 } catch (Exception $e) {
                     DB::rollback();
                     // return redirect()->back()->withErrors(['Ha ocurrido un error inesperado en el proceso.']);
@@ -2164,11 +2213,13 @@ class ControlsController extends Controller
         }
     }
 
-    private function getConfiguraciones() {
-        return DB::table('configuraciones')->where('ID',1)->first();
+    private function getConfiguraciones()
+    {
+        return DB::table('configuraciones')->where('ID', 1)->first();
     }
 
-    public function enviarEmail(Request $request) {
+    public function enviarEmail(Request $request)
+    {
         // Mensajes de alerta
         $msgs = [
             'name.required' => 'Nombre es obligatorio',
@@ -2187,12 +2238,11 @@ class ControlsController extends Controller
         ], $msgs);
 
         try {
-            Mail::send('emails.email_custom', ['description' => $request->description], function($message) use ($request)
-            {
+            Mail::send('emails.email_custom', ['description' => $request->description], function ($message) use ($request) {
                 $message->to($request->email, $request->name)->subject($request->subject);
             });
 
-            \Helper::messageFlash('Configuraciones',"Email enviado correctamente.");
+            \Helper::messageFlash('Configuraciones', "Email enviado correctamente.");
 
             return redirect()->back();
         } catch (\Exception $e) {
