@@ -1861,6 +1861,8 @@ class AccountController extends Controller
          $cliente = DB::table('clientes')->where('ID',$request->cliente)->first();
          $nota = "<a class=\"alert-link\" href=\"".url('clientes',$cliente->ID)."\">#".$cliente->ID." ".$cliente->nombre." ".$cliente->apellido."</a>: " . $nota;
         }
+
+        DB::beginTransaction();
         try {
           $data = [
                     'cuentas_id' => $id,
@@ -1870,10 +1872,23 @@ class AccountController extends Controller
                   ];
 
           $this->ac->storeNote($data);
+
+          if ($request->cliente != "") {
+              $data = [];
+              $data['clientes_id'] = $cliente->ID;
+              $data['Notas'] = $request->notes;
+              $data['Day'] = $date;
+              $data['usuario'] = session()->get('usuario')->Nombre;
+
+              DB::table('clientes_notas')->insert($data);
+          }
+
+          DB::commit();
           // Mensaje de notificacion
           \Helper::messageFlash('Cuentas','Nota Creada','alert_cuenta');
           return redirect('cuentas/'.$id);
         } catch (\Exception $e) {
+          DB::rollback();
           return redirect('/cuentas')->withErrors('Intentelo nuevamente');
         }
       }
