@@ -1557,7 +1557,7 @@ class CustomerController extends Controller
       if ($cliente) {
         $apellido = ucwords(strtolower($cliente->apellido));
         $nombre = ucwords(strtolower($cliente->nombre));;
-        if ($cliente->pais == "AR"): $pais = "Argentina"; else: $pais = $cliente->pais; endif;
+        $pais = $cliente->pais;
         if ($cliente->provincia === "C"): $prov = "Ciudad Autónoma de Buenos Aires";
         elseif ($cliente->provincia === "B"): $prov = "Buenos Aires";
         elseif ($cliente->provincia === "K"): $prov = "Catamarca";

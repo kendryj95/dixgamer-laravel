@@ -142,11 +142,13 @@
                             <p>
                                 <em class="text-muted" style="opacity:0.7; font-size:0.8em;">
                                     <i class="fa fa-map-marker fa-fw"></i>
-                                    {{  Helper::notEmptyShow($customer->ciudad,$customer->ciudad.', ') }}
+                                    {{  Helper::notEmptyShow($customer->ciudad,$customer->ciudad) }}
 
-                                    {{ $customer->provincia }}
+                                    {{  Helper::notEmptyShow($customer->provincia, ', '. $customer->provincia) }}
 
                                     {{  Helper::notEmptyShow($customer->cp,', '.$customer->cp) }}
+
+                                    {{  Helper::notEmptyShow($customer->pais,', '.$customer->pais) }}
 
                                     <a
                                             title="Modificar otros datos"
