@@ -77,7 +77,7 @@
                         <input type="hidden" name="clientes_id" value="{{ $ventas->clientes_id }}">
                     </form><!-- <br /><br /> -->
 
-                    @if(session()->get('usuario')->Nombre === "Leo")
+                    @if(session()->get('usuario')->Nombre === "Leo" || session()->get('usuario')->Nombre === "Victor")
                         <br><br>
                         <form method="post" name="form2" action="{{ url('customer_ventas_eliminar') }}">
                             {{csrf_field()}}
