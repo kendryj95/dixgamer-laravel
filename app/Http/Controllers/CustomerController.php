@@ -1657,6 +1657,7 @@ class CustomerController extends Controller
 
           $data['row_rsClient'] = $row_rsClient;
           $data['row_rsCuenta'] = $row_rsCuenta;
+          $data['juego'] = $titulo;
 
           break;
         
