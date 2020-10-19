@@ -182,9 +182,15 @@
 		                <i class="fa fa-user-secret fa-fw">
 		                </i>
 
-		                <span id="email-real">
-		                  {{$account->mail}}
-		                </span>
+						  <a href="#"
+							 class="btn-copiador text-muted"
+							 data-clipboard-target="#email-real">
+									<span id="email-real">
+										{{$account->mail}}
+									</span>
+
+							  <i aria-hidden="true" class="fa fa-clone"></i>
+						  </a>
 
 		                <span
 		                  class="badge badge-{{$color}} pull-right"
