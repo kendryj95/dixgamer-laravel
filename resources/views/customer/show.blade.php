@@ -718,6 +718,14 @@
 
                                 </div>
 
+                                @if($dataCustomer->estado != "pendiente" && $dataCustomer->estado != "listo")
+                                <div style="padding: 4px 2px; text-align:center;">
+                                    <span class="badge badge-inter badge-danger btn-block">
+                                        {{ ucwords(str_replace("-"," ",$dataCustomer->estado)) }}
+                                    </span>
+                                </div>
+                                @endif
+
                                 <div class="caption text-center">
                                     <small
                                             style="color:#CFCFCF; line-height: 2em;"
