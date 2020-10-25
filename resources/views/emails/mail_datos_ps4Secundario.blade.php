@@ -203,10 +203,9 @@
                     4) Aceptar los datos de la cuenta (next / continue)<br />
                     5) A veces pide vincular con Facebook, seleccionar <strong>"Do this later"</strong> o <strong>"Skip"</strong><br />
                     6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong><br />
-					7) Sube una foto a IG, etiquetanos @dixgamer.ok y gana un cupon.
-                    @if(isset($juego) && strpos(strtolower($juego), "fifa") !== false)
-                        8) Al iniciar Fifa por primera vez crear la cuenta de EA Sport con tu email personal, si creas con el nuestro te banean el juego.
-                    @endif
+					
+					<span style="color:#e74c3c;">7) Si el juego solicita crear una cuenta, usar tu correo personal. No usar el nuestro porque se bloquea.</span><br />
+					8) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cupón.
                     
                     <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
   {{-- <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br />
