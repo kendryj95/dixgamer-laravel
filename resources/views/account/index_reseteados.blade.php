@@ -29,17 +29,21 @@
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-md-1">
           <label for="palabra">&nbsp;</label> <br>
           <button type="submit" value="Buscar" name="enviar" class="btn btn-default">Buscar</button>
 
         </div>
+
+        <div style="padding: 30px 0;" class="form-group col-md-2">
+            <span style="font-weight: bold" class="pull-right">
+            Total: <span class="label label-success">{{$total_reseteados}}</span>
+        </span>
+        </div>
     </form>
 </div>
 	<div class="row">
-        <span style="font-weight: bold" class="pull-right">
-            Total: <span class="label label-success">{{$total_reseteados}}</span>
-        </span>
+
         <div class="table-responsive">
             <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
                 <thead>
@@ -81,7 +85,7 @@
                             {{ $value->Q }}
                         </td>
                         <td style="vertical-align: middle;">
-                            <span class="label label-{{\Helper::userColor($value->usuario_real)}}" title="{{ $value->usuario_real }}"><strong>{{strtoupper(substr($value->usuario_real,0,1))}}</strong></span>
+                            <span class="label label-{{$value->color_user}}" title="{{ $value->usuario_real }}"><strong>{{strtoupper(substr($value->usuario_real,0,1))}}</strong></span>
                         </td>
                     </tr>
                     @endforeach

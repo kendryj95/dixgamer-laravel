@@ -2030,7 +2030,9 @@ class AccountController extends Controller
       $usuario = isset($request->usuario) ? $request->usuario : '';
 
       $reseteados = Reset::getDatosReseteados($fecha_ini, $fecha_fin, $usuario)->paginate(50);
-      $total_reseteados = Reset::getDatosReseteados($fecha_ini, $fecha_fin, $usuario)->count();
+      $data = Reset::getDatosReseteados($fecha_ini, $fecha_fin, $usuario)->get();
+      $total_reseteados = 0;
+      foreach ($data as $item) $total_reseteados += $item->Q;
       $usuarios = Reset::getUsersReset()->get();
 
       return view('account.index_reseteados', compact('reseteados','fecha_fin','fecha_ini','usuarios','total_reseteados'));
