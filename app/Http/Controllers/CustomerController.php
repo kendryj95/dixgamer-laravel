@@ -1181,6 +1181,7 @@ class CustomerController extends Controller
       $slot = isset($request->slot) ? $request->slot : '';
       $consola = isset($request->cons) ? $request->cons : '';
       $type = isset($request->type) ? $request->type : '';
+      $state = isset($request->state) ? $request->state : '';
 
       try {
 
@@ -1210,6 +1211,21 @@ class CustomerController extends Controller
         } elseif($type != "" && $type === "devolution") {
           $data['stock_id'] = 4;
           $data['estado'] = "devolucion";
+        } elseif ($state != "") {
+            switch ($state) {
+                case "not-verify":
+                    $data['stock_id'] = 7;
+                    $data['estado'] = "no-verifica";
+                    break;
+                case "account-stolen":
+                    $data['stock_id'] = 8;
+                    $data['estado'] = "roba-cuenta";
+                    break;
+                case "sale-duplicated":
+                    $data['stock_id'] = 9;
+                    $data['estado'] = "venta-duplicada";
+                    break;
+            }
         } else {
           $data['stock_id'] = 1;
           $data['estado'] = "no-merece";
@@ -1286,6 +1302,26 @@ class CustomerController extends Controller
                       DB::table('ventas_notas')->insert($data);
                   }
               }
+          } elseif ($state != "") {
+              switch ($state) {
+                  case "not-verify":
+                      $nota = "El cliente no identifica su identidad.";
+                      break;
+                  case "account-stolen":
+                      $nota = "El cliente robó una cuenta.";
+                      break;
+                  case "sale-duplicated":
+                      $nota = "Se duplicó la venta en el sistema.";
+                      break;
+              }
+
+              $data = [];
+              $data['id_ventas'] = $id;
+              $data['Notas'] = $nota;
+              $data['Day'] = date('Y-m-d H:i:s');
+              $data['usuario'] = session()->get('usuario')->Nombre;
+
+              DB::table('ventas_notas')->insert($data);
           }
 
 

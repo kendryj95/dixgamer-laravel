@@ -778,35 +778,48 @@
                                                         style="background: transparent;border: none;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 5px;">
                                                     <i aria-hidden="true" class="fa fa-remove text-muted"></i>
                                                 </button>
-                                                <ul style="top:-160px;left:25px" class="dropdown-menu"
+                                                <ul style="top:-200px;left:25px" class="dropdown-menu"
                                                     aria-labelledby="dropdownMenu1">
-                                                    <li class="dropdown-header">¿Quitar producto?</li>
-                                                    <li role="separator" class="divider"></li>
                                                     <li>
-                                                        <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}">Sí,
-                                                            no merece</a></li>
+                                                        <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?state=not-verify">
+                                                            No verifica</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?state=account-stolen">
+                                                            Roba cuenta</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?state=sale-duplicated">
+                                                            Vta duplicada</a>
+                                                    </li>
+                                                    <li role="separator" class="divider"></li>
+
                                                     @if($dataCustomer->consola == 'ps4')
                                                         @if($dataCustomer->slot == 'Secundario')
                                                             <li>
                                                                 <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?slot={{$dataCustomer->slot}}">Sí,
                                                                     tal vez no usa</a></li>
+                                                            <li role="separator" class="divider"></li>
+
                                                         @elseif($dataCustomer->slot == 'Primario')
                                                             <li>
                                                                 <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?slot={{$dataCustomer->slot}}">Sí,
                                                                     ps4 no activa</a></li>
+                                                            <li role="separator" class="divider"></li>
+
                                                         @endif
 
                                                     @elseif($dataCustomer->consola == 'ps3')
                                                         <li>
                                                             <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?cons={{$dataCustomer->consola}}">Sí,
                                                                 no descargó</a></li>
+                                                        <li role="separator" class="divider"></li>
+
                                                     @endif
                                                     <li><a href="javascript:void(0)"
-                                                           onclick="modalCambioProd('{{$dataCustomer->ID_ventas}}')">Sí,
-                                                            cambio</a></li>
+                                                           onclick="modalCambioProd('{{$dataCustomer->ID_ventas}}')">Cambio</a></li>
                                                     <li>
-                                                        <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?type=devolution">Sí,
-                                                            devolución</a></li>
+                                                        <a href="{{ url('customer_ventas_quitar_producto',$dataCustomer->ID_ventas) }}?type=devolution">Devolución</a></li>
                                                 </ul>
                                             </div>
                                         @endif
