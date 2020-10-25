@@ -1874,9 +1874,11 @@ class AccountController extends Controller
           $this->ac->storeNote($data);
 
           if ($request->cliente != "") {
+              $nota = $request->notes;
+              $nota = "<a class=\"alert-link\" href=\"".url('cuentas',$id)."\">Cuenta #".$id."</a>: " . $nota;
               $data = [];
               $data['clientes_id'] = $cliente->ID;
-              $data['Notas'] = $request->notes;
+              $data['Notas'] = $nota;
               $data['Day'] = $date;
               $data['usuario'] = session()->get('usuario')->Nombre;
 
