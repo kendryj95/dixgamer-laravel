@@ -1305,7 +1305,7 @@ class CustomerController extends Controller
           } elseif ($state != "") {
               switch ($state) {
                   case "not-verify":
-                      $nota = "El cliente no identifica su identidad.";
+                      $nota = "El cliente no verifica su identidad.";
                       break;
                   case "account-stolen":
                       $nota = "El cliente robó una cuenta.";

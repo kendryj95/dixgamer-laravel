@@ -332,7 +332,8 @@ class SalesController extends Controller
                        $medio_cobro = $payment_method->name;
                        $multiplo = $payment_method->commission;
                    } else {
-                       $medio_cobro = "No encontrado";
+//                       $medio_cobro = "No encontrado";
+                       $medio_cobro = $venta->_payment_method;
                    }
 
                    // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
