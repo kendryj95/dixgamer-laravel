@@ -577,10 +577,12 @@ class CustomerController extends Controller
             $stock = Stock::find($request->stock);
 
             if ($stock) {
-              $validate_stock = Stock::StockDisponible($stock->consola,$stock->titulo, $request->slot);
+              if ($request->stock != 1 && $request->stock != 2) {
+                  $validate_stock = Stock::StockDisponible($stock->consola,$stock->titulo, $request->slot);
 
-              if (!is_array($validate_stock))
-                return redirect()->back()->withErrors(['Opps! El Stock ID ya está relacionado a una venta.']);
+                  if (!is_array($validate_stock))
+                      return redirect()->back()->withErrors(['Opps! El Stock ID ya está relacionado a una venta.']);
+              }
             } else {
               return redirect()->back()->withErrors(['Opps! El Stock ID no existe.']);
             }
@@ -1948,7 +1950,7 @@ class CustomerController extends Controller
 
     private function isNotStockDefault($stock_id)
     {
-      return $stock_id != 1 || false;
+      return $stock_id != 0 || false;
     }
 
     public function deleteNotes($id,$tipo)
