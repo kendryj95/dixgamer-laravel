@@ -325,7 +325,8 @@ foreach ($data as $value) {
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-          $('#detail-stock').text(response.message).show();
+            if (response.message !== "")
+                $('#detail-stock').text(response.message).show();
           var options = '';
           if (response.available) {
             $('#btnModManual').removeClass('disabled');

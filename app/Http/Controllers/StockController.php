@@ -1035,22 +1035,27 @@ ORDER BY libre DESC";
     public function detailStock($id_stock, $slot)
     {
       $stock = DB::table('stock')->where('ID',$id_stock)->first();
-      $message = "El ID Stock no está registrado en nuestra Base de Datos.";
+      $message = "";
       $cons = '';
       $disp = true;
-      if ($stock) {
-        $titulo = ucwords(\Helper::strTitleStock($stock->titulo));
-        $cons = $stock->consola;
-        $message = "$titulo ({$stock->consola})";
+      if ($id_stock != 1 && $id_stock != 2) {
+          if ($stock) {
+              $titulo = ucwords(\Helper::strTitleStock($stock->titulo));
+              $cons = $stock->consola;
+              $message = "$titulo ({$stock->consola})";
 
-        if (($stock->consola == "ps4" || $stock->consola == "ps3") && $slot == "No")
-            $slot = "Primario";
+              if (($stock->consola == "ps4" || $stock->consola == "ps3") && $slot == "No")
+                  $slot = "Primario";
 
-        $available = Stock::StockDisponibleWithIdStock($stock->consola,$stock->titulo, $slot, $id_stock);
-        if (!is_array($available)) {
-          $disp = false;
-          $message .= " - Sin Stock Disponible";
-        }
+              $available = Stock::StockDisponibleWithIdStock($stock->consola,$stock->titulo, $slot, $id_stock);
+              if (!is_array($available)) {
+                  $disp = false;
+                  $message .= " - Sin Stock Disponible";
+              }
+          } else {
+              $message = "El ID Stock no está registrado en nuestra Base de Datos.";
+              $disp = false;
+          }
       }
 
       return response()->json(['message' => $message,'console' => $cons,'available'=>$disp]);
