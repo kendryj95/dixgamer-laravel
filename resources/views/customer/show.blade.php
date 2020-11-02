@@ -778,7 +778,7 @@
                                             </ul>
                                         </div>
 
-                                        @if ($dataCustomer->ID_stock != 1)
+                                        @if ($dataCustomer->ID_stock != 0)
                                             <div class="dropdown" style="display: inline-block;">
                                                 <button class="btn btn-default btn-xs dropdown-toggle" type="button"
                                                         id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"

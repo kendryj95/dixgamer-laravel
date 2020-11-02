@@ -2060,10 +2060,10 @@ class ControlsController extends Controller
                             $control_individual .= "<br /> < 3 vtas en 45d -> bajo precio // multi por: " . $estimulo_Vta45 . " queda en: " . round($oferta_sugerida, 2);
 
 
-                            // límite inferior máximo: el precio de oferta no puede ser menor al 30% del "precio base"
-                            if ($oferta_sugerida < ($precio_base * 0.30)) {
-                                $oferta_sugerida = ($precio_base * 0.30);
-                                $control_individual .= "<br /> oferta no puede ser < 35% de precio base // queda en : " . round($oferta_sugerida, 2);
+                            // límite inferior máximo: el precio de oferta no puede ser menor al 25% del "precio base"
+                            if ($oferta_sugerida < ($precio_base * 0.25)) {
+                                $oferta_sugerida = ($precio_base * 0.25);
+                                $control_individual .= "<br /> oferta no puede ser < 25% de precio base // queda en : " . round($oferta_sugerida, 2);
                             }
 
                             // si no queda stock secundario quito oferta
