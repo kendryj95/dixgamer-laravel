@@ -403,7 +403,7 @@
                              onclick="getPageAjax('{{url("customer_duplicar_venta")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Duplicar venta</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas"
                              onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar venta y cobros</a></li>
-                        @if(session()->get('usuario')->Nombre === "Kendry" || session()->get('usuario')->Nombre === "Leo")
+                        @if(session()->get('usuario')->Nombre === "Victor" || session()->get('usuario')->Nombre === "Leo")
                             <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas"
                                    onclick="getPageAjax('{{url("customer_ventas_eliminar", $dataCustomer->ID_ventas)}}?type=contracargo','#modalVentas')">Contracargo</a></li>
                         @endif
