@@ -326,7 +326,8 @@ class SalesController extends Controller
                    // Defino el multiplo de la comisión por defecto de MP que es 5,38 %
                    $multiplo = "0.0538";
 
-                   $payment_method = DB::table('medios_cobros')->where('payment_method','LIKE',"%{$venta->_payment_method}%")->where('habilitado',1)->first();
+
+                   $payment_method = DB::table('medios_cobros')->where('payment_method','LIKE',"%".substr($venta->_payment_method,0,20)."%")->where('habilitado',1)->first();
 
                    if ($payment_method) {
                        $medio_cobro = $payment_method->name;
