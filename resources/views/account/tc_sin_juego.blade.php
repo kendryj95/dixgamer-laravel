@@ -22,7 +22,7 @@
       @foreach($cuentas as $cta)
       <tr>
         <td>{{ $cta->ID }}</td>
-        <td><a href="{{ $cta->cuentas_id }}" target="_blank">{{ $cta->cuentas_id }}</a></td>
+        <td><a href="{{ url('cuentas', $cta->cuentas_id) }}" target="_blank">{{ $cta->cuentas_id }}</a></td>
         <td>{{ $cta->Day }}</td>
       </tr>
       @endforeach
