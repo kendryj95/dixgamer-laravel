@@ -403,7 +403,7 @@
                              onclick="getPageAjax('{{url("customer_duplicar_venta")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Duplicar venta</a></li>
                       <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas"
                              onclick="getPageAjax('{{url("customer_ventas_eliminar")}}','#modalVentas', {{$dataCustomer->ID_ventas}})">Eliminar venta y cobros</a></li>
-                        @if(session()->get('usuario')->Nombre === "Victor" || session()->get('usuario')->Nombre === "Leo")
+                        @if(\Helper::validateAdministrator(session()->get('usuario')->Level) || session()->get('usuario')->Nombre === "Leo")
                             <li><a href="javascript:void(0)" data-toggle="modal" data-target=".modalVentas"
                                    onclick="getPageAjax('{{url("customer_ventas_eliminar", $dataCustomer->ID_ventas)}}?type=contracargo','#modalVentas')">Contracargo</a></li>
                         @endif
@@ -1205,98 +1205,7 @@
 
                 <div class="clear" style="clear:both;"></div>
 
-                <?php ///SI HAY VENTAS ELIMINADAS LAS MUESTRO ?>
 
-                @if(count($lowSalesByCustomerIds) > 0)
-                    <h3>Ventas eliminadas</h3>
-                    <div class="row">
-                        @foreach($lowSalesByCustomerIds as $lowerSale)
-                            <div class="col-xs-12 col-sm-6 col-md-3 thumbnail"
-                                 <?php if ($lowerSale->slot == 'Secundario'): ?>style="background-color:#efefef;"<?php endif; ?>>
-              <span class="pull-right" style="width: 45%;">
-              <p>
-                  <small style="color:#CFCFCF;" title="<?php echo $lowerSale->Day; ?>"><em
-                              class="fa fa-calendar-o fa-xs fa-fw"
-                              aria-hidden="true"></em><?php echo date("d-M", strtotime($lowerSale->Day)); ?></small>
-                  <small style="color:#CFCFCF;" title="<?php echo $lowerSale->Day_baja; ?>"><em
-                              class="fa fa-trash-o fa-xs fa-fw"
-                              aria-hidden="true"></em><?php echo date("d-M", strtotime($lowerSale->Day_baja)); ?></small>
-              </p>
-              <p><small style="color:#CFCFCF;"><i class="fa fa-gamepad fa-fw"
-                                                  aria-hidden="true"></i> <?php echo $lowerSale->ID_stock; ?>  <?php// if ($lowerSale->stock_Notas):?><a
-                              href="#" data-toggle="popover" data-placement="bottom" data-trigger="focus"
-                              title="Notas de Stock" data-content="<?php //echo $lowerSale->stock_Notas; ?>"
-                              style="color: #555555;"><i class="fa fa-comment fa-fw"></i></a><?php// endif; ?>  </small>
-              <small style="color:#CFCFCF;"><i class="fa fa-shopping-bag fa-fw"
-                                               aria-hidden="true"></i> <?php echo $lowerSale->ID_ventas; ?></small></p>
-              <p>
-              <?php
-                  if (strpos($lowerSale->medio_venta, 'Web') !== false): $text3 = '<i class="fa fa-shopping-basket fa-fw" aria-hidden="true"></i>';
-                  elseif (strpos($lowerSale->medio_venta, 'Mail') !== false): $text3 = '<i class="fa fa-envelope fa-fw"  aria-hidden="true"></i>';
-                  elseif (strpos($lowerSale->medio_venta, 'Mercado') !== false): $text3 = 'ML';
-                  endif;?>
-                  <?php
-                  $text4 = '';
-                  if (strpos($lowerSale->medio_cobro, 'Transferencia') !== false || strpos($lowerSale->medio_cobro, 'Banco') !== false || strpos($lowerSale->medio_cobro, 'Fondos') !== false): $text4 = '<i class="fa fa-bank fa-xs fa-fw" aria-hidden="true"></i>';
-                  elseif (strpos($lowerSale->medio_cobro, 'Ticket') !== false): $text4 = '<i class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i>';
-                  elseif (strpos($lowerSale->medio_cobro, 'MP') !== false): $text4 = 'MP';
-                  endif;?>
-        <small style="color:#CFCFCF;" title="<?php echo $lowerSale->medio_venta; ?>"><?php echo $text3;?></small> <small
-                          style="color:#CFCFCF;"
-                          title="<?php echo $lowerSale->medio_cobro; ?>"><?php echo $text4;?></small>
-              <?php //if($lowerSale->estado == 'listo'):?>
-                  {{-- <small style="color:#CFCFCF;"><i class="fa fa-download fa-fw" aria-hidden="true"></i></small> --}}
-                  <?php //endif; ?>
-              </p>
-        <?php
-                  $costo2 = 0;
-                  if (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo_usd * 0.6, 2) ?>
-              <?php elseif (($lowerSale->consola == 'ps4') && ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo_usd * 0.4, 2) ?>
-              <?php elseif ($lowerSale->consola == 'ps3'): $costo2 = round($lowerSale->costo_usd * 0.25, 2) ?>
-              <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot') && ($lowerSale->slot == 'Primario')): $costo2 = round($lowerSale->costo_usd * 0.6, 2) ?>
-              <?php elseif (($lowerSale->titulo == 'plus-12-meses-slot') && ($lowerSale->slot == 'Secundario')): $costo2 = round($lowerSale->costo_usd * 0.4, 2) ?>
-              <?php elseif (($lowerSale->consola !== 'ps4') && ($lowerSale->consola !== 'ps3') && ($lowerSale->titulo !== 'plus-12-meses-slot')): $costo2 = round($lowerSale->costo_usd, 2) ?>
-              <?php endif; ?>
-                  <?php $ganancia2 = round($lowerSale->precio - $lowerSale->comision - $costo2, 2); ?>
-              <p><small class="text-success"><i class="fa fa-dollar fa-xs fa-fw"
-                                                aria-hidden="true"></i><?php echo round($lowerSale->precio, 2); ?></small><br/><small
-                          class="text-danger"><i class="fa fa-dollar fa-xs fa-fw"
-                                                 aria-hidden="true"></i><?php echo round($lowerSale->comision, 2); ?></small>
-        @if(Helper::validateAdministrator(session()->get('usuario')->Level))
-                      <br/><small class="text-danger"><i class="fa fa-dollar fa-xs fa-fw"
-                                                         aria-hidden="true"></i><?php echo $costo2; ?></small><hr
-                          style="margin:0px"><small
-                          class="<?php if ($ganancia2 < '0'):?>text-danger<?php else:?>text-success<?php endif;?>"><i
-                              class="fa fa-dollar fa-xs fa-fw" aria-hidden="true"></i><?php echo $ganancia2; ?></small>
-        @endif
-
-              </span>
-
-                                <img class="img img-responsive img-rounded full-width"
-                                     style="width:54%; margin:0; opacity:0.8;" alt="<?php echo $lowerSale->titulo;?>"
-                                     src="{{asset('img/productos')}}/<?php echo $lowerSale->consola . "/" . $lowerSale->titulo . ".jpg"; ?>">
-                                <span class="label label-default <?php echo $lowerSale->consola; ?>"
-                                      style="position: relative; bottom: 22px; left: 5px; float:left;"><?php echo $lowerSale->consola; ?></span>
-                                <div class="caption text-center">
-                                    <?php if ($lowerSale->cuentas_id):?><a
-                                            href="cuentas_detalles.php?id=<?php echo $lowerSale->cuentas_id; ?>"
-                                            class="btn btn-xs" title="Ir a Cuenta"><i class="fa fa-link fa-xs fa-fw"
-                                                                                      aria-hidden="true"></i> <?php echo $lowerSale->cuentas_id; ?>
-                                    </a> <?php endif; ?>
-                                </div>
-                                <?php if ($lowerSale->ventas_Notas):?>
-                                <div class="alert alert-warning"><i
-                                            class="fa fa-comment fa-fw"></i> <?php echo $lowerSale->ventas_Notas; ?>
-                                </div><?php endif; ?>
-                                <?php if ($lowerSale->Notas_baja):?>
-                                <div class="alert alert-danger"><i
-                                            class="fa fa-comment fa-fw"></i> <?php echo $lowerSale->Notas_baja; ?>
-                                </div><?php endif; ?>
-                            </div>
-
-                        @endforeach
-                    </div>
-                @endif
                 @endif
             </div>
 

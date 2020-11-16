@@ -942,8 +942,8 @@ class CustomerController extends Controller
     {
       $type = $request->type;
       $ventas = DB::table('ventas')->select('ID','clientes_id')->where('ID',$id)->first();
-
-      $ventasBaja = DB::table('ventas_baja')->select('ID')->where('ventas_id',$id)->first();
+//      $ventasBaja = DB::table('ventas_baja')->select('ID')->where('ventas_id',$id)->first();
+        $ventasBaja = null;
 
       return view('ajax.customer.ventas_eliminar', compact('ventas', 'ventasBaja', 'type'));
     }

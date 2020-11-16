@@ -35,7 +35,7 @@
                 <input type="hidden" name="clientes_id" value="{{ $ventas->clientes_id }}">
             </form><!-- <br /><br /> -->
 
-                @if($type === "contracargo" && (session()->get('usuario')->Nombre === "Victor" || session()->get('usuario')->Nombre === "Leo"))
+                @if($type === "contracargo" && (\Helper::validateAdministrator(session()->get('usuario')->Level) || session()->get('usuario')->Nombre === "Leo"))
                     <form method="post" action="{{ url('customer_ventas_eliminar') }}">
                         {{csrf_field()}}
 
