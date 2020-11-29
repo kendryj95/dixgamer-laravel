@@ -680,9 +680,11 @@ class Stock extends Model
         return DB::table('stock_cargar')->where('estado','listo')->orderBy('Day','DESC');
     }
 
-    public function listPedidosPorCargar($user)
+    public function listPedidosPorCargar($user, $betinaUser = false)
     {
-        if ($user != '') {
+        if ($betinaUser) {
+            return DB::table('stock_cargar')->where('estado','pendiente')->orderBy('Day','DESC');
+        } elseif ($user != '') {
             return DB::table('stock_cargar')->where('estado','pendiente')->where('usuario',$user)->orderBy('Day','DESC');
         } else {
             return DB::table('stock_cargar')->where('estado','pendiente')->where('usuario',session()->get('usuario')->Nombre)->orderBy('Day','DESC');

@@ -21,7 +21,8 @@ class AppServiceProvider extends ServiceProvider
             $cantidad_por_cargar = 0;
             if (session()->has('usuario')) {
                 $user = session()->get('usuario')->Nombre;
-                $pedidos = $stockObj->listPedidosPorCargar($user)->get();
+                $isBetina = ($user == 'Betina' || $user == 'Beti_1');
+                $pedidos = $stockObj->listPedidosPorCargar($user, $isBetina)->get();
 
                 foreach ($pedidos as $i => $value) {
                     $stock = WpPost::linkStoreByCondition($value->titulo,$value->consola)->first();
