@@ -1633,7 +1633,9 @@
 							<ul style="left:-120px" class="dropdown-menu" aria-labelledby="removeProduct_{{$sc->slot == 'Secundario' ? 'secu' : 'pri'}}">
 								<li class="dropdown-header">¿Deseas quitar producto?</li>
 								<li role="separator" class="divider"></li>
-								<li><a href="{{ url('customer_ventas_quitar_producto',$sc->id) }}">Sí, no merece</a></li>
+								@if($sc->consola != 'ps4')
+									<li><a href="{{ url('customer_ventas_quitar_producto',$sc->id) }}">Sí, no merece</a></li>
+								@endif
 								@if($sc->consola == 'ps4')
 									@if($sc->slot == 'Secundario')
 										<li><a href="{{ url('customer_ventas_quitar_producto',$sc->id) }}?slot={{$sc->slot}}">Sí, tal vez no usa</a></li>
