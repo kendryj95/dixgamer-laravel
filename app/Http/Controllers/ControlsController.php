@@ -1265,12 +1265,11 @@ class ControlsController extends Controller
                     ->where(DB::raw("(dias_de_primer_venta > 180) or ((dias_de_primer_venta > 120) and (q_vtas > 1))"))
                     ->update(['auto' => 'si']);
 
-                DB::table('clientes as a')
-                    ->select('ID', 'dias_de_primer_venta', 'q')
+               DB::table('clientes as a')
                     ->leftjoin(DB::raw("(SELECT clientes_id, DATEDIFF(NOW(), min( Day )) as dias_de_primer_venta, count(*) as q FROM ventas where cons='ps4' group by clientes_id) as b"), 'a.ID', '=', 'b.clientes_id')
                     ->where('a.auto', 'si')
-                    ->where('q', '>=', 3)
-                    ->where('dias_de_primer_venta ', '>', 120)
+                    ->where('b.q', '>=', 3)
+                    ->where('b.dias_de_primer_venta', '>', 120)
                     ->update(['auto' => '3ps4']);
 
                 \Helper::messageFlash('Configuraciones', 'Clientes automatizados correctamente.');
