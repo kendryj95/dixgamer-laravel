@@ -239,7 +239,7 @@ class Stock extends Model
     }
 
     public function ScopeStockList($query,$obj){
-        $query->select('stock.*',DB::raw("(SELECT color FROM usuarios WHERE Nombre = usuario) AS color_user"));
+        $query->select('stock.*',DB::raw("DATE_FORMAT(stock.Day,'%d-%m-%Y') as Day_formatted"),DB::raw("(SELECT color FROM usuarios WHERE Nombre = usuario) AS color_user"));
         
         if (!empty($obj->column) && !empty($obj->word)) {
             if ($obj->column == 'titulo') {

@@ -19,6 +19,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Day</th>
                     <th>Producto</th>
                     @if(Helper::validateAdministrator(session()->get('usuario')->Level))
                         <th>Code Prov</th>
@@ -55,6 +56,10 @@
 
                                     </button>
                                 @endif
+                            </td>
+
+                            <td>
+                                {{ $stock->Day_formatted }}
                             </td>
 
                             <td>
