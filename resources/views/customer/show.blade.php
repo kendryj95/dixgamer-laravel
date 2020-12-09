@@ -1430,7 +1430,7 @@
                                                   style="font-size: 22px;"></textarea>
 
                                     </div>
-                                    <input type="hidden" id="idcustomer" value="">
+                                    <input type="hidden" id="idcustomer" value="{{$customer->ID}}">
                                     <button class="btn btn-warning btn-block" id="saveNotes" type="button">Salvar
                                         Cambios
                                     </button>
