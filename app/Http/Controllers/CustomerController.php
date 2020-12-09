@@ -1314,6 +1314,25 @@ class CustomerController extends Controller
                       break;
                   case "sale-duplicated":
                       $nota = "Se duplicó la venta en el sistema.";
+                      $cobros = DB::table('ventas_cobro')->where('ventas_id', $id)->get();
+
+                      foreach ($cobros as $cobro) {
+
+//                  if ($cobro->precio != 0 && $cobro->comision != 0) {
+                          if ($cobro->precio != 0) { // Se quita validación de comision != 0 para permitir eliminación de cobros bancarizados 11/10/2020
+                              $data = [];
+                              $data['ventas_id']= $id;
+                              $data['medio_cobro']= $cobro->medio_cobro;
+                              $data['ref_cobro']= $cobro->ref_cobro;
+                              $data['precio_ars']= $cobro->precio_ars;
+                              $data['comision_ars']= $cobro->comision_ars;
+                              $data['precio']= $cobro->precio * (-1);
+                              $data['comision']=$cobro->comision * (-1);
+                              $data['Day'] = date('Y-m-d H:i:s');
+                              $data['usuario'] = session()->get('usuario')->Nombre;
+                              DB::table('ventas_cobro')->insert($data);
+                          }
+                      }
                       break;
               }
 
