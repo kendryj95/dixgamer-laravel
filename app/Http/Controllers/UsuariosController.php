@@ -51,7 +51,7 @@ class UsuariosController extends Controller
 
     public function listar()
     {
-    	$usuarios = DB::select("SELECT * FROM usuarios");
+    	$usuarios = DB::select("SELECT * FROM usuarios ORDER BY nombre_visible");
 
     	return view('usuarios.listar', [
     		"usuarios" => $usuarios
