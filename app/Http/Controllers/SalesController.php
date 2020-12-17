@@ -199,11 +199,11 @@ class SalesController extends Controller
             $asignador = $existe_OII->usuario;
             $cliente = $existe_OII->clientes_id;
 
-            return redirect("web/sales/list?r=_exist&c=$cliente&u=$asignador");
+            if (!$request->action)
+                return redirect("web/sales/list?r=_exist&c=$cliente&u=$asignador");
         }
 
         $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
-
 
         $venta = DB::table('cbgw_woocommerce_order_items AS wco')
                             ->select(
@@ -243,7 +243,7 @@ class SalesController extends Controller
                    $valor_gift = explode("-", $titulo)[2];
 
                    $data_gifts = $this->giftCardOrder($valor_gift);
-                   
+
                }
 
                if (count($data_gifts) > 0) {
@@ -261,9 +261,9 @@ class SalesController extends Controller
                                    ->first();
 
                    $link_PS = '';
-                   
+
                    if ($rsLink_PS) {
-                       
+
                        $link_PS = $rsLink_PS->meta_value;
                    }
                }
@@ -301,21 +301,27 @@ class SalesController extends Controller
                     $datos['cliente'] = $existEmailCliente;
                     Mail::send('emails.sin_stock', $datos, function($message) use ($venta,$consola,$titulo,$slot)
                     {
-                        $message->to("contacto@dixgamer.com", "Contacto")->subject(session()->get('usuario')->Nombre.", falta stock (sales)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
+                        $vendedor = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Sistema";
+                        $message->to("contacto@dixgamer.com", "Contacto")->subject($vendedor.", falta stock (sales)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
                     });
+
+                   if ($request->action && $request->action == "wooc")
+                       return response()->json(false);
                }
-               
-               return view('sales.salesInsertWeb', [
-                   "row_rsSTK" => $row_rsSTK,
-                   "venta" => $venta,
-                   "consola" => $consola,
-                   "titulo" => $titulo,
-                   "slot" => $slot,
-                   "clientes" => $existEmailCliente,
-                   "linkPS" => $link_PS
-               ]);
+
+               if (!$request->action) {
+                   return view('sales.salesInsertWeb', [
+                       "row_rsSTK" => $row_rsSTK,
+                       "venta" => $venta,
+                       "consola" => $consola,
+                       "titulo" => $titulo,
+                       "slot" => $slot,
+                       "clientes" => $existEmailCliente,
+                       "linkPS" => $link_PS
+                   ]);
+               }
            } else {
-               
+
                $clientes_id = $existEmailCliente->ID;
                $medio_cobro = '';
                $ref_cobro = '';
@@ -338,7 +344,7 @@ class SalesController extends Controller
                    }
 
                    // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
-                   if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
+                   if (($venta->user_id_ml) && ($venta->user_id_ml != "")){
                    $ref_cobro = $venta->ref_cobro_3;
                    } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
                    //2017-08 Paso el ref_cobro_2 como primer alternativa para ver si se reducen los errores de REF DE COBRO WEB
@@ -346,9 +352,9 @@ class SalesController extends Controller
                        elseif (($venta->ref_cobro) && ($venta->ref_cobro != "")): $ref_cobro = $venta->ref_cobro;
                        elseif (($venta->ref_cobro_3) && ($venta->ref_cobro_3 != "")): $ref_cobro = $venta->ref_cobro_3;
                        endif;
-                       
+
                    }
-                   
+
                    $precio = $venta->precio;
                    $comision = ($multiplo * $venta->precio);
                    $precio_original = $precio;
@@ -372,7 +378,7 @@ class SalesController extends Controller
                            $data['precio'] = $precio;
                            $data['comision'] = $comision;
                            $data['Day'] = date('Y-m-d H:i:s');
-                           $data['usuario'] = session()->get('usuario')->Nombre;
+                           $data['usuario'] = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Sistema";
 
                            DB::table('ventas_cobro')->insert($data);
 
@@ -403,19 +409,24 @@ class SalesController extends Controller
                            }
                        }
 
-                       DB::commit();
+                       if ($request->session()->get('usuario') != null || ($request->action && $request->action == "wooc"))
+                           DB::commit();
 
-                       echo "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
+                       if (!$request->action)
+                           echo "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
+                       elseif ($request->action && $request->action == "wooc")
+                           return response()->json(true);
 
 
                    } catch (Exception $e) {
                        DB::rollback();
-                       return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor vuelva a intentarlo.']);
+                       if (!$request->action)
+                           return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor vuelva a intentarlo.']);
                    }
 
                }
-           } 
-        } else {
+           }
+        } elseif (!$request->action) {
             return redirect()->back()->withErrors(['Ha ocurrido un error al intentar obtener los datos de la compra.']);
         }
 
@@ -479,7 +490,7 @@ class SalesController extends Controller
         $data['estado'] = $stock_id == 6 ? "pago-deuda" : $estado;
         $data['Day'] = $date;
         $data['Day_modif'] = $date;
-        $data['usuario'] = session()->get('usuario')->Nombre;
+        $data['usuario'] = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Sistema";
 
         return $data;
     }

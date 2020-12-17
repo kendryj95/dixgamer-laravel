@@ -43,6 +43,9 @@ Route::get('control/enviar_email', function () {
 })->name('enviar-email');
 Route::post('control/enviar_email', 'ControlsController@enviarEmail')->name('enviar-email-post');
 Route::get('detail_stock/{id_stock}/{slot}', 'StockController@detailStock');
+// Para que sea accesible desde woocommerce
+Route::get('salesInsertWeb/{oii}/{titulo}/{consola}/{slot?}','SalesController@salesInsertWeb');
+
 
 
 
@@ -271,7 +274,6 @@ Route::group(['middleware' => ['login']], function()
     Route::get('web/sales_sin_pes_fifa_21/{filtro?}','Pedidos_CobradosController@sinSalesFifaPes21');
     //Route::get('/web/sales', function() { return redirect('web/sales/list'); });
     Route::post('getDataClientWebSales','Pedidos_CobradosController@getDataClientWebSales')->name('getDataClientWebSales');
-    Route::get('salesInsertWeb/{oii}/{titulo}/{consola}/{slot?}','SalesController@salesInsertWeb');
     Route::get('sales/{id_sale}/cliente','SalesController@salesClient');
     Route::get('sales/recupero','SalesController@salesListRecupero');
     Route::get('sales/list/notas','SalesController@indexNotes')->name('sales-notas');
