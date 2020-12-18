@@ -1675,7 +1675,7 @@ class CustomerController extends Controller
       }
     }
 
-    public function emails($ventas_id, $tipo, $consola=null, $slot=null, $cuentas_id=null)
+    public function emails($ventas_id)
     {
 
       $vista = '';
@@ -1684,27 +1684,35 @@ class CustomerController extends Controller
       $subject = '';
       $nombre = '';
 
-      switch ($tipo) {
-        case 'Juegos':
-          $vista = 'mail_datos_'.$consola.$slot;
-          $row_rsClient = DB::table('stock AS s')
-                              ->select(
-                                'ID AS ID_stock',
-                                'titulo',
-                                'consola',
-                                'cuentas_id',
-                                'c.*'
-                              )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
+        $row_rsClient = DB::table('stock AS s')
+            ->select(
+                'ID AS ID_stock',
+                'titulo',
+                'consola',
+                'code',
+                'cuentas_id',
+                'c.*'
+            )
+            ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
                                 FROM ventas
                                 LEFT JOIN
                                 clientes
                                 ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
-                              ->where('ID_ventas', $ventas_id)
-                              ->orderBy('c.Day', 'DESC')
-                              ->first();
+            ->where('ID_ventas', $ventas_id)
+            ->orderBy('c.Day', 'DESC')
+            ->first();
 
-          $row_rsCuenta = DB::table('cuentas')->select('ID','mail_fake','pass')->where('ID',$cuentas_id)->first();
+        if ( ($row_rsClient->consola === "ps") && ($row_rsClient->slot == "No") && ((strpos($row_rsClient->titulo, 'gift-card-') !== false))) $tipo = "Gift";
+        elseif( ($row_rsClient->consola === "ps") && ($row_rsClient->slot == "No") && ((strpos($row_rsClient->titulo, 'plus-') !== false))) $tipo = "Plus";
+        elseif ( ($row_rsClient->consola === "fifa-points") && ($row_rsClient->slot == "No") && ((strpos($row_rsClient->titulo, 'ps4') !== false))) $tipo = "FifaPoints";
+        else $tipo = "Juegos";
+
+
+      switch ($tipo) {
+        case 'Juegos':
+          $vista = 'mail_datos_'.$row_rsClient->consola.$row_rsClient->slot;
+
+          $row_rsCuenta = DB::table('cuentas')->select('ID','mail_fake','pass')->where('ID',$row_rsClient->cuentas_id)->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
           $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
@@ -1721,23 +1729,6 @@ class CustomerController extends Controller
         case 'Gift':
           
           $vista = 'mail_datos_gift';
-          $row_rsClient = DB::table('stock AS s')
-                              ->select(
-                                'ID AS ID_stock',
-                                'titulo',
-                                'consola',
-                                'code',
-                                'cuentas_id',
-                                'c.*'
-                              )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
-                                FROM ventas
-                                LEFT JOIN
-                                clientes
-                                ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
-                              ->where('ID_ventas', $ventas_id)
-                              ->orderBy('c.Day', 'DESC')
-                              ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
           $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
@@ -1751,23 +1742,6 @@ class CustomerController extends Controller
         case 'Plus':
 
           $vista = 'mail_datos_plus';
-          $row_rsClient = DB::table('stock AS s')
-                              ->select(
-                                'ID AS ID_stock',
-                                'titulo',
-                                'consola',
-                                'code',
-                                'cuentas_id',
-                                'c.*'
-                              )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
-                                FROM ventas
-                                LEFT JOIN
-                                clientes
-                                ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
-                              ->where('ID_ventas', $ventas_id)
-                              ->orderBy('c.Day', 'DESC')
-                              ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
           $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
@@ -1782,23 +1756,6 @@ class CustomerController extends Controller
         case 'FifaPoints':
 
           $vista = 'mail_datos_fifapoints_ps4';
-          $row_rsClient = DB::table('stock AS s')
-                              ->select(
-                                'ID AS ID_stock',
-                                'titulo',
-                                'consola',
-                                'code',
-                                'cuentas_id',
-                                'c.*'
-                              )
-                              ->rightjoin(DB::raw("(SELECT ventas.ID AS ID_ventas, clientes_id, stock_id, slot, estado, Day, clientes.ID AS ID_clientes, apellido, nombre, email, order_id_web AS pedido
-                                FROM ventas
-                                LEFT JOIN
-                                clientes
-                                ON ventas.clientes_id = clientes.ID) AS c"), 's.ID','=','c.stock_id')
-                              ->where('ID_ventas', $ventas_id)
-                              ->orderBy('c.Day', 'DESC')
-                              ->first();
 
           $titulo = ucwords(preg_replace('/([-])/'," ",$row_rsClient->titulo));
           $subject = '🔥 [Nueva Compra] '.$titulo.' ('.$row_rsClient->consola.') (wc-' . $row_rsClient->pedido . '-s' . $row_rsClient->ID_stock.')';
@@ -1817,7 +1774,7 @@ class CustomerController extends Controller
           'ventas_id' => $ventas_id,
           'concepto' => 'datos1',
           'Day' => date('Y-m-d H:i:s'),
-          'usuario' => session()->get('usuario')->Nombre
+          'usuario' => session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Xavi"
         ]);
 
         $qtyEmail = DB::table('mailer')->where('ventas_id',$ventas_id)->count();

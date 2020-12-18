@@ -872,86 +872,42 @@
 
                                     @endif
 
-                                <!--- aca entran los mails de gift cards -->
-                                    @if ( ($dataCustomer->consola === "ps") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'gift-card-') !== false)))
-
-
-                                        <button
-                                                class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
-                                                type="button"
-                                                onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Gift',null,null,null,this)">
-                                            <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
-                                            <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
-                                            @if($dataCustomer->datos1 > 0)
-                                                <?php echo '(' . $dataCustomer->datos1 . ')';  ?>
-                                            @endif
-                                        </button>
-
-                                        <!--- aca entran los mails de PLUS no slot -->
-                                    @elseif( ($dataCustomer->consola === "ps") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'plus-') !== false)))
-
-                                        <button
-                                                class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
-                                                type="button"
-                                                onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Plus',null,null,null,this)">
-                                            <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
-                                            <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
-                                            @if($dataCustomer->datos1 > 0)
-                                                <?php echo '(' . $dataCustomer->datos1 . ')'; ?>
-                                            @endif
-                                        </button>
-                                    @elseif ( ($dataCustomer->consola === "fifa-points") && ($dataCustomer->slot == "No") && ((strpos($dataCustomer->titulo, 'ps4') !== false)))
-
-                                        <button
-                                                class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
-                                                type="button"
-                                                onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'FifaPoints',null,null,null,this)">
-                                            <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i>
-                                            <i class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
-                                            @if($dataCustomer->datos1 > 0)
-                                                <?php echo '(' . $dataCustomer->datos1 . ')'; ?>
-                                            @endif
-                                        </button>
-
-                                    @else
-
-                                        @if ($venta_plus_sec && $dataCustomer->slot == "Secundario" && $dataCustomer->consola == "ps4")
-                                            <div class="dropdown" style="display: inline-block;">
-                                                <button class="btn btn-<?php echo $colorcito;?> @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif btn-xs dropdown-toggle"
-                                                        type="button" id="dropdownMenu1" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="true">
-                                                    <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i
-                                                            class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
-                                                    @if($dataCustomer->datos1 > 0)
-                                                        <?php echo '(' . $dataCustomer->datos1 . ')';  ?>
-                                                    @endif
-                                                </button>
-                                                <ul style="top:-75px;left:25px" class="dropdown-menu"
-                                                    aria-labelledby="dropdownMenu1">
-                                                    <li class="dropdown-header">Por favor confirmar</li>
-                                                    <li class="dropdown-header">si desea enviar
-                                                        este {{$dataCustomer->titulo}}</li>
-                                                    <li role="separator" class="divider"></li>
-                                                    <li><a href="javascript:;"
-                                                           onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}',this)">Sí,
-                                                            Enviar</a></li>
-                                                </ul>
-                                            </div>
-                                        @else
-                                        <!--- aca entran los mails de juegos y ps plus slot pri y secu -->
-                                            <button
-                                                    class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
-                                                    type="button"
-                                                    onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}', 'Juegos','{{ $dataCustomer->consola }}', '{{ $dataCustomer->slot }}', '{{ $dataCustomer->cuentas_id }}',this)">
+                                    @if ($venta_plus_sec && $dataCustomer->slot == "Secundario" && $dataCustomer->consola == "ps4")
+                                        <div class="dropdown" style="display: inline-block;">
+                                            <button class="btn btn-<?php echo $colorcito;?> @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif btn-xs dropdown-toggle"
+                                                    type="button" id="dropdownMenu1" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="true">
                                                 <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i
                                                         class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
                                                 @if($dataCustomer->datos1 > 0)
                                                     <?php echo '(' . $dataCustomer->datos1 . ')';  ?>
                                                 @endif
                                             </button>
-                                        @endif
-
+                                            <ul style="top:-75px;left:25px" class="dropdown-menu"
+                                                aria-labelledby="dropdownMenu1">
+                                                <li class="dropdown-header">Por favor confirmar</li>
+                                                <li class="dropdown-header">si desea enviar
+                                                    este {{$dataCustomer->titulo}}</li>
+                                                <li role="separator" class="divider"></li>
+                                                <li><a href="javascript:;"
+                                                       onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}',this)">Sí,
+                                                        Enviar</a></li>
+                                            </ul>
+                                        </div>
+                                    @else
+                                    <!--- aca entran los mails de juegos y ps plus slot pri y secu -->
+                                        <button
+                                                class="btn btn-<?php echo $colorcito;?> btn-xs @if($dataCustomer->recup == 2 || $customer->auto == "bloq") disabled @endif"
+                                                type="button"
+                                                onclick="enviarEmailVenta('{{ $dataCustomer->ID_ventas }}',this)">
+                                            <i class="fa fa-paper-plane fa-xs fa-fw" aria-hidden="true"></i> <i
+                                                    class="fa fa-info fa-xs fa-fw" aria-hidden="true"></i>
+                                            @if($dataCustomer->datos1 > 0)
+                                                <?php echo '(' . $dataCustomer->datos1 . ')';  ?>
+                                            @endif
+                                        </button>
                                     @endif
+
 
                                 <!--- filtrar en gmail -->
                                     @if (\Helper::operatorsRecoverPri(session()->get('usuario')->Nombre))
@@ -2052,15 +2008,10 @@
             return regex.test(fb);
         }
 
-        function enviarEmailVenta(ventas_id, tipo, consola = null, slot = null, cuentas_id = null, ele) {
+        function enviarEmailVenta(ventas_id, ele) {
 
             $(ele).addClass('disabled')
-            var url = '';
-            if (consola != null) {
-                url = "{{ url('enviar_email_venta') }}/" + ventas_id + "/" + tipo + "/" + consola + "/" + slot + "/" + cuentas_id;
-            } else {
-                url = "{{ url('enviar_email_venta') }}/" + ventas_id + "/" + tipo;
-            }
+            var url = "{{ url('enviar_email_venta') }}/" + ventas_id;
 
             $.ajax({
                 url: url,

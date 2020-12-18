@@ -45,8 +45,7 @@ Route::post('control/enviar_email', 'ControlsController@enviarEmail')->name('env
 Route::get('detail_stock/{id_stock}/{slot}', 'StockController@detailStock');
 // Para que sea accesible desde woocommerce
 Route::get('salesInsertWeb/{oii}/{titulo}/{consola}/{slot?}','SalesController@salesInsertWeb');
-
-
+Route::get('enviar_email_venta/{venta_id}', 'CustomerController@emails');
 
 
 // Solo usuarios logueados
@@ -80,7 +79,6 @@ Route::group(['middleware' => ['login']], function()
   Route::post('customer_addVentasCobro', 'CustomerController@addVentasCobroStore');
   Route::get('customer_setEmailPrimary/{id}/{id_cliente}', 'CustomerController@setEmailPrimary');
   Route::get('createCustomerWeb/{oii}', 'CustomerController@createCustomerWeb');
-  Route::get('enviar_email_venta/{venta_id}/{tipo}/{consola?}/{slot?}/{cuentas_id?}', 'CustomerController@emails');
   Route::get('update_amounts/{cobro}/{cliente_id}', 'CustomerController@updateAmounts');
   Route::get('delete_amounts/{id}', 'CustomerController@deleteAmount');
   Route::get('delete_notes/{id}/{tipo}', 'CustomerController@deleteNotes');

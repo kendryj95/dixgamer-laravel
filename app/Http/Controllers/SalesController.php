@@ -301,12 +301,12 @@ class SalesController extends Controller
                     $datos['cliente'] = $existEmailCliente;
                     Mail::send('emails.sin_stock', $datos, function($message) use ($venta,$consola,$titulo,$slot)
                     {
-                        $vendedor = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Sistema";
+                        $vendedor = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Xavi";
                         $message->to("contacto@dixgamer.com", "Contacto")->subject($vendedor.", falta stock (sales)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
                     });
 
                    if ($request->action && $request->action == "wooc")
-                       return response()->json(false);
+                       return response()->json(["status" => false]);
                }
 
                if (!$request->action) {
@@ -378,7 +378,7 @@ class SalesController extends Controller
                            $data['precio'] = $precio;
                            $data['comision'] = $comision;
                            $data['Day'] = date('Y-m-d H:i:s');
-                           $data['usuario'] = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Sistema";
+                           $data['usuario'] = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Xavi";
 
                            DB::table('ventas_cobro')->insert($data);
 
@@ -415,7 +415,7 @@ class SalesController extends Controller
                        if (!$request->action)
                            echo "<script>window.top.location.href='".url('clientes',$clientes_id)."'</script>";
                        elseif ($request->action && $request->action == "wooc")
-                           return response()->json(true);
+                           return response()->json(["status" => true, "ventas_id" => $ventaid]);
 
 
                    } catch (Exception $e) {
@@ -490,7 +490,7 @@ class SalesController extends Controller
         $data['estado'] = $stock_id == 6 ? "pago-deuda" : $estado;
         $data['Day'] = $date;
         $data['Day_modif'] = $date;
-        $data['usuario'] = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Sistema";
+        $data['usuario'] = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Xavi";
 
         return $data;
     }
