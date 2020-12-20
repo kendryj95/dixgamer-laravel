@@ -1,5 +1,5 @@
 <p>
-    Hola {{ $cliente->nombre }}, por favor ingresá a nuestra cuenta/usuario con el nombre <b>{{ $account->name . " " . $account->surname }}</b> una vez más para RE ACTIVAR el slot primario, una vez dentro de nuestro usuario:<br /><br />
+    Hola {{ $cliente->nombre }}, por favor ingresa a nuestra cuenta/usuario con el nombre <b>{{ $account->name . " " . $account->surname }}</b> una vez más para RE ACTIVAR el slot primario, una vez dentro de nuestro usuario:<br /><br />
 
     E-mail: {{$account->mail_fake}} <br>
     Contraseña: <?php echo $account->pass;?><br /><br />
