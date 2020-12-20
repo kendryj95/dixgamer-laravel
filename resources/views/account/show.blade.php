@@ -1108,6 +1108,27 @@
 
 										</div>
 
+										<div class="dropdown text-left">
+											<button
+													class="btn btn-link dropdown-toggle btn-xs"
+													type="button" id="vender_pri_cli5"
+													data-toggle="dropdown"
+													aria-haspopup="true"
+													aria-expanded="false">
+												Vender Pri a Cte #5 Secu se Activa
+												{{-- <span class="caret"></span> --}}
+											</button>
+
+											<ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli5">
+												<li class="dropdown-header">¿Estas seguro?</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario', 5]) }}" class="btn btn-danger">Sí, Seguro!</a>
+												</li>
+											</ul>
+
+										</div>
+
 									@endif
 
 									@php $texto_x = strpos($stock->titulo,"xx-") !== false ? "Quitar" : "Agregar" @endphp

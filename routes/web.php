@@ -82,7 +82,7 @@ Route::group(['middleware' => ['login']], function()
   Route::get('update_amounts/{cobro}/{cliente_id}', 'CustomerController@updateAmounts');
   Route::get('delete_amounts/{id}', 'CustomerController@deleteAmount');
   Route::get('delete_notes/{id}/{tipo}', 'CustomerController@deleteNotes');
-  Route::get('saleToClient/{id_stock}/{consola}/{slot}', 'CustomerController@saleToClient');
+  Route::get('saleToClient/{id_stock}/{consola}/{slot}/{cliente_id?}', 'CustomerController@saleToClient');
   Route::get('marcar_enviado/{id_venta}', 'CustomerController@marcarEnviadoVenta');
   Route::get('cargar_notas_ventas/{id_venta}', 'CustomerController@loadNotesSales');
   Route::post('cambiar_producto', 'CustomerController@cambiarProductoVta')->name('cambio-prod');

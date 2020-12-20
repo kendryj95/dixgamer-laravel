@@ -1941,8 +1941,8 @@ class CustomerController extends Controller
       }
     }
 
-    public function saleToClient($id_stock, $consola, $slot) {
-      $cliente_id = $consola == 'ps3' ? 2 : 1;
+    public function saleToClient($id_stock, $consola, $slot, $cliente_id = null) {
+      $cliente_id = $cliente_id != null ? $cliente_id : ($consola == 'ps3' ? 2 : 1);
 
       DB::beginTransaction();
 
