@@ -186,12 +186,15 @@ class SalesController extends Controller
         $giftConStock = false;
         $data_gifts = [];
         $deuda = false;
+        $postmeta = null;
+        $venta_data = null;
 
         $existe_OII = DB::table('ventas')
                         ->select(
                             'order_item_id',
                             'clientes_id',
-                            'usuario'
+                            'usuario',
+                            'ID as venta_id'
                         )
                         ->where('order_item_id',$oii)->first();
 
@@ -199,44 +202,31 @@ class SalesController extends Controller
             $asignador = $existe_OII->usuario;
             $cliente = $existe_OII->clientes_id;
 
-            if (!$request->action)
-                return redirect("web/sales/list?r=_exist&c=$cliente&u=$asignador");
+            if (!$request->action) return redirect("web/sales/list?r=_exist&c=$cliente&u=$asignador");
+            elseif ($request->action && $request->action == "wooc") return response()->json(["status" => "duplicated", "ventas_id" => $existe_OII->venta_id]);
+
         }
 
         $row_rsSTK = Stock::StockDisponible($consola,$titulo, $slot);
 
-        $venta = DB::table('cbgw_woocommerce_order_items AS wco')
-                            ->select(
-                              'wco.order_item_id',
-                              'wco.order_id',
-                              'p.ID as post_id',
-                              'p.post_status as estado',
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_billing_email' AND post_id=p.ID) AS email"),
-                              DB::raw("
-                                (SELECT 
-                                meta_value 
-                                FROM cbgw_postmeta 
-                                WHERE meta_key='_payment_method_title' AND post_id=p.ID) AS _payment_method"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_Mercado_Pago_Payment_IDs' AND post_id=p.ID LIMIT 1) AS ref_cobro"),
-                              DB::raw("(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(meta_value, 'payment_id=', -1),'&',1) FROM cbgw_postmeta WHERE meta_key='_transaction_details_ticket' AND post_id=p.ID LIMIT 1) AS ref_cobro_2"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id=p.ID LIMIT 1) AS ref_cobro_3"),
-                              DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_qty' AND order_item_id=wco.order_item_id) AS _qty"),
-                              DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_line_total' AND order_item_id=wco.order_item_id) AS precio"),
-                              DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=wco.order_item_id) AS slot"),
-                              DB::raw("(SELECT meta_value FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=wco.order_item_id) AS _product_id"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='user_id_ml' AND post_id=p.ID) AS user_id_ml"),
-                              DB::raw("(SELECT meta_value FROM cbgw_postmeta WHERE meta_key='order_id_ml' AND post_id=p.ID) AS order_id_ml")
-                            )
-                            ->leftjoin('cbgw_posts AS p','wco.order_id','=','p.ID')
-                            ->leftjoin('cbgw_postmeta AS pm','wco.order_id','=','pm.post_id')
-                            ->leftjoin('cbgw_woocommerce_order_itemmeta AS wcom','wco.order_item_id','=','wcom.order_item_id')
-                            ->where('wco.order_item_id',$oii)
-                            ->where(DB::raw("p.post_status = 'wc-processing' or p.post_status = 'wc-completed'"))
-                            ->groupBy('wco.order_item_id')
-                            ->orderBy('wco.order_item_id','DESC')
-                            ->first();
+        $venta = DB::table("cbgw_woocommerce_order_items as wco")
+            ->select("wco.order_item_id","wco.order_id","p.ID as post_id","p.post_status as estado")
+            ->leftjoin("cbgw_posts as p","wco.order_id","p.ID")
+            ->where("wco.order_item_id",$oii)
+            ->where(function ($query) {
+                $query->where('p.post_status', 'wc-processing')
+                    ->orWhere('p.post_status', 'wc-completed');
+            })->first();
+
 
         if ($venta) { // Si obtiene el registro de las tablas de woocommerce, de lo contrario se mostrará una alerta de error.
+
+            $postmeta = DB::table(DB::raw("(SELECT (SELECT meta_value AS email FROM cbgw_postmeta WHERE meta_key='_billing_email' AND post_id={$venta->order_id}) as email, (SELECT meta_value AS _payment_method FROM cbgw_postmeta WHERE meta_key='_payment_method_title' AND post_id={$venta->order_id}) as _payment_method, (SELECT meta_value AS ref_cobro_3 FROM cbgw_postmeta WHERE meta_key='_transaction_id' AND post_id={$venta->order_id} LIMIT 1) as ref_cobro_3) as postmeta"))->first();
+
+            if (!$postmeta) return redirect()->back()->withErrors(["No se encontraron datos en el postmeta"]);
+
+            $venta_data = DB::table(DB::raw("(SELECT (SELECT meta_value AS precio FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_line_total' and order_item_id=$oii) as precio, (SELECT meta_value AS slot FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='pa_slot' AND order_item_id=$oii) as slot, (SELECT meta_value AS _product_id FROM cbgw_woocommerce_order_itemmeta WHERE meta_key='_product_id' AND order_item_id=$oii) as _product_id) as sale"))->first();
+
            if (!is_array($row_rsSTK)) {
 
                if (isset($request->gift) && $request->gift == 'si') { // Validaré si el producto es una gift
@@ -269,7 +259,7 @@ class SalesController extends Controller
                }
            }
 
-           $email_pedido = $venta->email;
+           $email_pedido = $postmeta->email;
 
            $existEmailCliente = DB::table('clientes')
                                    ->select(
@@ -309,6 +299,10 @@ class SalesController extends Controller
                        return response()->json(["status" => false]);
                }
 
+               $venta->email = $email_pedido;
+               $venta->user_id_ml = null;
+               $venta->order_id_ml = null;
+
                if (!$request->action) {
                    return view('sales.salesInsertWeb', [
                        "row_rsSTK" => $row_rsSTK,
@@ -327,45 +321,39 @@ class SalesController extends Controller
                $ref_cobro = '';
                $multiplo = '';
 
-               if ($venta) {
+               if ($venta_data) {
 
                    // Defino el multiplo de la comisión por defecto de MP que es 5,38 %
                    $multiplo = "0.0538";
 
 
-                   $payment_method = DB::table('medios_cobros')->where('payment_method','LIKE',"%".substr($venta->_payment_method,0,20)."%")->where('habilitado',1)->first();
+                   $payment_method = DB::table('medios_cobros')->where('payment_method','LIKE',"%".substr($postmeta->_payment_method,0,20)."%")->where('habilitado',1)->first();
 
                    if ($payment_method) {
                        $medio_cobro = $payment_method->name;
                        $multiplo = $payment_method->commission;
                    } else {
 //                       $medio_cobro = "No encontrado";
-                       $medio_cobro = $venta->_payment_method;
+                       $medio_cobro = $postmeta->_payment_method;
                    }
 
-                   // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
-                   if (($venta->user_id_ml) && ($venta->user_id_ml != "")){
-                   $ref_cobro = $venta->ref_cobro_3;
-                   } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
-                   //2017-08 Paso el ref_cobro_2 como primer alternativa para ver si se reducen los errores de REF DE COBRO WEB
-                       if (($venta->ref_cobro_2) && ($venta->ref_cobro_2 != "")): $ref_cobro = $venta->ref_cobro_2;
-                       elseif (($venta->ref_cobro) && ($venta->ref_cobro != "")): $ref_cobro = $venta->ref_cobro;
-                       elseif (($venta->ref_cobro_3) && ($venta->ref_cobro_3 != "")): $ref_cobro = $venta->ref_cobro_3;
-                       endif;
+                   $ref_cobro = $postmeta->ref_cobro_3;
 
-                   }
-
-                   $precio = $venta->precio;
-                   $comision = ($multiplo * $venta->precio);
+                   $precio = $venta_data->precio;
+                   $comision = ($multiplo * $venta_data->precio);
                    $precio_original = $precio;
                    $comision_original = $comision;
+
+                   $sale = new \stdClass();
+                   $sale->order_item_id = $oii;
+                   $sale->order_id = $venta->order_id;
 
                    DB::beginTransaction();
 
                    try {
 
                        if (!$giftConStock) { // Si el producto no es una gift quiere decir esa variable.
-                           $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente, $slot, $deuda);
+                           $data = $this->dataSale($sale, $row_rsSTK, $existEmailCliente, $slot, $deuda);
                            DB::table('ventas')->insert($data);
                            $ventaid = DB::getPdo()->lastInsertId();
 
@@ -390,7 +378,7 @@ class SalesController extends Controller
                                $precio = $precio_original / $partes;
                                $comision = $comision_original / $partes;
 
-                               $data = $this->dataSale($venta, $row_rsSTK, $existEmailCliente);
+                               $data = $this->dataSale($sale, $row_rsSTK, $existEmailCliente);
                                DB::table('ventas')->insert($data);
                                $ventaid = DB::getPdo()->lastInsertId();
 
@@ -464,14 +452,7 @@ class SalesController extends Controller
         else: $slot_def = "No"; $estado = "listo";
         endif;
 
-        // SI ES VENTA DE ML DEFINO LOS VALORS CORRECTOS
-        if (($venta->user_id_ml) && ($venta->user_id_ml != "")){ 
-        $medio_venta = "MercadoLibre";
-        $order_id_ml = $venta->order_id_ml;
-        } else { // SI ES VENTA WEB DEFINO LOS VALORES CORRECTOS
         $medio_venta = "Web";
-        }
-
         $order_id_web = $venta->order_id;
 
         $data = [];
@@ -481,11 +462,6 @@ class SalesController extends Controller
         $data['cons'] = $cons;
         $data['slot'] = $slot_def;
         $data['medio_venta'] = $medio_venta;
-        
-        if(($order_id_ml) && ($order_id_ml != "")){
-
-            $data['order_id_ml'] = $order_id_ml;
-        }
         $data['order_id_web'] = $order_id_web;
         $data['estado'] = $stock_id == 6 ? "pago-deuda" : $estado;
         $data['Day'] = $date;
