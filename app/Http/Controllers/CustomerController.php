@@ -1588,7 +1588,7 @@ class CustomerController extends Controller
       }
     }
 
-    public function createCustomerWeb($oii)
+    public function createCustomerWeb(Request $request, $oii)
     {
       $cliente = DB::table('cbgw_woocommerce_order_items AS wco')
                     ->select(
@@ -1663,14 +1663,19 @@ class CustomerController extends Controller
         try {
           $clientes_id = DB::table('clientes')->insertGetId($data);
           DB::table('clientes_email')->insert(["clientes_id"=> $clientes_id, "email" => strtolower($email)]);
-          DB::commit();
 
-          \Helper::messageFlash('Clientes','Cliente creado exitosamente.');
+          if (session()->get("usuario") != null || ($request->action && $request->action == "wooc")) DB::commit();
 
-          return redirect("web/sales/".$cliente->post_id);
+          if (!$request->action) {
+              \Helper::messageFlash('Clientes','Cliente creado exitosamente.');
+
+              return redirect("web/sales/".$cliente->post_id);
+          } elseif ($request->action && $request->action == "wooc")
+              return response()->json(["status" => true, "cliente_id" => $clientes_id]);
         } catch (Exception $e) {
-          DB::rollback();
-          return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor']);
+            if (session()->get("usuario") != null || ($request->action && $request->action == "wooc")) DB::rollback();
+            if (!$request->action) return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Vuelva a intentarlo por favor']);
+            elseif ($request->action && $request->action == "wooc") return response()->json(["status" => false, "cliente_id" => null]);
         }
       }
     }
