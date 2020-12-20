@@ -239,7 +239,7 @@ class SalesController extends Controller
                if (count($data_gifts) > 0) {
                    $giftConStock = true;
                } else {
-                   $producto_catalogo = $venta->_product_id;
+                   $producto_catalogo = $venta_data->_product_id;
 
                    $rsLink_PS = DB::table('cbgw_postmeta')
                                    ->select(
