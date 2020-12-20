@@ -1656,7 +1656,7 @@ class CustomerController extends Controller
         if ($user_id_ml && $user_id_ml != "") {
           $data['ml_user'] = $user_id_ml;
         }
-        $data['usuario'] = session()->get('usuario')->Nombre;
+        $data['usuario'] = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Xavi";
 
         DB::beginTransaction();
 
