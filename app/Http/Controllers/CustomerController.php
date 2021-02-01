@@ -1070,8 +1070,10 @@ class CustomerController extends Controller
                   $data['estado'] = "no-merece";
               }
               $data['recup'] = 1;
-              $data['cons'] = 'x';
-              $data['slot'] = 'No';
+                if ($request->type && $request->type !== "contracargo") {
+                    $data['cons'] = 'x';
+                    $data['slot'] = 'No';
+                }
               $data['Day_modif'] = date('Y-m-d H:i:s');
 
               DB::table('ventas')->where('ID',$request->ID)->update($data);
