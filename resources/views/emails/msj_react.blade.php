@@ -1,8 +1,10 @@
 <p>
-    Hola {{ $cliente->nombre }}, por favor ingresa a nuestra cuenta/usuario con el nombre <b>{{ $account->name . " " . $account->surname }}</b> una vez más para RE ACTIVAR el slot primario, una vez dentro de nuestro usuario:<br /><br />
+    Hola {{ $cliente->nombre }}, por favor ingrese a nuestra cuenta/usuario con el nombre <b>{{ $account->name . " " . $account->surname }}</b> una vez más para RE ACTIVAR el slot primario.<br /><br />
 
     E-mail: {{$account->mail_fake}} <br>
     Contraseña: <?php echo $account->pass;?><br /><br />
+
+    Una vez dentro de nuestro usuario:<br /><br />
 
     1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar<br />
     2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar<br />
