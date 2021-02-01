@@ -23,6 +23,7 @@
             <label for="usuario">Usuario:</label>
             <select name="usuario" id="usuario" class="form-control">
                 <option value="">Seleccione usuario</option>
+                <option value="everybody" @if(app('request')->input('usuario') == "everybody") selected @endif>Todos</option>
                 @foreach($usuarios as $usuario)
                 <option value="{{ $usuario->usuario }}" @if(app('request')->input('usuario') == $usuario->usuario) selected @endif>{{ $usuario->usuario }}</option>
                 @endforeach
@@ -83,7 +84,12 @@
                             @endif
                         </td>
                         <td style="vertical-align: middle;">
-                            <span class="label label-{{$value->color_user}}" title="{{ $value->usuario }}"><strong>{{strtoupper(substr($value->usuario,0,1))}}</strong></span>
+                            @php
+                            $usuarios = explode(",",$value->usuario);
+                            @endphp
+                            @foreach($usuarios as $usuario)
+                                <span class="label label-{{\Helper::userColor($usuario)}}" title="{{ $usuario }}"><strong>{{strtoupper(substr($usuario,0,1))}}</strong></span> / 
+                            @endforeach
                         </td>
                     </tr>
                     @endforeach
