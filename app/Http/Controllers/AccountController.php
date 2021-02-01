@@ -1951,24 +1951,24 @@ class AccountController extends Controller
       try {
         switch ($request->tipo) {
           case 'contra':
-            $nota = "Se modificó cta_pass #{$request->id} de {$request->current_day} a {$request->Day}";
+            $nota = "Se modificó <b>cambio de pass</b> #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('cta_pass')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           
           case 'reset':
-            $nota = "Se modificó reseteo #{$request->id} de {$request->current_day} a {$request->Day}";
+            $nota = "Se modificó <b>reseteo</b> #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('reseteo')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           case 'resetear':
-            $nota = "Se modificó resetear #{$request->id} de {$request->current_day} a {$request->Day}";
+            $nota = "Se modificó <b>solicitud de reseteo</b> #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('resetear')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           case 'notas':
-            $nota = "Se modificó cuentas_notas #{$request->id} de {$request->current_day} a {$request->Day}";
+            $nota = "Se modificó <b>nota de la cuenta</b> #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('cuentas_notas')->where('ID',$request->id)->update(['Day' => $request->Day]);
             break;
           case 'venta':
-            $nota = "Se modificó ventas #{$request->id} de {$request->current_day} a {$request->Day}";
+            $nota = "Se modificó <b>ventas</b> #{$request->id} de {$request->current_day} a {$request->Day}";
             DB::table('ventas')->where('ID',$request->id)->update(['Day_modif' => $request->Day]);
             break;
         }
