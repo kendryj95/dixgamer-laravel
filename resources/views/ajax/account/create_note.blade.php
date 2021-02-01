@@ -31,6 +31,21 @@
         </div>
         <button class="btn btn-warning btn-block" id="create_note" type="button">Guardar</button>
       </form>
+
+      <div style="margin-top: 5px;" class="btn-group btn-group-sm" role="group" aria-label="accesos-directos">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-secondary" onclick="shortcut('sony')">Sony solicita...</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-secondary" onclick="shortcut('cte_ps3')">Cte PS3 no descargó</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-secondary" onclick="shortcut('cambio_pass')">Cambio de pass por...</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-secondary" onclick="shortcut('secu_pri')">Secu se activa Pri</button>
+        </div>
+      </div>
     </div>
     <div class="col-md-1 col-lg-1"></div>
     <div class="col-lg-4 col-md-4">
@@ -92,6 +107,25 @@
       document.getElementById('Notas').focus();
     },600)
   });
+
+  function shortcut(type) {
+    $("#Notas").text("");
+
+    switch (type) {
+      case "sony":
+        $("#Notas").text("Sony solicita cambiar pass");
+        break;
+      case "cte_ps3":
+        $("#Notas").text("Cte PS3 no descargó");
+        break;
+      case "cambio_pass":
+        $("#Notas").text("Cambio de pass por cambio/devolución");
+        break;
+      case "secu_pri":
+        $("#Notas").text("Secu se activa Pri");
+        break;
+    }
+  }
 
   function initSelect2(){
     $( "#cliente-select" ).select2({
