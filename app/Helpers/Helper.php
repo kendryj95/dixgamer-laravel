@@ -157,19 +157,7 @@ class Helper
 
 
     public static function userColor($person){
-      $color = '';
-      if (strpos($person, 'ariano') !== false): $color = "primary";
-      elseif (strpos($person, 'antiago') !== false): $color = "info";
-      elseif (strpos($person, 'rancisco') !== false): $color = "success";
-      elseif (strpos($person, 'aquel') !== false): $color = "danger";
-      elseif (strpos($person, 'nrique') !== false): $color = "warning";
-      elseif (strpos($person, 'Leo') !== false): $color = "normal";
-      elseif (strpos($person, 'Hernan') !== false): $color = "normal";
-      elseif (strpos($person, 'anuel') !== false): $color = "normal";
-      elseif (strpos($person, 'ictor') !== false): $color = "default";
-      elseif (strpos($person, 'ugenio') !== false): $color = "primary";
-      elseif (strpos($person, 'etina') !== false): $color = "danger";
-      endif;
+      $color = DB::table('usuarios')->where('Nombre',$person)->value('color');
 
       return $color;
     }
