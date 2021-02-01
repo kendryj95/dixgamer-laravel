@@ -7,17 +7,13 @@
   <div class="row" id="{{ $sectionId }}">
     <div class="page-header"><h3 style="color: #000;text-align: left;">{{ $title }}</h3> </div>
 
-    @php
-    $class_bg = '';
-    @endphp
-    @if($title == 'PS4 Secundario')
-  
-    @php
+      @php
+          $class_bg = '';
 
-    $class_bg = 'backgroundCardPs';
-    @endphp
-
-    @endif
+          if ($slot == "Secundario") {
+              $class_bg = 'backgroundCardPs';
+          }
+      @endphp
 
     @foreach($datas as $data)
 

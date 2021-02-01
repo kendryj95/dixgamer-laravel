@@ -9,15 +9,11 @@
 
     @php
     $class_bg = '';
-    @endphp
-    @if($title == 'PS4 Secundario')
-  
-    @php
 
-    $class_bg = 'backgroundCardPs';
+    if ($slot == "Secundario") {
+        $class_bg = 'backgroundCardPs';
+    }
     @endphp
-
-    @endif
 
     @foreach($datas as $data)
 

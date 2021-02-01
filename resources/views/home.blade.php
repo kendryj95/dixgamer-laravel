@@ -16,8 +16,10 @@
 <div class="container">
   <h1>Inicio</h1>
   <div class="row text-center">
-    <a href="#pri" class="btn btn-lg btn-primary">Ir a Primarios</a>
-    <a href="#secu" name="secu" class="btn btn-lg btn-info">Ir a Secundarios</a>
+    <a href="#ps5_pri" class="btn btn-lg btn-primary">Ir a PS5 Primarios</a>
+    <a href="#ps5_secu" class="btn btn-lg btn-info">Ir a PS5 Secundarios</a>
+    <a href="#ps4_pri" class="btn btn-lg btn-primary">Ir a PS4 Primarios</a>
+    <a href="#ps4_secu" class="btn btn-lg btn-info">Ir a PS4 Secundarios</a>
     <a href="#ps3" class="btn btn-lg btn-default" style="background-color:#000; color:#FFF;">Ir a PS3</a>
     <a href="#reset" class="btn btn-lg btn-warning">Ir a Resetear</a>
   </div>
@@ -29,11 +31,29 @@
     @slot('OII', $OII)
   @endcomponent
 
-  <!-- PS4 PRIMARIO  -->
+  <!-- PS5 PRIMARIO  -->
+  @component('components.home.card_ps')
+    @slot('datas', $ps5_primary_stocks)
+    @slot('title', 'PS5 Primario')
+    @slot('sectionId', 'ps5_pri')
+    @slot('slot', 'Primario')
+    @slot('OII', $OII)
+  @endcomponent
+
+  <!-- PS5 Secundario  -->
+  @component('components.home.card_ps')
+    @slot('datas', $ps5_secundary_stocks)
+    @slot('title', 'PS5 Secundario')
+    @slot('sectionId', 'ps5_secu')
+    @slot('slot', 'Secundario')
+    @slot('OII', $OII)
+  @endcomponent
+
+<!-- PS4 PRIMARIO  -->
   @component('components.home.card_ps')
     @slot('datas', $ps4_primary_stocks)
     @slot('title', 'PS4 Primario')
-    @slot('sectionId', 'pri')
+    @slot('sectionId', 'ps4_pri')
     @slot('slot', 'Primario')
     @slot('OII', $OII)
   @endcomponent
@@ -42,7 +62,7 @@
   @component('components.home.card_ps')
     @slot('datas', $ps4_secundary_stocks)
     @slot('title', 'PS4 Secundario')
-    @slot('sectionId', 'secu')
+    @slot('sectionId', 'ps4_secu')
     @slot('slot', 'Secundario')
     @slot('OII', $OII)
   @endcomponent

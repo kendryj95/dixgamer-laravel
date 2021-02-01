@@ -75,6 +75,7 @@ class Stock extends Model
             })
             ->where('stock.consola', '!=', $obj->console_1)
             ->where('stock.consola', '!=', $obj->console_2)
+            ->where('stock.consola', '!=', $obj->console_3)
             ->where('stock.consola', '!=', 'xps')
             ->where('q_vta', NULL)
             ->where('stock.titulo','!=', $obj->title)
