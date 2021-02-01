@@ -1750,9 +1750,9 @@ class ControlsController extends Controller
                                 $new_price = ($precio_base * 1.1);
                             }
 							
-							// 2020-12-18 no permito precio mas bajo a 2 usd
-							if ($new_price < 2.5) {
-                                $new_price = 2.5;
+							// 2020-12-18 no permito precio mas bajo a 2 usd // 2021-01-25 paso a 3
+							if ($new_price < 3) {
+                                $new_price = 3;
                             }
 							
 
@@ -2110,7 +2110,9 @@ class ControlsController extends Controller
                             // $oferta_sugerida = (round($oferta_sugerida, 0)/25);
                             // $oferta_sugerida = (ceil($oferta_sugerida)*25);
                             // actualizado para pasar a US
-                            $oferta_sugerida = round($oferta_sugerida, 2);
+							// 2020-12-20 aumento 15% para Navidad
+                            //$oferta_sugerida = round($oferta_sugerida * 1.15, 2);
+							$oferta_sugerida = round($oferta_sugerida, 2);
                             $control_individual .= "<br /> Sug redondeado: " . $oferta_sugerida;
 
                             $mensajes .= "<tr><td>[" . $ID . "]</td><td>" . str_replace('-', ' ', $producto) . " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs . "</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:" . round($costo_usd, 2) . " de " . round($costo_usd_original) . "</td><td>Ant:" . $antiguedad . "</td></tr>";
