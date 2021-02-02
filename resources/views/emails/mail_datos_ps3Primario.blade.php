@@ -296,14 +296,8 @@ $last2digits = substr($id_ventas,-2,2);
 													<th class="tfoot" width="400" align="left" style="vertical-align:top; padding:0;">
 														<table width="100%" cellpadding="0" cellspacing="0">
 															<tr>
-																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;"> dixgamer.com, 2017. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a></td>
-															</tr>
-														</table>
-													</th>
-													<th class="thead" width="150" align="left" style="vertical-align:top; padding:0;">
-														<table class="center" align="right" cellpadding="0" cellspacing="0">
-															<tr>
-																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;"><a style="text-decoration:none; color:#797c82;" target="_blank" href="https://facebook.com/dixgamer.arg/"> encontranos en facebook > </a></td>
+																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;"> DixGamer.com,
+                                                                    {{date('Y')}}. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a></td>
 															</tr>
 														</table>
 													</th>

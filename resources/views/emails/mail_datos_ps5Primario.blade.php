@@ -193,22 +193,18 @@
                 <p style="font-size:18px">Hola {{ $row_rsClient->nombre }} {{ $row_rsClient->apellido }}, gracias por tu nueva compra.</p>
                 <p><em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
                 <br />
-                <p>Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
-                <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
-                  2) <strong>Aceptar las condiciones</strong> de Sony e inscribirse con estos datos:<br />
+                <p>1) <strong>Prender</strong> la consola &gt; Agregar Usuario > <strong>Comenzar</strong><br />
+                  2) Completar con estos datos:<br />
   <br />
-  <strong> ID</strong> de inicio de sesion: {{ $row_rsCuenta->mail_fake }} <br />
+  <strong> ID</strong> de inicio de sesion: <b style="text-decoration: unset; color: #000000">{{ $row_rsCuenta->mail_fake }}</b> <br />
 <em>(incluir el punto y si hay gui&oacute;n medio tambi&eacute;n, son todas letras min&uacute;sculas, ninguna may&uacute;scula)</em><br />
   <strong> Contrase&#241;a</strong>: {{ $row_rsCuenta->pass }} <br />
   <em>(respetar may&uacute;sculas y min&uacute;sculas)</em><br />
   <br />
-                  3) <strong>Iniciar Sesi&#243;n</strong> y aceptar los datos de la cuenta (next / continue)<br />
-                  4) A veces pide vincular con Facebook, seleccionar <strong>"Do this later"</strong> o <strong>"Skip"</strong><br />
-                  5) <strong>Activar primario:</strong> Ir a Ajustes &gt; PlayStation Network/ Admin de cuentas &gt; Activar como tu PS4 principal &gt; Activar<br />
-                  6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong><br />
-                  7) Reiniciar la PS4 una vez que inicia la descarga. <strong>SI</strong>, cuando inicia la descarga reiniciamos la consola. <strong>Luego directamente ingresar con tu usuario. </strong><br />
-				  8) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cup�n.	
-                    <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
+                  3) <strong>Iniciar Sesi&#243;n</strong> y aceptar los datos de la cuenta <br />
+                  4) Arriba a la derecha en Configuración > Usuarios y cuentas > Otro > Uso compartido de consola y juego offline. Seleccionar <b>Activar</b> <br />
+                  5) Cambiar a tu usuario personal, no volver a abrir nuestro usuario.<br />
+                  6) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cupón.<br />
                     
   {{-- <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br /><br/>
   <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br /> --}}
@@ -223,15 +219,13 @@
                             <p style="color: #e74c3c;">No modificar ningun dato de nuestra cuenta, si MODIFICAS la vamos a bloquear y vas a perder el juego para siempre.</p>
                             <p style="color: #e74c3c;">Compraste el juego PRIMARIO luego de iniciar la descarga no tenes que abrir nuestra cuenta nunca mas.</p>
                             
-                            <p style="color:#999;font-size:12px;"><em>Para evitar abrirla por error pod&#233;s poner contrase&#241;a &#191;C&#243;mo?<br />
-                              Abrir nuestro Usuario &gt; Ajustes / Configuraci&#243;n &gt; Usuarios &gt; Configuracion de entrada al sistema &gt; Administracion de claves &gt; Colocar clave &gt; Reiniciar PS4</em></p>                            <span style="color: #e74c3c;">Si borras nuestro usuario se bloquea tu juego.</span><br />
+                            <span style="color: #e74c3c;">Si borras nuestro usuario se bloquea tu juego.</span><br />
                             <span style="color:#999;font-size:12px;"><em>&#191;Soluci&#243;n? Volver a agregar el usuario a tu consola.</em></span>
                             <p style="color:#e74c3c;">RECORDAR QUE PARA JUGAR VAS A USAR TU USUARIO PERSONAL</p><p><strong>---</strong></p>
                             
                           <p><strong>&gt; &iquest;Puedo compartir la cuenta? NO,</strong> la cuenta sirve para una consola, si se comparte reportamos a Sony y te damos de baja, <strong>perd&eacute;s tu juego para siempre.</strong></p>
                           <p>&gt; &#191;Puedo activar m&#225;s de una cuenta primaria en mi consola? Si podes tener hasta 16 cuentas primaria al mismo tiempo.</p>
                           <p>&gt; &#191;Que significa activar como "Primario"? Que las descargas realizadas desde esta cuenta se van a poder utilizar desde todos los usuarios en tu Play.</p>
-                          <p><strong>&gt;</strong> Para ver el <strong>progreso de la descarga abr&#237; tu usuario</strong> &gt; Notificaciones &gt; Descargas. Hasta que no termine el total de la barra de descargar no vas a poder jugar a todos los modos disponibles.</p>
                             <p><strong>&gt; Si la descarga demora mucho</strong> no queda otra que esperar, eso depende de tu <strong>conexi&oacute;n a internet</strong>, el peso del juego y    los servidores de descarga.</p>
                           </td>
                       </tr>
@@ -295,7 +289,7 @@
                                                         <table width="100%" cellpadding="0" cellspacing="0">
                                                             <tr>
                                                                 <td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;">
-                                                                    DixGamer.com, {{date('Y')}}. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a>
+                                                                    DixGamer.com, {{ date('Y') }}. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a>
                                                                 </td>
                                                             </tr>
                                                         </table>

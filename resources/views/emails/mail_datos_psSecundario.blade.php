@@ -288,7 +288,7 @@
 														<table width="100%" cellpadding="0" cellspacing="0">
 															<tr>
 																<td data-color="text" data-link-color="link text color" data-link-style="text-decoration:underline; color:#797c82;" class="aligncenter" style="font:12px/16px Arial, Helvetica, sans-serif; color:#797c82; padding:0 0 10px;">
-																	dixgamer.com, {{date('Y')}}. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a>
+																	DixGamer.com, {{date('Y')}}. Todos los derechos reservados. <a style="text-decoration:underline; color:#797c82;"></a>
 																</td>
 															</tr>
 														</table>
