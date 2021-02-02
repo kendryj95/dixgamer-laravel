@@ -203,9 +203,10 @@
   <br />
                   3) <strong>Iniciar Sesi&#243;n</strong> y aceptar los datos de la cuenta <br />
                   4) Arriba a la derecha en Configuración > Usuarios y cuentas > Otro > Uso compartido de consola y juego offline. Seleccionar <b>Activar</b> <br />
-                  5) Cambiar a tu usuario personal, no volver a abrir nuestro usuario.<br />
-                  6) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cupón.<br />
-                    
+                  5) Ir a "Biblioteca de juegos" > Ingresar al juego comprado > En los 3 puntos, seleccionar la versión PS5 > Iniciar descarga.<br />
+                  6) Cambiar a tu usuario personal, no volver a abrir nuestro usuario.<br />
+                  7) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cupón.<br />
+
   {{-- <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br /><br/>
   <a href="https://dixgamer.com/db/clientes_conf_est.php?id={{ $row_rsClient->ID_ventas }}&amp;c_id={{ $row_rsClient->clientes_id }}&amp;s_id={{ $row_rsClient->stock_id }}" style="border-radius: 6px;font-size: 18px;line-height: 1.33333;padding: 10px 26px;background-color: #1d9d74;border-color: #198764;color: #fff;moz-user-select: none;background-image: none;cursor: pointer;display: inline-block;font-weight: normal;margin-bottom: 0;text-align: center; vertical-align: middle; white-space: nowrap; text-decoration:none;" target="_blank">Ya inici&eacute; la descarga</a><br /> --}}
                 </p></td>
