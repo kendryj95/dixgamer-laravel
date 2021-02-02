@@ -376,13 +376,17 @@ class Stock extends Model
 
     public function ScopeGetDatosCargados($query, $fecha_ini, $fecha_fin, $usuario)
     {
+        $fieldUser = "";
+        if ($usuario === "everybody") $fieldUser = DB::raw("GROUP_CONCAT(DISTINCT usuario) AS usuario");
+        else $fieldUser = "usuario";
+
         $sql = $query->select(
             DB::raw("COUNT(*) AS Q"),
             'titulo',
             'consola',
             DB::raw("GROUP_CONCAT(cuentas_id) AS cuentas"),
             DB::raw("GROUP_CONCAT(ID) AS stocks_id"),
-            DB::raw("GROUP_CONCAT(usuario) AS usuario"),
+            $fieldUser,
             DB::raw("(SELECT color FROM usuarios WHERE Nombre = REPLACE(stock.usuario,'-GC','')) AS color_user")
         )
         ->where(DB::raw('DATE(Day)'),'>=',$fecha_ini)
