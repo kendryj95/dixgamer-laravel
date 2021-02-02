@@ -634,9 +634,26 @@ class CustomerController extends Controller
       $obj = new \stdClass;
       $obj->console_1 = 'ps4';
       $obj->console_2 = 'ps3';
+      $obj->console_3 = 'ps5';
       $obj->title = 'plus-12-meses-slot';
 
       $stocks = Stock::showStock($obj)->get();
+      /***     PS5 PRIMARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps5';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'primary';
+      $ps5_primary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
+
+      //dd($stocks);
+      /***     PS5 SECUNDARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps4';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'secundary';
+      $ps5_secundary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
       /***     PS4 PRIMARIO     ***/
 
       $obj = new \stdClass;
@@ -666,6 +683,8 @@ class CustomerController extends Controller
               'stocks',
               'ps4_primary_stocks',
               'ps4_secundary_stocks',
+              'ps5_primary_stocks',
+              'ps5_secundary_stocks',
               'ps3_reset_stocks',
               'ps3_stocks',
               'id_ventas'
@@ -679,9 +698,26 @@ class CustomerController extends Controller
       $obj = new \stdClass;
       $obj->console_1 = 'ps4';
       $obj->console_2 = 'ps3';
+      $obj->console_3 = 'ps5';
       $obj->title = 'plus-12-meses-slot';
 
       $stocks = Stock::showStock($obj)->get();
+      /***     PS5 PRIMARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps5';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'primary';
+      $ps5_primary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
+
+      //dd($stocks);
+      /***     PS5 SECUNDARIO     ***/
+
+      $obj = new \stdClass;
+      $obj->console = 'ps5';
+      $obj->title = 'plus-12-meses-slot';
+      $obj->type = 'secundary';
+      $ps5_secundary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
       /***     PS4 PRIMARIO     ***/
 
       $obj = new \stdClass;
@@ -711,6 +747,8 @@ class CustomerController extends Controller
               'stocks',
               'ps4_primary_stocks',
               'ps4_secundary_stocks',
+              'ps5_primary_stocks',
+              'ps5_secundary_stocks',
               'ps3_reset_stocks',
               'ps3_stocks',
               'id_ventas'
