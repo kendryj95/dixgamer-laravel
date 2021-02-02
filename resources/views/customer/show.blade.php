@@ -2050,12 +2050,17 @@
         }
 
         function btnReAsignar(titulo, cons, slot, id_venta, e) {
-            if (cons == 'ps4') {
-                url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/${slot}/${id_venta}`;
-            } else if (cons == 'ps3') {
-                url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/Primario/${id_venta}`;
-            } else {
-                url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/No/${id_venta}`;
+            var url = '';
+            switch (cons) {
+                case 'ps5':
+                case 'ps4':
+                    url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/${slot}/${id_venta}`;
+                    break;
+                case 'ps3':
+                    url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/Primario/${id_venta}`;
+                    break;
+                default:
+                    url = `{{ url('customer_ventas_modificar_producto_store') }}/${cons}/${titulo}/No/${id_venta}`;
             }
 
             window.location.href = url;

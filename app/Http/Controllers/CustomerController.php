@@ -599,7 +599,7 @@ class CustomerController extends Controller
 
             $nota = '';
 
-            if ($stock_anterior->cons == "ps4") {
+            if ($stock_anterior->cons == "ps4" || $stock_anterior->cons == "ps5") {
               $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
             } else {
               $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
@@ -924,7 +924,7 @@ class CustomerController extends Controller
 
       $nota = '';
 
-      if ($stock_anterior->cons == "ps4") {
+      if ($stock_anterior->cons == "ps4" || $stock_anterior->cons == "ps5") {
         $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
       } else {
         $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
@@ -1090,7 +1090,7 @@ class CustomerController extends Controller
 
             $nota = '';
 
-            if ($stock_anterior->cons == "ps4") {
+            if ($stock_anterior->cons == "ps4" || $stock_anterior->cons == "ps5") {
               $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
             } else {
               $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
@@ -1240,7 +1240,7 @@ class CustomerController extends Controller
 
         $nota = '';
 
-        if ($stock_anterior->cons == "ps4") {
+        if ($stock_anterior->cons == "ps4" || $stock_anterior->cons == "ps5") {
           $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
         } else {
           $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";
@@ -2093,7 +2093,7 @@ class CustomerController extends Controller
 
             $nota = '';
 
-            if ($stock_anterior->cons == "ps4") {
+            if ($stock_anterior->cons == "ps4" || $stock_anterior->cons == "ps5") {
                 $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons $stock_anterior->slot #$stock_anterior->cuentas_id";
             } else {
                 $nota = "Antes tenía #$stock_anterior->stock_id $stock_anterior->titulo $stock_anterior->cons #$stock_anterior->cuentas_id";

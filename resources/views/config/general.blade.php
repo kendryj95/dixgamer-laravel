@@ -240,7 +240,7 @@
 							<label for="">Productos Excluidos Primario:</label><br>
 							<select name="productos_excluidos_pri[]" value="" class="form-control select2-multiple select-recupero" multiple>
 							  @foreach($titles as $t)
-								@if ($t->consola == 'ps4')
+								@if ($t->consola == 'ps4' || $t->consola == 'ps5')
 									@php
 									$selected = '';
 									$titulo = explode(" (",$t->nombre_web)[0];
@@ -257,7 +257,7 @@
 							<label for="">Productos Excluidos Secundario:</label><br>
 							<select name="productos_excluidos_secu[]" value="" class="form-control select2-multiple select-recupero" multiple>
 							  @foreach($titles as $t)
-								@if ($t->consola == 'ps4')
+								@if ($t->consola == 'ps4' || $t->consola == 'ps5')
 									@php
 									$selected = '';
 									$titulo = explode(" (",$t->nombre_web)[0];

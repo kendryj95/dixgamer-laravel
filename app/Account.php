@@ -324,7 +324,7 @@ class Account extends Model
       ->join('stock AS s','v.stock_id','=','s.ID')
       ->join('clientes AS c','v.clientes_id','=','c.ID')
       ->where('s.cuentas_id', $account_id)
-      ->where('s.consola','ps4')
+      ->whereIn('s.consola',['ps4','ps5'])
       ->orderBy('v.ID','DESC');
 
       $query2 = DB::table('ventas AS v')
@@ -335,7 +335,7 @@ class Account extends Model
       ->join('stock AS s','v.stock_id','=','s.ID')
       ->join('clientes AS c','v.clientes_id','=','c.ID')
       ->where('s.cuentas_id', $account_id)
-      ->whereNotIn('s.consola',['ps3','ps4'])
+      ->whereNotIn('s.consola',['ps3','ps4','ps5'])
       ->orderBy('v.ID','DESC');
 
       return DB::table('ventas AS v')
