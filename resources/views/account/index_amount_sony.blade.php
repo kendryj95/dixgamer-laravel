@@ -15,6 +15,7 @@
           <th>Cta ID</th>
           <th>Balance</th>
           <th>Consolas</th>
+          <th>Juegos</th>
           <th>Reseteos</th>
           <th>Day</th>
           <th>Usuario</th>
@@ -50,6 +51,12 @@
                 <td>
                   <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
                     {{ $account->consolas }}
+                  </a>
+                </td>
+
+                <td>
+                  <a title="Ir a cuenta." href="{{ url('/cuentas', [$account->cuentas_id] ) }}">
+                    {{ $account->juegos }}
                   </a>
                 </td>
 
