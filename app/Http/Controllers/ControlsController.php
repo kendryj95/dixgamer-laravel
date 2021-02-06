@@ -2113,6 +2113,8 @@ class ControlsController extends Controller
 							// 2020-12-20 aumento 15% para Navidad
                             //$oferta_sugerida = round($oferta_sugerida * 1.15, 2);
 							$oferta_sugerida = round($oferta_sugerida, 2);
+                            // 2021-02-04 limito a 4 usd el precio de oferta, a menor precio no tiene sentido vender, mucho gasto
+                            if($oferta_sugerida<4) {$oferta_sugerida = 4;}
                             $control_individual .= "<br /> Sug redondeado: " . $oferta_sugerida;
 
                             $mensajes .= "<tr><td>[" . $ID . "]</td><td>" . str_replace('-', ' ', $producto) . " " . $slot . "</td><td> Reg: " . $precio_regular . "</td><td>Bas: " . $precio_base . "</td><td>Sal: " . $sale_price . "</td><td>Sug: " . $oferta_sugerida . "</td><td>Lib:" . $libre . "</td><td> // </td><td>qvP:" . $qvp . "</td><td>qvS:" . $qvs . "</td><td>qvP_45d:" . $qvp_45d . "</td><td>qvS_45d:" . $qvs_45d . "</td><td>Stk:" . $Q_stk . "</td><td>qv_45d/Stk: " . $divi . "</td><td>C_mod:" . round($costo_usd, 2) . " de " . round($costo_usd_original) . "</td><td>Ant:" . $antiguedad . "</td></tr>";
