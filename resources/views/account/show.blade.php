@@ -1179,6 +1179,16 @@
 
 									@endif
 
+									@if($stock->consola == "ps4" && (\Helper::validateAdministrator(session()->get('usuario')->Level) || session()->get('usuario')->Nombre === "Leo"))
+										@if(!$stock->ID_ventas) {{-- ¿Tiene ventas? --}}
+											<button
+													class="btn btn-link btn-xs"
+													data-toggle="modal"
+													data-target=".bs-example-modal-lg"
+													onClick='getPageAjax("{{ route('descartar-juego-cuenta-get', $stock->ID_stock) }}","#modal-container")'>Descartar juego</button>
+										@endif
+
+									@endif
 								</div>
 							</div>
 							@if ($i === 1)

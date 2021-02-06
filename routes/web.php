@@ -152,6 +152,8 @@ Route::group(['middleware' => ['login']], function()
   Route::get('cuentas/activa/{id_account}/{valor_activa}', 'AccountController@activaCuenta')->name('activa-cuenta');
   Route::get('cuentas/balance_sony/{id_account}', 'AccountController@balanceSony')->name('balance-sony');
   Route::post('cuentas/balance_sony', 'AccountController@balanceSonyStore')->name('balance-sony-store');
+  Route::get('cuentas/descartar_juego/{stock_id}', 'AccountController@descartarStock')->name('descartar-juego-cuenta-get');
+  Route::post('cuentas/descartar_juego/{stock_id}', 'StockController@descartarStock')->name('descartar-juego-cuenta-post');
 
   Route::get('balance/{page}', 'ControlsController@balanceProductosDiasCondicionado'); // Acceso solo para BETINA
 

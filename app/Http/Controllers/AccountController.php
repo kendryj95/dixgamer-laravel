@@ -3066,4 +3066,11 @@ class AccountController extends Controller
         return view('account.index_amount_sony',compact('rows'));
     }
 
+    public function descartarStock($stock_id) {
+        $stock = Stock::find($stock_id);
+
+        return view('ajax.account.descartar_juego',compact('stock'));
+
+    }
+
 }

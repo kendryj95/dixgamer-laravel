@@ -676,9 +676,30 @@ class StockController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $reuce = false)
     {
-        //
+        $stock = Stock::find($id);
+        if (!$stock) return redirect()->back()->withErrors(["Ha ocurrido un error al obtener los datos del stock"]);
+
+        $data = $request->all();
+        unset($data['_token']);
+        DB::table('stock')->where('ID', $id)->update($data);
+
+        if (!$reuce) {
+            // Mensaje de notificacion
+            \Helper::messageFlash('Stock','Stock actualizado correctamente.');
+            return redirect()->back();
+        }
+
+        return;
+    }
+
+    public function descartarStock(Request $request, $stock_id) {
+        $this->update($request, $stock_id, true);
+
+        // Mensaje de notificacion
+        \Helper::messageFlash('Stock','Stock descartado correctamente.');
+        return redirect()->back();
     }
 
     /**
