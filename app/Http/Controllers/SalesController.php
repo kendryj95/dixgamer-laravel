@@ -445,7 +445,7 @@ class SalesController extends Controller
         //Si es una vta de ps4 o plus slot que NO ES de ML asigno el slot desde la consulta SQL
         //elseif --> antes de escapar el IF anterior que iba primero
 
-        if (($cons === "ps4") or ($titulo === "plus-12-meses-slot")): $slot_def = ucwords($slot); $estado = "pendiente";
+        if (($cons === "ps4") or $cons === "ps5" or ($titulo === "plus-12-meses-slot")): $slot_def = ucwords($slot); $estado = "pendiente";
         elseif ($cons === "ps3"): $slot_def = "Primario"; $estado = "pendiente";
 
         //Si no cumple con ninguno de los parametros anteriores seguramente se trata de una venta de Gift Card y el slot se define en "No"

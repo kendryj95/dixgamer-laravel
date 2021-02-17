@@ -4,7 +4,7 @@
 
         <div class="row text-center" style="background-color:#cfcfcf;padding:5px; border: 1px dashed #efefef">
             <img class="img-rounded" width="60"
-                 src="/img/productos/<?php echo $colname_rsCON . "/" . $colname_rsTIT;?>.jpg"
+                 src="{{asset("img/productos/$colname_rsCON/$colname_rsTIT.jpg")}}"
                  alt="<?php echo $colname_rsTIT . " - " . $colname_rsCON;?>"/><h4 style="display: inline">
                 Asignar <?php echo $colname_rsTIT . " (" . $colname_rsCON . ")";?></h4>
         <?php if (($colname_rsCON === "ps4") or ($colname_rsTIT === "plus-12-meses-slot")): echo '<em style="font-size:0.8m">' . $colname_rsSlot . '</em>'; endif;?>
