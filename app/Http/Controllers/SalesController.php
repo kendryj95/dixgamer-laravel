@@ -354,6 +354,21 @@ class SalesController extends Controller
 
                        if (!$giftConStock) { // Si el producto no es una gift quiere decir esa variable.
                            $data = $this->dataSale($sale, $row_rsSTK, $existEmailCliente, $slot, $deuda);
+
+                           if ($request->action && $request->action == "wooc") {
+                               $existe_OII = DB::table('ventas')
+                                   ->select(
+                                       'order_item_id',
+                                       'clientes_id',
+                                       'usuario',
+                                       'ID as venta_id'
+                                   )
+                                   ->where('order_item_id',$oii)->first();
+
+                               if ($existe_OII)
+                                   return response()->json(["status" => "duplicated", "ventas_id" => $existe_OII->venta_id]);
+                           }
+
                            DB::table('ventas')->insert($data);
                            $ventaid = DB::getPdo()->lastInsertId();
 
@@ -377,6 +392,20 @@ class SalesController extends Controller
                                $partes = count($data_gifts);
                                $precio = $precio_original / $partes;
                                $comision = $comision_original / $partes;
+
+                               if ($request->action && $request->action == "wooc") {
+                                   $existe_OII = DB::table('ventas')
+                                       ->select(
+                                           'order_item_id',
+                                           'clientes_id',
+                                           'usuario',
+                                           'ID as venta_id'
+                                       )
+                                       ->where('order_item_id',$oii)->first();
+
+                                   if ($existe_OII)
+                                       return response()->json(["status" => "duplicated", "ventas_id" => $existe_OII->venta_id]);
+                               }
 
                                $data = $this->dataSale($sale, $row_rsSTK, $existEmailCliente);
                                DB::table('ventas')->insert($data);
