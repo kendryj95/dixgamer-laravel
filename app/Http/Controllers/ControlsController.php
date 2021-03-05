@@ -182,7 +182,7 @@ class ControlsController extends Controller
             $condicion1 .= " and DATE(Day) between '$request->fecha_ini' and '$request->fecha_fin'";
         }
 
-        /*$query_Diario = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
+        /*$query_Diario = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM
 		(SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' and DATE_FORMAT(Day, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')
 		UNION ALL
 		SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' and DATE_FORMAT(ex_Day_stock, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d')) AS resultado
@@ -191,7 +191,7 @@ class ControlsController extends Controller
 
         $row_Diario = DB::select($query_Diario);
 
-        $query_Mensual = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
+        $query_Mensual = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM
         (SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' and DATE_FORMAT(Day, '%Y-%m') >= DATE_FORMAT(NOW(), '%Y-%m')
         UNION ALL
         SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' and DATE_FORMAT(ex_Day_stock, '%Y-%m') >= DATE_FORMAT(NOW(), '%Y-%m')) AS resultado
@@ -200,7 +200,7 @@ class ControlsController extends Controller
 
         $row_Mensual = DB::select($query_Mensual);*/
 
-        $query_Total = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM 
+        $query_Total = "SELECT COUNT(*) as Q, titulo, consola, round(AVG(costo_usd),0) as costo_usd, usuario FROM
         (SELECT titulo, consola, costo_usd, Day as D, usuario FROM `stock` where usuario='$vendedor' $condicion1
         UNION ALL
         SELECT titulo, consola, costo_usd, ex_Day_stock as D, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor' $condicion1) AS resultado
@@ -210,8 +210,8 @@ class ControlsController extends Controller
         $row_Total = DB::select($query_Total);
 
         $query_SaldoP = "SELECT Q, (costo_usd - (Q*0.01)) as costo_usd, costo_ars, SUM(usd) as carga_usd, SUM(ars) as carga_ars, saldo_prov.usuario FROM saldo_prov
-        LEFT JOIN 
-        (SELECT COUNT(*) as Q, SUM(costo_usd) as costo_usd, SUM(costo) as costo_ars, usuario FROM 
+        LEFT JOIN
+        (SELECT COUNT(*) as Q, SUM(costo_usd) as costo_usd, SUM(costo) as costo_ars, usuario FROM
         (SELECT costo_usd, costo, usuario FROM `stock` where usuario='$vendedor'
         UNION ALL
         SELECT costo_usd, costo, ex_usuario as usuario FROM `saldo` where ex_usuario='$vendedor') AS resultado GROUP by usuario) as gastado
@@ -548,33 +548,33 @@ class ControlsController extends Controller
             $condicion .= "AND ref_op>=4629477059";
         }
 
-        $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
-        AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
-        AND concepto NOT LIKE '%Anulación de retención de ingresos brutos de%' 
-        AND concepto NOT LIKE '%Anulación parcial de retención de ingresos brutos de%' 
+        $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%'
+        AND concepto NOT LIKE '%Retención de ingresos brutos de%'
+        AND concepto NOT LIKE '%Anulación de retención de ingresos brutos de%'
+        AND concepto NOT LIKE '%Anulación parcial de retención de ingresos brutos de%'
                                     AND concepto != 'Devolución de pago'
                                     AND concepto != 'Descuento recibido'
-        AND concepto != 'Recarga de celular' 
-        AND concepto != 'Pago' 
-        AND concepto != 'Pago adicional' 
-        AND concepto != 'Retiro de dinero a cuenta bancaria' 
-        AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' 
+        AND concepto != 'Recarga de celular'
+        AND concepto != 'Pago'
+        AND concepto != 'Pago adicional'
+        AND concepto != 'Retiro de dinero a cuenta bancaria'
+        AND concepto != 'Anulación de retiro de dinero a cuenta bancaria'
         AND concepto != 'Percepción RG 4240 IVA Servicios Digitales Internacionales'
                                     AND concepto != 'Anulación de percepción RG 4240 IVA Servicios Digitales Internacionales'";
 
         $query_rsGRAL = "SELECT mp.*, cobro.*, (imp_mp - imp_db) as dif # SACO LA DIFERENCIA ENTRE MP Y LA DB
-        FROM 
+        FROM
             (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov, # agrupo los mov de una misma operacion
                  GROUP_CONCAT(concepto SEPARATOR ', ') AS concepto, # y agrupo los conceptos de esos movimientos
                  SUM(importe) AS imp_mp # sumo el total final (saldo) de esa operacion
                  FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
-                     
+
                  WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep)
-                 $condicion 
+                 $condicion
                  GROUP BY ref_op # los agrupo por operacion
               ) as mp
         LEFT JOIN
-                (SELECT ref_cobro, 
+                (SELECT ref_cobro,
                 IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
                 GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos las ventas que tienen esa ref de cobro
                 clientes_id
@@ -606,17 +606,17 @@ class ControlsController extends Controller
         }
 
         $query_rsGRAL2 = "SELECT db.*, mp.*, (imp_mp - imp_db) as dif
-        FROM 
+        FROM
         (SELECT ventas_cobro.Day,
-                ref_cobro, 
+                ref_cobro,
                 IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
                 GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos los ID de ventas que tienen esa ref de cobro
                 ventas_cobro.usuario,
                 clientes_id
             FROM ventas_cobro
-                LEFT JOIN 
+                LEFT JOIN
                 (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
-            ON ventas_cobro.ventas_id = vtas.ID 
+            ON ventas_cobro.ventas_id = vtas.ID
             WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%' $condicion
             GROUP BY ref_cobro) as db
         LEFT JOIN
@@ -649,17 +649,17 @@ class ControlsController extends Controller
         }
 
         $query_rsGRAL2 = "SELECT db.*, mp.*, (imp_mp - imp_db) as dif
-        FROM 
+        FROM
         (SELECT ventas_cobro.Day,
-                ref_cobro, 
+                ref_cobro,
                 IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
                 GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos los ID de ventas que tienen esa ref de cobro
                 ventas_cobro.usuario,
                 clientes_id
             FROM ventas_cobro
-                LEFT JOIN 
+                LEFT JOIN
                 (SELECT ventas.ID as ID, clientes_id FROM ventas UNION ALL SELECT ventas_baja.ventas_id as ID, clientes_id FROM ventas_baja ) as vtas
-            ON ventas_cobro.ventas_id = vtas.ID 
+            ON ventas_cobro.ventas_id = vtas.ID
             WHERE ventas_cobro.Day > '2017-04-01' AND medio_cobro LIKE '%MP%' AND ref_cobro<=4554354344 # 2019-03-26: Filtro los cobros hasta el último que entró en mi primer cuenta de MP, luego de esto continuamos cobrando con la cuenta de MP de Mariana
             GROUP BY ref_cobro) as db
         LEFT JOIN
@@ -694,30 +694,30 @@ class ControlsController extends Controller
             $condicion .= "AND ref_op>=4629477059";
         }
 
-        $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%' 
-        AND concepto NOT LIKE '%Retención de ingresos brutos de%' 
-        AND concepto NOT LIKE '%Anulación de retención de ingresos brutos de%' 
-        AND concepto NOT LIKE '%Anulación parcial de retención de ingresos brutos de%' 
-        AND concepto != 'Recarga de celular' 
-        AND concepto != 'Pago' 
-        AND concepto != 'Pago adicional' 
-        AND concepto != 'Retiro de dinero a cuenta bancaria' 
-        AND concepto != 'Anulación de retiro de dinero a cuenta bancaria' 
+        $wherenotlike = "concepto NOT LIKE '%Percepción Ing. Brutos%'
+        AND concepto NOT LIKE '%Retención de ingresos brutos de%'
+        AND concepto NOT LIKE '%Anulación de retención de ingresos brutos de%'
+        AND concepto NOT LIKE '%Anulación parcial de retención de ingresos brutos de%'
+        AND concepto != 'Recarga de celular'
+        AND concepto != 'Pago'
+        AND concepto != 'Pago adicional'
+        AND concepto != 'Retiro de dinero a cuenta bancaria'
+        AND concepto != 'Anulación de retiro de dinero a cuenta bancaria'
         AND concepto !='Percepción RG 4240 IVA Servicios Digitales Internacionales'";
 
         $query_rsGRAL = "SELECT mp.*, cobro.*, (imp_mp - imp_db) as dif # SACO LA DIFERENCIA ENTRE MP Y LA DB
-        FROM 
+        FROM
             (SELECT ref_op, GROUP_CONCAT(nro_mov SEPARATOR ', ') as nro_mov, # agrupo los mov de una misma operacion
                  GROUP_CONCAT(concepto SEPARATOR ', ') AS concepto, # y agrupo los conceptos de esos movimientos
                  SUM(importe) AS imp_mp # sumo el total final (saldo) de esa operacion
                  FROM (SELECT * FROM mercadopago UNION ALL SELECT ID,nro_mov,concepto,ref_op,importe,saldo FROM mercadopago_baja) as mercadopago
-                     
+
                  WHERE " . $wherenotlike . " # quito los movimientos que no tienen que ver con ventas y cobros (serian pagos, retiros y reten o percep)
-                 $condicion 
+                 $condicion
                  GROUP BY ref_op # los agrupo por operacion
               ) as mp
         LEFT JOIN
-                (SELECT ref_cobro, 
+                (SELECT ref_cobro,
                 IFNULL(SUM(ventas_cobro.precio - ventas_cobro.comision), 0) as imp_db, # si no hay cobro con esa referencia le coloco valor 0
                 GROUP_CONCAT(ventas_id SEPARATOR ',') AS ventas_id, # agrupo todos las ventas que tienen esa ref de cobro
                 clientes_id
@@ -1256,7 +1256,7 @@ class ControlsController extends Controller
             case 'automatizar_clientes':
 
                 DB::table('clientes as a')
-                    ->leftjoin(DB::raw("(SELECT 
+                    ->leftjoin(DB::raw("(SELECT
                 clientes_id,
                 COUNT(*) as q_vtas,
                 DATEDIFF(NOW(), min( Day )) as dias_de_primer_venta
@@ -1286,7 +1286,7 @@ class ControlsController extends Controller
                 LEFT JOIN (SELECT COUNT(*) as q_web, order_id FROM cbgw_woocommerce_order_items WHERE order_item_type='line_item' GROUP BY order_id) as web
                 #solo cuento los productos dentro de un pedido, para evitar contar cupones o descuentos que sean un item dentro del pedido
                 ON db.order_id_web = web.order_id
-                LEFT JOIN cbgw_posts 
+                LEFT JOIN cbgw_posts
                 on db.order_id_web = cbgw_posts.ID
                 WHERE cbgw_posts.post_status = 'wc-processing' AND q_db >= q_web");
 
@@ -1327,12 +1327,12 @@ class ControlsController extends Controller
 
                 ///// 2019-12-06 agrego limit de 4800 order item id para que no tire abajo el servidor
                 DB::table('ventas AS a')
-                    ->leftjoin(DB::raw("(SELECT 
+                    ->leftjoin(DB::raw("(SELECT
                 order_item_id,
                 order_id,
                 max( CASE WHEN cbgw_postmeta.meta_key='order_id_ml' and cbgw_woocommerce_order_items.order_id=cbgw_postmeta.post_id THEN cbgw_postmeta.meta_value END ) as order_id_ml
                 FROM cbgw_woocommerce_order_items
-                LEFT JOIN cbgw_postmeta 
+                LEFT JOIN cbgw_postmeta
                 ON order_id = cbgw_postmeta.post_id
                 GROUP BY order_item_id
 				ORDER BY order_item_id desc
@@ -1464,29 +1464,29 @@ class ControlsController extends Controller
                          cbgw_posts as p
                          left join cbgw_posts as p_p ON p.post_parent = p_p.ID
                          left join cbgw_postmeta as pm ON p.post_parent = pm.post_id
-                         left join cbgw_postmeta as pm2 ON p.ID = pm2.post_id 
+                         left join cbgw_postmeta as pm2 ON p.ID = pm2.post_id
                         where
                             p.post_type = 'product_variation' and
                             p_p.post_status = 'publish'
                         group by
                             p.ID
                             order by p.post_title) as web
-                            
+
                         LEFT JOIN
-                        (SELECT 
-                            titulo, 
-                            SUM(case when slot = 'Primario' then 1 else 0 end) AS Q_vta_pri, 
+                        (SELECT
+                            titulo,
+                            SUM(case when slot = 'Primario' then 1 else 0 end) AS Q_vta_pri,
                             SUM(case when slot = 'Secundario' then 1 else 0 end) AS Q_vta_sec,
                             DATEDIFF(NOW(), MIN(stock.Day)) as antiguedad_juego
-                        FROM 
-                            ventas 
-                        LEFT JOIN 
-                            stock 
-                        ON 
+                        FROM
+                            ventas
+                        LEFT JOIN
+                            stock
+                        ON
                             ventas.stock_id = stock.ID
-                        WHERE 
+                        WHERE
                             (consola = 'ps4' or titulo = 'plus-12-meses-slot')
-                        GROUP BY 
+                        GROUP BY
                             titulo  ) as vtas
                         ON
                         web.producto = vtas.titulo
@@ -1656,7 +1656,7 @@ class ControlsController extends Controller
                         p.post_type = 'product' and
                         p.post_status = 'publish'
                     group by
-                        p.ID  
+                        p.ID
                     ORDER BY `consola`  ASC) as rdo_web
                     Where consola = 'ps3') AS rdo_web_2
 
@@ -1667,7 +1667,7 @@ class ControlsController extends Controller
                     (SELECT ID_stk, stk.titulo, stk.consola, (costo_usd / Q_Stock) as costoxU, Q_Stock, IFNULL(q_venta,0) as Q_Vta
                     FROM
                     (SELECT ID_stk, titulo, consola, stk_ctas_id, dayreset, Q_reset, days_from_reset, Q_vta, round(AVG(costo_usd),2) as costo_usd, SUM(Q_Stock) AS Q_Stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo_usd),2) as costo_usd, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS Q_Stock
-                    FROM stock 
+                    FROM stock
                     LEFT JOIN
                     (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo
                     FROM reseteo
@@ -1749,17 +1749,17 @@ class ControlsController extends Controller
                             if ($new_price > ($precio_base * 1.1)) {
                                 $new_price = ($precio_base * 1.1);
                             }
-							
-							// 2020-12-18 no permito precio mas bajo a 2 usd // 2021-01-25 paso a 3
-							if ($new_price < 3) {
-                                $new_price = 3;
+
+							// 2020-12-18 no permito precio menor a 2 usd // 2021-01-25 paso a 3 // 2021-03-05 paso a 3.5
+							if ($new_price < 3.5) {
+                                $new_price = 3.5;
                             }
-							
+
 
                             $new_price = round($new_price, 2); // 2020-07-22 redondeo new price
 
                             //redondeo resultado
-                            //$new_price = (round($new_price, 0)/5); 
+                            //$new_price = (round($new_price, 0)/5);
                             //$new_price = (ceil($new_price)*5);
                             // 2019-10-28 actualizado para usd
                             // $new_price = round($new_price, 0);
@@ -1836,31 +1836,31 @@ class ControlsController extends Controller
                      cbgw_posts as p
                      left join cbgw_posts as p_p ON p.post_parent = p_p.ID
                      left join cbgw_postmeta as pm ON p.post_parent = pm.post_id
-                     left join cbgw_postmeta as pm2 ON p.ID = pm2.post_id 
+                     left join cbgw_postmeta as pm2 ON p.ID = pm2.post_id
                     where
                         p.post_type = 'product_variation' and
                         p_p.post_status = 'publish'
                     group by
                         p.ID
                         order by p.post_title ASC) as web
-                        
+
                     LEFT JOIN
-                    (SELECT 
-                        titulo, 
-                        SUM(case when slot = 'Primario' then 1 else 0 end) AS Qvp, 
+                    (SELECT
+                        titulo,
+                        SUM(case when slot = 'Primario' then 1 else 0 end) AS Qvp,
                         SUM(case when slot = 'Secundario' then 1 else 0 end) AS Qvs
-                    FROM ventas LEFT JOIN stock 
+                    FROM ventas LEFT JOIN stock
                     ON ventas.stock_id = stock.ID
                     WHERE consola = 'ps4'
                     GROUP BY titulo) as vtas
                     ON web.producto = vtas.titulo
 
                     LEFT JOIN
-                    (SELECT 
-                        titulo, 
-                        SUM(case when slot = 'Primario' then 1 else 0 end) AS Qvp_45d, 
+                    (SELECT
+                        titulo,
+                        SUM(case when slot = 'Primario' then 1 else 0 end) AS Qvp_45d,
                         SUM(case when slot = 'Secundario' then 1 else 0 end) AS Qvs_45d
-                    FROM ventas LEFT JOIN stock 
+                    FROM ventas LEFT JOIN stock
                     ON ventas.stock_id = stock.ID
                     WHERE consola = 'ps4' AND (DATEDIFF(NOW(), ventas.Day) < 45)
                     GROUP BY titulo) as vtas_45d
@@ -2016,7 +2016,7 @@ class ControlsController extends Controller
                                     $divi = $divi;
                                 }
                                 $oferta_sugerida = $oferta_sugerida * $divi;
-                                $control_individual .= "<br /> >3 Stk subo precio si hay mucha Vta_45 y poco Stk // el es multi es: " . round($divi, 2) . " queda en " . round($oferta_sugerida, 2);
+                                $control_individual .= "<br /> >3 Stk subo precio si hay mucha Vta_45 y poco Stk // el multi es: " . round($divi, 2) . " queda en " . round($oferta_sugerida, 2);
                             }
 
                             // si se vendió 2 o mas limito la oferta cuando queda poco stock
@@ -2055,10 +2055,10 @@ class ControlsController extends Controller
                             }
 
                             /**** 2019-11-27 quito esto porque no tiene tanta relación, mejoro oferta cuanto mas stock tengo en relación a mis ventas... mayor stk disponible mejor oferta traslado al público */
-                            //if(($Q_stk/$qv) > 0.30){$estimulo_Relacion = 0.925;} 
-                            //elseif(($Q_stk/$qv) > 0.20){$estimulo_Relacion = 0.950;} 
-                            //elseif(($Q_stk/$qv) > 0.10){$estimulo_Relacion = 0.975;} 
-                            //else{$estimulo_Relacion = 1;} 
+                            //if(($Q_stk/$qv) > 0.30){$estimulo_Relacion = 0.925;}
+                            //elseif(($Q_stk/$qv) > 0.20){$estimulo_Relacion = 0.950;}
+                            //elseif(($Q_stk/$qv) > 0.10){$estimulo_Relacion = 0.975;}
+                            //else{$estimulo_Relacion = 1;}
                             $estimulo_Relacion = 1; //COMENTAR ESTA LINEA SI HABILITO LA DE ARRIBA
 
                             $oferta_sugerida = $oferta_sugerida * $estimulo_Vta45 * $estimulo_Relacion;
@@ -2071,9 +2071,10 @@ class ControlsController extends Controller
                                 $control_individual .= "<br /> oferta no puede ser < 25% de precio base // queda en : " . round($oferta_sugerida, 2);
                             }
 							// 2021-02-04 limito a 4 usd el precio de oferta, a menor precio no tiene sentido vender, mucho gasto
-                            if($oferta_sugerida < 4) {
-								$oferta_sugerida = 4;
-								$control_individual .= "<br /> oferta no puede ser < 4 usd // queda en 4 "; 
+              // 2021-03-05 paso a 5 usd
+                            if($oferta_sugerida < 5) {
+								$oferta_sugerida = 5;
+								$control_individual .= "<br /> oferta no puede ser < 5 usd // queda en 5 ";
 							}
 
                             // si no queda stock secundario quito oferta
