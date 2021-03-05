@@ -39,7 +39,7 @@
     </div>
 
     <div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="reactivar-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por favor ingrese a nuestra cuenta/usuario con el nombre <b>{{ $account_name . " " . $account_surname }}</b> una vez más para RE ACTIVAR tu slot primario. <br><br>
+					<span id="reactivar-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por favor ingrese a nuestra cuenta/usuario con el nombre <b>{{ $account_name . " " . $account_surname }}</b> una vez más para RE ACTIVAR el slot primario: <br><br>
 
 						Email: {{$mail_fake}} <br>
 						Contraseña: <?php echo $pass;?><br /><br />
