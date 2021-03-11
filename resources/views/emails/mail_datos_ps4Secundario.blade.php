@@ -239,14 +239,20 @@
                           <td style="padding: 20px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #666;"><p style="font-size:22px;">
                             <p style="font-size:22px;">02. Truco <em style="color:#999;font-size:12px;">(funciona en algunos juegos)</em></p>
                             <p>Los juegos que permiten multijugador local (jugar con mas de un joystick) se pueden jugar con tu usuario de siempre.</p>
-                            <p><strong>&iquest;C&oacute;mo?</strong> Video Tutorial: <a href="https://youtu.be/TzuRIrEvhW0" target="_blank">https://youtu.be/TzuRIrEvhW0</a></p>
+                            <p><strong>&iquest;C&oacute;mo?</strong> </p>
+                              <p style="color:#666666;">
+                                  1) Iniciar el juego desde nuestro usuario.<br />
+                                  2) Presionar el botón de PS ubicado en el medio del joystick.<br />
+                                  3) Ingresar a "Opciones" en el menú del usuario, cambiar de usuario al suyo personal y luego vuelva a presionar sobre la imagen del juego.<br />
+                                  4) Finalmente, presionar X en el joystick.<br /></p>
+
                             <p style="color:#666666;">A veces los usuarios que utilizan este tutorial reportan un problema con el joystick. <span>Si te aparece alg&uacute;n error en pantalla que no detecta tu joystick ac&aacute; est&aacute; la soluci&oacute;n:</span></p>
                             <p style="color:#666666;">Procedimiento para 'resetear' tu joystick:<br />
-                              1) Apagar tu PS4<br />
-                              2) El bot&oacute;n Reset est&aacute; localizado en un peque&ntilde;o agujero en la parte posterior del mando, cerca del bot&oacute;n L2<br />
-                              3) Con un clip, presionar el bot&oacute;n Reset por un par de segundos<br />
-                              4) Conecta el mando a tu PlayStation 4 usando el cable USB<br />
-                            5) Enciende tu PS4 y presiona el bot&oacute;n PS del mando para iniciar sesi&oacute;n</p>
+                              1) Apagar tu PS4.<br />
+                              2) El botón Reset está localizado en un pequeño agujero en la parte posterior del mando, cerca del botón L2.<br />
+                              3) Con un clip, presionar el botón Reset por unos segundos.<br />
+                              4) Conectar el mando a la PS4 usando el cable USB.<br />
+                            5) Encender la PS4 y presionar el botón PS del mando para iniciar sesión.</p>
                   </td>
                   </tr>
                   </table></td>
