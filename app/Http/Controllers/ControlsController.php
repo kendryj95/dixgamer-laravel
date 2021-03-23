@@ -1842,6 +1842,7 @@ class ControlsController extends Controller
                         p_p.post_status = 'publish'
                     group by
                         p.ID
+                        having consola <> 'ps5'
                         order by p.post_title ASC) as web
 
                     LEFT JOIN
