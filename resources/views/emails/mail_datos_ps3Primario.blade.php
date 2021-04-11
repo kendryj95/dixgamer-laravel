@@ -202,7 +202,7 @@ $last2digits = substr($id_ventas,-2,2);
 
 				<p>Ver <a href="https://www.facebook.com/watch/?v=2534001146657963" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p> 
                 <p>1) <strong>Prender</strong> la consola &gt; Crear <strong>Usuario Nuevo</strong><br />
-                  2) Le colocamos de nombre <strong>"{{$last2digits . " " . substr($row_rsClient->titulo,0,8) }} NO Tocar"</strong><br />
+                  2) Le colocamos de nombre <strong>"{{$last2digits . " " . substr($row_rsClient->titulo,0,16) }} NO Tocar"</strong><br />
                   3) <strong>Abrimos el usuario creado</strong> y vamos a <strong>PSN</strong> <em>(PlayStation Network)</em> &gt; <strong>Inscribirse</strong> > Opción "Usar una <strong>cuenta existente</strong>"<br /><br />
 
 				  4) Completamos con estos datos:<br />
