@@ -1750,9 +1750,9 @@ class ControlsController extends Controller
                                 $new_price = ($precio_base * 1.1);
                             }
 
-							// 2020-12-18 no permito precio menor a 2 usd // 2021-01-25 paso a 3 // 2021-03-05 paso a 3.5
-							if ($new_price < 3.5) {
-                                $new_price = 3.5;
+							// 2020-12-18 no permito precio menor a 2 usd // 2021-01-25 paso a 3 // 2021-03-05 paso a 3.5 // 2021-04-07 paso a 4.5
+							if ($new_price < 4.5) {
+                                $new_price = 4.5;
                             }
 
 
@@ -2072,9 +2072,9 @@ class ControlsController extends Controller
                                 $control_individual .= "<br /> oferta no puede ser < 25% de precio base // queda en : " . round($oferta_sugerida, 2);
                             }
 							// 2021-02-04 limito a 4 usd el precio de oferta, a menor precio no tiene sentido vender, mucho gasto
-              // 2021-03-05 paso a 5 usd
-                            if($oferta_sugerida < 5) {
-								$oferta_sugerida = 5;
+              // 2021-03-05 paso a 5 usd // 2021-04-07 paso a 5.5
+              if($oferta_sugerida < 5.5) {
+								$oferta_sugerida = 5.5;
 								$control_individual .= "<br /> oferta no puede ser < 5 usd // queda en 5 ";
 							}
 
