@@ -1262,7 +1262,7 @@ class ControlsController extends Controller
                 DATEDIFF(NOW(), min( Day )) as dias_de_primer_venta
                 FROM ventas GROUP BY clientes_id) as b"), 'a.ID', '=', 'b.clientes_id')
                     ->whereIn('a.auto', ['no','3ps4'])
-                    ->where(DB::raw("(dias_de_primer_venta > 180) or ((dias_de_primer_venta > 120) and (q_vtas > 1))"))
+                    ->where(DB::raw("((dias_de_primer_venta > 180) OR ((dias_de_primer_venta > 120) AND (q_vtas > 1)))"))
                     ->update(['auto' => 'si']);
 
                DB::table('clientes as a')
