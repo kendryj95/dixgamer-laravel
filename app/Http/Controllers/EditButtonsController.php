@@ -119,7 +119,7 @@ class EditButtonsController extends Controller
         if ($fb != null) {
             DB::table('clientes_notas')->insert(['notas' => 'Facebook anterior: '. $fb,
                 'clientes_id' => $request->id ,
-                'usuario' => 'Victor', 'Day' => (string)\Carbon\Carbon::now()]);
+                'usuario' => session()->get('usuario')->Nombre, 'Day' => (string)\Carbon\Carbon::now()]);
         }
 
         return Response()->json('Variable de ML Actualizada');
