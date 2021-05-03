@@ -193,6 +193,8 @@
                 <p style="font-size:18px">Hola {{ $row_rsClient->nombre }} {{ $row_rsClient->apellido }}, gracias por tu nueva compra.</p>
                 <p><em style="color:#999;">Leer COMPLETO para evitar riesgos de perder tu juego.</em></p>
                 <br />
+                    <p style="color: #e74c3c;">Este juego es para PS5, no se permite su uso en PS4..</p>
+                    <br>
                 <p>1) <strong>Prender</strong> la consola &gt; Agregar Usuario > <strong>Comenzar</strong><br />
                   2) Completar con estos datos:<br />
   <br />
