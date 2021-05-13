@@ -1,3 +1,22 @@
+<!-- Font Awesome style desde mi servidor -->
+<link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+
+<!-- link a mi css -->
+<link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+
+<!-- Bootstrap SITE CSS -->
+<link href="{{ asset('css/site.css') }}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="{{ asset('css/offcanvas.css') }}" rel="stylesheet">
+
+<!-- 2017-12-30 Agrego nuevo css de BootFLAT -->
+<link href="{{ asset('css/bootflat.css') }}" rel="stylesheet">
+
+<!-- Estilo personalizado por mi -->
+<link href="{{ asset('css/personalizado.css') }}" rel="stylesheet">
+<link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
 @if (count($errors) > 0)
       <div class="alert alert-danger text-center">
         <ul>
