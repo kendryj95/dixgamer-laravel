@@ -2,10 +2,10 @@
 @if(count($columns) > 0)
 <!-- Filtrador -->
 <form class="form-inline" name="buscador" method="get" action="{{ url($path) }}">
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
 
       <label for="column">Buscar en: </label> <br>
-      <select name="column" class="form-control">
+      <select name="column" class="form-control" id="column">
         @php $selected = ''; @endphp
         @foreach($columns as $i => $column)
           @if(app('request')->input('column') == $column)
@@ -47,12 +47,26 @@
 
 
     <!-- Palabra a buscar en la columna -->
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
 
       <label for="word">Palabra(s): </label> <br>
       <input id="word" type="text" class="form-control" name="word" value="{{ app('request')->input('word') }}">
 
     </div>
+
+    @if(isset($consolas))
+        <div style="display: @if(app('request')->input('column') != "titulo") none @else block @endif " id="showConsola" class="form-group col-md-3">
+
+            <label for="consola">Consola: </label> <br>
+            <select name="consola" id="consola" class="form-control">
+                <option value="">Seleccione consola</option>
+                @foreach($consolas as $obj)
+                    <option value="{{$obj->consola}}" @if($obj->consola == app('request')->input('consola')) selected @endif>{{$obj->consola}}</option>
+                @endforeach
+            </select>
+
+        </div>
+    @endif
 
     <div class="form-group">
       <label for="palabra">&nbsp;</label> <br>
@@ -63,3 +77,19 @@
 
 </form>
 @endif
+
+<script>
+    setTimeout(function() {
+        $(document).ready(function() {
+            $('#column').change(function() {
+                var value = $(this).val();
+                var path = '{{ $path }}';
+                if (path === "stock" && value === "titulo") {
+                    $('#showConsola').show();
+                } else {
+                    $('#showConsola').hide();
+                }
+            });
+        });
+    }, 500)
+</script>

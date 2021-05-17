@@ -245,6 +245,9 @@ class Stock extends Model
         if (!empty($obj->column) && !empty($obj->word)) {
             if ($obj->column == 'titulo') {
                 $query->where($obj->column,"like","%".str_replace(' ','-',trim($obj->word))."%");
+                if ($obj->consola) {
+                    $query->where("consola", $obj->consola);
+                }
             } else {
                 $query->where($obj->column,"like","%".$obj->word."%");
             }

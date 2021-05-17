@@ -10,6 +10,7 @@
 <div class="row">
     @component('components/filters/column_word')
         @slot('columns',$columns);
+        @slot('consolas',$consolas);
         @slot('path','stock');
     @endcomponent
 </div>

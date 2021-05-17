@@ -32,6 +32,7 @@ class StockController extends Controller
         $obj = new \stdClass;
         $obj->column = $request->column;
         $obj->word = $request->word;
+        $obj->consola = $request->consola;
 
         $columns = [];
         if (\Helper::validateAdministrator(session()->get('usuario')->Level)) {
@@ -39,12 +40,15 @@ class StockController extends Controller
         }else{
           $columns = ['ID','titulo','consola','cuentas_id','Day'];
         }
-        $stocks = Stock::stockList($obj)->paginate(50);
+        $queryStock = Stock::stockList($obj);
+        $stocks = $queryStock->paginate(50);
+        $consolas = Stock::stockList($obj)->select('consola')->distinct()->get();
         // $stocks = $this->st->stockListIndex($obj);
 
         return view('stock.index',compact(
           'stocks',
-          'columns'
+          'columns',
+            'consolas'
         ));
     }
     
