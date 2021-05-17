@@ -281,7 +281,7 @@ class SalesController extends Controller
             }
 
 
-           if (!is_array($row_rsSTK) && !$giftConStock && !$deuda) {
+           if (true) {
                if (!$request->previousUrl) {
                     $datos['consola'] = $consola;
                     $datos['titulo'] = $titulo;
@@ -289,11 +289,11 @@ class SalesController extends Controller
                     $datos['order'] = $oii;
                     $datos['tipo'] = "Sales";
                     $datos['cliente'] = $existEmailCliente;
-                    Mail::send('emails.sin_stock', $datos, function($message) use ($venta,$consola,$titulo,$slot)
+                    /*Mail::send('emails.sin_stock', $datos, function($message) use ($venta,$consola,$titulo,$slot)
                     {
                         $vendedor = session()->get('usuario') != null ? session()->get('usuario')->Nombre : "Xavi";
                         $message->to("contacto@dixgamer.com", "Contacto")->subject($vendedor.", falta stock (sales)- $titulo ($consola) $slot - Pedido {$venta->order_id}");
-                    });
+                    });*/
 
                    if ($request->action && $request->action == "wooc")
                        return response()->json(["status" => false]);
@@ -303,7 +303,7 @@ class SalesController extends Controller
                $venta->user_id_ml = null;
                $venta->order_id_ml = null;
 
-               if (!$request->action) {
+               if (true) {
                    return view('sales.salesInsertWeb', [
                        "row_rsSTK" => $row_rsSTK,
                        "venta" => $venta,

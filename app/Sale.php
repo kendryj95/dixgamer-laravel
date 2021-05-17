@@ -27,7 +27,7 @@ class Sale extends Model
 
     // Ventas por orden id
     public function ScopeSalesFromOrderId($query,$order_id){
-      if (!empty($orden_id)) {
+      if ($order_id) {
         return $query->where('order_item_id',$order_id);
       }else{
         return $query->where('order_item_id','!=',null);

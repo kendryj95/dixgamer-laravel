@@ -6,7 +6,7 @@
 
 <div class="container">
 	
-	<?php if(!is_array($row_rsSTK)):?>
+	<?php if(true):?>
 			<div>
 			<h4 class="text-danger text-center">sin stock</h4>
 			<table class="table" border="0" cellpadding="0" cellspacing="5" style="font-size:1em;">
@@ -65,9 +65,12 @@
 
 				<br><br>
 
+				@if($consola == "ps4" || $consola == "ps3")
 				<span class="pull-right">No olvides buscar stock disponible en la @if ($consola == "ps4") <a href="{{url('sales/recupero')}}?column=titulo&word={{$titulo}}&enviar=Buscar">lista de recuperos</a> @elseif($consola == "ps3") <a href="{{url('home')}}#reset">lista de reseteos</a> @endif</span>
 
 				<br>
+
+				@endif
 
 				<div class="row">
 						<!-- Large modal -->
