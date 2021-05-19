@@ -42,6 +42,7 @@ class StockController extends Controller
         }
         $queryStock = Stock::stockList($obj);
         $stocks = $queryStock->paginate(50);
+        $obj->consola = "";
         $consolas = Stock::stockList($obj)->select('consola')->distinct()->get();
         // $stocks = $this->st->stockListIndex($obj);
 
