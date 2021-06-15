@@ -142,9 +142,10 @@
 		                <li class="dropdown-header">{{ $texto_pass }}?</li>
 		                <li role="separator" class="divider"></li>
 		                <li>
-											<form class=" text-center" id="form_cambiar_pass" action="{{url('actualizar_password_cuenta',[$account->ID, $param])}}" method="post">
+											<form style="margin-bottom: 5px;" class=" text-center" id="form_cambiar_pass" action="{{url('actualizar_password_cuenta',[$account->ID, $param])}}" method="post">
 												{{ csrf_field() }}
 												<button
+														style="width: 100%;"
 													class="btn btn-danger"
 								title="cambiar pass"
 								id="cambiar_pass"
@@ -152,6 +153,19 @@
 		                    	Si, seguro!
 		                    </button>
 											</form>
+
+							<form class=" text-center" id="form_cambiar_pass_sony_solicita" action="{{url('actualizar_password_cuenta',[$account->ID, $param])}}" method="post">
+								{{ csrf_field() }}
+								<input type="hidden" name="sony_solicita" value="yes">
+								<button
+										style="width: 100%;"
+										class="btn btn-danger"
+										title="sony solicita"
+										id="sony_solicita"
+										type="button">
+									Si, Sony solicita!
+								</button>
+							</form>
 		                </li>
 		              </ul>
 
@@ -1747,6 +1761,11 @@
 			$('#cambiar_pass').on('click', function(){
 				$(this).prop('disabled', true);
 				$('#form_cambiar_pass').submit();
+			});
+
+			$('#sony_solicita').on('click', function(){
+				$(this).prop('disabled', true);
+				$('#form_cambiar_pass_sony_solicita').submit();
 			});
 
 			/*$('#resetear').on('click', function(){

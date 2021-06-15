@@ -1786,7 +1786,7 @@ class AccountController extends Controller
     }
 
 
-    public function updatePassword($id, $param = null){
+    public function updatePassword($id, $param = null, Request $request){
       try {
         $npass = \Helper::getRandomPass();
         $date = date('Y-m-d H:i:s', time());
@@ -1802,6 +1802,15 @@ class AccountController extends Controller
         $account = [];
         $account['pass'] = $npass;
         $this->acc->updateAccount($account,$id);
+
+        if ($request->sony_solicita && $request->sony_solicita === 'yes') {
+            DB::table('cuentas_notas')->insert([
+                "cuentas_id" => $id,
+                "Notas" => "Sony solicitó cambiar pass",
+                "Day" => date('Y-m-d H:i:s'),
+                "usuario" => session()->get('usuario')->Nombre
+            ]);
+        }
 
         if ($param != null) {
           $stocks = DB::table('stock')->select(DB::raw('GROUP_CONCAT(ID) AS stocks_ids'))->where('cuentas_id',$id)->groupBy('cuentas_id')->value('stocks_ids');
