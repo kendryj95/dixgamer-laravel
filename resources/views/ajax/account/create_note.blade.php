@@ -44,6 +44,12 @@
           </div>
         </div>
 
+        <div style="display: flex;padding-left: 5px;margin-bottom: 5px;">
+          <button style="width: 25%" type="button" class="btn btn-secondary btn-sm" onclick="shortcut('sin_ps3_activas')">Sin ps3 activas</button>
+
+        </div>
+
+
         <button class="btn btn-warning btn-block" id="create_note" type="button">Guardar</button>
       </form>
     </div>
@@ -123,6 +129,9 @@
         break;
       case "secu_pri":
         $("#Notas").text("Secu se activa Pri");
+        break;
+      case "sin_ps3_activas":
+        $("#Notas").text("Sin ps3 activas");
         break;
     }
   }
