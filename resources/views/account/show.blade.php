@@ -1621,7 +1621,9 @@
 						@if ($sc->auto === "bloq")
 							<span class="badge badge-danger"><i class="fa fa-times-circle"></i> Cliente bloqueado</span>
 						@else
-							@php $ps5 = '-ps5'; @endphp
+							@php
+								$ps5 = strpos($sc->consola, 'ps5') !== false ? '-ps5' : '';
+							@endphp
 							<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_react_pri" data-clipboard-target="#reactivar-copy{{$sc->clientes_id . $ps5}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
 							<button class="btn-xs btn-info label email-info" id="enviar_email_pri" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
