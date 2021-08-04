@@ -257,13 +257,14 @@ foreach ($data as $value) {
             <span class="input-group-addon"><i class="fa fa-bookmark"></i></span>
             <select name="slot" id="slot" class="form-control">
               <option value="">Seleccione Slot</option>
-              @if ($clientes->cons != "ps3" && $clientes->cons != "ps4")
-                <option value="No" @if($clientes->slot == 'No') selected @endif>No</option>
-              @elseif ($clientes->cons == "ps3")
-                <option value="Primario" @if($clientes->slot == 'Primario') selected @endif>Primario</option>
+
+              @if ($clientes->cons == "ps3" || $clientes->cons == "ps5")
+                <option value="Primario" selected>Primario</option>
               @elseif ($clientes->cons == "ps4")
                 <option value="Primario" @if($clientes->slot == 'Primario') selected @endif>Primario</option>
                 <option value="Secundario" @if($clientes->slot == 'Secundario') selected @endif>Secundario</option>
+              @else
+                <option value="No" selected>No</option>
               @endif
             </select>
             <span class="input-group-addon">Slot (actual: {{ $clientes->slot }})</span>
@@ -333,9 +334,9 @@ foreach ($data as $value) {
           } else {
             $('#btnModManual').addClass('disabled');
           }
-          if (response.console == 'ps3') {
+          if (response.console == 'ps3' || response.console == 'ps5') {
             options = `
-            <option value="Primario" ${slot == 'Primario' ? 'selected' : ''}>Primario</option>
+            <option value="Primario">Primario</option>
             `;
           } else if (response.console == 'ps4') {
             options = `
@@ -344,7 +345,7 @@ foreach ($data as $value) {
             `;
           } else {
             options = `
-            <option value="No" ${slot == 'No' ? 'selected' : ''}>No</option>
+            <option value="No">No</option>
             `;
           }
           setTimeout(() => {
