@@ -205,7 +205,13 @@
   <br />
                   3) <strong>Iniciar Sesi&#243;n</strong> y aceptar los datos de la cuenta <br />
                   4) Arriba a la derecha en Configuración > Usuarios y cuentas > Otro > Uso compartido de consola y juego offline. Seleccionar <b>Activar</b> <br />
-                  5) Ir a “Biblioteca de juegos” e ingresar al juego comprado. En los 3 puntos, seleccionar la opción “Ver producto” y aparecerá “Free PS5 Digital Upgrade”. Seleccionar “Download”, luego “Confirm Purchase” e iniciar la descarga del juego para PS5.<br />
+                    @if (strpos($row_rsCuenta->juego, "retrocompatible") !== false)
+                        5) Ir a “Biblioteca de juegos” e ingresar al juego comprado. Seleccionar “Download” para comenzar la descarga.
+                        <br>
+                    @else
+                        5) Ir a “Biblioteca de juegos” e ingresar al juego comprado. En los 3 puntos, seleccionar la opción “Ver producto” y aparecerá “Free PS5 Digital Upgrade”. Seleccionar “Download”, luego “Confirm Purchase” e iniciar la descarga del juego para PS5.<br />
+                    @endif
+
                   6) Cambiar a tu usuario personal, no volver a abrir nuestro usuario.<br />
                   7) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cupón.<br />
 
