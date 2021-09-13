@@ -260,6 +260,8 @@ Route::group(['middleware' => ['login']], function()
   });
 
   Route::get('sales/list','SalesController@index')->name('sales/list');
+  Route::get('mati/list','SalesController@indexMati')->name('mati/list');
+  Route::get('mati/desvincular/{id_mati}','SalesController@desvincularMati')->name('desvincular-mati');
   Route::post('sales/list','SalesController@index')->name('sales/list');
   Route::get('sales/lista_sin_entregar','SalesController@sinEntregar')->name('sales/lista_sin_entregar');
   Route::get('sales/lista_cobro','SalesController@listaCobros')->name('sales/listaCobros');

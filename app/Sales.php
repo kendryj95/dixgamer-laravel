@@ -237,4 +237,15 @@ class Sales extends Model
       return $query;
     }
 
+    public function ScopeTest($query, $obj)
+    {
+        $query = DB::table("mati");
+
+        if (!empty($obj->column) && !empty($obj->word)) {
+            $query->where($obj->column,'like',"%$obj->word%");
+        }
+
+        return $query;
+    }
+
 }

@@ -49,6 +49,20 @@ class SalesController extends Controller
         return view('sales.sales_list_notes')->with(['datos' => $datos, 'columns' => $columns]);
     }
 
+    public function indexMati(Request $request)
+    {
+        // Ventas con filtro
+        $obj = new \stdClass;
+        $obj->column = $request->column;
+        $obj->word = $request->word;
+
+        $datos = Sales::getDataMati($obj)->orderBy('ID','DESC')->paginate(50);
+
+        $columns = Schema::getColumnListing('mati');
+
+        return view('sales.mati_list')->with(['datos' => $datos, 'columns' => $columns]);
+    }
+
     public function addManualSale(Request $request, $consola, $titulo, $slot){
 
         $colname_rsCON = $consola;
@@ -854,6 +868,19 @@ class SalesController extends Controller
         $prod_secundarios = explode(",",$configuracion->prod_excluidos_secu);
 
         return view('sales.sales_recupero', compact('ventas','columns','prod_primarios','prod_secundarios'));
+    }
+
+    public function desvincularMati($id_mati)
+    {
+        try {
+            DB::table("mati")->where("id", $id_mati)->update(["order_id" => -1]);
+            // Mensaje de notificacion
+            \Helper::messageFlash('Ventas','Mati desvinculado correctamente','alert_ventas');
+
+            return redirect()->back();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['Ha ocurrido un error inesperado. Por favor vuelva a intentarlo.']);
+        }
     }
 
 }

@@ -143,6 +143,7 @@
                 <li><a href="{{ url('sales/lista_cobro') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Cobros</a></li>
                 <li><a href="{{ url('sales/lista_sin_entregar') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin Entregar</a></li>
                 <li><a href="{{ url('sales/recupero') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> En recupero</a></li>
+                <li><a href="{{ url('mati/list') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Mati</a></li>
         <!--
                 <li><a href="https://dixgamer.com/db/ventas_web_sin_oii.php"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin order_item_id</a></li>
 
