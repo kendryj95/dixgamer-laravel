@@ -205,7 +205,7 @@
   <br />
                   3) <strong>Iniciar Sesi&#243;n</strong> y aceptar los datos de la cuenta <br />
                   4) Arriba a la derecha en Configuración > Usuarios y cuentas > Otro > Uso compartido de consola y juego offline. Seleccionar <b>Activar</b> <br />
-                    @if (strpos($row_rsCuenta->juego, "retrocompatible") !== false)
+                    @if (strpos($juego, "retrocompatible") !== false)
                         5) Ir a “Biblioteca de juegos” e ingresar al juego comprado. Seleccionar “Download” para comenzar la descarga.
                         <br>
                     @else
