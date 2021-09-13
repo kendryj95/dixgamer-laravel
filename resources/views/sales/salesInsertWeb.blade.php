@@ -6,7 +6,7 @@
 
 <div class="container">
 	
-	<?php if(true):?>
+	<?php if(!is_array($row_rsSTK)):?>
 			<div>
 			<h4 class="text-danger text-center">sin stock</h4>
 			<table class="table" border="0" cellpadding="0" cellspacing="5" style="font-size:1em;">
