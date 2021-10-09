@@ -237,7 +237,7 @@ class Sales extends Model
       return $query;
     }
 
-    public function ScopeTest($query, $obj)
+    public function ScopeGetDataMati($query, $obj)
     {
         $query = DB::table("mati");
 
@@ -246,6 +246,27 @@ class Sales extends Model
         }
 
         return $query;
+    }
+
+    public function ScopeSalesSummaryByMonthSince2021($query)
+    {
+        return DB::table("ventas_cobro")
+            ->select(DB::raw("DATE_FORMAT(Day,'%Y-%m') as D"), DB::raw("COUNT(*)as q"),
+            DB::raw("round(sum(precio)/COUNT(*),2) as ticket"), DB::raw("round(sum(precio),0) as total"))
+            ->where("precio", ">", 0)
+            ->whereRaw("DATE(Day) >= '2021-01-01'")
+            ->groupBy("D");
+    }
+
+    public function ScopeSalesSummaryByDayLastTwoMonth($query)
+    {
+        // SELECT DATE_FORMAT(Day,'%Y-%m-%d') as D, COUNT(*)as q, round(sum(precio)/COUNT(*),2) as ticket, round(sum(precio),0) as total FROM `ventas_cobro` where precio>0 and Day>=DATE_FORMAT(NOW() ,'%Y-%m-01') - INTERVAL 1 MONTH group by D
+        return DB::table("ventas_cobro")
+            ->select(DB::raw("DATE_FORMAT(Day,'%Y-%m-%d') as D"), DB::raw("COUNT(*) as q"),
+                DB::raw("round(sum(precio)/COUNT(*),2) as ticket"), DB::raw("round(sum(precio),0) as total"))
+            ->where("precio", ">", 0)
+            ->whereRaw("DATE(Day) >= DATE_FORMAT(NOW() ,'%Y-%m-01') - INTERVAL 1 MONTH")
+            ->groupBy("D");
     }
 
 }

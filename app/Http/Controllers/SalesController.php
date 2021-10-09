@@ -882,4 +882,12 @@ class SalesController extends Controller
         }
     }
 
+    public function salesSummary()
+    {
+        $sales = Sales::salesSummaryByMonthSince2021()->get();
+        $sales2 = Sales::salesSummaryByDayLastTwoMonth()->get();
+
+        return view("sales.summary", compact("sales", "sales2"));
+    }
+
 }

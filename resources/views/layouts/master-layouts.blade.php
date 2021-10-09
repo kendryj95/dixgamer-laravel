@@ -1,3 +1,6 @@
+@php
+$userAuth = session()->get('usuario');
+@endphp
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -97,39 +100,39 @@
               <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-gamepad fa-fw" aria-hidden="true"></i> Stk<span class="caret"></span> @if($stockCargar > 0)<span class="badge badge-danger">{{$stockCargar}}</span>@endif</a>
               <ul class="dropdown-menu">
                 <li><a href="{{ url('stock') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
-                @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+                @if(\Helper::validateAdministrator($userAuth->Level))
                   <li><a href="{{ url('stock_notas') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Notas</a></li>
                 @endif
                 <li><a href="{{ url('saldos') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar Saldo</a></li>
-                @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+                @if(\Helper::validateAdministrator($userAuth->Level))
                   <li><a href="{{ url('stock_cm') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar CM</a></li>
                 @endif
                 <li><a href="{{ url('stocks_cargados') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Cargados</a></li>
-                @if(\Helper::validateAdministrator(session()->get('usuario')->Level) || session()->get('usuario')->Nombre === "Leo")
+                @if(\Helper::validateAdministrator($userAuth->Level) || $userAuth->Nombre === "Leo")
                 <li><a href="{{ url('pedidos_carga/admin') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos de carga - Admin</a></li>
                 @endif
                 <li><a href="{{ url('pedidos_cargar') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos por Cargar @if($stockCargar > 0)<span class="badge badge-danger">{{$stockCargar}}</span>@endif</a></li>
                 <li><a href="{{ url('catalogo_link_ps_store') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Link PS Store</a></li>
                 <li><a href="{{ url('productos_catalogo') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Catalogo Completo</a></li>
 
-                @if(Helper::validateAdminAnalyst(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
+                @if(Helper::validateAdminAnalyst($userAuth->Level) || Helper::permissionPerUser($userAuth->Nombre, "Gift"))
                     <li class="divider" role="separator"></li>
                     <li><a href="{{ url('falta_cargar') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> Falta Cargar</a></li>
                     <li><a href="{{ url('stock_insertar_codigo') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P1</a></li>
                     <li><a href="{{ url('stock_insertar_codigo_poff') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> POFF</a></li>
                 @endif
 
-                @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+                @if(\Helper::validateAdministrator($userAuth->Level))
                 <li><a href="{{ url('stock_insertar_codigo_control') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P1 - Control</a></li>
                 @endif
 
-                @if(Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
+                @if(Helper::validateAdministrator($userAuth->Level) || Helper::permissionPerUser($userAuth->Nombre, "Gift"))
                   <li><a href="{{ url('stock_insertar_codigo_g') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P2</a></li>
                   
                   <li><a href="{{ url('stock_insertar_codigo_g_vcc') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P2 - VCC</a></li>
                 @endif
 
-                @if(Helper::validateAdministrator(session()->get('usuario')->Level) || Helper::permissionPerUser(session()->get('usuario')->Nombre, "Gift"))
+                @if(Helper::validateAdministrator($userAuth->Level) || Helper::permissionPerUser($userAuth->Nombre, "Gift"))
                   <li><a href="{{ url('stock_insertar_codigo_p3') }}"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> P3</a></li>
                 @endif
               </ul>
@@ -144,142 +147,136 @@
                 <li><a href="{{ url('sales/lista_sin_entregar') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin Entregar</a></li>
                 <li><a href="{{ url('sales/recupero') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> En recupero</a></li>
                 <li><a href="{{ url('mati/list') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Mati</a></li>
-        <!--
-                <li><a href="https://dixgamer.com/db/ventas_web_sin_oii.php"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin order_item_id</a></li>
+                @php
+                $usersSalesSummary = ["Leo","Beti","Mica"];
+                @endphp
+                @if(\Helper::validateAdministrator($userAuth->Level) || in_array($userAuth->Nombre, $usersSalesSummary))
+                <li><a href="{{ route("sales-summary") }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Resumen</a></li>
+                @endif
 
-                <li class="divider" role="separator"></li>
-                <!--  Solo Admin   -->
-                <!--
-                <li><a href="https://dixgamer.com/db/ventas_insertar.php"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
-                <!--  Termina Admin   -->
-                <!--
+</ul>
+</li>
+<li class="dropdown"><a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados<span class="caret"></span></a>
 
-                <li><a href="https://dixgamer.com/db/ventas_buscador.php"><i class="fa fa-search fa-fw" aria-hidden="true"></i> Buscar</a></li>
+<ul class="dropdown-menu">
 
-                -->
-              </ul>
-            </li>
-            <li class="dropdown"><a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados<span class="caret"></span></a>
-
-              <ul class="dropdown-menu">
-
-                <li><a href="{{ url('web/sales_fifa_22') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Fifa 22</a></li>
+<li><a href="{{ url('web/sales_fifa_22') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Fifa 22</a></li>
 {{--                <li><a href="{{ url('web/sales_pes_21') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pes 21</a></li>--}}
-                <li><a href="{{ url('web/sales_sin_fifa_22') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin Fifa 22</a></li>
-                <li><a href="{{ url('web/sales') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Todos</a></li>
+<li><a href="{{ url('web/sales_sin_fifa_22') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Sin Fifa 22</a></li>
+<li><a href="{{ url('web/sales') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Todos</a></li>
 
-              </ul>
+</ul>
 
-            </li>
+</li>
 
 {{--            <li><a href="{{ url('web/sales') }}"><i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Ped Cobrados</a></li>--}}
 
-            @if(Helper::validateAdministrator(session()->get('usuario')->Level))
-              <li class="dropdown">
-                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bank fa-fw" aria-hidden="true"></i> Gtos<span class="caret"></span></a>
-                <ul class="dropdown-menu">
+@if(Helper::validateAdministrator($userAuth->Level))
+<li class="dropdown">
+<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bank fa-fw" aria-hidden="true"></i> Gtos<span class="caret"></span></a>
+<ul class="dropdown-menu">
 
-                  <li><a href="{{ url('/gastos') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
+  <li><a href="{{ url('/gastos') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar</a></li>
 
-                  <li class="divider" role="separator"></li>
-                  <li><a href="{{ url('gastos/create') }}"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
-                </ul>
-              </li>
-            @endif
-            </ul>
+  <li class="divider" role="separator"></li>
+  <li><a href="{{ url('gastos/create') }}"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
+</ul>
+</li>
+@endif
+</ul>
 
-          <ul class="nav navbar-nav navbar-right">
+<ul class="nav navbar-nav navbar-right">
 
-            <li><a href="javascript:void(0)"><i class="glyphicon glyphicon-user text-success" aria-hidden="true"></i> {{ session()->get('usuario')->Nombre }}</a></li>
-          <!-- COMENTADO POR KENDRY POR PETICION DE VICTOR 10/06/20 -->
-          {{-- @if(Helper::lessAdministrator(session()->get('usuario')->Level))
-            <li><a href="{{ url('horario') }}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
-          @endif --}}
+<li><a href="javascript:void(0)"><i class="glyphicon glyphicon-user text-success" aria-hidden="true"></i> {{ $userAuth->Nombre }}</a></li>
+<!-- COMENTADO POR KENDRY POR PETICION DE VICTOR 10/06/20 -->
+{{-- @if(Helper::lessAdministrator($userAuth->Level))
+<li><a href="{{ url('horario') }}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
+@endif --}}
 
-          @if (Helper::validateAdminAnalyst(session()->get('usuario')->Level))
+@if (Helper::validateAdminAnalyst($userAuth->Level))
 
-           <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{ url('balance') }}"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Balance</a></li>
-                <li><a href="{{ url('balance_productos') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
-                <li><a href="{{ url('balance_productos_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
-                <li class="divider" role="separator"></li>
-                <li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>
-                <li><a href="https://dixgamer.com/db/publicaciones_detalles.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Publicaciones</a></li>
-                <li><a href="{{ url('publicaciones_secundarias_ml') }}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Secundarias</a></li>
-                <li><a href="https://dixgamer.com/db/publicaciones_insertar.php"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
-                <li class="divider" role="separator"></li>
-                <li><a href="{{ url('adwords') }}"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
-                <li class="divider" role="separator"></li>
-                <li><a href="{{url('config/general')}}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> General</a></li>
-                <li><a href="{{url('usuario')}}"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
-                <li><a href="{{url('usuario/list')}}"><i class="fa fa-users fa-fw" aria-hidden="true"></i> Listar usuarios</a></li>
-              </ul>
-            </li>
-          
-
-            <li class="dropdown">
-                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Control<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{{url('evolucion')}}"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Evolución</a></li>
-                  <li><a href="{{url('horarios')}}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
-                  <li class="divider" role="separator"></li>
-                  <li><a href="{{ url('carga_gc') }}"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
-                  <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
-                  <li class="divider" role="separator"></li>
-                  <li><a href="{{ route('enviar-email') }}"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i> Enviar Email</a></li>
-                  <li><a href="{{ url('control_mp') }}"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
-                  <li><a href="{{ url('control_mp','v2') }}"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP2</a></li>
-                  <li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
-                  <li><a href="{{ url('control_ventas') }}"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas</a></li>
-                  <li><a href="{{ url('control_ventas_bancos') }}"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas por Bancos</a></li>
-               </ul>
-            </li>
-          @endif
-
-          @if(session()->get('usuario')->Nombre == 'Betina' || session()->get('usuario')->Nombre == 'Beti_1')
-
-          <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Balances<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{ url('balance','ventas_7_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 7 Dias</a></li>
-                <li><a href="{{ url('balance','ventas_15_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 15 Dias</a></li>
-                <li><a href="{{ url('balance','ventas_30_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 30 Dias</a></li>
-                <li><a href="{{ url('balance','ventas_45_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 45 Dias</a></li>
-              </ul>
-          </li>
-
-          @endif
+<li class="dropdown">
+<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>
+<ul class="dropdown-menu">
+<li><a href="{{ url('balance') }}"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Balance</a></li>
+<li><a href="{{ url('balance_productos') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
+<li><a href="{{ url('balance_productos_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
+<li class="divider" role="separator"></li>
+<li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>
+<li><a href="https://dixgamer.com/db/publicaciones_detalles.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Publicaciones</a></li>
+<li><a href="{{ url('publicaciones_secundarias_ml') }}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Secundarias</a></li>
+<li><a href="https://dixgamer.com/db/publicaciones_insertar.php"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Agregar</a></li>
+<li class="divider" role="separator"></li>
+<li><a href="{{ url('adwords') }}"><i class="fa fa-google fa-fw" aria-hidden="true"></i> Adwords</a></li>
+<li class="divider" role="separator"></li>
+<li><a href="{{url('config/general')}}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> General</a></li>
+<li><a href="{{url('usuario')}}"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Nuevo usuario</a></li>
+<li><a href="{{url('usuario/list')}}"><i class="fa fa-users fa-fw" aria-hidden="true"></i> Listar usuarios</a></li>
+</ul>
+</li>
 
 
-      <!--  Termina Admin   -->
-            <li><a href="{{ url('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
-          </ul>
-        </div><!-- /.nav-collapse -->
-      </div><!-- /.container -->
-    </nav><!-- /.navbar -->
+<li class="dropdown">
+<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Control<span class="caret"></span></a>
+<ul class="dropdown-menu">
+  <li><a href="{{url('evolucion')}}"><i class="fa fa-line-chart fa-fw" aria-hidden="true"></i> Evolución</a></li>
+  <li><a href="{{url('horarios')}}"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i> Horas</a></li>
+  <li class="divider" role="separator"></li>
+  <li><a href="{{ url('carga_gc') }}"><i class="fa fa-barcode fa-fw" aria-hidden="true"></i> Carga GC</a></li>
+  <li><a href="https://dixgamer.com/db/control_precios_web.php"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Precios</a></li>
+  <li class="divider" role="separator"></li>
+  <li><a href="{{ route('enviar-email') }}"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i> Enviar Email</a></li>
+  <li><a href="{{ url('control_mp') }}"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP</a></li>
+  <li><a href="{{ url('control_mp','v2') }}"><i class="fa fa-credit-card-alt fa-fw" aria-hidden="true"></i> MP2</a></li>
+  <li><a href="https://dixgamer.com/db/modificaciones_control.php"><i class="fa fa-check fa-fw" aria-hidden="true"></i> Modif</a></li>
+  <li><a href="{{ url('control_ventas') }}"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas</a></li>
+  <li><a href="{{ url('control_ventas_bancos') }}"><i class="fa fa-shopping-bag fa-fw" aria-hidden="true"></i> Ventas por Bancos</a></li>
+</ul>
+</li>
+@endif
+
+@if($userAuth->Nombre == 'Betina' || $userAuth->Nombre == 'Beti_1')
+
+<li class="dropdown">
+<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Balances<span class="caret"></span></a>
+<ul class="dropdown-menu">
+<li><a href="{{ url('balance','ventas_7_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 7 Dias</a></li>
+<li><a href="{{ url('balance','ventas_15_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 15 Dias</a></li>
+<li><a href="{{ url('balance','ventas_30_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 30 Dias</a></li>
+<li><a href="{{ url('balance','ventas_45_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Ventas en 45 Dias</a></li>
+</ul>
+</li>
+
+@endif
 
 
-    @if(Session::has('success'))
-      <div class="container text-center">
-        <div class="alert alert-success" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">{{ Session::get('success')->title }}:</span>
-            {{ Session::get('success')->body }}
-        </div>
-      </div>
-    @elseif(Session::has('warning'))
-      <div class="container text-center">
-        <div class="alert alert-warning" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">{{ Session::get('warning')->title }}:</span>
-            {{ Session::get('warning')->body }}
-        </div>
-      </div>
-    @endif
+<!--  Termina Admin   -->
+<li><a href="{{ url('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
+</ul>
+</div><!-- /.nav-collapse -->
+</div><!-- /.container -->
+</nav><!-- /.navbar -->
 
-    
+
+@if(Session::has('success'))
+<div class="container text-center">
+<div class="alert alert-success" role="alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+<span class="sr-only">{{ Session::get('success')->title }}:</span>
+{{ Session::get('success')->body }}
+</div>
+</div>
+@elseif(Session::has('warning'))
+<div class="container text-center">
+<div class="alert alert-warning" role="alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+<span class="sr-only">{{ Session::get('warning')->title }}:</span>
+{{ Session::get('warning')->body }}
+</div>
+</div>
+@endif
+
+
 @yield('container')
 
 
@@ -287,37 +284,37 @@
 
 
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="{{ asset('assets/js/docs.min.js') }}"></script>
-  <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-  <script src="{{ asset('js/script2.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
-  <script src="{{ asset('js/typeahead.bundle.js') }}"></script>
-  <script type="text/javascript" src="{{asset('js/tinymce/tinymce.min.js')}}"></script>
-  <script type="text/javascript" src="{{asset('js/tinymce/skins/custom/jquery.tinymce.min.js')}}"></script> 
-  <script src="{{ asset('js/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
-  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="{{ asset('assets/js/docs.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/script2.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+<script src="{{ asset('js/typeahead.bundle.js') }}"></script>
+<script type="text/javascript" src="{{asset('js/tinymce/tinymce.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/tinymce/skins/custom/jquery.tinymce.min.js')}}"></script>
+<script src="{{ asset('js/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
 
-  <script>new Clipboard('.btn-copiador');</script>
+<script>new Clipboard('.btn-copiador');</script>
 
-  <!-- Activar popover -->
+<!-- Activar popover -->
 
-  <script>
-    $(document).ready(function(){
-      if ($('[data-toggle="popover"]').length>0) {
-        $('[data-toggle="popover"]').popover();
-      }
+<script>
+$(document).ready(function(){
+if ($('[data-toggle="popover"]').length>0) {
+$('[data-toggle="popover"]').popover();
+}
 
 
-      @if(Session::has('success'))
-          $('#modal_success').modal('toggle');
-      @endif
-    });
-  </script>
+@if(Session::has('success'))
+$('#modal_success').modal('toggle');
+@endif
+});
+</script>
 
-  @yield('scripts')
+@yield('scripts')
 
 </body>
 </html>

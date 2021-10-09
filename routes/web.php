@@ -188,6 +188,8 @@ Route::group(['middleware' => ['login']], function()
 
   });
 
+    Route::get('pedidos_carga/admin', 'StockController@pedCargaAdmin');
+
     // Rutas donde solo podran acceder administradores
   Route::group(['middleware' => ['administrator']], function()
   {
@@ -198,7 +200,6 @@ Route::group(['middleware' => ['login']], function()
     Route::post('stock_insertar_codigo_g_vcc','StockController@storeCodeGVCC');
 
     Route::post('asignar_stock','StockController@asignarStockStore');
-    Route::get('pedidos_carga/admin', 'StockController@pedCargaAdmin');
     Route::get('pedidos_finalizados/admin', 'StockController@pedCargaFinalizados');
     Route::get('confirmar_pedido/{id}', 'StockController@confirmPedCarga');
     Route::get('get_pedidos_edit/{id}', 'StockController@getPedidosEdit');
@@ -274,11 +275,11 @@ Route::group(['middleware' => ['login']], function()
     Route::get('web/sales_fifa_22/{filtro?}','Pedidos_CobradosController@salesFifa22');
     Route::get('web/sales_pes_21/{filtro?}','Pedidos_CobradosController@salesPes21');
     Route::get('web/sales_sin_fifa_22/{filtro?}','Pedidos_CobradosController@sinSalesFifaPes22');
-    //Route::get('/web/sales', function() { return redirect('web/sales/list'); });
     Route::post('getDataClientWebSales','Pedidos_CobradosController@getDataClientWebSales')->name('getDataClientWebSales');
     Route::get('sales/{id_sale}/cliente','SalesController@salesClient');
     Route::get('sales/recupero','SalesController@salesListRecupero');
     Route::get('sales/list/notas','SalesController@indexNotes')->name('sales-notas');
+    Route::get('sales/summary','SalesController@salesSummary')->name('sales-summary');
 
   Route::get('usuario', 'UsuariosController@create');
 
