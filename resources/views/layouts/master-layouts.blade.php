@@ -105,7 +105,7 @@
                   <li><a href="{{ url('stock_cm') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Listar CM</a></li>
                 @endif
                 <li><a href="{{ url('stocks_cargados') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Cargados</a></li>
-                @if(\Helper::validateAdministrator(session()->get('usuario')->Level))
+                @if(\Helper::validateAdministrator(session()->get('usuario')->Level) || session()->get('usuario')->Nombre === "Leo")
                 <li><a href="{{ url('pedidos_carga/admin') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos de carga - Admin</a></li>
                 @endif
                 <li><a href="{{ url('pedidos_cargar') }}"><i class="fa fa-list fa-fw" aria-hidden="true"></i> Pedidos por Cargar @if($stockCargar > 0)<span class="badge badge-danger">{{$stockCargar}}</span>@endif</a></li>

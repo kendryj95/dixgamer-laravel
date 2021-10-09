@@ -882,6 +882,9 @@ ORDER BY libre DESC";
 
     public function pedCargaAdmin()
     {
+        $userAuth = session()->get('usuario');
+        // Validacion para usuarios no administradores (excepto Leo)
+        if ($userAuth->Nombre !== "Leo" && !\Helper::validateAdministrator($userAuth->Level)) redirect("/")->back()->withErrors(["Acceso denegado"]);
       $titles = $this->wp_p->lastGameStockTitles();
       $users = DB::table('usuarios')->get();
       $pedidos = $this->st->listPedidosCargados()->get();

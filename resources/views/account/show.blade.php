@@ -1023,7 +1023,7 @@
 										<small>
 											<strong>
 												{{$stock->costo_usd}}
-												@if (Helper::validateAdministrator(session()->get('usuario')->Level))
+												@if (Helper::validateAdministrator(session()->get('usuario')->Level) || session()->get('usuario')->Nombre === "Leo")
 													({{empty($stock->costo_usd_modif) ? '0.00' : $stock->costo_usd_modif}})
 												@endif
 											</strong>
