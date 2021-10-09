@@ -118,6 +118,7 @@
                     [
                       'column' => app('request')->input('column'),
                       'word' => app('request')->input('word'),
+                      'consola' => app('request')->input('consola'),
                     ]
                     )->render() }}
                 </div>
