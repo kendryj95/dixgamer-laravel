@@ -1214,6 +1214,10 @@ class ControlsController extends Controller
 
     public function balanceProductosDias(Request $request)
     {
+        $userAuth = session()->get('usuario');
+        if ($userAuth->Nombre !== "Leo" && !\Helper::validateAdministrator($userAuth->Level))
+            return redirect("/")->withErrors(["Acceso denegado"]);
+
         $dias = isset($request->dias) ? $request->dias : 7;
 
         $rsCXP = Stock::getDatosBalanceProductosDias($dias);

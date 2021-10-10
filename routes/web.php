@@ -222,6 +222,8 @@ Route::group(['middleware' => ['login']], function()
         Route::resource('gastos', 'ExpensesController');
     });
 
+    Route::get('balance_productos_dias', 'ControlsController@balanceProductosDias');
+
     Route::group(['middleware' => ['administrator']], function()
     {
         Route::get('horarios', 'ScheduleController@indexAdmin');
@@ -244,7 +246,6 @@ Route::group(['middleware' => ['login']], function()
         Route::get('control_ventas', 'ControlsController@controlVentas');
         Route::get('balance', 'ControlsController@balance');
         Route::get('balance_productos', 'ControlsController@balanceProductos');
-        Route::get('balance_productos_dias', 'ControlsController@balanceProductosDias');
     });
 
 

@@ -235,7 +235,11 @@ $userAuth = session()->get('usuario');
 </li>
 @endif
 
-@if($userAuth->Nombre == 'Betina' || $userAuth->Nombre == 'Beti_1')
+@if($userAuth->Nombre === "Leo")
+  <li><a href="{{ url('balance_productos_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Balance Prod Por Dias</a></li>
+@endif
+
+  @if($userAuth->Nombre == 'Betina' || $userAuth->Nombre == 'Beti_1')
 
 <li class="dropdown">
 <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Balances<span class="caret"></span></a>
