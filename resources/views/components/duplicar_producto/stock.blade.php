@@ -1,3 +1,6 @@
+@php
+  $userAuth = session()->get('usuario');
+@endphp
 @if(count($stocks) > 0)
   <div class="row">
     <div class="page-header"><h3 style="color:#000;text-align: left;">{{ $title }}</h3> </div>
@@ -47,7 +50,7 @@
               {{$stock->id_stk}}
             </small>
             <br />
-              @if(Helper::validateAdministrator(session()->get('usuario')->Level))
+              @if(Helper::validateAdministrator(session()->get('usuario')->Level) || $userAuth->Nombre === "Leo")
                 <span class="badge badge-default">
                   ${{$stock->costo}}
                 </span>
