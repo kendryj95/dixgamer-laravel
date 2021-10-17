@@ -189,6 +189,9 @@ Route::group(['middleware' => ['login']], function()
   });
 
     Route::get('pedidos_carga/admin', 'StockController@pedCargaAdmin');
+    Route::post('asignar_stock','StockController@asignarStockStore');
+    Route::get('confirmar_pedido/{id}', 'StockController@confirmPedCarga');
+    Route::get('pedidos_finalizados/admin', 'StockController@pedCargaFinalizados');
 
     // Rutas donde solo podran acceder administradores
   Route::group(['middleware' => ['administrator']], function()
@@ -199,9 +202,6 @@ Route::group(['middleware' => ['login']], function()
     Route::get('stock_insertar_codigo_g_vcc','StockController@createCodeGVCC');
     Route::post('stock_insertar_codigo_g_vcc','StockController@storeCodeGVCC');
 
-    Route::post('asignar_stock','StockController@asignarStockStore');
-    Route::get('pedidos_finalizados/admin', 'StockController@pedCargaFinalizados');
-    Route::get('confirmar_pedido/{id}', 'StockController@confirmPedCarga');
     Route::get('get_pedidos_edit/{id}', 'StockController@getPedidosEdit');
     Route::get('stock_cm', 'StockController@listCM');
     Route::get('stock_cm/{code}', 'StockController@listCMByCode');

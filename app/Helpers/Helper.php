@@ -54,6 +54,16 @@ class Helper
       return false;
     }
 
+    public static function validateAccessUserNotAdmin()
+    {
+        $userAuth = session()->get('usuario');
+        $usersNotAdmin = [
+            "Leo"
+        ];
+
+        return !in_array($userAuth->Nombre, $usersNotAdmin) && !self::validateAdministrator($userAuth->Level);
+    }
+
 
     // Retorna nombre aleatorio
     public static function getRandomName(){

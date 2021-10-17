@@ -827,6 +827,10 @@ ORDER BY libre DESC";
 
     public function asignarStockStore(Request $request)
     {
+        // Validacion para usuarios no administradores
+        if (\Helper::validateAccessUserNotAdmin())
+            return redirect("/")->withErrors(["Acceso denegado"]);
+
       // Mensajes de alerta
       $msgs = [
         'cantidad.numeric' => 'La cantidad debe ser un valor numerico',
@@ -882,9 +886,8 @@ ORDER BY libre DESC";
 
     public function pedCargaAdmin()
     {
-        $userAuth = session()->get('usuario');
-        // Validacion para usuarios no administradores (excepto Leo)
-        if ($userAuth->Nombre !== "Leo" && !\Helper::validateAdministrator($userAuth->Level))
+        // Validacion para usuarios no administradores
+        if (\Helper::validateAccessUserNotAdmin())
             return redirect("/")->withErrors(["Acceso denegado"]);
 
       $titles = $this->wp_p->lastGameStockTitles();
@@ -896,6 +899,10 @@ ORDER BY libre DESC";
 
     public function pedCargaFinalizados()
     {
+        // Validacion para usuarios no administradores
+        if (\Helper::validateAccessUserNotAdmin())
+            return redirect("/")->withErrors(["Acceso denegado"]);
+
       $pedidos_finalizados = $this->st->listPedidosFinalizados()->get();
 
       return view('stock.pedidos_finalizados_admin',compact('pedidos_finalizados'));
@@ -903,6 +910,10 @@ ORDER BY libre DESC";
 
     public function confirmPedCarga($id)
     {
+        // Validacion para usuarios no administradores
+        if (\Helper::validateAccessUserNotAdmin())
+            return redirect("/")->withErrors(["Acceso denegado"]);
+
       $ids = explode(",", $id);
       DB::table('stock_cargar')->whereIn('ID',$ids)->update(["estado" => "listo"]);
 
