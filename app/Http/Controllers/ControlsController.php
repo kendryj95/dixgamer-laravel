@@ -2035,23 +2035,21 @@ class ControlsController extends Controller
 
                             // si se vendió 2 o mas limito la oferta cuando queda poco stock
                             if ($qv_45d >= 2) {
-                                if ($Q_stk == 5) {
-                                    $limite_Stk = $precio_base * 0.750;
-                                } elseif ($Q_stk == 4) {
-                                    $limite_Stk = $precio_base * 0.800;
+                                if ($Q_stk == 4) {
+                                    $limite_Stk = $precio_base * 0.07;
                                 } elseif ($Q_stk == 3) {
-                                    $limite_Stk = $precio_base * 0.850;
+                                    $limite_Stk = $precio_base * 0.82;
                                 } elseif ($Q_stk == 2) {
-                                    $limite_Stk = $precio_base * 0.900;
+                                    $limite_Stk = $precio_base * 0.87;
                                 } elseif ($Q_stk == 1) {
-                                    $limite_Stk = $precio_base * 0.920;
+                                    $limite_Stk = $precio_base * 0.92;
                                 } else {
                                     $limite_Stk = $oferta_sugerida;
                                 }
 
                                 if ($oferta_sugerida < $limite_Stk) {
                                     $oferta_sugerida = $limite_Stk;
-                                    $control_individual .= "<br /> > 1 Vta y < 6 stk -> precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida, 2);
+                                    $control_individual .= "<br /> > 1 Vta y < 5 stk -> precio límite inferior: " . $limite_Stk . ", queda en: " . round($oferta_sugerida, 2);
                                 }
                             }
 
