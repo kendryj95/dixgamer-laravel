@@ -2274,4 +2274,14 @@ class ControlsController extends Controller
             return redirect()->back()->withErrors([$e->getMessage()]);
         }
     }
+
+    public function infoAdicional()
+    {
+        // Validacion para usuarios no administradores
+        if (\Helper::validateAccessUserNotAdmin())
+            return redirect("/")->withErrors(["Acceso denegado"]);
+
+        $data = Sales::infoAdicionalData();
+        return view('config.info_adicional', compact('data'));
+    }
 }

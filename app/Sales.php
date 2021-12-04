@@ -269,4 +269,18 @@ class Sales extends Model
             ->groupBy("D");
     }
 
+    public function ScopeInfoAdicionalData($query)
+    {
+        return DB::select("SELECT titulo, consola, COUNT(*) as Stock_H, antiguedad_juego, ROUND(AVG(costo_usd)) as costo_usd, ROUND(AVG(costo_usd_modif)) as costo_usd_modif, Q_vta_pri, (COUNT(*) - Q_vta_pri) as Stk_pri, IFNULL(Q_recu_pri,0) as Q_recu_pri, Q_vta_sec, (COUNT(*) - Q_vta_sec) as Stk_sec, IFNULL(Q_recu_sec,0) as Q_recu_sec FROM stock as s2
+LEFT JOIN (SELECT titulo as titulo1, SUM(case when slot = 'Primario' then 1 else 0 end) AS Q_vta_pri, SUM(case when slot = 'Secundario' then 1 else 0 end) AS Q_vta_sec, DATEDIFF(NOW(), MIN(s1.Day)) as antiguedad_juego FROM ventas LEFT JOIN stock as s1 ON ventas.stock_id = s1.ID WHERE s1.consola = 'ps4' GROUP BY s1.titulo) query1 
+ON s2.titulo = query1.titulo1 
+LEFT JOIN (SELECT titulo as titulo2, recup, SUM(case when slot = 'Primario' then 1 else 0 end) AS Q_recu_pri, SUM(case when slot = 'Secundario' then 1 else 0 end) AS Q_recu_sec FROM `ventas`
+left join stock on ventas.stock_id = stock.ID
+where recup=2 and consola='ps4'
+GROUP BY titulo) as query2
+ON s2.titulo = query2.titulo2
+WHERE s2.consola='ps4'
+GROUP BY titulo");
+    }
+
 }

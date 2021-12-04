@@ -225,6 +225,7 @@ Route::group(['middleware' => ['login']], function()
     Route::get('balance_productos_dias', 'ControlsController@balanceProductosDias');
     Route::get('config/general', 'ControlsController@configGeneral');
     Route::post('config/general', 'ControlsController@configGeneralStore');
+    Route::get('config/info_adicional', 'ControlsController@infoAdicional');
 
     Route::group(['middleware' => ['administrator']], function()
     {

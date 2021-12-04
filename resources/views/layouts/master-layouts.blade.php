@@ -202,6 +202,7 @@ $userAuth = session()->get('usuario');
 <li><a href="{{ url('balance_productos') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por productos</a></li>
 <li><a href="{{ url('balance_productos_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
 <li class="divider" role="separator"></li>
+  <li><a href="{{ url('config/info_adicional') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Info adicional</a></li>
 <li><a href="https://dixgamer.com/db/publicaciones_generar_descripcion.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Generar Descrip</a></li>
 <li><a href="https://dixgamer.com/db/publicaciones_detalles.php"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Publicaciones</a></li>
 <li><a href="{{ url('publicaciones_secundarias_ml') }}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i> Secundarias</a></li>
@@ -241,6 +242,7 @@ $userAuth = session()->get('usuario');
       <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Config<span class="caret"></span></a>
       <ul class="dropdown-menu">
         <li><a href="{{ url('balance_productos_dias') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Por Dias</a></li>
+        <li><a href="{{ url('config/info_adicional') }}"><i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i> Info adicional</a></li>
         <li class="divider" role="separator"></li>
         <li><a href="{{url('config/general')}}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> General</a></li>
       </ul>
