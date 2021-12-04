@@ -1079,8 +1079,9 @@
 
 										</div>
 
-									@elseif ($stock->consola == 'ps4')
+									@elseif ($stock->consola == 'ps4' || $stock->consola == 'ps5')
 
+										@if ($stock->consola == 'ps5')
 										<div class="dropdown text-left">
 											<button
 													class="btn btn-link dropdown-toggle btn-xs"
@@ -1101,6 +1102,7 @@
 											</ul>
 
 										</div>
+										@endif
 										<div class="dropdown text-left">
 											<button
 													class="btn btn-link dropdown-toggle btn-xs"
