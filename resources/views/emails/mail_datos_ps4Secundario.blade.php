@@ -201,13 +201,12 @@
   <br />
                     3) <strong>Iniciar Sesi&#243;n.</strong> <span style="color: #e74c3c;">Si te pregunta "cambiar tu PS4 principal" <strong>NO CAMBIAR</strong></span><br />
                     4) Aceptar los datos de la cuenta (next / continue)<br />
-                    5) A veces pide vincular con Facebook, seleccionar <strong>"Do this later"</strong> o <strong>"Skip"</strong><br />
-                    6) Ir a Configuración > Administración de cuentas > Activar como tu PS4 principal y seleccionar Desactivar. Si solicita confirmar: Aceptar.
+                    5) Ir a Configuración > Administración de cuentas > Activar como tu PS4 principal y seleccionar Desactivar. Si solicita confirmar: Aceptar.
                       <br>
-                    7) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong><br />
+                    6) Ir a <strong>Biblioteca</strong> &gt; Comprados &gt; <strong>Iniciar la descarga del juego.</strong><br />
 					
-					<span style="color:#e74c3c;">8) Si el juego solicita crear una cuenta, usar tu correo personal. No usar el nuestro porque se bloquea.</span><br />
-					9) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cupón.
+					<span style="color:#e74c3c;">7) Si el juego solicita crear una cuenta, usar tu correo personal. No usar el nuestro porque se bloquea.</span><br />
+					8) Subir una foto a IG con etiqueta @dixgamer.ok para ganar un cupón.
                     
                     <p>&iquest;Problemas? Mira el <a href="https://www.facebook.com/watch/?v=1377310052437007" title="Tutorial crear cuenta USA" target="_blank">video tutorial</a> paso a paso.</p>
   {{-- <strong>Al comenzar la descarga</strong> click aqu&iacute;: <br />
