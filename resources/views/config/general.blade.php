@@ -20,16 +20,31 @@
 	<div class="row">
 	  <div class="col-lg-3">
 	    <ul class="nav nav-pills nav-stacked">
-			@php $i = 0; @endphp
+			@php
+				$i = 0;
+				$menuActive = '';
+			@endphp
 	        @foreach ($options as $menu => $titulo)
-			<li role="presentation" class="@if($i == 0) active @endif"><a  data-toggle="tab" href="#{{$menu}}"> {{$titulo}} </a></li>
-			@php $i++; @endphp
+				@php
+					if ($i == 0) {
+						$menuActive = $menu;
+					}
+				@endphp
+				@if ($menu == "menu6" && $user == "Leo")
+					<li role="presentation" class="@if($i == 0) active @endif"><a  data-toggle="tab" href="#{{$menu}}"> {{$titulo}} </a></li>
+					@php $i++; @endphp
+
+				@elseif ($user != "Leo")
+					<li role="presentation" class="@if($i == 0) active @endif"><a  data-toggle="tab" href="#{{$menu}}"> {{$titulo}} </a></li>
+					@php $i++; @endphp
+
+				@endif
 			@endforeach
 	    </ul>
 	  </div>
 	  <div class="col-lg-8 col-md-offset-1">
 	    <div class="tab-content" id="v-pills-tabContent">
-	      <div class="tab-pane fade" id="menu1" role="tabpanel">
+	      <div class="tab-pane fade @if($menuActive == "menu1") in active @endif" id="menu1" role="tabpanel">
 			<div class="row">
 				<div class="col-md-12">
 					<form action="{{ url('config/general') }}" method="post">
@@ -44,7 +59,7 @@
 				</div>
 			</div>
 	      </div>
-	      <div class="tab-pane fade in active" id="menu2" role="tabpanel">
+	      <div class="tab-pane fade @if($menuActive == "menu2") in active @endif" id="menu2" role="tabpanel">
 	      	<div class="row">
 	      		<div class="col-md-12">
 	      			<form action="{{ url('config/general') }}" id="cuentas_excluidas" method="post">
@@ -59,7 +74,7 @@
 	      		</div>
 	      	</div>
 	      </div>
-	      <div class="tab-pane fade" id="menu3" role="tabpanel">
+	      <div class="tab-pane fade @if($menuActive == "menu3") in active @endif" id="menu3" role="tabpanel">
 	      	<div class="row">
 	      		<div class="col-md-12">
 	      			<div class="alert alert-info" role="alert" style="background: #D9EDF7 !important">
@@ -69,7 +84,7 @@
 	      		</div>
 	      	</div>
 	      </div>
-	      <div class="tab-pane fade" id="menu4" role="tabpanel">
+	      <div class="tab-pane fade @if($menuActive == "menu4") in active @endif" id="menu4" role="tabpanel">
 	      	<div class="row">
 	      		<div class="col-md-12">
 	      			<a class="btn btn-info btn-sm pull-right" href="https://dixgamer.com/crontabs/download_log.php"><i class="fa fa-download"></i> Descargar Logs</a>
@@ -105,7 +120,7 @@
 	      		</div>
 	      	</div>
 	      </div>
-	      <div class="tab-pane fade" id="menu5" role="tabpanel">
+	      <div class="tab-pane fade @if($menuActive == "menu5") in active @endif" id="menu5" role="tabpanel">
 	      	<form action="{{ url('config/general') }}" method="post">
 				{{ csrf_field() }}
 				<input type="hidden" name="opt" value="3">
@@ -153,7 +168,7 @@
 	      		</div>
 	      	</form>
 	      </div> <!-- TERMINA -->
-	      <div class="tab-pane fade" id="menu6" role="tabpanel">
+	      <div class="tab-pane fade @if($menuActive == "menu6") in active @endif" id="menu6" role="tabpanel">
 	      	<div class="row">
 	      		<div class="col-md-12">
 	      			<form action="{{ url('config/general') }}" id="productos_excluidas" method="post">
@@ -179,7 +194,7 @@
 	      		</div>
 	      	</div>
 	      </div>
-	      <div class="tab-pane fade" id="menu7" role="tabpanel">
+	      <div class="tab-pane fade @if($menuActive == "menu7") in active @endif" id="menu7" role="tabpanel">
 	      	<div class="row">
 	      		<div class="col-md-12">
 	      			<form action="{{ url('config/general') }}" id="form_dominios" method="post">
@@ -230,7 +245,7 @@
 	      		</div>
 	      	</div>
 		  </div>
-		  <div class="tab-pane fade" id="menu8" role="tabpanel">
+		  <div class="tab-pane fade @if($menuActive == "menu8") in active @endif" id="menu8" role="tabpanel">
 			<div class="row">
 				<div class="col-md-12">
 					<form action="{{ url('config/general') }}" id="productos_excluidos_recupero" method="post">
@@ -275,7 +290,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="tab-pane fade" id="menu9" role="tabpanel">
+		<div class="tab-pane fade @if($menuActive == "menu9") in active @endif" id="menu9" role="tabpanel">
 			<div class="row">
 				<div class="col-md-12">
 					<form action="{{ url('config/general') }}" id="form_dominios_excluidos" method="post">
@@ -300,7 +315,7 @@
 				</div>
 			</div>
 		</div>
-			<div class="tab-pane fade" id="menu10" role="tabpanel">
+			<div class="tab-pane fade @if($menuActive == "menu10") in active @endif" id="menu10" role="tabpanel">
 				<div class="row">
 					<div class="col-md-12">
 						<form action="{{ url('config/general') }}" id="form_medios_cobros" method="post">

@@ -741,6 +741,10 @@ class ControlsController extends Controller
 
     public function configGeneral()
     {
+        // Validacion para usuarios no administradores
+        if (\Helper::validateAccessUserNotAdmin())
+            return redirect("/")->withErrors(["Acceso denegado"]);
+
         $cantidadStock = DB::table('stock')->select(
             'titulo',
             'consola'
@@ -794,8 +798,9 @@ class ControlsController extends Controller
         $medios_cobros = DB::table('medios_cobros')->get();
 
         $options = $this->optionsConfig();
+        $user = session()->get('usuario')->Nombre;
 
-        return view('config.general', compact('options', 'oferta_fortnite', 'cuentas_excluidas', 'cantidadStock', 'configuraciones', 'titles', 'titulos', 'dominios', 'titulos_pri', 'titulos_secu', 'dominios_exclu', 'medios_cobros'));
+        return view('config.general', compact('options', 'oferta_fortnite', 'cuentas_excluidas', 'cantidadStock', 'configuraciones', 'titles', 'titulos', 'dominios', 'titulos_pri', 'titulos_secu', 'dominios_exclu', 'medios_cobros', 'user'));
     }
 
     private function optionsConfig()
@@ -806,7 +811,7 @@ class ControlsController extends Controller
             "menu3" => "Reporte de Ventas",
             "menu4" => "Procesos Automaticos",
             "menu5" => "Parametros",
-            "menu6" => "Productos Excluidos",
+            "menu6" => "Productos Excluidos Oferta",
             "menu7" => "Dominios para Ctas",
             "menu8" => "Productos Excluidos Recupero",
             "menu9" => "Dominios excluidos para TC",
@@ -819,6 +824,10 @@ class ControlsController extends Controller
 
     public function configGeneralStore(Request $request)
     {
+        // Validacion para usuarios no administradores
+        if (\Helper::validateAccessUserNotAdmin())
+            return redirect("/")->withErrors(["Acceso denegado"]);
+
         switch ($request->opt) {
             case 1: // Texto Fortnite
                 $data = [];
