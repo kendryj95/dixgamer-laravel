@@ -1081,7 +1081,7 @@
 
 									@elseif ($stock->consola == 'ps4' || $stock->consola == 'ps5')
 
-										@if ($stock->consola == 'ps5')
+										@if ($stock->consola == 'ps4' || $stock->consola == 'ps5')
 										<div class="dropdown text-left">
 											<button
 													class="btn btn-link dropdown-toggle btn-xs"
@@ -1103,47 +1103,49 @@
 
 										</div>
 										@endif
-										<div class="dropdown text-left">
-											<button
-													class="btn btn-link dropdown-toggle btn-xs"
-													type="button" id="vender_secu_cli2"
-													data-toggle="dropdown"
-													aria-haspopup="true"
-													aria-expanded="false">
-												Vender Secundario a Cliente #1
-												{{-- <span class="caret"></span> --}}
-											</button>
+										@if($stock->consola == 'ps4')
+											<div class="dropdown text-left">
+												<button
+														class="btn btn-link dropdown-toggle btn-xs"
+														type="button" id="vender_secu_cli2"
+														data-toggle="dropdown"
+														aria-haspopup="true"
+														aria-expanded="false">
+													Vender Secundario a Cliente #1
+													{{-- <span class="caret"></span> --}}
+												</button>
 
-											<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
-												<li class="dropdown-header">¿Estas seguro?</li>
-												<li role="separator" class="divider"></li>
-												<li>
-													<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Secundario']) }}" class="btn btn-danger">Sí, Seguro!</a>
-												</li>
-											</ul>
+												<ul class="dropdown-menu bg-info" aria-labelledby="vender_secu_cli2">
+													<li class="dropdown-header">¿Estas seguro?</li>
+													<li role="separator" class="divider"></li>
+													<li>
+														<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Secundario']) }}" class="btn btn-danger">Sí, Seguro!</a>
+													</li>
+												</ul>
 
-										</div>
+											</div>
 
-										<div class="dropdown text-left">
-											<button
-													class="btn btn-link dropdown-toggle btn-xs"
-													type="button" id="vender_pri_cli5"
-													data-toggle="dropdown"
-													aria-haspopup="true"
-													aria-expanded="false">
-												Vender Pri a Cte #5 Secu se Activa
-												{{-- <span class="caret"></span> --}}
-											</button>
+											<div class="dropdown text-left">
+												<button
+														class="btn btn-link dropdown-toggle btn-xs"
+														type="button" id="vender_pri_cli5"
+														data-toggle="dropdown"
+														aria-haspopup="true"
+														aria-expanded="false">
+													Vender Pri a Cte #5 Secu se Activa
+													{{-- <span class="caret"></span> --}}
+												</button>
 
-											<ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli5">
-												<li class="dropdown-header">¿Estas seguro?</li>
-												<li role="separator" class="divider"></li>
-												<li>
-													<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario', 5]) }}" class="btn btn-danger">Sí, Seguro!</a>
-												</li>
-											</ul>
+												<ul class="dropdown-menu bg-info" aria-labelledby="vender_pri_cli5">
+													<li class="dropdown-header">¿Estas seguro?</li>
+													<li role="separator" class="divider"></li>
+													<li>
+														<a href="{{ url('saleToClient', [$stock->ID_stock, $stock->consola, 'Primario', 5]) }}" class="btn btn-danger">Sí, Seguro!</a>
+													</li>
+												</ul>
 
-										</div>
+											</div>
+										@endif
 
 									@endif
 
