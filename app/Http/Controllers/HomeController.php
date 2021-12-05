@@ -51,7 +51,7 @@ class HomeController extends Controller
       $obj->title = 'plus-12-meses-slot';
 
       $stocks = Stock::showStock($obj)->get();
-      /***     PS4 PRIMARIO     ***/
+      /***     PS5 PRIMARIO     ***/
 
       $obj = new \stdClass;
       $obj->console = 'ps5';
@@ -60,7 +60,7 @@ class HomeController extends Controller
       $ps5_primary_stocks =  Stock::primaryOrSecundaryConsole($obj)->get();
 
       //dd($stocks);
-      /***     PS4 SECUNDARIO     ***/
+      /***     PS5 SECUNDARIO     ***/
 
       $obj = new \stdClass;
       $obj->console = 'ps5';

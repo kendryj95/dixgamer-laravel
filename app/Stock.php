@@ -62,6 +62,7 @@ class Stock extends Model
             'Q_vta',
             'dayvta',
             DB::raw('round(AVG(costo_usd),2) as costo'),
+            DB::raw('round(AVG(costo_usd_modif),2) as costo_modif'),
             DB::raw('COUNT(*) AS Q_Stock')
         )
             ->leftjoin(DB::raw('
@@ -96,6 +97,7 @@ class Stock extends Model
             'vendido.q_vta_pri',
             'vendido.q_vta_sec',
             DB::raw('round(AVG(costo_usd),2) as costo'),
+            DB::raw('round(AVG(costo_usd_modif),2) as costo_modif'),
             DB::raw('COUNT(*) AS q_stock')
         )
             ->leftjoin(DB::raw(
@@ -284,7 +286,7 @@ class Stock extends Model
 
     public function ScopePs3($query){
         return DB::select(DB::raw("
-        SELECT ID_stk AS id_stk, titulo, consola, stk_ctas_id, dayreset, q_reset, days_from_reset, q_vta, round(AVG(costo_usd),2) as costo, SUM(Q_Stock) AS q_stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo_usd),2) as costo_usd, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS q_stock
+        SELECT ID_stk AS id_stk, titulo, consola, stk_ctas_id, dayreset, q_reset, days_from_reset, q_vta, round(AVG(costo_usd),2) as costo, round(AVG(costo_usd_modif),2) as costo_modif, SUM(Q_Stock) AS q_stock FROM (SELECT ID AS ID_stk, titulo, consola, round(AVG(costo_usd),2) as costo_usd, round(AVG(costo_usd_modif),2) as costo_usd_modif, cuentas_id AS stk_ctas_id, ID_reseteo AS ID_reset, r_cuentas_id AS reset_ctas_id, dayreseteo AS dayreset, reset.Q_reseteado AS Q_reset, DATEDIFF(NOW(), dayreseteo) AS days_from_reset, ID_vta, Q_vta, dayvta, ((2 + (IFNULL(Q_reseteado, 0) * 2)) - IFNULL(Q_vta, 0)) AS q_stock
         FROM stock
         LEFT JOIN
         (SELECT ID AS ID_reseteo, cuentas_id AS r_cuentas_id, COUNT(*) AS Q_reseteado, MAX(Day) AS dayreseteo

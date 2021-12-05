@@ -54,6 +54,9 @@ $userAuth = session()->get('usuario');
                 <span class="badge badge-default">
                   ${{$stock->costo}}
                 </span>
+                <span style="color: darkred" class="badge badge-default">
+                  ${{$stock->costo_modif}}
+                </span>
               @endif
           </div>
         </div>

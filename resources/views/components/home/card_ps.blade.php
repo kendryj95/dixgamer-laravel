@@ -80,6 +80,9 @@
              <span class="badge badge-default">
                ${{$data->costo}}
              </span>
+                  <span style="color: darkred" class="badge badge-default">
+                  ${{$data->costo_modif ?: '0'}}
+                </span>
            @endif
           </div>
         </div>
