@@ -168,3 +168,48 @@ color: white;
 	border: none !important;
 	padding: 4px !important;
 }
+
+.table-info-adicional {
+	text-align: left !important;
+	position: relative !important;
+	border-collapse: collapse !important;
+}
+
+/* Fixed Headers */
+
+.table-info-adicional th {
+	position: -webkit-sticky !important;
+	position: sticky !important;
+	top: 0 !important;
+	z-index: 2 !important;
+}
+
+.table-info-adicional th[scope=row] {
+	position: -webkit-sticky !important;
+	position: sticky !important;
+	left: 0 !important;
+	z-index: 1 !important;
+}
+
+.table-info-adicional th[scope=row] {
+	vertical-align: top !important;
+	color: inherit !important;
+	background-color: inherit !important;
+	background: linear-gradient(90deg, transparent 0%, transparent calc(100% - .05em), #d6d6d6 calc(100% - .05em), #d6d6d6 100%) !important;
+}
+
+table.table-info-adicional:nth-of-type(2) th:not([scope=row]):first-child {
+	left: 0 !important;
+	z-index: 3 !important;
+	background: linear-gradient(90deg, #666 0%, #666 calc(100% - .05em), #ccc calc(100% - .05em), #ccc 100%) !important;
+}
+
+/* Strictly for making the scrolling happen. */
+
+.table-info-adicional th[scope=row] + td {
+	min-width: 24em !important;
+}
+
+.table-info-adicional th[scope=row] {
+	min-width: 20em !important;
+}

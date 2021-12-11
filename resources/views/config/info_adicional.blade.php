@@ -1,3 +1,13 @@
+@php
+function changeNameColumn($column) {
+    switch ($column) {
+        case 'antiguedad_juego':
+            return 'Antig';
+        default:
+            return $column;
+    }
+}
+@endphp
 @extends('layouts.master-layouts')
 
 @section('title', 'Info Adicional')
@@ -12,11 +22,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped">
+                        <table border="0" align="center" cellpadding="0" cellspacing="5" class="table table-striped table-info-adicional">
                             <thead>
                             <tr>
                                 @foreach($columns as $column => $value)
-                                    <th>{{$column}}</th>
+                                    @if($column !== "consola") <th>{{changeNameColumn($column)}}</th> @endif
                                 @endforeach
                             </tr>
                             </thead>
@@ -24,7 +34,13 @@
                             @foreach($data as $i => $item)
                                 <tr>
                                     @foreach($data[$i] as $attrib => $value)
-                                        <td>{{$value}}</td>
+                                        @if($attrib === "titulo")
+                                            <td>{{ \Helper::strTitleStock($data[$i]->$attrib) }}
+                                                <span class="label label-default {{$data[$i]->consola}}">
+                                                {{$data[$i]->consola}}</td>
+                                        @elseif ($attrib != "consola")
+                                            <td>{{$value}}</td>
+                                        @endif
                                     @endforeach
                                 </tr>
                             @endforeach
