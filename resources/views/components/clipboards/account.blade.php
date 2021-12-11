@@ -1,7 +1,9 @@
 <div style="position:absolute; top:-1000px; left:-3000px;">
     <div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="newpass-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por mantenimiento de los servidores actualizamos la contraseña de ésta Cuenta/Usuario,<br /><br />
-						La nueva contraseña es: <?php echo $pass;?><br /><br />
+					<span id="newpass-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por mantenimiento de los servidores actualizamos los datos de la cuenta.<br /><br />
+
+						Mail: {{ $mail_fake }}<br />
+						Contraseña: {{ $pass }}<br /><br />
 
 						{!! html_entity_decode($oferta_fortnite) !!}<br>
 
@@ -26,12 +28,17 @@
     </div>
 
     <div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="avisonewemail-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por mantenimiento de los servidores actualizamos los datos de la cuenta.<br /><br />
+					<span id="avisonewemail-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;">
+						Gracias por su respuesta! <br>
+
+						<p>Por favor, inicie sesión con estos datos:<br /><br />
 
 						Juego: {{strtoupper(str_replace("-"," ",$titulo))}} <br>
 						Usuario: {{$account_name}} {{$account_surname}} <br>
-						Nuevo e-mail: {{ $mail_fake }} <br>
+						Mail: {{ $mail_fake }} <br>
 						Contraseña: {{ $pass }} <br><br>
+
+						Confirme si logró ingresar. Muchas gracias! <br><br>
 
 						{!! html_entity_decode($oferta_fortnite) !!} <br>
 						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/></p>
@@ -39,7 +46,9 @@
     </div>
 
     <div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
-					<span id="reactivar-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por favor ingrese a nuestra cuenta/usuario con el nombre <b>{{ $account_name . " " . $account_surname }}</b> una vez más para RE ACTIVAR el slot primario: <br><br>
+					<span id="reactivar-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;">
+						Gracias por su respuesta! <br><br>
+						<p>Por favor, ingrese al usuario <b>{{ $account_name . " " . $account_surname }}</b> para reactivar el slot primario. Inicie la sesión en la cuenta con estos datos: <br><br>
 
 						Email: {{$mail_fake}} <br>
 						Contraseña: <?php echo $pass;?><br /><br />
@@ -50,6 +59,9 @@
 						1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar<br />
 						2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar<br />
 						3) Reiniciar la consola y acceder con su usuario personal, recuerde no volver a abrir nuestro usuario.<br /><br />
+
+						Confirme si logró ingresar al juego desde su usuario. <br>
+						Muchas gracias! <br><br>
 
 						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/><br>
 
