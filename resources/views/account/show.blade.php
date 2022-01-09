@@ -1667,7 +1667,7 @@
 						@if ($sc->auto === "bloq")
 							<span class="badge badge-danger"><i class="fa fa-times-circle"></i> Cliente bloqueado</span>
 						@else
-							<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_react_pri" data-clipboard-target="#reactivar-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
+							<a href="#<?php echo $sc->clientes_id; ?>" class="btn-copiador btn-xs btn-info label" id="msj_react_pri" data-clipboard-target="#msjreact-copy{{$sc->clientes_id}}">msj react <i aria-hidden="true" class="fa fa-clone"></i></a>
 							<button class="btn-xs btn-info label email-info" id="enviar_email_pri" onclick="envioEmailInfo('msj_react','{{$sc->clientes_id}}','{{$account->ID}}','{{$sc->id}}','{{$sc->ID_stock}}',this)">email <i aria-hidden="true" class="fa fa-paper-plane"></i></button>
 
 							<span style="display: none" id="msj_react_email_success{{$sc->clientes_id}}" class="label label-success">email enviado</span>

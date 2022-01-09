@@ -70,6 +70,25 @@
 						</p>
 					</span>
 
+		<span id="msjreact-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por favor ingrese a nuestra cuenta/usuario con el nombre <b>{{ $account_name . " " . $account_surname }}</b> una vez más para RE ACTIVAR el slot primario: <br><br>
+
+						Email: {{$mail_fake}} <br>
+						Contraseña: <?php echo $pass;?><br /><br />
+
+						Una vez dentro de nuestro usuario:<br /><br />
+
+
+						1) Ir a Configuración > PSN/Administración de cuentas > Activar como tu PS4 principal > Activar<br />
+						2) Ir a Configuración > PSN/Administración de cuentas > Restaurar Licencias > Restaurar<br />
+						3) Reiniciar la consola y acceder con su usuario personal, recuerde no volver a abrir nuestro usuario.<br /><br />
+
+						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/><br>
+
+				<!-- Aprovecho para contarte que nuestros paVos de Fortnite bajaron de precio, <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/">ver paVos baratos</a><br /><br /> -->
+						{!! html_entity_decode($oferta_fortnite) !!} <br>
+						</p>
+					</span>
+
 		<span id="reactivar-copy{{$clientes_id}}-ps5" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por favor ingrese a nuestro usuario/cuenta una vez más para RE ACTIVAR el slot primario: <br><br>
 
 						Email: {{$mail_fake}} <br>
