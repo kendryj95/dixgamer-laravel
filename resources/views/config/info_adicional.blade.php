@@ -35,11 +35,25 @@ function changeNameColumn($column) {
                                 <tr>
                                     @foreach($data[$i] as $attrib => $value)
                                         @if($attrib === "titulo")
-                                            <td>{{ \Helper::strTitleStock($data[$i]->$attrib) }}
-                                                <span class="label label-default {{$data[$i]->consola}}">
-                                                {{$data[$i]->consola}}</td>
+                                            <td>{{ \Helper::strTitleStock($data[$i]->$attrib) }} ({{$data[$i]->consola}})
+                                                </td>
                                         @elseif ($attrib != "consola")
-                                            <td>{{$value}}</td>
+                                            <td>
+                                            @if ($attrib == "Stock_H")
+                                                <span class="badge badge-default">{{$value}}</span>
+                                            @elseif ($attrib == "antiguedad_juego")
+                                                {{$value}} d.
+
+                                            @elseif ($attrib == "costo_usd" || $attrib == "costo_usd_modif")
+                                                <p class="badge badge-normal" style="opacity:0.85;">$ {{$value}}</p>
+                                            @elseif ($attrib == "Q_vta_pri" || $attrib == "Q_vta_sec")
+                                                <span class="badge badge-danger">{{$value}}</span>
+                                            @elseif ($attrib == "Stk_pri" || $attrib == "Stk_sec")
+                                                <span class="badge badge-success">{{$value}}</span>
+                                            @elseif ($attrib == "Q_recu_pri" || $attrib == "Q_recu_sec")
+                                                <span class="badge badge-warning">{{$value}}</span>
+                                            @endif
+                                            </td>
                                         @endif
                                     @endforeach
                                 </tr>
