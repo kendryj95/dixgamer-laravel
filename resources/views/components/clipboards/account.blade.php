@@ -61,12 +61,7 @@
 						3) Reiniciar la consola y acceder con su usuario personal, recuerde no volver a abrir nuestro usuario.<br /><br />
 
 						Confirme si logró ingresar al juego desde su usuario. <br>
-						Muchas gracias! <br><br>
-
-						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/><br>
-
-                            <!-- Aprovecho para contarte que nuestros paVos de Fortnite bajaron de precio, <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/">ver paVos baratos</a><br /><br /> -->
-						{!! html_entity_decode($oferta_fortnite) !!} <br>
+						Muchas gracias! <br>
 						</p>
 					</span>
 
@@ -99,12 +94,7 @@
 
 						1) Ir a Ajustes > Usuarios y cuentas > Otro > Compartir consola y jugar offline > Activar.<br />
 						2) Ir a Ajustes > Usuarios y cuentas > Otro > Restaurar Licencias > Restaurar.<br />
-						3) Cerrar sesión y luego acceder con su usuario personal, recuerde no volver a abrir nuestro usuario.<br /><br />
-
-						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/><br>
-
-                            <!-- Aprovecho para contarte que nuestros paVos de Fortnite bajaron de precio, <a href="https://dixgamer.com/categoria-producto/tarjetas/fortnite/">ver paVos baratos</a><br /><br /> -->
-						{!! html_entity_decode($oferta_fortnite) !!} <br>
+						3) Cerrar sesión y luego acceder con su usuario personal, recuerde no volver a abrir nuestro usuario.<br />
 						</p>
 					</span>
     </div>
