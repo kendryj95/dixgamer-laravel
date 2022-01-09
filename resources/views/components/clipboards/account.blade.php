@@ -38,10 +38,7 @@
 						Mail: {{ $mail_fake }} <br>
 						Contraseña: {{ $pass }} <br><br>
 
-						Confirme si logró ingresar. Muchas gracias! <br><br>
-
-						{!! html_entity_decode($oferta_fortnite) !!} <br>
-						Saludos, <?php echo session()->get('usuario')->nombre_visible;?> de DixGamer.<br/></p>
+						Confirme si logró ingresar. Muchas gracias! <br>
 					</span>
     </div>
 
