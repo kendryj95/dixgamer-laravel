@@ -3,11 +3,7 @@
 					<span id="newpass-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por mantenimiento de los servidores actualizamos los datos de la cuenta.<br /><br />
 
 						Mail: {{ $mail_fake }}<br />
-						Contraseña: {{ $pass }}<br /><br />
-
-						{!! html_entity_decode($oferta_fortnite) !!}<br>
-
-						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
+						Contraseña: {{ $pass }}<br /></p>
 					</span>
     </div>
 
