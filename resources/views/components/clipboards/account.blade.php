@@ -3,7 +3,9 @@
 					<span id="newpass-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Hola {{ $nombre_cliente }}, por mantenimiento de los servidores actualizamos los datos de la cuenta.<br /><br />
 
 						Mail: {{ $mail_fake }}<br />
-						Contraseña: {{ $pass }}<br /></p>
+						Contraseña: {{ $pass }}<br /><br />
+
+						Saludos, <?php echo session()->get('usuario')->Nombre;?> de DixGamer.<br/></p>
 					</span>
     </div>
 
@@ -35,12 +37,14 @@
 						Contraseña: {{ $pass }} <br><br>
 
 						Confirme si logró ingresar. Muchas gracias! <br>
+						Muchas gracias! <br>
 					</span>
     </div>
 
     <div style="position: absolute; height: 100px; width: 100px;right: -50px; top: 50px;">
 					<span id="reactivar-copy{{$clientes_id}}" style="font-size:15px; background: white; font-weight: normal; color:#111;">
-						Gracias por su respuesta! <br><br>
+						Gracias por su respuesta! <br>
+
 						<p>Por favor, ingrese al usuario <b>{{ $account_name . " " . $account_surname }}</b> para reactivar el slot primario. Inicie la sesión en la cuenta con estos datos: <br><br>
 
 						Email: {{$mail_fake}} <br>
@@ -77,7 +81,10 @@
 						</p>
 					</span>
 
-		<span id="reactivar-copy{{$clientes_id}}-ps5" style="font-size:15px; background: white; font-weight: normal; color:#111;"><p>Por favor ingrese a nuestro usuario/cuenta una vez más para RE ACTIVAR el slot primario: <br><br>
+		<span id="reactivar-copy{{$clientes_id}}-ps5" style="font-size:15px; background: white; font-weight: normal; color:#111;">
+			Gracias por su respuesta! <br>
+
+			<p>Por favor ingrese a nuestro usuario/cuenta una vez más para RE ACTIVAR el slot primario: <br><br>
 
 						Email: {{$mail_fake}} <br>
 						Contraseña: <?php echo $pass;?><br /><br />

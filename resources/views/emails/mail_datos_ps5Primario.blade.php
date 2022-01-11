@@ -206,7 +206,7 @@
                   3) <strong>Iniciar Sesi&#243;n</strong> y aceptar los datos de la cuenta <br />
                     4) Si te solicita habilitar la verificación de 2 pasos, seleccionar "Hacerlo más tarde". <br>
                   5) Arriba a la derecha en Configuración > Usuarios y cuentas > Otro > Uso compartido de consola y juego offline. Seleccionar <b>Activar</b> <br />
-                    @if (strpos($juego, "retro") !== false)
+                    @if (strpos(strtolower($juego), "retro") !== false)
                         6) Ir a “Biblioteca de juegos” e ingresar al juego comprado. Seleccionar “Download” para comenzar la descarga.
                         <br>
                     @else
